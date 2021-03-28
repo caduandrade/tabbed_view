@@ -1,8 +1,7 @@
 name: tabbed_view
 description: Widget inspired by the classic Desktop-style tab component.
 version: 0.1.0
-author:
-homepage:
+homepage: https://github.com/caduandrade/tabbed_view
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
