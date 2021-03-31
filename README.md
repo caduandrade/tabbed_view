@@ -4,10 +4,14 @@
 
 Widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
-![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/intro.png)
+![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/examples.png)
 
 The *TabbedView* renders the presentation of the model.
+
 The *TabbedViewModel* stores the tab data as name, content, buttons or any dynamic value.
+
+## Get started
+
 The default theme is *TabbedViewTheme.light()*.
 
 ```dart
@@ -21,7 +25,7 @@ The default theme is *TabbedViewTheme.light()*.
 
 ![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/light.gif)
 
-**Content builder**
+## Content builder
 
 It allows creating the contents of the tab dynamically during the selection event.
 
@@ -39,7 +43,9 @@ It allows creating the contents of the tab dynamically during the selection even
         });
 ```
 
-**Dark theme**
+## Themes
+
+###  Dark theme
 
 ```dart
     TabbedWiew tabbedView =
@@ -48,7 +54,16 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
 
-### Agenda for the next few days
+###  Mobile theme
+
+```dart
+    TabbedWiew tabbedView =
+        TabbedWiew(model: model, theme: TabbedViewTheme.mobile());
+```
+
+![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
+
+## Agenda for the next few days
 
 * Complete documentation and examples to cover all available features.
 * Release the final version. The API can be changed.
