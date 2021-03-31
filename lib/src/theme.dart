@@ -70,19 +70,22 @@ class TabsAreaTheme {
   const TabsAreaTheme(
       {this.closeButtonIcon = Icons.clear,
       this.tab = const TabTheme(),
-      this.tabGap = const TabGapTheme(),
       this.buttonsArea = const ButtonsAreaTheme(),
       this.color,
       this.border,
-      double tabsOffset = 0,
-      this.equalHeights = EqualHeights.none})
-      : this.tabsOffset = tabsOffset >= 0 ? tabsOffset : 0;
+      this.initialGap = 0,
+      this.middleGap = 0,
+      this.minimalFinalGap = 0,
+      this.gapBottomBorder = BorderSide.none,
+      this.equalHeights = EqualHeights.none});
 
   final Color? color;
   final Border? border;
   final TabTheme tab;
-  final double tabsOffset;
-  final TabGapTheme tabGap;
+  final double initialGap;
+  final double middleGap;
+  final double minimalFinalGap;
+  final BorderSide gapBottomBorder;
 
   final ButtonsAreaTheme buttonsArea;
   final IconData closeButtonIcon;
@@ -94,10 +97,18 @@ class TabsAreaTheme {
         color: theme.color == null ? this.color : theme.color,
         border: theme.border == null ? this.border : theme.border,
         tab: this.tab.copyWith(theme.tab),
-        tabsOffset: theme.tabsOffset == this.tabsOffset
-            ? this.tabsOffset
-            : theme.tabsOffset,
-        tabGap: this.tabGap.copyWith(theme.tabGap),
+        initialGap: theme.initialGap == this.initialGap
+            ? this.initialGap
+            : theme.initialGap,
+        middleGap: theme.middleGap == this.middleGap
+            ? this.middleGap
+            : theme.middleGap,
+        minimalFinalGap: theme.minimalFinalGap == this.minimalFinalGap
+            ? this.minimalFinalGap
+            : theme.minimalFinalGap,
+        gapBottomBorder: theme.gapBottomBorder == this.gapBottomBorder
+            ? this.gapBottomBorder
+            : theme.gapBottomBorder,
         buttonsArea: this.buttonsArea.copyWith(theme.buttonsArea),
         closeButtonIcon: theme.closeButtonIcon == this.closeButtonIcon
             ? this.closeButtonIcon
@@ -224,24 +235,6 @@ class TabButtonTheme {
   }
 }
 
-class TabGapTheme {
-  const TabGapTheme({this.color, double width = 0, double height = 1})
-      : this.width = width >= 0 ? width : 0,
-        this.height = height >= 0 ? height : 0;
-
-  final Color? color;
-  final double width;
-  final double height;
-
-  /// Creates a copy of this theme but with the values replaced by the positive and non-null properties from the given theme.
-  TabGapTheme copyWith(TabGapTheme theme) {
-    return TabGapTheme(
-        color: theme.color == null ? this.color : theme.color,
-        width: theme.width == this.width ? this.width : theme.width,
-        height: theme.height == this.height ? this.height : theme.height);
-  }
-}
-
 class ContentAreaTheme {
   const ContentAreaTheme({this.decoration, this.padding});
 
@@ -277,8 +270,9 @@ class _Light {
                 border:
                     Border(bottom: BorderSide(color: Colors.black, width: 1))),
             padding: EdgeInsets.only(bottom: 2)),
-        tabGap: TabGapTheme(height: 1, color: Colors.black, width: 0),
-        tabsOffset: 0);
+        middleGap: 4,
+        initialGap: 30,
+        gapBottomBorder: BorderSide(color: Colors.black, width: 1));
   }
 
   static TabTheme _tabTheme() {
@@ -319,7 +313,7 @@ class _Dark {
     return TabsAreaTheme(
         tab: _tabTheme(),
         equalHeights: EqualHeights.all,
-        tabGap: TabGapTheme(width: 4),
+        middleGap: 4,
         buttonsArea: _buttonsAreaTheme());
   }
 

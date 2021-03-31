@@ -574,25 +574,31 @@ class _VisibleTabs {
   }
 
   updateOffsets(BoxConstraints constraints, Size tabsAreaButtonsSize) {
-    double offset = tabsAreaTheme.tabsOffset;
+    double offset = tabsAreaTheme.initialGap;
     for (int i = 0; i < _tabs.length; i++) {
       RenderBox tab = _tabs[i];
       _TabsAreaLayoutParentData tabParentData = tab.tabsAreaLayoutParentData();
 
       tabParentData.offset = Offset(offset, tabParentData.offset.dy);
 
-      // widget width + right gap
-      offset += tab.size.width + tabsAreaTheme.tabGap.width;
+      if (i < _tabs.length - 1) {
+        offset += tab.size.width + tabsAreaTheme.middleGap;
+      } else {
+        offset += tab.size.width + tabsAreaTheme.minimalFinalGap;
+      }
     }
   }
 
   double requiredTabWidth(int index) {
     RenderBox tab = _tabs[index];
-    return tab.size.width + tabsAreaTheme.tabGap.width;
+    if (index < _tabs.length - 1) {
+      return tab.size.width + tabsAreaTheme.middleGap;
+    }
+    return tab.size.width + tabsAreaTheme.minimalFinalGap;
   }
 
   double requiredTotalWidth() {
-    double width = tabsAreaTheme.tabsOffset;
+    double width = 0;
     for (int i = 0; i < _tabs.length; i++) {
       width += requiredTabWidth(i);
     }
@@ -670,7 +676,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     RenderBox tabsAreaButtons = lastChild!;
 
     double availableWidth = constraints.maxWidth -
-        tabsAreaTheme.tabsOffset -
+        tabsAreaTheme.initialGap -
         tabsAreaButtons.size.width;
 
     visibleTabs.updateOffsets(constraints, tabsAreaButtons.size);
@@ -692,7 +698,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         parentUsesSize: true,
       );
       availableWidth = constraints.maxWidth -
-          tabsAreaTheme.tabsOffset -
+          tabsAreaTheme.initialGap -
           tabsAreaButtons.size.width;
 
       visibleTabs.updateOffsets(constraints, tabsAreaButtons.size);
@@ -808,17 +814,25 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
     Canvas canvas = context.canvas;
 
-    Paint? gapPaint;
-    if (tabsAreaTheme.tabGap.color != null) {
-      gapPaint = Paint()
+    Paint? gapBorderPaint;
+    if (tabsAreaTheme.gapBottomBorder.style == BorderStyle.solid &&
+        tabsAreaTheme.gapBottomBorder.width > 0) {
+      gapBorderPaint = Paint()
         ..style = PaintingStyle.fill
-        ..color = tabsAreaTheme.tabGap.color!;
+        ..color = tabsAreaTheme.gapBottomBorder.color;
     }
-
-    double left = offset.dx + tabsAreaTheme.tabsOffset;
     double top = offset.dy;
+    double left = offset.dx;
+    double topGap = top + size.height - tabsAreaTheme.gapBottomBorder.width;
 
-    double topGap = top + size.height - tabsAreaTheme.tabGap.height;
+    // initial gap
+    if (tabsAreaTheme.initialGap > 0 && gapBorderPaint != null) {
+      canvas.drawRect(
+          Rect.fromLTWH(left, topGap, tabsAreaTheme.initialGap,
+              tabsAreaTheme.gapBottomBorder.width),
+          gapBorderPaint);
+    }
+    left += tabsAreaTheme.initialGap;
 
     for (int i = 0; i < visibleTabs.length; i++) {
       RenderBox tab = visibleTabs[i];
@@ -827,15 +841,13 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         left += tab.size.width;
 
         // right gap
-        if (tabsAreaTheme.tabGap.width > 0) {
-          if (gapPaint != null) {
-            canvas.drawRect(
-                Rect.fromLTWH(left, topGap, tabsAreaTheme.tabGap.width,
-                    tabsAreaTheme.tabGap.height),
-                gapPaint);
-          }
-          left += tabsAreaTheme.tabGap.width;
+        if (tabsAreaTheme.middleGap > 0 && gapBorderPaint != null) {
+          canvas.drawRect(
+              Rect.fromLTWH(left, topGap, tabsAreaTheme.middleGap,
+                  tabsAreaTheme.gapBottomBorder.width),
+              gapBorderPaint);
         }
+        left += tabsAreaTheme.middleGap;
       }
     }
 
@@ -843,11 +855,11 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     RenderBox? tabsAreaButtons = lastChild!;
     double lastGapWidth =
         size.width - left - tabsAreaButtons.size.width + offset.dx;
-    if (lastGapWidth > 0 && gapPaint != null) {
+    if (lastGapWidth > 0 && gapBorderPaint != null) {
       canvas.drawRect(
           Rect.fromLTWH(
-              left, topGap, lastGapWidth, tabsAreaTheme.tabGap.height),
-          gapPaint);
+              left, topGap, lastGapWidth, tabsAreaTheme.gapBottomBorder.width),
+          gapBorderPaint);
     }
   }
 
