@@ -7,11 +7,9 @@ enum VerticalAlignment { top, center, bottom }
 
 class TabbedViewTheme {
   const TabbedViewTheme(
-      {this.decoration,
-      this.tabsArea = const TabsAreaTheme(),
+      {this.tabsArea = const TabsAreaTheme(),
       this.contentArea = const ContentAreaTheme()});
 
-  final Decoration? decoration;
   final TabsAreaTheme tabsArea;
   final ContentAreaTheme contentArea;
 
@@ -34,8 +32,6 @@ class TabbedViewTheme {
   /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
   TabbedViewTheme copyWith(TabbedViewTheme theme) {
     return TabbedViewTheme(
-        decoration:
-            theme.decoration == null ? this.decoration : theme.decoration,
         tabsArea: this.tabsArea.copyWith(theme.tabsArea),
         contentArea: this.contentArea.copyWith(theme.contentArea));
   }

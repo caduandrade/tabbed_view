@@ -47,18 +47,12 @@ class _TabbedWiewState extends State<TabbedWiew> {
   @override
   Widget build(BuildContext context) {
     _TabbedWiewScope scope = widget._scope;
-    Widget? body;
-    if (scope.model.tabs.length > 0) {
-      Widget tabArea =
-          _TabsArea(scope: scope, notifyTabbedWidgetChange: _notifyChange);
-
-      _ContentArea contentArea = _ContentArea(scope: scope);
-
-      body = Column(
-          children: [tabArea, Expanded(child: contentArea)],
-          crossAxisAlignment: CrossAxisAlignment.stretch);
-    }
-    return Container(child: body, decoration: scope.theme.decoration);
+    Widget tabArea =
+        _TabsArea(scope: scope, notifyTabbedWidgetChange: _notifyChange);
+    _ContentArea contentArea = _ContentArea(scope: scope);
+    return Column(
+        children: [tabArea, Expanded(child: contentArea)],
+        crossAxisAlignment: CrossAxisAlignment.stretch);
   }
 
   _notifyChange() {
