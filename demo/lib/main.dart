@@ -1,6 +1,6 @@
 import 'package:demo/add_tab_page.dart';
 import 'package:demo/content_builder_page.dart';
-import 'package:demo/custom_light_theme_page.dart';
+import 'package:demo/custom_gaps_theme_page.dart';
 import 'package:demo/minimalist_theme_page.dart';
 import 'package:demo/mobile_theme_page.dart';
 import 'package:demo/new_model_page.dart';
@@ -24,7 +24,7 @@ class Example {
   static const Example new_model = const Example('New model');
   static const Example change_tab = const Example('Change tab');
   static const Example add_tab = const Example('Add tab');
-  static const Example custom_light_theme = const Example('Custom light theme');
+  static const Example custom_gaps_theme = const Example('Custom gaps theme');
 
   static const List<Example> values = [
     Example.simple,
@@ -33,7 +33,7 @@ class Example {
     Example.new_model,
     Example.change_tab,
     Example.add_tab,
-    Example.custom_light_theme,
+    Example.custom_gaps_theme,
     Example.mobile_theme,
     Example.minimalist_theme
   ];
@@ -124,8 +124,8 @@ class _TabbedViewDemoPageState extends State<TabbedViewDemoPage> {
       example = ChangeTabPage();
     } else if (_currentExample == Example.add_tab) {
       example = AddTabPage();
-    } else if (_currentExample == Example.custom_light_theme) {
-      example = CustomLightThemePage();
+    } else if (_currentExample == Example.custom_gaps_theme) {
+      example = CustomGapsThemePage();
     } else if (_currentExample == Example.mobile_theme) {
       example = MobileThemePage();
     } else if (_currentExample == Example.minimalist_theme) {

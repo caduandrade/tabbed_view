@@ -2,12 +2,12 @@ import 'package:demo/example_page.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-class CustomLightThemePage extends StatefulWidget {
+class CustomGapsThemePage extends StatefulWidget {
   @override
-  CustomLightThemePageState createState() => CustomLightThemePageState();
+  CustomGapsThemePageState createState() => CustomGapsThemePageState();
 }
 
-class CustomLightThemePageState extends ExamplePageState {
+class CustomGapsThemePageState extends ExamplePageState {
   @override
   Widget buildContent() {
     List<TabData> tabs = [];
@@ -17,9 +17,7 @@ class CustomLightThemePageState extends ExamplePageState {
     }
     TabbedWiewModel model = TabbedWiewModel(tabs);
 
-    TabbedViewTheme theme = TabbedViewTheme.light().copyWith(TabbedViewTheme());
-
-    TabbedWiew tabbedView = TabbedWiew(model: model, theme: theme);
+    TabbedWiew tabbedView = TabbedWiew(model: model);
     return tabbedView;
   }
 }
