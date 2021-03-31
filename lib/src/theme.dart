@@ -23,6 +23,14 @@ class TabbedViewTheme {
     return _Light.build();
   }
 
+  factory TabbedViewTheme.mobile() {
+    return _Mobile.build();
+  }
+
+  factory TabbedViewTheme.minimalist() {
+    return _Minimalist.build();
+  }
+
   /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
   TabbedViewTheme copyWith(TabbedViewTheme theme) {
     return TabbedViewTheme(
@@ -386,5 +394,83 @@ class _Dark {
     }
     return ContentAreaTheme(
         decoration: BoxDecoration(color: Colors.grey[800]), padding: padding);
+  }
+}
+
+class _Mobile {
+  static TabbedViewTheme build() {
+    return TabbedViewTheme(
+        tabsArea: _tabsAreaTheme(), contentArea: _contentAreaTheme());
+  }
+
+  static TabsAreaTheme _tabsAreaTheme() {
+    return TabsAreaTheme(
+        tab: _tabTheme(),
+        equalHeights: EqualHeights.all,
+        decoration: BoxDecoration(
+            color: Colors.grey[300],
+            border: Border.all(color: Colors.grey[600]!, width: 1)),
+        buttonsArea: ButtonsAreaTheme(
+            decoration: BoxDecoration(color: Colors.grey[600]!),
+            button: TabButtonTheme(color: Colors.white)));
+  }
+
+  static TabTheme _tabTheme() {
+    return TabTheme(
+        buttonsOffset: 8,
+        padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
+        verticalBorder: TabBorderTheme(color: Colors.grey[600]!, thickness: 1),
+        bottomBorder: TabBorderTheme(color: Colors.white, thickness: 4),
+        highlighted: TabStatusTheme(
+            bottomBorder: TabBorderTheme(color: Colors.grey, thickness: 4)),
+        selected: TabStatusTheme(
+            bottomBorder: TabBorderTheme(color: Colors.blue, thickness: 4)));
+  }
+
+  static ContentAreaTheme _contentAreaTheme() {
+    BorderSide borderSide = BorderSide(width: 1, color: Colors.grey[600]!);
+    BoxBorder border =
+        Border(bottom: borderSide, left: borderSide, right: borderSide);
+    BoxDecoration decoration = BoxDecoration(border: border);
+    return ContentAreaTheme(decoration: decoration);
+  }
+}
+
+class _Minimalist {
+  static TabbedViewTheme build() {
+    return TabbedViewTheme(
+        tabsArea: _tabsAreaTheme(), contentArea: _contentAreaTheme());
+  }
+
+  static TabsAreaTheme _tabsAreaTheme() {
+    return TabsAreaTheme(
+        tab: _tabTheme(),
+        equalHeights: EqualHeights.all,
+        decoration: BoxDecoration(
+            color: Colors.grey[300],
+            border: Border.all(color: Colors.grey[600]!, width: 1)),
+        buttonsArea: ButtonsAreaTheme(
+            decoration: BoxDecoration(color: Colors.grey[600]!),
+            button: TabButtonTheme(color: Colors.white)));
+  }
+
+  static TabTheme _tabTheme() {
+    return TabTheme(
+        buttonsOffset: 8,
+        padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
+        verticalBorder: TabBorderTheme(color: Colors.grey[600]!, thickness: 1),
+        bottomBorder: TabBorderTheme(color: Colors.white, thickness: 4),
+        highlighted: TabStatusTheme(
+            bottomBorder: TabBorderTheme(color: Colors.grey, thickness: 4)),
+        selected: TabStatusTheme(
+            bottomBorder: TabBorderTheme(color: Colors.blue, thickness: 4)));
+  }
+
+  static ContentAreaTheme _contentAreaTheme() {
+    BorderSide borderSide = BorderSide(width: 1, color: Colors.grey[600]!);
+    BoxBorder border =
+        Border(bottom: borderSide, left: borderSide, right: borderSide);
+    BoxDecoration decoration = BoxDecoration(border: border);
+    return ContentAreaTheme(decoration: decoration);
   }
 }

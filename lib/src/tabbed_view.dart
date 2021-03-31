@@ -47,7 +47,7 @@ class _TabbedWiewState extends State<TabbedWiew> {
   @override
   Widget build(BuildContext context) {
     _TabbedWiewScope scope = widget._scope;
-    Widget? body = null;
+    Widget? body;
     if (scope.model.tabs.length > 0) {
       Widget tabArea =
           _TabsArea(scope: scope, notifyTabbedWidgetChange: _notifyChange);
