@@ -5,6 +5,29 @@ enum EqualHeights { none, tabs, all }
 
 enum VerticalAlignment { top, center, bottom }
 
+class ButtonColors {
+  final Color normal;
+  final Color hover;
+  final Color disabled;
+
+  const ButtonColors(
+      {this.normal = Colors.black54,
+      this.hover = Colors.black,
+      this.disabled = Colors.black12});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ButtonColors &&
+          runtimeType == other.runtimeType &&
+          normal == other.normal &&
+          hover == other.hover &&
+          disabled == other.disabled;
+
+  @override
+  int get hashCode => normal.hashCode ^ hover.hashCode ^ disabled.hashCode;
+}
+
 class TabbedViewTheme {
   const TabbedViewTheme(
       {this.tabsArea = const TabsAreaTheme(),
@@ -29,6 +52,9 @@ class TabbedViewTheme {
     return _Minimalist.build();
   }
 
+  static const double minimalIconSize = 8;
+  static const double defaultIconSize = 16;
+
   /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
   TabbedViewTheme copyWith(TabbedViewTheme theme) {
     return TabbedViewTheme(
@@ -42,14 +68,20 @@ class ButtonsAreaTheme {
       {this.decoration,
       this.padding,
       double offset = 0,
-      this.button = const TabButtonTheme(),
+      double buttonIconSize = TabbedViewTheme.defaultIconSize,
+      this.buttonColors = const ButtonColors(),
       this.menuTabsButtonIcon = Icons.more_vert})
-      : this.offset = offset >= 0 ? offset : 0;
+      : this.offset = offset >= 0 ? offset : 0,
+        this.buttonIconSize = buttonIconSize >= TabbedViewTheme.minimalIconSize
+            ? buttonIconSize
+            : TabbedViewTheme.minimalIconSize;
 
   final BoxDecoration? decoration;
   final EdgeInsetsGeometry? padding;
   final double offset;
-  final TabButtonTheme button;
+  final double buttonIconSize;
+  final ButtonColors buttonColors;
+
   final IconData menuTabsButtonIcon;
 
   /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
@@ -58,7 +90,12 @@ class ButtonsAreaTheme {
         decoration:
             theme.decoration == null ? this.decoration : theme.decoration,
         offset: theme.offset == this.offset ? this.offset : theme.offset,
-        button: this.button.copyWith(theme.button),
+        buttonIconSize: theme.buttonIconSize == this.buttonIconSize
+            ? this.buttonIconSize
+            : theme.buttonIconSize,
+        buttonColors: theme.buttonColors == this.buttonColors
+            ? this.buttonColors
+            : theme.buttonColors,
         padding: theme.padding == null ? this.padding : theme.padding,
         menuTabsButtonIcon: theme.menuTabsButtonIcon == this.menuTabsButtonIcon
             ? this.menuTabsButtonIcon
@@ -121,7 +158,8 @@ class TabsAreaTheme {
 
 class TabTheme {
   const TabTheme(
-      {this.button = const TabButtonTheme(),
+      {this.buttonColors = const ButtonColors(),
+      double buttonIconSize = TabbedViewTheme.defaultIconSize,
       this.verticalAlignment = VerticalAlignment.center,
       double buttonsOffset = 0,
       double buttonsGap = 0,
@@ -133,7 +171,10 @@ class TabTheme {
       this.normal = const TabStatusTheme(),
       this.disabled = const TabStatusTheme()})
       : this.buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
-        this.buttonsGap = buttonsGap >= 0 ? buttonsGap : 0;
+        this.buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
+        this.buttonIconSize = buttonIconSize >= TabbedViewTheme.minimalIconSize
+            ? buttonIconSize
+            : TabbedViewTheme.minimalIconSize;
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.
@@ -148,7 +189,8 @@ class TabTheme {
 
   final TextStyle? textStyle;
 
-  final TabButtonTheme button;
+  final double buttonIconSize;
+  final ButtonColors buttonColors;
   final double buttonsOffset;
   final double buttonsGap;
 
@@ -167,7 +209,12 @@ class TabTheme {
         decoration:
             theme.decoration == null ? this.decoration : theme.decoration,
         textStyle: theme.textStyle == null ? this.textStyle : theme.textStyle,
-        button: this.button.copyWith(theme.button),
+        buttonColors: theme.buttonColors == this.buttonColors
+            ? this.buttonColors
+            : theme.buttonColors,
+        buttonIconSize: theme.buttonIconSize == this.buttonIconSize
+            ? this.buttonIconSize
+            : theme.buttonIconSize,
         buttonsOffset: theme.buttonsOffset == this.buttonsOffset
             ? this.buttonsOffset
             : theme.buttonsOffset,
@@ -182,7 +229,8 @@ class TabTheme {
 }
 
 class TabStatusTheme {
-  const TabStatusTheme({this.decoration, this.fontColor, this.padding});
+  const TabStatusTheme(
+      {this.decoration, this.fontColor, this.padding, this.buttonColors});
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.
@@ -193,45 +241,17 @@ class TabStatusTheme {
 
   final BoxDecoration? decoration;
   final Color? fontColor;
+  final ButtonColors? buttonColors;
 
   /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
   TabStatusTheme copyWith(TabStatusTheme theme) {
     return TabStatusTheme(
         decoration:
             theme.decoration == null ? this.decoration : theme.decoration,
+        buttonColors: theme.buttonColors == this.buttonColors
+            ? this.buttonColors
+            : theme.buttonColors,
         fontColor: theme.fontColor == null ? this.fontColor : theme.fontColor);
-  }
-}
-
-class TabButtonTheme {
-  static const double minimalIconSize = 8;
-
-  const TabButtonTheme(
-      {double iconSize = 16,
-      this.color = Colors.black54,
-      this.hoverColor = Colors.black,
-      this.disabledColor = Colors.black12})
-      : this.iconSize = iconSize >= TabButtonTheme.minimalIconSize
-            ? iconSize
-            : TabButtonTheme.minimalIconSize;
-
-  final double iconSize;
-  final Color color;
-  final Color hoverColor;
-  final Color disabledColor;
-
-  /// Creates a copy of this theme but with the values replaced by the positive and non-default properties from the given theme.
-  TabButtonTheme copyWith(TabButtonTheme theme) {
-    return TabButtonTheme(
-        iconSize:
-            theme.iconSize == this.iconSize ? this.iconSize : theme.iconSize,
-        color: theme.color == this.color ? this.color : theme.color,
-        hoverColor: theme.hoverColor == this.hoverColor
-            ? this.hoverColor
-            : theme.hoverColor,
-        disabledColor: theme.disabledColor == this.disabledColor
-            ? this.disabledColor
-            : theme.disabledColor);
   }
 }
 
@@ -320,10 +340,10 @@ class _Dark {
     return ButtonsAreaTheme(
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(color: Colors.grey[800]),
-        button: TabButtonTheme(
-            color: Colors.grey[400]!,
-            disabledColor: Colors.grey[600]!,
-            hoverColor: Colors.grey[100]!));
+        buttonColors: ButtonColors(
+            normal: Colors.grey[400]!,
+            disabled: Colors.grey[600]!,
+            hover: Colors.grey[100]!));
   }
 
   static TabTheme _tabTheme() {
@@ -344,10 +364,10 @@ class _Dark {
                 border:
                     Border(bottom: BorderSide(width: 3, color: Colors.black))),
             padding: EdgeInsets.fromLTRB(6, 2, 6, 2)),
-        button: TabButtonTheme(
-            color: Colors.grey[400]!,
-            disabledColor: Colors.grey[600]!,
-            hoverColor: Colors.grey[100]!));
+        buttonColors: ButtonColors(
+            normal: Colors.grey[400]!,
+            disabled: Colors.grey[600]!,
+            hover: Colors.grey[100]!));
   }
 
   static ContentAreaTheme _contentAreaTheme({EdgeInsetsGeometry? padding}) {
@@ -360,50 +380,50 @@ class _Dark {
 }
 
 class _Mobile {
-  static TabbedViewTheme build() {
+  static TabbedViewTheme build({Color borderColor = Colors.grey}) {
     return TabbedViewTheme(
-        tabsArea: _tabsAreaTheme(), contentArea: _contentAreaTheme());
+        tabsArea: _tabsAreaTheme(borderColor),
+        contentArea: _contentAreaTheme(borderColor));
   }
 
-  static TabsAreaTheme _tabsAreaTheme() {
+  static TabsAreaTheme _tabsAreaTheme(Color borderColor) {
     return TabsAreaTheme(
-        tab: _tabTheme(),
+        tab: _tabTheme(borderColor),
         equalHeights: EqualHeights.all,
-        color: Colors.grey[300],
-        border: Border.all(color: Colors.grey[600]!, width: 1),
+        initialGap: -1,
+        middleGap: -1,
+        border: Border.all(color: borderColor, width: 1),
         buttonsArea: ButtonsAreaTheme(
-            decoration: BoxDecoration(color: Colors.grey[600]!),
-            button: TabButtonTheme(color: Colors.white)));
+            decoration: BoxDecoration(color: Colors.grey[300]!)));
   }
 
-  static final BorderSide verticalBorder =
-      BorderSide(color: Colors.grey[600]!, width: 1);
-
-  static TabTheme _tabTheme() {
+  static TabTheme _tabTheme(Color borderColor) {
+    BorderSide verticalBorder = BorderSide(color: borderColor, width: 1);
+    double markHeight = 3;
     return TabTheme(
         buttonsOffset: 8,
         padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
         decoration: BoxDecoration(
             border: Border(
-                bottom: BorderSide(color: Colors.white, width: 4),
+                bottom: BorderSide(color: Colors.white, width: markHeight),
                 left: verticalBorder,
                 right: verticalBorder)),
         highlighted: TabStatusTheme(
             decoration: BoxDecoration(
                 border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: 4),
+                    bottom: BorderSide(color: Colors.grey, width: markHeight),
                     left: verticalBorder,
                     right: verticalBorder))),
         selected: TabStatusTheme(
             decoration: BoxDecoration(
                 border: Border(
-                    bottom: BorderSide(color: Colors.blue, width: 4),
+                    bottom: BorderSide(color: Colors.blue, width: markHeight),
                     left: verticalBorder,
                     right: verticalBorder))));
   }
 
-  static ContentAreaTheme _contentAreaTheme() {
-    BorderSide borderSide = BorderSide(width: 1, color: Colors.grey[600]!);
+  static ContentAreaTheme _contentAreaTheme(Color borderColor) {
+    BorderSide borderSide = BorderSide(width: 1, color: borderColor);
     BoxBorder border =
         Border(bottom: borderSide, left: borderSide, right: borderSide);
     BoxDecoration decoration = BoxDecoration(border: border);
@@ -412,50 +432,35 @@ class _Mobile {
 }
 
 class _Minimalist {
-  static TabbedViewTheme build() {
+  static TabbedViewTheme build({Color? borderColor}) {
+    Color bc = borderColor ?? Colors.grey[700]!;
     return TabbedViewTheme(
-        tabsArea: _tabsAreaTheme(), contentArea: _contentAreaTheme());
+        tabsArea: _tabsAreaTheme(bc), contentArea: _contentAreaTheme(bc));
   }
 
-  static TabsAreaTheme _tabsAreaTheme() {
+  static TabsAreaTheme _tabsAreaTheme(Color borderColor) {
     return TabsAreaTheme(
-        tab: _tabTheme(),
+        tab: _tabTheme(borderColor),
+        middleGap: 8,
         equalHeights: EqualHeights.all,
-        color: Colors.grey[300],
-        border: Border.all(color: Colors.grey[600]!, width: 1),
-        buttonsArea: ButtonsAreaTheme(
-            decoration: BoxDecoration(color: Colors.grey[600]!),
-            button: TabButtonTheme(color: Colors.white)));
+        border: Border(bottom: BorderSide(color: borderColor, width: 1)));
   }
 
-  static final BorderSide verticalBorder =
-      BorderSide(color: Colors.grey[600]!, width: 1);
-
-  static TabTheme _tabTheme() {
+  static TabTheme _tabTheme(Color borderColor) {
     return TabTheme(
         buttonsOffset: 8,
-        padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Colors.white, width: 4),
-                left: verticalBorder,
-                right: verticalBorder)),
-        highlighted: TabStatusTheme(
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: 4),
-                    left: verticalBorder,
-                    right: verticalBorder))),
+        padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
         selected: TabStatusTheme(
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.blue, width: 4),
-                    left: verticalBorder,
-                    right: verticalBorder))));
+            fontColor: Colors.white,
+            decoration: BoxDecoration(color: borderColor)),
+        buttonColors: ButtonColors(
+            normal: Colors.white60,
+            hover: Colors.white,
+            disabled: Colors.white24));
   }
 
-  static ContentAreaTheme _contentAreaTheme() {
-    BorderSide borderSide = BorderSide(width: 1, color: Colors.grey[600]!);
+  static ContentAreaTheme _contentAreaTheme(Color borderColor) {
+    BorderSide borderSide = BorderSide(width: 1, color: borderColor);
     BoxBorder border =
         Border(bottom: borderSide, left: borderSide, right: borderSide);
     BoxDecoration decoration = BoxDecoration(border: border);

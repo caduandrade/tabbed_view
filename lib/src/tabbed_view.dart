@@ -157,7 +157,8 @@ class _TabsAreaState extends State<_TabsArea> {
       buttonsArea = _TabButtonWidget(
           button: menuTabsButton,
           enabled: true,
-          theme: buttonsAreaTheme.button);
+          colors: buttonsAreaTheme.buttonColors,
+          iconSize: buttonsAreaTheme.buttonIconSize);
 
       EdgeInsetsGeometry? margin;
       if (buttonsAreaTheme.offset > 0) {
@@ -242,6 +243,9 @@ class _TabWidget extends StatelessWidget {
     TabsAreaTheme tabsAreaTheme = scope.theme.tabsArea;
     TabTheme tabTheme = tabsAreaTheme.tab;
     TabStatusTheme statusTheme = _getTabThemeFor(status);
+    ButtonColors buttonColors = statusTheme.buttonColors != null
+        ? statusTheme.buttonColors!
+        : tabTheme.buttonColors;
 
     TextStyle? textStyle = tabTheme.textStyle;
     if (statusTheme.fontColor != null) {
@@ -261,12 +265,15 @@ class _TabWidget extends StatelessWidget {
       textAndButtons.add(SizedBox(width: tabTheme.buttonsOffset));
     }
     bool hasButtons = data.buttons != null && data.buttons!.length > 0;
-    TabButtonTheme buttonTheme = tabTheme.button;
+
     if (hasButtons) {
       for (int i = 0; i < data.buttons!.length; i++) {
         TabButton button = data.buttons![i];
         textAndButtons.add(_TabButtonWidget(
-            button: button, enabled: buttonsEnabled, theme: buttonTheme));
+            button: button,
+            enabled: buttonsEnabled,
+            colors: buttonColors,
+            iconSize: tabTheme.buttonIconSize));
         if (i < data.buttons!.length - 1 && tabTheme.buttonsGap > 0) {
           textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
         }
@@ -282,7 +289,10 @@ class _TabWidget extends StatelessWidget {
           toolTip: scope.closeButtonTooltip);
 
       textAndButtons.add(_TabButtonWidget(
-          button: closeButton, enabled: buttonsEnabled, theme: buttonTheme));
+          button: closeButton,
+          enabled: buttonsEnabled,
+          colors: buttonColors,
+          iconSize: tabTheme.buttonIconSize));
     }
 
     CrossAxisAlignment? alignment;
@@ -366,10 +376,14 @@ class _TabWidget extends StatelessWidget {
 
 class _TabButtonWidget extends StatefulWidget {
   _TabButtonWidget(
-      {required this.button, required this.enabled, required this.theme});
+      {required this.button,
+      required this.enabled,
+      required this.iconSize,
+      required this.colors});
 
   final TabButton button;
-  final TabButtonTheme theme;
+  final double iconSize;
+  final ButtonColors colors;
   final bool enabled;
 
   @override
@@ -380,12 +394,13 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
   bool _hover = false;
   @override
   Widget build(BuildContext context) {
-    Color color =
-        widget.button.color != null ? widget.button.color! : widget.theme.color;
+    Color color = widget.button.color != null
+        ? widget.button.color!
+        : widget.colors.normal;
 
     Color hoverColor = widget.button.hoverColor != null
         ? widget.button.hoverColor!
-        : widget.theme.hoverColor;
+        : widget.colors.hover;
 
     bool hasEvent = widget.button.onPressed != null ||
         (widget.button.popupMenuItemBuilder != null &&
@@ -394,14 +409,14 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
     if (hasEvent == false || widget.enabled == false) {
       Color disabledColor = widget.button.disabledColor != null
           ? widget.button.disabledColor!
-          : widget.theme.disabledColor;
+          : widget.colors.disabled;
       return Icon(widget.button.icon,
-          color: disabledColor, size: widget.theme.iconSize);
+          color: disabledColor, size: widget.iconSize);
     }
 
     Color finalColor = _hover ? hoverColor : color;
-    Widget icon = Icon(widget.button.icon,
-        color: finalColor, size: widget.theme.iconSize);
+    Widget icon =
+        Icon(widget.button.icon, color: finalColor, size: widget.iconSize);
 
     if (widget.button.popupMenuItemBuilder != null) {
       // Can't disable tooltip.
