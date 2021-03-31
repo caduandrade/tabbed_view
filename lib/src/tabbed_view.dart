@@ -136,9 +136,13 @@ class _TabsAreaState extends State<_TabsArea> {
         selectedTabIndex: model.selectedIndex);
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
 
+    Decoration? decoration;
+    if (tabsAreaTheme.color != null || tabsAreaTheme.border != null) {
+      decoration = BoxDecoration(
+          color: tabsAreaTheme.color, border: tabsAreaTheme.border);
+    }
     return Container(
-        child: MouseRegion(child: tabsAreaLayout),
-        decoration: tabsAreaTheme.decoration);
+        child: MouseRegion(child: tabsAreaLayout), decoration: decoration);
   }
 
   Widget _buttonsAreaBuilder(BuildContext context) {

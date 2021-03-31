@@ -72,12 +72,14 @@ class TabsAreaTheme {
       this.tab = const TabTheme(),
       this.tabGap = const TabGapTheme(),
       this.buttonsArea = const ButtonsAreaTheme(),
-      this.decoration,
+      this.color,
+      this.border,
       double tabsOffset = 0,
       this.equalHeights = EqualHeights.none})
       : this.tabsOffset = tabsOffset >= 0 ? tabsOffset : 0;
 
-  final Decoration? decoration;
+  final Color? color;
+  final Border? border;
   final TabTheme tab;
   final double tabsOffset;
   final TabGapTheme tabGap;
@@ -89,8 +91,8 @@ class TabsAreaTheme {
   /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
   TabsAreaTheme copyWith(TabsAreaTheme theme) {
     return TabsAreaTheme(
-        decoration:
-            theme.decoration == null ? this.decoration : theme.decoration,
+        color: theme.color == null ? this.color : theme.color,
+        border: theme.border == null ? this.border : theme.border,
         tab: this.tab.copyWith(theme.tab),
         tabsOffset: theme.tabsOffset == this.tabsOffset
             ? this.tabsOffset
@@ -387,9 +389,8 @@ class _Mobile {
     return TabsAreaTheme(
         tab: _tabTheme(),
         equalHeights: EqualHeights.all,
-        decoration: BoxDecoration(
-            color: Colors.grey[300],
-            border: Border.all(color: Colors.grey[600]!, width: 1)),
+        color: Colors.grey[300],
+        border: Border.all(color: Colors.grey[600]!, width: 1),
         buttonsArea: ButtonsAreaTheme(
             decoration: BoxDecoration(color: Colors.grey[600]!),
             button: TabButtonTheme(color: Colors.white)));
@@ -426,9 +427,8 @@ class _Minimalist {
     return TabsAreaTheme(
         tab: _tabTheme(),
         equalHeights: EqualHeights.all,
-        decoration: BoxDecoration(
-            color: Colors.grey[300],
-            border: Border.all(color: Colors.grey[600]!, width: 1)),
+        color: Colors.grey[300],
+        border: Border.all(color: Colors.grey[600]!, width: 1),
         buttonsArea: ButtonsAreaTheme(
             decoration: BoxDecoration(color: Colors.grey[600]!),
             button: TabButtonTheme(color: Colors.white)));
