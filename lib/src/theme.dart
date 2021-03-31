@@ -115,9 +115,9 @@ class TabTheme {
       this.color,
       this.textStyle = const TextStyle(fontSize: 13),
       this.padding,
-      this.verticalBorder = const TabBorderTheme(),
-      this.topBorder = const TabBorderTheme(),
-      this.bottomBorder = const TabBorderTheme(),
+      this.verticalBorder = BorderSide.none,
+      this.topBorder = BorderSide.none,
+      this.bottomBorder = BorderSide.none,
       this.selected = const TabStatusTheme(),
       this.highlighted = const TabStatusTheme(),
       this.normal = const TabStatusTheme(),
@@ -137,9 +137,9 @@ class TabTheme {
   final Color? color;
   final TextStyle? textStyle;
 
-  final TabBorderTheme verticalBorder;
-  final TabBorderTheme topBorder;
-  final TabBorderTheme bottomBorder;
+  final BorderSide verticalBorder;
+  final BorderSide topBorder;
+  final BorderSide bottomBorder;
 
   final TabButtonTheme button;
   final double buttonsOffset;
@@ -159,9 +159,15 @@ class TabTheme {
         padding: theme.padding == null ? this.padding : theme.padding,
         color: theme.color == null ? this.color : theme.color,
         textStyle: theme.textStyle == null ? this.textStyle : theme.textStyle,
-        verticalBorder: this.verticalBorder.copyWith(theme.verticalBorder),
-        topBorder: this.topBorder.copyWith(theme.topBorder),
-        bottomBorder: this.bottomBorder.copyWith(theme.bottomBorder),
+        verticalBorder: this.verticalBorder == theme.verticalBorder
+            ? this.verticalBorder
+            : theme.verticalBorder,
+        topBorder: this.topBorder == theme.topBorder
+            ? this.topBorder
+            : theme.topBorder,
+        bottomBorder: this.bottomBorder == theme.bottomBorder
+            ? this.bottomBorder
+            : theme.bottomBorder,
         button: this.button.copyWith(theme.button),
         buttonsOffset: theme.buttonsOffset == this.buttonsOffset
             ? this.buttonsOffset
@@ -193,20 +199,20 @@ class TabStatusTheme {
 
   final Color? color;
   final Color? fontColor;
-  final TabBorderTheme? topBorder;
-  final TabBorderTheme? bottomBorder;
+  final BorderSide? topBorder;
+  final BorderSide? bottomBorder;
 
   /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
   TabStatusTheme copyWith(TabStatusTheme theme) {
     return TabStatusTheme(
         color: theme.color == null ? this.color : theme.color,
         fontColor: theme.fontColor == null ? this.fontColor : theme.fontColor,
-        topBorder: this.topBorder == null
-            ? theme.topBorder
-            : this.topBorder!.copyWith(theme.topBorder),
-        bottomBorder: this.bottomBorder == null
-            ? theme.bottomBorder
-            : this.bottomBorder!.copyWith(theme.bottomBorder));
+        topBorder: this.topBorder == theme.topBorder
+            ? this.topBorder
+            : theme.topBorder,
+        bottomBorder: this.bottomBorder == theme.bottomBorder
+            ? this.bottomBorder
+            : theme.bottomBorder);
   }
 }
 
@@ -239,26 +245,6 @@ class TabButtonTheme {
         disabledColor: theme.disabledColor == this.disabledColor
             ? this.disabledColor
             : theme.disabledColor);
-  }
-}
-
-class TabBorderTheme {
-  const TabBorderTheme({this.color, double thickness = 0})
-      : this.thickness = thickness >= 0 ? thickness : 0;
-
-  final Color? color;
-  final double thickness;
-
-  /// Creates a copy of this theme but with the values replaced by the positive and non-null properties from the given theme.
-  TabBorderTheme copyWith(TabBorderTheme? theme) {
-    if (theme != null) {
-      return TabBorderTheme(
-          color: theme.color == null ? this.color : theme.color,
-          thickness: theme.thickness == this.thickness
-              ? this.thickness
-              : theme.thickness);
-    }
-    return TabBorderTheme(color: this.color, thickness: this.thickness);
   }
 }
 
@@ -320,17 +306,16 @@ class _Light {
   }
 
   static TabTheme _tabTheme() {
-    TabBorderTheme horizontalBorder =
-        TabBorderTheme(color: Colors.black, thickness: 1);
+    BorderSide horizontalBorder = BorderSide(color: Colors.black, width: 1);
     return TabTheme(
         padding: EdgeInsets.fromLTRB(6, 2, 6, 2),
-        verticalBorder: TabBorderTheme(color: Colors.black, thickness: 1),
+        verticalBorder: BorderSide(color: Colors.black, width: 1),
         topBorder: horizontalBorder,
         bottomBorder: horizontalBorder,
         highlighted:
             TabStatusTheme(color: const Color.fromRGBO(230, 230, 230, 1)),
         selected: TabStatusTheme(
-          bottomBorder: TabBorderTheme(),
+          bottomBorder: BorderSide.none,
           padding: EdgeInsets.fromLTRB(6, 2, 6, 8),
         ));
   }
@@ -372,11 +357,10 @@ class _Dark {
     return TabTheme(
         color: Colors.grey[900],
         padding: EdgeInsets.fromLTRB(6, 2, 6, 2),
-        bottomBorder: TabBorderTheme(thickness: 3, color: Colors.black),
+        bottomBorder: BorderSide(width: 3, color: Colors.black),
         selected: TabStatusTheme(
             color: Colors.grey[800],
-            bottomBorder:
-                TabBorderTheme(thickness: 3, color: Colors.grey[800])),
+            bottomBorder: BorderSide(width: 3, color: Colors.grey[800]!)),
         highlighted: TabStatusTheme(color: Colors.grey[700]),
         button: TabButtonTheme(
             color: Colors.grey[400]!,
@@ -415,12 +399,12 @@ class _Mobile {
     return TabTheme(
         buttonsOffset: 8,
         padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
-        verticalBorder: TabBorderTheme(color: Colors.grey[600]!, thickness: 1),
-        bottomBorder: TabBorderTheme(color: Colors.white, thickness: 4),
+        verticalBorder: BorderSide(color: Colors.grey[600]!, width: 1),
+        bottomBorder: BorderSide(color: Colors.white, width: 4),
         highlighted: TabStatusTheme(
-            bottomBorder: TabBorderTheme(color: Colors.grey, thickness: 4)),
+            bottomBorder: BorderSide(color: Colors.grey, width: 4)),
         selected: TabStatusTheme(
-            bottomBorder: TabBorderTheme(color: Colors.blue, thickness: 4)));
+            bottomBorder: BorderSide(color: Colors.blue, width: 4)));
   }
 
   static ContentAreaTheme _contentAreaTheme() {
@@ -454,12 +438,12 @@ class _Minimalist {
     return TabTheme(
         buttonsOffset: 8,
         padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
-        verticalBorder: TabBorderTheme(color: Colors.grey[600]!, thickness: 1),
-        bottomBorder: TabBorderTheme(color: Colors.white, thickness: 4),
+        verticalBorder: BorderSide(color: Colors.grey[600]!, width: 1),
+        bottomBorder: BorderSide(color: Colors.white, width: 4),
         highlighted: TabStatusTheme(
-            bottomBorder: TabBorderTheme(color: Colors.grey, thickness: 4)),
+            bottomBorder: BorderSide(color: Colors.grey, width: 4)),
         selected: TabStatusTheme(
-            bottomBorder: TabBorderTheme(color: Colors.blue, thickness: 4)));
+            bottomBorder: BorderSide(color: Colors.blue, width: 4)));
   }
 
   static ContentAreaTheme _contentAreaTheme() {

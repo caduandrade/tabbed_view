@@ -133,8 +133,9 @@ class _TabsAreaState extends State<_TabsArea> {
         buttonsAreaBuilder: _buttonsAreaBuilder,
         theme: widget.scope.theme,
         hiddenTabs: hiddenTabs,
-        selectedTabIndex: widget.scope.model.selectedIndex);
+        selectedTabIndex: model.selectedIndex);
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
+
     return Container(
         child: MouseRegion(child: tabsAreaLayout),
         decoration: tabsAreaTheme.decoration);
@@ -300,10 +301,11 @@ class _TabWidget extends StatelessWidget {
     } else if (tabsAreaTheme.tab.color != null) {
       color = tabsAreaTheme.tab.color;
     }
+
     BorderSide topBorderSide =
-        _buildBorderSide(tabsAreaTheme.tab.topBorder, statusTheme.topBorder);
-    BorderSide bottomBorderSide = _buildBorderSide(
-        tabsAreaTheme.tab.bottomBorder, statusTheme.bottomBorder);
+        statusTheme.topBorder ?? tabsAreaTheme.tab.topBorder;
+    BorderSide bottomBorderSide =
+        statusTheme.bottomBorder ?? tabsAreaTheme.tab.bottomBorder;
     Decoration decoration = BoxDecoration(
         color: color,
         border: Border(bottom: bottomBorderSide, top: topBorderSide));
@@ -340,24 +342,6 @@ class _TabWidget extends StatelessWidget {
 
   _onExit(PointerExitEvent details, BuildContext context) {
     updateHighlightedIndex(null);
-  }
-
-  BorderSide _buildBorderSide(
-      TabBorderTheme parentTheme, TabBorderTheme? theme) {
-    Color? color = parentTheme.color;
-    double height = parentTheme.thickness;
-    if (theme != null) {
-      if (theme.color != null) {
-        color = theme.color;
-        height = theme.thickness;
-      } else {
-        return BorderSide.none;
-      }
-    }
-    if (color != null && height > 0) {
-      return BorderSide(color: color, width: height);
-    }
-    return BorderSide.none;
   }
 
   _onClose(int index) {
@@ -597,13 +581,13 @@ class _VisibleTabs {
       RenderBox tab = _tabs[i];
       _TabsAreaLayoutParentData tabParentData = tab.tabsAreaLayoutParentData();
       if (i == 0 || (i > 0 && tabsAreaTheme.tabGap.width > 0)) {
-        offset += tabsAreaTheme.tab.verticalBorder.thickness;
+        offset += tabsAreaTheme.tab.verticalBorder._effectiveValue();
       }
       tabParentData.offset = Offset(offset, tabParentData.offset.dy);
 
       // widget width + right border + right gap
       offset += tab.size.width +
-          tabsAreaTheme.tab.verticalBorder.thickness +
+          tabsAreaTheme.tab.verticalBorder._effectiveValue() +
           tabsAreaTheme.tabGap.width;
     }
   }
@@ -613,11 +597,11 @@ class _VisibleTabs {
     double width = 0;
     if (index == 0 || (index > 0 && tabsAreaTheme.tabGap.width > 0)) {
       // left border
-      width += tabsAreaTheme.tab.verticalBorder.thickness;
+      width += tabsAreaTheme.tab.verticalBorder._effectiveValue();
     }
     // widget width + right border + right gap
     width += tab.size.width +
-        tabsAreaTheme.tab.verticalBorder.thickness +
+        tabsAreaTheme.tab.verticalBorder._effectiveValue() +
         tabsAreaTheme.tabGap.width;
     return width;
   }
@@ -863,24 +847,24 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       if (tabParentData.visible) {
         // left border
         if (i == 0 || (i > 0 && tabsAreaTheme.tabGap.width > 0)) {
-          if (tabsAreaTheme.tab.verticalBorder.thickness > 0) {
+          if (tabsAreaTheme.tab.verticalBorder._effectiveValue() > 0) {
             if (verticalBorderPaint != null) {
               canvas.drawRect(
                   Rect.fromLTWH(
                       left,
                       top + size.height - tab.size.height,
-                      tabsAreaTheme.tab.verticalBorder.thickness,
+                      tabsAreaTheme.tab.verticalBorder._effectiveValue(),
                       tab.size.height),
                   verticalBorderPaint);
             }
-            left += tabsAreaTheme.tab.verticalBorder.thickness;
+            left += tabsAreaTheme.tab.verticalBorder._effectiveValue();
           }
         }
 
         left += tab.size.width;
 
         // right border
-        if (tabsAreaTheme.tab.verticalBorder.thickness > 0) {
+        if (tabsAreaTheme.tab.verticalBorder._effectiveValue() > 0) {
           if (verticalBorderPaint != null) {
             double rightBorderTop = top + size.height - tab.size.height;
             double rightBorderHeight = tab.size.height;
@@ -896,11 +880,11 @@ class _TabsAreaLayoutRenderBox extends RenderBox
                 Rect.fromLTWH(
                     left,
                     rightBorderTop,
-                    tabsAreaTheme.tab.verticalBorder.thickness,
+                    tabsAreaTheme.tab.verticalBorder._effectiveValue(),
                     rightBorderHeight),
                 verticalBorderPaint);
           }
-          left += tabsAreaTheme.tab.verticalBorder.thickness;
+          left += tabsAreaTheme.tab.verticalBorder._effectiveValue();
         }
 
         // right gap
@@ -951,5 +935,14 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 extension _TabsAreaLayoutParentDataGetter on RenderObject {
   _TabsAreaLayoutParentData tabsAreaLayoutParentData() {
     return this.parentData as _TabsAreaLayoutParentData;
+  }
+}
+
+extension _TabEffectiveValue on BorderSide {
+  double _effectiveValue() {
+    if (style == BorderStyle.solid) {
+      return width;
+    }
+    return 0;
   }
 }
