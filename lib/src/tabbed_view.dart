@@ -852,14 +852,26 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     }
 
     // fill last gap
-    RenderBox? tabsAreaButtons = lastChild!;
-    double lastGapWidth =
-        size.width - left - tabsAreaButtons.size.width + offset.dx;
-    if (lastGapWidth > 0 && gapBorderPaint != null) {
-      canvas.drawRect(
-          Rect.fromLTWH(
-              left, topGap, lastGapWidth, tabsAreaTheme.gapBottomBorder.width),
-          gapBorderPaint);
+    if (gapBorderPaint != null) {
+      double lastX;
+      if (visibleTabs.length > 0) {
+        RenderBox lastTab = visibleTabs.last;
+        _TabsAreaLayoutParentData tabParentData =
+            lastTab.tabsAreaLayoutParentData();
+        lastX = tabParentData.offset.dx + lastTab.size.width;
+      } else {
+        lastX = offset.dx + tabsAreaTheme.initialGap;
+      }
+
+      RenderBox? tabsAreaButtons = lastChild!;
+      double lastGapWidth =
+          size.width - lastX - tabsAreaButtons.size.width + offset.dx;
+      if (lastGapWidth > 0) {
+        canvas.drawRect(
+            Rect.fromLTWH(lastX, topGap, lastGapWidth,
+                tabsAreaTheme.gapBottomBorder.width),
+            gapBorderPaint);
+      }
     }
   }
 

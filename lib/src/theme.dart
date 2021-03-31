@@ -270,8 +270,7 @@ class _Light {
                 border:
                     Border(bottom: BorderSide(color: Colors.black, width: 1))),
             padding: EdgeInsets.only(bottom: 2)),
-        middleGap: 4,
-        initialGap: 30,
+        middleGap: -1,
         gapBottomBorder: BorderSide(color: Colors.black, width: 1));
   }
 
