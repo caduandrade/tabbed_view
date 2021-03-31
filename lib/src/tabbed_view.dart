@@ -822,12 +822,9 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     });
 
     Canvas canvas = context.canvas;
-    Paint? verticalBorderPaint;
-    if (tabsAreaTheme.tab.verticalBorder.color != null) {
-      verticalBorderPaint = Paint()
-        ..style = PaintingStyle.fill
-        ..color = tabsAreaTheme.tab.verticalBorder.color!;
-    }
+    Paint verticalBorderPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = tabsAreaTheme.tab.verticalBorder.color;
 
     Paint? gapPaint;
     if (tabsAreaTheme.tabGap.color != null) {
@@ -848,15 +845,13 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         // left border
         if (i == 0 || (i > 0 && tabsAreaTheme.tabGap.width > 0)) {
           if (tabsAreaTheme.tab.verticalBorder._effectiveValue() > 0) {
-            if (verticalBorderPaint != null) {
-              canvas.drawRect(
-                  Rect.fromLTWH(
-                      left,
-                      top + size.height - tab.size.height,
-                      tabsAreaTheme.tab.verticalBorder._effectiveValue(),
-                      tab.size.height),
-                  verticalBorderPaint);
-            }
+            canvas.drawRect(
+                Rect.fromLTWH(
+                    left,
+                    top + size.height - tab.size.height,
+                    tabsAreaTheme.tab.verticalBorder._effectiveValue(),
+                    tab.size.height),
+                verticalBorderPaint);
             left += tabsAreaTheme.tab.verticalBorder._effectiveValue();
           }
         }
@@ -865,25 +860,23 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
         // right border
         if (tabsAreaTheme.tab.verticalBorder._effectiveValue() > 0) {
-          if (verticalBorderPaint != null) {
-            double rightBorderTop = top + size.height - tab.size.height;
-            double rightBorderHeight = tab.size.height;
-            if (tabsAreaTheme.tabGap.width == 0 && i < visibleTabs.length - 1) {
-              RenderBox nextTab = visibleTabs[i + 1];
-              rightBorderTop = math.min(
-                  rightBorderTop, top + size.height - nextTab.size.height);
-              rightBorderHeight =
-                  math.max(rightBorderHeight, nextTab.size.height);
-            }
-
-            canvas.drawRect(
-                Rect.fromLTWH(
-                    left,
-                    rightBorderTop,
-                    tabsAreaTheme.tab.verticalBorder._effectiveValue(),
-                    rightBorderHeight),
-                verticalBorderPaint);
+          double rightBorderTop = top + size.height - tab.size.height;
+          double rightBorderHeight = tab.size.height;
+          if (tabsAreaTheme.tabGap.width == 0 && i < visibleTabs.length - 1) {
+            RenderBox nextTab = visibleTabs[i + 1];
+            rightBorderTop = math.min(
+                rightBorderTop, top + size.height - nextTab.size.height);
+            rightBorderHeight =
+                math.max(rightBorderHeight, nextTab.size.height);
           }
+
+          canvas.drawRect(
+              Rect.fromLTWH(
+                  left,
+                  rightBorderTop,
+                  tabsAreaTheme.tab.verticalBorder._effectiveValue(),
+                  rightBorderHeight),
+              verticalBorderPaint);
           left += tabsAreaTheme.tab.verticalBorder._effectiveValue();
         }
 
