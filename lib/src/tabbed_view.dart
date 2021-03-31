@@ -240,9 +240,10 @@ class _TabWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     TabData data = scope.model.tabs[index];
     TabsAreaTheme tabsAreaTheme = scope.theme.tabsArea;
+    TabTheme tabTheme = tabsAreaTheme.tab;
     TabStatusTheme statusTheme = _getTabThemeFor(status);
 
-    TextStyle? textStyle = tabsAreaTheme.tab.textStyle;
+    TextStyle? textStyle = tabTheme.textStyle;
     if (statusTheme.fontColor != null) {
       if (textStyle != null) {
         textStyle = textStyle.copyWith(color: statusTheme.fontColor);
@@ -256,24 +257,24 @@ class _TabWidget extends StatelessWidget {
         (scope.selectToEnableButtons && status == _TabStatus.selected);
     if (data.closable ||
         (data.buttons != null && data.buttons!.length > 0) &&
-            tabsAreaTheme.tab.buttonsOffset > 0) {
-      textAndButtons.add(SizedBox(width: tabsAreaTheme.tab.buttonsOffset));
+            tabTheme.buttonsOffset > 0) {
+      textAndButtons.add(SizedBox(width: tabTheme.buttonsOffset));
     }
     bool hasButtons = data.buttons != null && data.buttons!.length > 0;
-    TabButtonTheme buttonTheme = tabsAreaTheme.tab.button;
+    TabButtonTheme buttonTheme = tabTheme.button;
     if (hasButtons) {
       for (int i = 0; i < data.buttons!.length; i++) {
         TabButton button = data.buttons![i];
         textAndButtons.add(_TabButtonWidget(
             button: button, enabled: buttonsEnabled, theme: buttonTheme));
-        if (i < data.buttons!.length - 1 && tabsAreaTheme.tab.buttonsGap > 0) {
-          textAndButtons.add(SizedBox(width: tabsAreaTheme.tab.buttonsGap));
+        if (i < data.buttons!.length - 1 && tabTheme.buttonsGap > 0) {
+          textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
         }
       }
     }
     if (data.closable) {
-      if (hasButtons && tabsAreaTheme.tab.buttonsGap > 0) {
-        textAndButtons.add(SizedBox(width: tabsAreaTheme.tab.buttonsGap));
+      if (hasButtons && tabTheme.buttonsGap > 0) {
+        textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
       }
       TabButton closeButton = TabButton(
           icon: tabsAreaTheme.closeButtonIcon,
@@ -285,7 +286,7 @@ class _TabWidget extends StatelessWidget {
     }
 
     CrossAxisAlignment? alignment;
-    switch (tabsAreaTheme.tab.verticalAlignment) {
+    switch (tabTheme.verticalAlignment) {
       case VerticalAlignment.top:
         alignment = CrossAxisAlignment.start;
         break;
@@ -298,21 +299,14 @@ class _TabWidget extends StatelessWidget {
     Widget textAndButtonsContainer =
         Row(children: textAndButtons, crossAxisAlignment: alignment);
 
-    ThemeData theme = Theme.of(context);
-    Color? color = theme.scaffoldBackgroundColor;
-    if (statusTheme.color != null) {
-      color = statusTheme.color;
-    } else if (tabsAreaTheme.tab.color != null) {
-      color = tabsAreaTheme.tab.color;
+    BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
+    if (decoration == null) {
+      decoration =
+          BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor);
+    } else if (decoration.color == null) {
+      decoration =
+          decoration.copyWith(color: Theme.of(context).scaffoldBackgroundColor);
     }
-
-    BorderSide topBorderSide =
-        statusTheme.topBorder ?? tabsAreaTheme.tab.topBorder;
-    BorderSide bottomBorderSide =
-        statusTheme.bottomBorder ?? tabsAreaTheme.tab.bottomBorder;
-    Decoration decoration = BoxDecoration(
-        color: color,
-        border: Border(bottom: bottomBorderSide, top: topBorderSide));
 
     EdgeInsetsGeometry? padding = tabsAreaTheme.tab.padding;
     if (statusTheme.padding != null) {
@@ -584,30 +578,17 @@ class _VisibleTabs {
     for (int i = 0; i < _tabs.length; i++) {
       RenderBox tab = _tabs[i];
       _TabsAreaLayoutParentData tabParentData = tab.tabsAreaLayoutParentData();
-      if (i == 0 || (i > 0 && tabsAreaTheme.tabGap.width > 0)) {
-        offset += tabsAreaTheme.tab.verticalBorder._effectiveValue();
-      }
+
       tabParentData.offset = Offset(offset, tabParentData.offset.dy);
 
-      // widget width + right border + right gap
-      offset += tab.size.width +
-          tabsAreaTheme.tab.verticalBorder._effectiveValue() +
-          tabsAreaTheme.tabGap.width;
+      // widget width + right gap
+      offset += tab.size.width + tabsAreaTheme.tabGap.width;
     }
   }
 
   double requiredTabWidth(int index) {
     RenderBox tab = _tabs[index];
-    double width = 0;
-    if (index == 0 || (index > 0 && tabsAreaTheme.tabGap.width > 0)) {
-      // left border
-      width += tabsAreaTheme.tab.verticalBorder._effectiveValue();
-    }
-    // widget width + right border + right gap
-    width += tab.size.width +
-        tabsAreaTheme.tab.verticalBorder._effectiveValue() +
-        tabsAreaTheme.tabGap.width;
-    return width;
+    return tab.size.width + tabsAreaTheme.tabGap.width;
   }
 
   double requiredTotalWidth() {
@@ -826,9 +807,6 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     });
 
     Canvas canvas = context.canvas;
-    Paint verticalBorderPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = tabsAreaTheme.tab.verticalBorder.color;
 
     Paint? gapPaint;
     if (tabsAreaTheme.tabGap.color != null) {
@@ -846,43 +824,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       RenderBox tab = visibleTabs[i];
       _TabsAreaLayoutParentData tabParentData = tab.tabsAreaLayoutParentData();
       if (tabParentData.visible) {
-        // left border
-        if (i == 0 || (i > 0 && tabsAreaTheme.tabGap.width > 0)) {
-          if (tabsAreaTheme.tab.verticalBorder._effectiveValue() > 0) {
-            canvas.drawRect(
-                Rect.fromLTWH(
-                    left,
-                    top + size.height - tab.size.height,
-                    tabsAreaTheme.tab.verticalBorder._effectiveValue(),
-                    tab.size.height),
-                verticalBorderPaint);
-            left += tabsAreaTheme.tab.verticalBorder._effectiveValue();
-          }
-        }
-
         left += tab.size.width;
-
-        // right border
-        if (tabsAreaTheme.tab.verticalBorder._effectiveValue() > 0) {
-          double rightBorderTop = top + size.height - tab.size.height;
-          double rightBorderHeight = tab.size.height;
-          if (tabsAreaTheme.tabGap.width == 0 && i < visibleTabs.length - 1) {
-            RenderBox nextTab = visibleTabs[i + 1];
-            rightBorderTop = math.min(
-                rightBorderTop, top + size.height - nextTab.size.height);
-            rightBorderHeight =
-                math.max(rightBorderHeight, nextTab.size.height);
-          }
-
-          canvas.drawRect(
-              Rect.fromLTWH(
-                  left,
-                  rightBorderTop,
-                  tabsAreaTheme.tab.verticalBorder._effectiveValue(),
-                  rightBorderHeight),
-              verticalBorderPaint);
-          left += tabsAreaTheme.tab.verticalBorder._effectiveValue();
-        }
 
         // right gap
         if (tabsAreaTheme.tabGap.width > 0) {
@@ -932,14 +874,5 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 extension _TabsAreaLayoutParentDataGetter on RenderObject {
   _TabsAreaLayoutParentData tabsAreaLayoutParentData() {
     return this.parentData as _TabsAreaLayoutParentData;
-  }
-}
-
-extension _TabEffectiveValue on BorderSide {
-  double _effectiveValue() {
-    if (style == BorderStyle.solid) {
-      return width;
-    }
-    return 0;
   }
 }
