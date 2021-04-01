@@ -4,7 +4,7 @@
 
 Widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
-![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/examples.png)
+![examples](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/examples.png)
 
 The *TabbedView* renders the presentation of the model.
 
@@ -23,7 +23,7 @@ The default theme is *TabbedViewTheme.light()*.
     TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
 ```
 
-![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/light.gif)
+![light](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/light.gif)
 
 ## Content builder
 
@@ -54,7 +54,19 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel([tab]));
 ```
 
-![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
+![tabbutton](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
+
+### Removing the close button
+
+```dart
+    var tabs = [
+      TabData(text: 'Tab'),
+      TabData(text: 'Non-closable tab', closable: false)
+    ];
+    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
+```
+
+![nonclosabletab](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/nonclosable_tab.png)
 
 ## Themes
 
@@ -77,7 +89,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedWiew tabbedView = TabbedWiew(model: model, theme: theme);
 ```
 
-![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
+![customgap](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
 
 ### Default themes
 
@@ -88,7 +100,7 @@ It allows creating the contents of the tab dynamically during the selection even
         TabbedWiew(model: model, theme: TabbedViewTheme.dark());
 ```
 
-![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
+![dark](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
 
 ####  Mobile theme
 
@@ -97,9 +109,9 @@ It allows creating the contents of the tab dynamically during the selection even
         TabbedWiew(model: model, theme: TabbedViewTheme.mobile());
 ```
 
-![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
+![mobile](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
 
 ## Agenda for the next few days
 
 * Complete documentation and examples to cover all available features.
-* Release the final version. The API can be changed.
+* Release the final version (1.0.0). The API may have some small changes.

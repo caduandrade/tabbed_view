@@ -7,7 +7,7 @@ class CustomTabPage extends StatefulWidget {
   CustomTabPageState createState() => CustomTabPageState();
 }
 
-enum _Custom { button }
+enum _Custom { button, nonclosable }
 
 class CustomTabPageState extends ExamplePageState {
   _Custom _custom = _Custom.button;
@@ -21,7 +21,14 @@ class CustomTabPageState extends ExamplePageState {
               _custom = _Custom.button;
             });
           },
-          child: Text('Button'))
+          child: Text('Button')),
+      ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _custom = _Custom.nonclosable;
+            });
+          },
+          child: Text('Non-closable'))
     ];
   }
 
@@ -30,6 +37,8 @@ class CustomTabPageState extends ExamplePageState {
     switch (_custom) {
       case _Custom.button:
         return _button();
+      case _Custom.nonclosable:
+        return _nonclosable();
     }
   }
 
@@ -38,6 +47,15 @@ class CustomTabPageState extends ExamplePageState {
       TabButton(icon: Icons.star, onPressed: () => print('Hello!'))
     ]);
     TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel([tab]));
+    return tabbedView;
+  }
+
+  Widget _nonclosable() {
+    var tabs = [
+      TabData(text: 'Tab'),
+      TabData(text: 'Non-closable tab', closable: false)
+    ];
+    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
     return tabbedView;
   }
 }
