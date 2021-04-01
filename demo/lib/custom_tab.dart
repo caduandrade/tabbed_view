@@ -1,4 +1,4 @@
-import 'package:demo/example_page.dart';
+import 'package:demo/example_multi_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
@@ -7,42 +7,33 @@ class CustomTabPage extends StatefulWidget {
   CustomTabPageState createState() => CustomTabPageState();
 }
 
-enum _Custom { button, nonclosable }
+enum _View { extra_button, nonclosable }
 
-class CustomTabPageState extends ExamplePageState {
-  _Custom _custom = _Custom.button;
+class CustomTabPageState extends ExampleMultiViewPageState<_View> {
+  @override
+  _View defaultView() {
+    return _View.extra_button;
+  }
 
   @override
   List<Widget> buildExampleWidgets() {
     return [
-      ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _custom = _Custom.button;
-            });
-          },
-          child: Text('Button')),
-      ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _custom = _Custom.nonclosable;
-            });
-          },
-          child: Text('Non-closable'))
+      buttonView('Extra button', _View.extra_button),
+      buttonView('Non-closable', _View.nonclosable)
     ];
   }
 
   @override
-  Widget buildContent() {
-    switch (_custom) {
-      case _Custom.button:
-        return _button();
-      case _Custom.nonclosable:
+  Widget buildContentView(_View currentView) {
+    switch (currentView) {
+      case _View.extra_button:
+        return _extra_button();
+      case _View.nonclosable:
         return _nonclosable();
     }
   }
 
-  Widget _button() {
+  Widget _extra_button() {
     TabData tab = TabData(text: 'Tab', buttons: [
       TabButton(icon: Icons.star, onPressed: () => print('Hello!'))
     ]);

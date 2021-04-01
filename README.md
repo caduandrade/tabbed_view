@@ -4,7 +4,10 @@
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
-![examples](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/examples.png)
+![lightcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/light_cut.png)
+![darkcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_cut.png)
+![mobilecut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_cut.png)
+![minimalistcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_cut.png)
 
 The *TabbedView* renders the presentation of the model.
 
@@ -70,7 +73,23 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ## Themes
 
-### Customizing
+### Tabs area
+
+#### Color
+
+* The default *TabsAreaTheme* color is null.
+
+```dart
+    var tabs = [TabData(text: 'Tab 1'), TabData(text: 'Tab 2')];
+
+    TabbedViewTheme theme = TabbedViewTheme.minimalist();
+    theme.tabsArea.color = Colors.green[100];
+
+    TabbedWiew tabbedView =
+        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+```
+
+![tabsareacolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_color.png)
 
 #### Tab gaps
 
@@ -91,7 +110,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![customgap](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
 
-### Default themes
+### Predefined themes
 
 ####  Dark theme
 

@@ -385,15 +385,16 @@ class _Minimalist {
 
   static TabTheme _tabTheme(Color borderColor) {
     return TabTheme(
-        buttonsOffset: 8,
-        padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
-        selectedStatus: TabStatusTheme(
-            fontColor: Colors.white,
-            decoration: BoxDecoration(color: borderColor)),
-        buttonColors: ButtonColors(
-            normal: Colors.white60,
-            hover: Colors.white,
-            disabled: Colors.white24));
+      buttonsOffset: 8,
+      padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
+      selectedStatus: TabStatusTheme(
+          buttonColors: ButtonColors(
+              normal: Colors.white60,
+              hover: Colors.white,
+              disabled: Colors.white24),
+          fontColor: Colors.white,
+          decoration: BoxDecoration(color: borderColor)),
+    );
   }
 
   static ContentAreaTheme _contentAreaTheme(Color borderColor) {

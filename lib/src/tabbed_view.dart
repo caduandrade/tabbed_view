@@ -79,20 +79,10 @@ class _ContentArea extends StatelessWidget {
         child = tab.content;
       }
     }
-    ThemeData theme = Theme.of(context);
-    BoxDecoration? decoration;
-    if (contentAreaTheme.decoration != null &&
-        contentAreaTheme.decoration is BoxDecoration) {
-      decoration = contentAreaTheme.decoration!;
-      if (decoration.color == null) {
-        decoration = decoration.copyWith(color: theme.scaffoldBackgroundColor);
-      }
-    } else {
-      decoration = BoxDecoration(color: theme.scaffoldBackgroundColor);
-    }
+
     return Container(
         child: child,
-        decoration: decoration,
+        decoration: contentAreaTheme.decoration,
         padding: contentAreaTheme.padding);
   }
 }
@@ -310,13 +300,6 @@ class _TabWidget extends StatelessWidget {
         Row(children: textAndButtons, crossAxisAlignment: alignment);
 
     BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
-    if (decoration == null) {
-      decoration =
-          BoxDecoration(color: Theme.of(context).scaffoldBackgroundColor);
-    } else if (decoration.color == null) {
-      decoration =
-          decoration.copyWith(color: Theme.of(context).scaffoldBackgroundColor);
-    }
 
     EdgeInsetsGeometry? padding = tabsAreaTheme.tab.padding;
     if (statusTheme.padding != null) {
