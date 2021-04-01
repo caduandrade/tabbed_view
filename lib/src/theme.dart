@@ -29,12 +29,13 @@ class ButtonColors {
 }
 
 class TabbedViewTheme {
-  const TabbedViewTheme(
-      {this.tabsArea = const TabsAreaTheme(),
-      this.contentArea = const ContentAreaTheme()});
+  TabbedViewTheme({TabsAreaTheme? tabsArea, ContentAreaTheme? contentArea})
+      : this.tabsArea = tabsArea != null ? tabsArea : TabsAreaTheme(),
+        this.contentArea =
+            contentArea != null ? contentArea : ContentAreaTheme();
 
-  final TabsAreaTheme tabsArea;
-  final ContentAreaTheme contentArea;
+  TabsAreaTheme tabsArea;
+  ContentAreaTheme contentArea;
 
   factory TabbedViewTheme.dark() {
     return _Dark.build();
@@ -54,110 +55,67 @@ class TabbedViewTheme {
 
   static const double minimalIconSize = 8;
   static const double defaultIconSize = 16;
-
-  /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
-  TabbedViewTheme copyWith(TabbedViewTheme theme) {
-    return TabbedViewTheme(
-        tabsArea: this.tabsArea.copyWith(theme.tabsArea),
-        contentArea: this.contentArea.copyWith(theme.contentArea));
-  }
 }
 
 class ButtonsAreaTheme {
-  const ButtonsAreaTheme(
+  ButtonsAreaTheme(
       {this.decoration,
       this.padding,
       double offset = 0,
       double buttonIconSize = TabbedViewTheme.defaultIconSize,
       this.buttonColors = const ButtonColors(),
       this.menuTabsButtonIcon = Icons.more_vert})
-      : this.offset = offset >= 0 ? offset : 0,
+      : this._offset = offset >= 0 ? offset : 0,
         this.buttonIconSize = buttonIconSize >= TabbedViewTheme.minimalIconSize
             ? buttonIconSize
             : TabbedViewTheme.minimalIconSize;
 
-  final BoxDecoration? decoration;
-  final EdgeInsetsGeometry? padding;
-  final double offset;
-  final double buttonIconSize;
-  final ButtonColors buttonColors;
+  BoxDecoration? decoration;
+  EdgeInsetsGeometry? padding;
+  double _offset;
+  double buttonIconSize;
+  ButtonColors buttonColors;
 
-  final IconData menuTabsButtonIcon;
+  IconData menuTabsButtonIcon;
 
-  /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
-  ButtonsAreaTheme copyWith(ButtonsAreaTheme theme) {
-    return ButtonsAreaTheme(
-        decoration:
-            theme.decoration == null ? this.decoration : theme.decoration,
-        offset: theme.offset == this.offset ? this.offset : theme.offset,
-        buttonIconSize: theme.buttonIconSize == this.buttonIconSize
-            ? this.buttonIconSize
-            : theme.buttonIconSize,
-        buttonColors: theme.buttonColors == this.buttonColors
-            ? this.buttonColors
-            : theme.buttonColors,
-        padding: theme.padding == null ? this.padding : theme.padding,
-        menuTabsButtonIcon: theme.menuTabsButtonIcon == this.menuTabsButtonIcon
-            ? this.menuTabsButtonIcon
-            : theme.menuTabsButtonIcon);
+  double get offset => _offset;
+
+  set offset(double value) {
+    _offset = value >= 0 ? value : 0;
   }
 }
 
 class TabsAreaTheme {
-  const TabsAreaTheme(
+  TabsAreaTheme(
       {this.closeButtonIcon = Icons.clear,
-      this.tab = const TabTheme(),
-      this.buttonsArea = const ButtonsAreaTheme(),
+      TabTheme? tab,
+      ButtonsAreaTheme? buttonsArea,
       this.color,
       this.border,
       this.initialGap = 0,
       this.middleGap = 0,
       this.minimalFinalGap = 0,
       this.gapBottomBorder = BorderSide.none,
-      this.equalHeights = EqualHeights.none});
+      this.equalHeights = EqualHeights.none})
+      : this.tab = tab != null ? tab : TabTheme(),
+        this.buttonsArea =
+            buttonsArea != null ? buttonsArea : ButtonsAreaTheme();
 
-  final Color? color;
-  final Border? border;
-  final TabTheme tab;
-  final double initialGap;
-  final double middleGap;
-  final double minimalFinalGap;
-  final BorderSide gapBottomBorder;
+  Color? color;
+  Border? border;
+  TabTheme tab;
+  double initialGap;
+  double middleGap;
+  double minimalFinalGap;
+  BorderSide gapBottomBorder;
 
-  final ButtonsAreaTheme buttonsArea;
-  final IconData closeButtonIcon;
-  final EqualHeights equalHeights;
-
-  /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
-  TabsAreaTheme copyWith(TabsAreaTheme theme) {
-    return TabsAreaTheme(
-        color: theme.color == null ? this.color : theme.color,
-        border: theme.border == null ? this.border : theme.border,
-        tab: this.tab.copyWith(theme.tab),
-        initialGap: theme.initialGap == this.initialGap
-            ? this.initialGap
-            : theme.initialGap,
-        middleGap: theme.middleGap == this.middleGap
-            ? this.middleGap
-            : theme.middleGap,
-        minimalFinalGap: theme.minimalFinalGap == this.minimalFinalGap
-            ? this.minimalFinalGap
-            : theme.minimalFinalGap,
-        gapBottomBorder: theme.gapBottomBorder == this.gapBottomBorder
-            ? this.gapBottomBorder
-            : theme.gapBottomBorder,
-        buttonsArea: this.buttonsArea.copyWith(theme.buttonsArea),
-        closeButtonIcon: theme.closeButtonIcon == this.closeButtonIcon
-            ? this.closeButtonIcon
-            : theme.closeButtonIcon,
-        equalHeights: theme.equalHeights == this.equalHeights
-            ? this.equalHeights
-            : theme.equalHeights);
-  }
+  ButtonsAreaTheme buttonsArea;
+  IconData closeButtonIcon;
+  EqualHeights equalHeights;
 }
 
 class TabTheme {
-  const TabTheme(
+  TabTheme(
       {this.buttonColors = const ButtonColors(),
       double buttonIconSize = TabbedViewTheme.defaultIconSize,
       this.verticalAlignment = VerticalAlignment.center,
@@ -166,70 +124,62 @@ class TabTheme {
       this.decoration,
       this.textStyle = const TextStyle(fontSize: 13),
       this.padding,
-      this.selected = const TabStatusTheme(),
-      this.highlighted = const TabStatusTheme(),
-      this.normal = const TabStatusTheme(),
-      this.disabled = const TabStatusTheme()})
-      : this.buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
-        this.buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
+      TabStatusTheme? selectedStatus,
+      TabStatusTheme? highlightedStatus,
+      TabStatusTheme? normalStatus,
+      TabStatusTheme? disabledStatus})
+      : this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
+        this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize = buttonIconSize >= TabbedViewTheme.minimalIconSize
             ? buttonIconSize
-            : TabbedViewTheme.minimalIconSize;
+            : TabbedViewTheme.minimalIconSize,
+        this.selectedStatus =
+            selectedStatus != null ? selectedStatus : TabStatusTheme(),
+        this.highlightedStatus =
+            highlightedStatus != null ? highlightedStatus : TabStatusTheme(),
+        this.normalStatus =
+            normalStatus != null ? normalStatus : TabStatusTheme(),
+        this.disabledStatus =
+            disabledStatus != null ? disabledStatus : TabStatusTheme();
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.
   ///
   /// This padding is in addition to any padding inherent in the [decoration];
   /// see [Decoration.padding].
-  final EdgeInsetsGeometry? padding;
+  EdgeInsetsGeometry? padding;
 
-  final VerticalAlignment verticalAlignment;
+  VerticalAlignment verticalAlignment;
 
-  final BoxDecoration? decoration;
+  BoxDecoration? decoration;
 
-  final TextStyle? textStyle;
+  TextStyle? textStyle;
 
-  final double buttonIconSize;
-  final ButtonColors buttonColors;
-  final double buttonsOffset;
-  final double buttonsGap;
+  double buttonIconSize;
+  ButtonColors buttonColors;
+  double _buttonsOffset;
+  double _buttonsGap;
 
-  final TabStatusTheme selected;
-  final TabStatusTheme highlighted;
-  final TabStatusTheme normal;
-  final TabStatusTheme disabled;
+  TabStatusTheme selectedStatus;
+  TabStatusTheme highlightedStatus;
+  TabStatusTheme normalStatus;
+  TabStatusTheme disabledStatus;
 
-  /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
-  TabTheme copyWith(TabTheme theme) {
-    return TabTheme(
-        verticalAlignment: theme.verticalAlignment == this.verticalAlignment
-            ? this.verticalAlignment
-            : theme.verticalAlignment,
-        padding: theme.padding == null ? this.padding : theme.padding,
-        decoration:
-            theme.decoration == null ? this.decoration : theme.decoration,
-        textStyle: theme.textStyle == null ? this.textStyle : theme.textStyle,
-        buttonColors: theme.buttonColors == this.buttonColors
-            ? this.buttonColors
-            : theme.buttonColors,
-        buttonIconSize: theme.buttonIconSize == this.buttonIconSize
-            ? this.buttonIconSize
-            : theme.buttonIconSize,
-        buttonsOffset: theme.buttonsOffset == this.buttonsOffset
-            ? this.buttonsOffset
-            : theme.buttonsOffset,
-        buttonsGap: theme.buttonsGap == this.buttonsGap
-            ? this.buttonsGap
-            : theme.buttonsGap,
-        selected: this.selected.copyWith(theme.selected),
-        highlighted: this.highlighted.copyWith(theme.highlighted),
-        normal: this.normal.copyWith(theme.normal),
-        disabled: this.disabled.copyWith(theme.disabled));
+  double get buttonsOffset => _buttonsOffset;
+
+  set buttonsOffset(double value) {
+    _buttonsOffset = value >= 0 ? value : 0;
+  }
+
+  double get buttonsGap => _buttonsGap;
+
+  set buttonsGap(double value) {
+    _buttonsGap = value >= 0 ? value : 0;
   }
 }
 
 class TabStatusTheme {
-  const TabStatusTheme(
+  TabStatusTheme(
       {this.decoration, this.fontColor, this.padding, this.buttonColors});
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
@@ -237,43 +187,23 @@ class TabStatusTheme {
   ///
   /// This padding is in addition to any padding inherent in the [decoration];
   /// see [Decoration.padding].
-  final EdgeInsetsGeometry? padding;
-
-  final BoxDecoration? decoration;
-  final Color? fontColor;
-  final ButtonColors? buttonColors;
-
-  /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
-  TabStatusTheme copyWith(TabStatusTheme theme) {
-    return TabStatusTheme(
-        decoration:
-            theme.decoration == null ? this.decoration : theme.decoration,
-        buttonColors: theme.buttonColors == this.buttonColors
-            ? this.buttonColors
-            : theme.buttonColors,
-        fontColor: theme.fontColor == null ? this.fontColor : theme.fontColor);
-  }
+  EdgeInsetsGeometry? padding;
+  BoxDecoration? decoration;
+  Color? fontColor;
+  ButtonColors? buttonColors;
 }
 
 class ContentAreaTheme {
-  const ContentAreaTheme({this.decoration, this.padding});
+  ContentAreaTheme({this.decoration, this.padding});
 
-  final BoxDecoration? decoration;
+  BoxDecoration? decoration;
 
   /// Empty space to inscribe inside the [decoration]. The content child, if any, is
   /// placed inside this padding.
   ///
   /// This padding is in addition to any padding inherent in the [decoration];
   /// see [Decoration.padding].
-  final EdgeInsetsGeometry? padding;
-
-  /// Creates a copy of this theme but with the values replaced by the non-null properties from the given theme.
-  ContentAreaTheme copyWith(ContentAreaTheme theme) {
-    return ContentAreaTheme(
-        decoration:
-            theme.decoration == null ? this.decoration : theme.decoration,
-        padding: theme.padding == null ? this.padding : theme.padding);
-  }
+  EdgeInsetsGeometry? padding;
 }
 
 class _Light {
@@ -299,11 +229,11 @@ class _Light {
         padding: EdgeInsets.fromLTRB(6, 2, 6, 2),
         decoration:
             BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
-        highlighted: TabStatusTheme(
+        highlightedStatus: TabStatusTheme(
             decoration: BoxDecoration(
                 color: const Color.fromRGBO(230, 230, 230, 1),
                 border: Border.all(color: Colors.black, width: 1))),
-        selected: TabStatusTheme(
+        selectedStatus: TabStatusTheme(
           decoration: BoxDecoration(
               border: Border(
                   left: BorderSide(color: Colors.black, width: 1),
@@ -352,13 +282,13 @@ class _Dark {
             color: Colors.grey[900],
             border: Border(bottom: BorderSide(width: 3, color: Colors.black))),
         padding: EdgeInsets.fromLTRB(6, 2, 6, 2),
-        selected: TabStatusTheme(
+        selectedStatus: TabStatusTheme(
             decoration: BoxDecoration(
                 color: Colors.grey[800],
                 border: Border(
                     bottom: BorderSide(width: 3, color: Colors.grey[800]!))),
             padding: EdgeInsets.fromLTRB(6, 2, 6, 2)),
-        highlighted: TabStatusTheme(
+        highlightedStatus: TabStatusTheme(
             decoration: BoxDecoration(
                 color: Colors.grey[700],
                 border:
@@ -408,13 +338,13 @@ class _Mobile {
                 bottom: BorderSide(color: Colors.white, width: markHeight),
                 left: verticalBorder,
                 right: verticalBorder)),
-        highlighted: TabStatusTheme(
+        highlightedStatus: TabStatusTheme(
             decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: Colors.grey, width: markHeight),
                     left: verticalBorder,
                     right: verticalBorder))),
-        selected: TabStatusTheme(
+        selectedStatus: TabStatusTheme(
             decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: Colors.blue, width: markHeight),
@@ -450,7 +380,7 @@ class _Minimalist {
     return TabTheme(
         buttonsOffset: 8,
         padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
-        selected: TabStatusTheme(
+        selectedStatus: TabStatusTheme(
             fontColor: Colors.white,
             decoration: BoxDecoration(color: borderColor)),
         buttonColors: ButtonColors(

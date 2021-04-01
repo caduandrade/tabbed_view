@@ -1,3 +1,7 @@
+## 0.4.0
+
+* Simplifying the API to change themes
+
 ## 0.3.0
 
 * Changes in thematization

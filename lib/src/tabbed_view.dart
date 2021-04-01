@@ -363,13 +363,13 @@ class _TabWidget extends StatelessWidget {
     TabsAreaTheme tabsAreaTheme = scope.theme.tabsArea;
     switch (status) {
       case _TabStatus.selected:
-        return tabsAreaTheme.tab.selected;
+        return tabsAreaTheme.tab.selectedStatus;
       case _TabStatus.highlighted:
-        return tabsAreaTheme.tab.highlighted;
+        return tabsAreaTheme.tab.highlightedStatus;
       case _TabStatus.normal:
-        return tabsAreaTheme.tab.normal;
+        return tabsAreaTheme.tab.normalStatus;
       case _TabStatus.disabled:
-        return tabsAreaTheme.tab.disabled;
+        return tabsAreaTheme.tab.disabledStatus;
     }
   }
 }

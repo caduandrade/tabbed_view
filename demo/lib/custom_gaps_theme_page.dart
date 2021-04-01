@@ -17,7 +17,14 @@ class CustomGapsThemePageState extends ExamplePageState {
     }
     TabbedWiewModel model = TabbedWiewModel(tabs);
 
-    TabbedWiew tabbedView = TabbedWiew(model: model);
+    TabbedViewTheme theme = TabbedViewTheme.light();
+
+    theme.tabsArea
+      ..initialGap = 20
+      ..middleGap = 5
+      ..minimalFinalGap = 5;
+
+    TabbedWiew tabbedView = TabbedWiew(model: model, theme: theme);
     return tabbedView;
   }
 }

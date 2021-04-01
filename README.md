@@ -45,7 +45,30 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ## Themes
 
-###  Dark theme
+### Customizing
+
+#### Tab gaps
+
+* Gap before the tabs.
+* Gap between tabs.
+* Minimum gap after tabs. Separates the last tab and the buttons area.
+
+```dart
+    TabbedViewTheme theme = TabbedViewTheme.light();
+
+    theme.tabsArea
+      ..initialGap = 20
+      ..middleGap = 5
+      ..minimalFinalGap = 5;
+
+    TabbedWiew tabbedView = TabbedWiew(model: model, theme: theme);
+```
+
+![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
+
+### Default themes
+
+####  Dark theme
 
 ```dart
     TabbedWiew tabbedView =
@@ -54,7 +77,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
 
-###  Mobile theme
+####  Mobile theme
 
 ```dart
     TabbedWiew tabbedView =
