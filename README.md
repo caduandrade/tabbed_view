@@ -74,8 +74,8 @@ It allows creating the contents of the tab dynamically during the selection even
 
 #### Tab gaps
 
-* Gap before the tabs.
-* Gap between tabs.
+* Gap before the tabs (allows negative value).
+* Gap between tabs (allows negative value).
 * Minimum gap after tabs. Separates the last tab and the buttons area.
 
 ```dart
