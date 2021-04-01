@@ -8,6 +8,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
 ![darkcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_cut.png)
 ![mobilecut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_cut.png)
 ![minimalistcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_cut.png)
+![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
 
 The *TabbedView* renders the presentation of the model.
 
@@ -129,6 +130,44 @@ It allows creating the contents of the tab dynamically during the selection even
 ```
 
 ![mobile](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
+
+### Creating new theme
+
+It is possible to create an entire theme from scratch.
+
+```dart
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+      TabData(text: 'Tab 3')
+    ];
+
+    TabbedViewTheme theme = TabbedViewTheme();
+    theme.tabsArea
+      ..border = Border(bottom: BorderSide(color: Colors.green[700]!, width: 3))
+      ..middleGap = 6;
+
+    Radius radius = Radius.circular(10.0);
+    BorderRadiusGeometry? borderRadius =
+        BorderRadius.only(topLeft: radius, topRight: radius);
+
+    theme.tabsArea.tab
+      ..padding = EdgeInsets.fromLTRB(10, 4, 10, 4)
+      ..buttonsOffset = 8
+      ..decoration = BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.green[100],
+          borderRadius: borderRadius)
+      ..selectedStatus.decoration =
+          BoxDecoration(color: Colors.green[200], borderRadius: borderRadius)
+      ..highlightedStatus.decoration =
+          BoxDecoration(color: Colors.green[50], borderRadius: borderRadius);
+
+    TabbedWiew tabbedView =
+        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+```
+
+![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
 
 ## Agenda for the next few days
 
