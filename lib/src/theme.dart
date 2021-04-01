@@ -94,24 +94,31 @@ class TabsAreaTheme {
       this.border,
       this.initialGap = 0,
       this.middleGap = 0,
-      this.minimalFinalGap = 0,
+      double minimalFinalGap = 0,
       this.gapBottomBorder = BorderSide.none,
       this.equalHeights = EqualHeights.none})
       : this.tab = tab != null ? tab : TabTheme(),
         this.buttonsArea =
-            buttonsArea != null ? buttonsArea : ButtonsAreaTheme();
+            buttonsArea != null ? buttonsArea : ButtonsAreaTheme(),
+        this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0;
 
   Color? color;
   Border? border;
   TabTheme tab;
   double initialGap;
   double middleGap;
-  double minimalFinalGap;
+  double _minimalFinalGap;
   BorderSide gapBottomBorder;
 
   ButtonsAreaTheme buttonsArea;
   IconData closeButtonIcon;
   EqualHeights equalHeights;
+
+  double get minimalFinalGap => _minimalFinalGap;
+
+  set minimalFinalGap(double value) {
+    _minimalFinalGap = value >= 0 ? value : 0;
+  }
 }
 
 class TabTheme {

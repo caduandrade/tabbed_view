@@ -1,6 +1,6 @@
 ## 0.4.0
 
-* Simplifying the API to change themes
+* API changes to simplify changing themes
 
 ## 0.3.0
 
