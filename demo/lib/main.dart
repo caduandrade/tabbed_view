@@ -1,6 +1,7 @@
 import 'package:demo/add_tab_page.dart';
 import 'package:demo/content_builder_page.dart';
 import 'package:demo/custom_gaps_theme_page.dart';
+import 'package:demo/custom_tab.dart';
 import 'package:demo/minimalist_theme_page.dart';
 import 'package:demo/mobile_theme_page.dart';
 import 'package:demo/new_model_page.dart';
@@ -25,6 +26,7 @@ class Example {
   static const Example change_tab = const Example('Change tab');
   static const Example add_tab = const Example('Add tab');
   static const Example custom_gaps_theme = const Example('Custom gaps theme');
+  static const Example custom_tab = const Example('Custom tab');
 
   static const List<Example> values = [
     Example.simple,
@@ -35,7 +37,8 @@ class Example {
     Example.add_tab,
     Example.custom_gaps_theme,
     Example.mobile_theme,
-    Example.minimalist_theme
+    Example.minimalist_theme,
+    Example.custom_tab
   ];
 
   final String name;
@@ -130,6 +133,8 @@ class _TabbedViewDemoPageState extends State<TabbedViewDemoPage> {
       example = MobileThemePage();
     } else if (_currentExample == Example.minimalist_theme) {
       example = MinimalistThemePage();
+    } else if (_currentExample == Example.custom_tab) {
+      example = CustomTabPage();
     } else {
       example = Center(child: Text(_currentExample.name + ' ?'));
     }

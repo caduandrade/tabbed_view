@@ -43,6 +43,19 @@ It allows creating the contents of the tab dynamically during the selection even
         });
 ```
 
+## Tab
+
+### Extra button
+
+```dart
+    TabData tab = TabData(text: 'Tab', buttons: [
+      TabButton(icon: Icons.star, onPressed: () => print('Hello!'))
+    ]);
+    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel([tab]));
+```
+
+![intro](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
+
 ## Themes
 
 ### Customizing
