@@ -83,7 +83,7 @@ class _ContentArea extends StatelessWidget {
     BoxDecoration? decoration;
     if (contentAreaTheme.decoration != null &&
         contentAreaTheme.decoration is BoxDecoration) {
-      decoration = contentAreaTheme.decoration! as BoxDecoration;
+      decoration = contentAreaTheme.decoration!;
       if (decoration.color == null) {
         decoration = decoration.copyWith(color: theme.scaffoldBackgroundColor);
       }
