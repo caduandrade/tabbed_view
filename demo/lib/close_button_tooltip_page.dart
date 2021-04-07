@@ -2,12 +2,12 @@ import 'package:demo/example_page.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-class ContentBuilderPage extends StatefulWidget {
+class CloseButtonTooltipPage extends StatefulWidget {
   @override
-  ContentBuilderPageState createState() => ContentBuilderPageState();
+  ListeningTabClosePageState createState() => ListeningTabClosePageState();
 }
 
-class ContentBuilderPageState extends ExamplePageState {
+class ListeningTabClosePageState extends ExamplePageState {
   @override
   Widget buildContent() {
     List<TabData> tabs = [
@@ -15,13 +15,9 @@ class ContentBuilderPageState extends ExamplePageState {
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')
     ];
-
     TabbedWiew tabbedView = TabbedWiew(
         model: TabbedWiewModel(tabs),
-        contentBuilder: (BuildContext context, int tabIndex) {
-          int i = tabIndex + 1;
-          return Center(child: Text('Content $i'));
-        });
+        closeButtonTooltip: 'Click here to close the tab');
     return tabbedView;
   }
 }

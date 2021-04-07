@@ -2,6 +2,23 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+/// The tab data.
+///
+/// The text displayed on the tab is defined by [text] parameter.
+///
+/// The optional [value] parameter allows any value to be associated
+/// with the tab.
+///
+/// The optional [content] parameter defines the content of the tab.
+///
+/// The [closable] parameter defines whether the close button is visible.
+///
+/// The [buttons] parameter allows you to define extra buttons in addition
+/// to the Close button.
+///
+/// See also:
+///
+/// * [TabbedWiew.contentBuilder]
 class TabData {
   TabData(
       {this.value,
@@ -17,6 +34,7 @@ class TabData {
   bool closable;
 }
 
+/// Configures a tab button.
 class TabButton {
   TabButton(
       {required this.icon,
@@ -38,6 +56,9 @@ class TabButton {
   final String? toolTip;
 }
 
+/// The [TabbedWiew] model.
+///
+/// Stores tabs and selection tab index.
 class TabbedWiewModel {
   factory TabbedWiewModel(List<TabData> tabs) {
     return TabbedWiewModel._(tabs);
@@ -64,13 +85,15 @@ class TabbedWiewModel {
     _selectedIndex = tabIndex;
   }
 
+  /// Adds a tab to the model.
   add(TabData tab) {
     _tabs.add(tab);
-    if (_tabs.length > 0) {
+    if (_tabs.length == 1) {
       _selectedIndex = 0;
     }
   }
 
+  /// Removes a tab from the model.
   remove(int tabIndex) {
     _validateIndex(tabIndex);
     _tabs.removeAt(tabIndex);

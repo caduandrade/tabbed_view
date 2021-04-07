@@ -12,8 +12,8 @@ class SimplePageState extends ExamplePageState {
   Widget buildContent() {
     List<TabData> tabs = [];
     for (var i = 1; i < 7; i++) {
-      tabs.add(
-          TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
+      Widget tabContent = Center(child: Text('Content $i'));
+      tabs.add(TabData(text: 'Tab $i', content: tabContent));
     }
     TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
     return tabbedView;

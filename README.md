@@ -21,23 +21,24 @@ The default theme is *TabbedViewTheme.light()*.
 ```dart
     List<TabData> tabs = [];
     for (var i = 1; i < 7; i++) {
-      tabs.add(
-          TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
+      Widget tabContent = Center(child: Text('Content $i'));
+      tabs.add(TabData(text: 'Tab $i', content: tabContent));
     }
     TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
 ```
 
 ![light](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/light.gif)
 
-## Content builder
+### Content builder
 
 It allows creating the contents of the tab dynamically during the selection event.
 
 ```dart
-    List<TabData> tabs = [];
-    for (var i = 1; i < 5; i++) {
-      tabs.add(TabData(text: 'Tab $i'));
-    }
+    List<TabData> tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+      TabData(text: 'Tab 3')
+    ];
 
     TabbedWiew tabbedView = TabbedWiew(
         model: TabbedWiewModel(tabs),
@@ -45,6 +46,19 @@ It allows creating the contents of the tab dynamically during the selection even
           int i = tabIndex + 1;
           return Center(child: Text('Content $i'));
         });
+```
+
+### Close button tooltip
+
+```dart
+    List<TabData> tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+      TabData(text: 'Tab 3')
+    ];
+    TabbedWiew tabbedView = TabbedWiew(
+        model: TabbedWiewModel(tabs),
+        closeButtonTooltip: 'Click here to close the tab');
 ```
 
 ## Tab
@@ -60,6 +74,24 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![tabbutton](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
 
+### Extra button - overriding theme color
+
+```dart
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2', buttons: [
+        TabButton(
+            icon: Icons.star,
+            color: Colors.green,
+            onPressed: () => print('Hello!'))
+      ])
+    ];
+
+    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
+```
+
+![tabbuttoncolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button_color.png)
+
 ### Removing the close button
 
 ```dart
@@ -72,7 +104,66 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![nonclosabletab](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/nonclosable_tab.png)
 
+### Tab close listener
+
+```dart
+    bool _onTabClosing(int tabIndex) {
+      if (tabIndex == 0) {
+        print('The tab $tabIndex is busy and cannot be closed.');
+        return false;
+      }
+      print('Closing tab $tabIndex...');
+      return true;
+    }
+
+    List<TabData> tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+      TabData(text: 'Tab 3')
+    ];
+    TabbedWiew tabbedView =
+        TabbedWiew(model: TabbedWiewModel(tabs), onTabClosing: _onTabClosing);
+```
+
 ## Themes
+
+### Tab
+
+#### Text style
+
+```dart
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+    ];
+
+    TabbedViewTheme theme = TabbedViewTheme.light();
+    theme.tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
+
+    TabbedWiew tabbedView =
+        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+```
+
+![tabtextstyle](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_text_style.png)
+
+#### Alignment
+
+```dart
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+    ];
+
+    TabbedViewTheme theme = TabbedViewTheme.light();
+    theme.tabsArea.tab
+      ..textStyle = TextStyle(fontSize: 20)
+      ..verticalAlignment = VerticalAlignment.top;
+
+    TabbedWiew tabbedView =
+        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+```
+
+![topalignment](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/top_alignment.png)
 
 ### Tabs area
 

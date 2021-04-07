@@ -7,7 +7,13 @@ class CustomTabPage extends StatefulWidget {
   CustomTabPageState createState() => CustomTabPageState();
 }
 
-enum _View { extra_button, nonclosable }
+enum _View {
+  extra_button,
+  nonclosable,
+  top_alignment,
+  text_style,
+  extra_button_override_color
+}
 
 class CustomTabPageState extends ExampleMultiViewPageState<_View> {
   @override
@@ -19,7 +25,11 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
   List<Widget> buildExampleWidgets() {
     return [
       buttonView('Extra button', _View.extra_button),
-      buttonView('Non-closable', _View.nonclosable)
+      buttonView('Non-closable', _View.nonclosable),
+      buttonView('Top alignment', _View.top_alignment),
+      buttonView('Text style', _View.text_style),
+      buttonView(
+          'Extra button - override color', _View.extra_button_override_color)
     ];
   }
 
@@ -27,13 +37,19 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
   Widget buildContentView(_View currentView) {
     switch (currentView) {
       case _View.extra_button:
-        return _extra_button();
+        return _extraButton();
       case _View.nonclosable:
         return _nonclosable();
+      case _View.top_alignment:
+        return _topAlignment();
+      case _View.text_style:
+        return _textStyle();
+      case _View.extra_button_override_color:
+        return _extraButtonOverrideColor();
     }
   }
 
-  Widget _extra_button() {
+  Widget _extraButton() {
     TabData tab = TabData(text: 'Tab', buttons: [
       TabButton(icon: Icons.star, onPressed: () => print('Hello!'))
     ]);
@@ -47,6 +63,52 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
       TabData(text: 'Non-closable tab', closable: false)
     ];
     TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
+    return tabbedView;
+  }
+
+  Widget _textStyle() {
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+    ];
+
+    TabbedViewTheme theme = TabbedViewTheme.light();
+    theme.tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
+
+    TabbedWiew tabbedView =
+        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+    return tabbedView;
+  }
+
+  Widget _topAlignment() {
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+    ];
+
+    TabbedViewTheme theme = TabbedViewTheme.light();
+    theme.tabsArea.tab
+      ..textStyle = TextStyle(fontSize: 20)
+      ..verticalAlignment = VerticalAlignment.top;
+
+    TabbedWiew tabbedView =
+        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+    return tabbedView;
+  }
+
+  Widget _extraButtonOverrideColor() {
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2', buttons: [
+        TabButton(
+            icon: Icons.star,
+            color: Colors.green,
+            onPressed: () => print('Hello!'))
+      ])
+    ];
+
+    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
+
     return tabbedView;
   }
 }

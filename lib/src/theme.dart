@@ -3,8 +3,10 @@ import 'package:flutter/painting.dart';
 
 enum EqualHeights { none, tabs, all }
 
+/// Sets the alignment in the tab.
 enum VerticalAlignment { top, center, bottom }
 
+/// Sets the normal, hover and disabled color for the tab button.
 class ButtonColors {
   final Color normal;
   final Color hover;
@@ -233,6 +235,7 @@ class _Light {
 
   static TabTheme _tabTheme() {
     return TabTheme(
+        buttonsOffset: 4,
         padding: EdgeInsets.fromLTRB(6, 2, 6, 2),
         decoration:
             BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
@@ -285,6 +288,7 @@ class _Dark {
 
   static TabTheme _tabTheme() {
     return TabTheme(
+        buttonsOffset: 4,
         decoration: BoxDecoration(
             color: Colors.grey[900],
             border: Border(bottom: BorderSide(width: 3, color: Colors.black))),
@@ -338,7 +342,7 @@ class _Mobile {
     BorderSide verticalBorder = BorderSide(color: borderColor, width: 1);
     double markHeight = 3;
     return TabTheme(
-        buttonsOffset: 8,
+        buttonsOffset: 4,
         padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
         decoration: BoxDecoration(
             border: Border(
@@ -385,7 +389,7 @@ class _Minimalist {
 
   static TabTheme _tabTheme(Color borderColor) {
     return TabTheme(
-      buttonsOffset: 8,
+      buttonsOffset: 4,
       padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
       selectedStatus: TabStatusTheme(
           buttonColors: ButtonColors(

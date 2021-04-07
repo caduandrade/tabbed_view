@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 import 'dart:math' as math;
 
+/// Propagates parameters to internal components.
 class _TabbedWiewScope {
   _TabbedWiewScope(
       {required this.theme,
@@ -21,6 +22,14 @@ class _TabbedWiewScope {
   final String? closeButtonTooltip;
 }
 
+/// Widget inspired by the classic Desktop-style tab component.
+///
+/// Supports customizable themes.
+///
+/// Parameters:
+/// * [selectToEnableButtons]: allows buttons to be clicked only if the tab is
+///   selected. The default value is [TRUE].
+/// * [closeButtonTooltip]: optional tooltip for the close button.
 class TabbedWiew extends StatefulWidget {
   TabbedWiew(
       {TabbedViewTheme? theme,
@@ -43,6 +52,7 @@ class TabbedWiew extends StatefulWidget {
   State<StatefulWidget> createState() => _TabbedWiewState();
 }
 
+/// The [TabbedWiew] state.
 class _TabbedWiewState extends State<TabbedWiew> {
   @override
   Widget build(BuildContext context) {
@@ -62,6 +72,7 @@ class _TabbedWiewState extends State<TabbedWiew> {
   }
 }
 
+// Container widget for the tab content.
 class _ContentArea extends StatelessWidget {
   _ContentArea({required this.scope});
 
@@ -87,6 +98,7 @@ class _ContentArea extends StatelessWidget {
   }
 }
 
+/// Widget for the tabs and buttons.
 class _TabsArea extends StatefulWidget {
   const _TabsArea(
       {Key? key, required this.scope, required this.notifyTabbedWidgetChange})
@@ -99,6 +111,7 @@ class _TabsArea extends StatefulWidget {
   State<StatefulWidget> createState() => _TabsAreaState();
 }
 
+/// The [_TabsArea] state.
 class _TabsAreaState extends State<_TabsArea> {
   int? _highlightedIndex;
 
@@ -209,10 +222,13 @@ class _TabsAreaState extends State<_TabsArea> {
   }
 }
 
+/// Listener for the tabs with the mouse over.
 typedef _UpdateHighlightedIndex = void Function(int? tabIndex);
 
+/// Inner enum for tab status.
 enum _TabStatus { selected, highlighted, normal, disabled }
 
+/// The tab widget. Displays the tab text and its buttons.
 class _TabWidget extends StatelessWidget {
   const _TabWidget(
       {required this.index,
@@ -357,6 +373,7 @@ class _TabWidget extends StatelessWidget {
   }
 }
 
+/// Widget for tab buttons. Used for any tab button such as the close button.
 class _TabButtonWidget extends StatefulWidget {
   _TabButtonWidget(
       {required this.button,
@@ -373,6 +390,7 @@ class _TabButtonWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _TabButtonWidgetState();
 }
 
+/// The [_TabButtonWidget] state.
 class _TabButtonWidgetState extends State<_TabButtonWidget> {
   bool _hover = false;
   @override
@@ -402,7 +420,7 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
         Icon(widget.button.icon, color: finalColor, size: widget.iconSize);
 
     if (widget.button.popupMenuItemBuilder != null) {
-      // Can't disable tooltip.
+      // Can't disable tooltip :-(
       // Waiting for https://github.com/flutter/flutter/issues/60418
       return PopupMenuButton<int>(
         child: icon,
@@ -438,6 +456,9 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
   }
 }
 
+/// Inner widget for [_TabsArea] layout.
+/// Displays the popup menu button for tabs hidden due to lack of space.
+/// The selected [_TabWidget] will always be visible.
 class _TabsAreaLayout extends MultiChildRenderObjectWidget {
   _TabsAreaLayout(
       {Key? key,
@@ -481,6 +502,7 @@ class _TabsAreaLayout extends MultiChildRenderObjectWidget {
   }
 }
 
+/// The [_TabsAreaLayout] element.
 class _TabsAreaLayoutElement extends MultiChildRenderObjectElement {
   _TabsAreaLayoutElement(_TabsAreaLayout widget) : super(widget);
 
@@ -498,6 +520,7 @@ class _TabsAreaLayoutElement extends MultiChildRenderObjectElement {
   }
 }
 
+/// Constraints with value for [_TabsAreaLayout].
 class _TabsAreaButtonsBoxConstraints extends BoxConstraints {
   _TabsAreaButtonsBoxConstraints({
     required _HiddenTabs hiddenTabs,
@@ -532,6 +555,7 @@ class _TabsAreaButtonsBoxConstraints extends BoxConstraints {
   }
 }
 
+/// Holds the hidden tab indexes.
 class _HiddenTabs {
   List<int> indexes = [];
   bool get hasHiddenTabs => indexes.isNotEmpty;
@@ -554,6 +578,8 @@ class _TabsAreaLayoutParentData extends ContainerBoxParentData<RenderBox> {
   }
 }
 
+/// Utility class to find out which tabs may be visible.
+/// Calculates the required width and sets the offset value.
 class _VisibleTabs {
   _VisibleTabs(this.tabsAreaTheme);
 
@@ -571,6 +597,7 @@ class _VisibleTabs {
     return _tabs[index];
   }
 
+  /// Updates the offset given the tab width, initial offset and gap values.
   updateOffsets(BoxConstraints constraints, Size tabsAreaButtonsSize) {
     double offset = tabsAreaTheme.initialGap;
     for (int i = 0; i < _tabs.length; i++) {
@@ -587,6 +614,8 @@ class _VisibleTabs {
     }
   }
 
+  /// Calculates the required width for the tab. Includes the gap values
+  /// on the right.
   double requiredTabWidth(int index) {
     RenderBox tab = _tabs[index];
     if (index < _tabs.length - 1) {
@@ -595,6 +624,7 @@ class _VisibleTabs {
     return tab.size.width + tabsAreaTheme.minimalFinalGap;
   }
 
+  /// Calculates the required width for all tabs.
   double requiredTotalWidth() {
     double width = 0;
     for (int i = 0; i < _tabs.length; i++) {
@@ -603,6 +633,7 @@ class _VisibleTabs {
     return width;
   }
 
+  /// Removes the last non-selected tab. Returns the removed tab index.
   int? removeLastNonSelected() {
     int index = _tabs.length - 1;
     while (index >= 0) {
@@ -619,6 +650,7 @@ class _VisibleTabs {
   }
 }
 
+/// The [_TabsAreaLayout] render box.
 class _TabsAreaLayoutRenderBox extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _TabsAreaLayoutParentData>,
@@ -893,6 +925,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
   }
 }
 
+/// Utility extension to facilitate obtaining parent data.
 extension _TabsAreaLayoutParentDataGetter on RenderObject {
   _TabsAreaLayoutParentData tabsAreaLayoutParentData() {
     return this.parentData as _TabsAreaLayoutParentData;

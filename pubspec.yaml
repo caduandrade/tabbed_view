@@ -1,6 +1,6 @@
 name: tabbed_view
 description: Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
-version: 0.4.0
+version: 0.5.0
 homepage: https://github.com/caduandrade/tabbed_view
 
 environment:
