@@ -2,6 +2,7 @@ import 'package:demo/add_tab_page.dart';
 import 'package:demo/close_button_tooltip_page.dart';
 import 'package:demo/content_builder_page.dart';
 import 'package:demo/from_the_scratch_page.dart';
+import 'package:demo/hidden_tabs_menu_button_icon_page.dart';
 import 'package:demo/tab_close_listener_page.dart';
 import 'package:demo/tabs_area_theme_page.dart';
 import 'package:demo/custom_tab.dart';
@@ -34,6 +35,8 @@ class Example {
   static const Example tab_close_listener = const Example('Tab close listener');
   static const Example close_button_tooltip =
       const Example('Close button tooltip');
+  static const Example hidden_tabs_menu_button_icon =
+      const Example('Hidden tabs menu button icon');
 
   static const List<Example> values = [
     Example.simple,
@@ -48,7 +51,8 @@ class Example {
     Example.custom_tab,
     Example.from_the_scratch,
     Example.tab_close_listener,
-    Example.close_button_tooltip
+    Example.close_button_tooltip,
+    Example.hidden_tabs_menu_button_icon
   ];
 
   final String name;
@@ -151,6 +155,8 @@ class _TabbedViewDemoPageState extends State<TabbedViewDemoPage> {
       example = TabCloseListenerPage();
     } else if (_currentExample == Example.close_button_tooltip) {
       example = CloseButtonTooltipPage();
+    } else if (_currentExample == Example.hidden_tabs_menu_button_icon) {
+      example = HiddenTabsMenuButtonIconPage();
     } else {
       example = Center(child: Text(_currentExample.name + ' ?'));
     }

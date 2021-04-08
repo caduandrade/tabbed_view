@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 ///
 /// The text displayed on the tab is defined by [text] parameter.
 ///
-/// The optional [value] parameter allows any value to be associated
-/// with the tab.
+/// The optional [value] parameter allows associate the tab to any value.
 ///
 /// The optional [content] parameter defines the content of the tab.
 ///
@@ -76,6 +75,7 @@ class TabbedWiewModel {
 
   UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
 
+  /// The selected tab index
   int? get selectedIndex => _selectedIndex;
 
   set selectedIndex(int? tabIndex) {

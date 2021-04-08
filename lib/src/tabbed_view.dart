@@ -153,12 +153,12 @@ class _TabsAreaState extends State<_TabsArea> {
     Widget buttonsArea;
 
     if (hiddenTabs.hasHiddenTabs) {
-      TabButton menuTabsButton = TabButton(
-          icon: buttonsAreaTheme.menuTabsButtonIcon,
+      TabButton hiddenTabsMenuButton = TabButton(
+          icon: buttonsAreaTheme.hiddenTabsMenuButtonIcon,
           popupMenuItemBuilder: _buildTabsMenu,
           onPopupMenuItemSelected: _onTabsMenuItemSelected);
       buttonsArea = _TabButtonWidget(
-          button: menuTabsButton,
+          button: hiddenTabsMenuButton,
           enabled: true,
           colors: buttonsAreaTheme.buttonColors,
           iconSize: buttonsAreaTheme.buttonIconSize);
@@ -216,9 +216,11 @@ class _TabsAreaState extends State<_TabsArea> {
   }
 
   _updateHighlightedIndex(int? tabIndex) {
-    setState(() {
-      _highlightedIndex = tabIndex;
-    });
+    if (_highlightedIndex != tabIndex) {
+      setState(() {
+        _highlightedIndex = tabIndex;
+      });
+    }
   }
 }
 
@@ -331,8 +333,8 @@ class _TabWidget extends StatelessWidget {
         GestureDetector(onTap: _onClick, child: tabContainer);
 
     MouseRegion mouseRegion = MouseRegion(
-        onEnter: (details) => _onEnter(details, context),
-        onExit: (details) => _onExit(details, context),
+        onHover: (details) => updateHighlightedIndex(index),
+        onExit: (details) => updateHighlightedIndex(null),
         child: gestureDetector);
 
     return mouseRegion;
@@ -341,14 +343,6 @@ class _TabWidget extends StatelessWidget {
   _onClick() {
     scope.model.selectedIndex = index;
     notifyTabbedWidgetChange();
-  }
-
-  _onEnter(PointerEnterEvent details, BuildContext context) {
-    updateHighlightedIndex(index);
-  }
-
-  _onExit(PointerExitEvent details, BuildContext context) {
-    updateHighlightedIndex(null);
   }
 
   _onClose(int index) {
@@ -423,6 +417,7 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
       // Can't disable tooltip :-(
       // Waiting for https://github.com/flutter/flutter/issues/60418
       return PopupMenuButton<int>(
+        key: UniqueKey(),
         child: icon,
         tooltip: widget.button.toolTip,
         onSelected: widget.button.onPopupMenuItemSelected,

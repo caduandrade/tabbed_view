@@ -202,6 +202,26 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![customgap](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
 
+#### Buttons area
+
+##### Changing the button icon for the hidden tabs menu
+
+```dart
+    List<TabData> tabs = [];
+    for (var i = 1; i < 7; i++) {
+      tabs.add(TabData(text: 'Tab $i'));
+    }
+
+    TabbedViewTheme theme = TabbedViewTheme.light();
+    theme.tabsArea.buttonsArea.hiddenTabsMenuButtonIcon =
+        Icons.arrow_drop_down_circle_outlined;
+
+    TabbedWiew tabbedView =
+        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+```
+
+![hiddentabsbuttonicon](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/hidden_tabs_button_icon.png)
+
 ### Predefined themes
 
 ####  Dark theme

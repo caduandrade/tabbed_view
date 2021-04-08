@@ -30,6 +30,7 @@ class ButtonColors {
   int get hashCode => normal.hashCode ^ hover.hashCode ^ disabled.hashCode;
 }
 
+/// The [TabbedView] theme.
 class TabbedViewTheme {
   TabbedViewTheme({TabsAreaTheme? tabsArea, ContentAreaTheme? contentArea})
       : this.tabsArea = tabsArea != null ? tabsArea : TabsAreaTheme(),
@@ -39,18 +40,22 @@ class TabbedViewTheme {
   TabsAreaTheme tabsArea;
   ContentAreaTheme contentArea;
 
+  /// Builds the predefined dark theme.
   factory TabbedViewTheme.dark() {
     return _Dark.build();
   }
 
+  /// Builds the predefined light theme.
   factory TabbedViewTheme.light() {
     return _Light.build();
   }
 
+  /// Builds the predefined mobile theme.
   factory TabbedViewTheme.mobile() {
     return _Mobile.build();
   }
 
+  /// Builds the predefined minimalist theme.
   factory TabbedViewTheme.minimalist() {
     return _Minimalist.build();
   }
@@ -59,6 +64,7 @@ class TabbedViewTheme {
   static const double defaultIconSize = 16;
 }
 
+/// Theme for buttons area.
 class ButtonsAreaTheme {
   ButtonsAreaTheme(
       {this.decoration,
@@ -66,7 +72,7 @@ class ButtonsAreaTheme {
       double offset = 0,
       double buttonIconSize = TabbedViewTheme.defaultIconSize,
       this.buttonColors = const ButtonColors(),
-      this.menuTabsButtonIcon = Icons.more_vert})
+      this.hiddenTabsMenuButtonIcon = Icons.arrow_drop_down})
       : this._offset = offset >= 0 ? offset : 0,
         this.buttonIconSize = buttonIconSize >= TabbedViewTheme.minimalIconSize
             ? buttonIconSize
@@ -78,7 +84,7 @@ class ButtonsAreaTheme {
   double buttonIconSize;
   ButtonColors buttonColors;
 
-  IconData menuTabsButtonIcon;
+  IconData hiddenTabsMenuButtonIcon;
 
   double get offset => _offset;
 
@@ -87,6 +93,7 @@ class ButtonsAreaTheme {
   }
 }
 
+///Theme for tabs and buttons area.
 class TabsAreaTheme {
   TabsAreaTheme(
       {this.closeButtonIcon = Icons.clear,
@@ -123,6 +130,7 @@ class TabsAreaTheme {
   }
 }
 
+/// Theme for tab.
 class TabTheme {
   TabTheme(
       {this.buttonColors = const ButtonColors(),
@@ -187,6 +195,7 @@ class TabTheme {
   }
 }
 
+/// Theme for tab in a given status.
 class TabStatusTheme {
   TabStatusTheme(
       {this.decoration, this.fontColor, this.padding, this.buttonColors});
@@ -202,6 +211,7 @@ class TabStatusTheme {
   ButtonColors? buttonColors;
 }
 
+// Theme for tab content container.
 class ContentAreaTheme {
   ContentAreaTheme({this.decoration, this.padding});
 
@@ -215,6 +225,7 @@ class ContentAreaTheme {
   EdgeInsetsGeometry? padding;
 }
 
+/// Predefined light theme builder.
 class _Light {
   static TabbedViewTheme build() {
     return TabbedViewTheme(
@@ -262,6 +273,7 @@ class _Light {
   }
 }
 
+/// Predefined dark theme builder.
 class _Dark {
   static TabbedViewTheme build() {
     return TabbedViewTheme(
@@ -320,6 +332,7 @@ class _Dark {
   }
 }
 
+/// Predefined mobile theme builder.
 class _Mobile {
   static TabbedViewTheme build({Color borderColor = Colors.grey}) {
     return TabbedViewTheme(
@@ -372,6 +385,7 @@ class _Mobile {
   }
 }
 
+/// Predefined minimalist theme builder.
 class _Minimalist {
   static TabbedViewTheme build({Color? borderColor}) {
     Color bc = borderColor ?? Colors.grey[700]!;
