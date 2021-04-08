@@ -155,8 +155,8 @@ class _TabsAreaState extends State<_TabsArea> {
     if (hiddenTabs.hasHiddenTabs) {
       TabButton hiddenTabsMenuButton = TabButton(
           icon: buttonsAreaTheme.hiddenTabsMenuButtonIcon,
-          popupMenuItemBuilder: _buildTabsMenu,
-          onPopupMenuItemSelected: _onTabsMenuItemSelected);
+          popupMenuItemBuilder: _buildHiddenTabsMenu,
+          onPopupMenuItemSelected: _onHiddenTabsMenuItemSelected);
       buttonsArea = _TabButtonWidget(
           button: hiddenTabsMenuButton,
           enabled: true,
@@ -182,13 +182,13 @@ class _TabsAreaState extends State<_TabsArea> {
     return buttonsArea;
   }
 
-  _onTabsMenuItemSelected(int index) {
+  _onHiddenTabsMenuItemSelected(int index) {
     setState(() {
       widget.scope.model.selectedIndex = index;
     });
   }
 
-  List<PopupMenuEntry<int>> _buildTabsMenu(BuildContext context) {
+  List<PopupMenuEntry<int>> _buildHiddenTabsMenu(BuildContext context) {
     List<PopupMenuEntry<int>> list = [];
     hiddenTabs.indexes.sort();
     for (int index in hiddenTabs.indexes) {
