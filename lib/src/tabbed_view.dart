@@ -57,15 +57,14 @@ class _TabbedWiewState extends State<TabbedWiew> {
   @override
   Widget build(BuildContext context) {
     _TabbedWiewScope scope = widget._scope;
-    Widget tabArea =
-        _TabsArea(scope: scope, notifyTabbedWidgetChange: _notifyChange);
+    Widget tabArea = _TabsArea(scope: scope);
     _ContentArea contentArea = _ContentArea(scope: scope);
     return Column(
         children: [tabArea, Expanded(child: contentArea)],
         crossAxisAlignment: CrossAxisAlignment.stretch);
   }
 
-  _notifyChange() {
+  _rebuild() {
     setState(() {
       // rebuild
     });
@@ -100,12 +99,9 @@ class _ContentArea extends StatelessWidget {
 
 /// Widget for the tabs and buttons.
 class _TabsArea extends StatefulWidget {
-  const _TabsArea(
-      {Key? key, required this.scope, required this.notifyTabbedWidgetChange})
-      : super(key: key);
+  const _TabsArea({Key? key, required this.scope}) : super(key: key);
 
   final _TabbedWiewScope scope;
-  final Function notifyTabbedWidgetChange;
 
   @override
   State<StatefulWidget> createState() => _TabsAreaState();
@@ -128,8 +124,7 @@ class _TabsAreaState extends State<_TabsArea> {
           index: index,
           status: status,
           scope: widget.scope,
-          updateHighlightedIndex: _updateHighlightedIndex,
-          notifyTabbedWidgetChange: widget.notifyTabbedWidgetChange));
+          updateHighlightedIndex: _updateHighlightedIndex));
     }
     Widget tabsAreaLayout = _TabsAreaLayout(
         children: children,
@@ -236,14 +231,12 @@ class _TabWidget extends StatelessWidget {
       {required this.index,
       required this.status,
       required this.scope,
-      required this.updateHighlightedIndex,
-      required this.notifyTabbedWidgetChange});
+      required this.updateHighlightedIndex});
 
   final int index;
   final _TabStatus status;
   final _TabbedWiewScope scope;
   final _UpdateHighlightedIndex updateHighlightedIndex;
-  final Function notifyTabbedWidgetChange;
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +286,7 @@ class _TabWidget extends StatelessWidget {
       }
       TabButton closeButton = TabButton(
           icon: tabsAreaTheme.closeButtonIcon,
-          onPressed: () => _onClose(index),
+          onPressed: () => _onClose(context, index),
           toolTip: scope.closeButtonTooltip);
 
       textAndButtons.add(_TabButtonWidget(
@@ -330,7 +323,7 @@ class _TabWidget extends StatelessWidget {
         decoration: decoration);
 
     GestureDetector gestureDetector =
-        GestureDetector(onTap: _onClick, child: tabContainer);
+        GestureDetector(onTap: () => _onClick(context), child: tabContainer);
 
     MouseRegion mouseRegion = MouseRegion(
         onHover: (details) => updateHighlightedIndex(index),
@@ -340,15 +333,19 @@ class _TabWidget extends StatelessWidget {
     return mouseRegion;
   }
 
-  _onClick() {
+  _onClick(BuildContext context) {
     scope.model.selectedIndex = index;
-    notifyTabbedWidgetChange();
+    _TabbedWiewState? tabbedWiewState =
+        context.findAncestorStateOfType<_TabbedWiewState>();
+    tabbedWiewState?._rebuild();
   }
 
-  _onClose(int index) {
+  _onClose(BuildContext context, int index) {
     if (scope.onTabClosing == null || scope.onTabClosing!(index)) {
       scope.model.remove(index);
-      notifyTabbedWidgetChange();
+      _TabbedWiewState? tabbedWiewState =
+          context.findAncestorStateOfType<_TabbedWiewState>();
+      tabbedWiewState?._rebuild();
     }
   }
 
