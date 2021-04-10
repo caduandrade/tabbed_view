@@ -1,3 +1,7 @@
+## 0.6.0
+
+* Changes in thematization
+
 ## 0.5.0
 
 * Changes in thematization

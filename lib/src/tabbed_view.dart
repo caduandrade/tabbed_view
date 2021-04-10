@@ -346,25 +346,24 @@ class _ContentArea extends StatelessWidget {
     }
 
     if (controller._menuBuilder != null) {
-      Container paddingChild =
-          Container(child: child, padding: contentAreaTheme.padding);
-      Stack stack = Stack(children: [
-        Positioned.fill(
-            child: paddingChild, left: 0, right: 0, bottom: 0, top: 0),
-        Positioned.fill(
-            child: _Blur(controller), left: 0, right: 0, bottom: 0, top: 0),
-        Positioned(
-            child: LimitedBox(
-                maxWidth: 200,
-                child:
-                    _TabbedViewMenuWidget(controller: controller, data: data)),
-            right: 0,
-            top: 0,
-            bottom: 0)
-      ]);
-
+      List<Widget> children = [];
+      children.add(Positioned.fill(
+          child: Container(child: child, padding: contentAreaTheme.padding),
+          left: 0,
+          right: 0,
+          bottom: 0,
+          top: 0));
+      children.add(Positioned.fill(
+          child: _Glass(data), left: 0, right: 0, bottom: 0, top: 0));
+      children.add(Positioned(
+          child: LimitedBox(
+              maxWidth: 200,
+              child: _TabbedViewMenuWidget(controller: controller, data: data)),
+          right: 0,
+          top: 0,
+          bottom: 0));
       Widget listener = NotificationListener<SizeChangedLayoutNotification>(
-          child: SizeChangedLayoutNotifier(child: stack),
+          child: SizeChangedLayoutNotifier(child: Stack(children: children)),
           onNotification: (n) {
             scheduleMicrotask(() {
               controller._removeMenu();
@@ -382,19 +381,22 @@ class _ContentArea extends StatelessWidget {
   }
 }
 
-class _Blur extends StatelessWidget {
-  _Blur(this.controller);
+class _Glass extends StatelessWidget {
+  _Glass(this.data);
 
-  final TabbedWiewController controller;
+  final _TabbedWiewData data;
 
   @override
   Widget build(BuildContext context) {
+    Widget? child;
+    if (data.theme.menu.blur) {
+      child = BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+          child: Container(color: Colors.transparent));
+    }
     return ClipRect(
         child: GestureDetector(
-            child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-                child: Container(color: Colors.transparent)),
-            onTap: () => controller._removeMenu()));
+            child: child, onTap: () => data.controller._removeMenu()));
   }
 }
 

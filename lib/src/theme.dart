@@ -237,6 +237,7 @@ class MenuTheme {
       this.textStyle = const TextStyle(fontSize: 13),
       this.border,
       this.color,
+      this.blur = true,
       double dividerThickness = 0,
       this.dividerColor,
       this.hoverColor})
@@ -265,6 +266,8 @@ class MenuTheme {
   Color? color;
 
   Color? hoverColor;
+
+  bool blur;
 
   double _dividerThickness;
 
