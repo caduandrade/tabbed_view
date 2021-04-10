@@ -17,9 +17,7 @@ class NewModelPageState extends ExamplePageState {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewModel model = TabbedWiewModel(tabs);
-
-    TabbedWiew tabbedView = TabbedWiew(model: model);
+    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
     return tabbedView;
   }
 

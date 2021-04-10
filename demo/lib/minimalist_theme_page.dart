@@ -15,10 +15,10 @@ class MinimalistThemePageState extends ExamplePageState {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewModel model = TabbedWiewModel(tabs);
 
-    TabbedWiew tabbedView =
-        TabbedWiew(model: model, theme: TabbedViewTheme.minimalist());
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: TabbedWiewController(tabs),
+        theme: TabbedViewTheme.minimalist());
     return tabbedView;
   }
 }

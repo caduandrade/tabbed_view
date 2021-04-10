@@ -36,7 +36,7 @@ class TabsAreaThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewModel model = TabbedWiewModel(tabs);
+    TabbedWiewController model = TabbedWiewController(tabs);
 
     TabbedViewTheme theme = TabbedViewTheme.light();
 
@@ -45,7 +45,7 @@ class TabsAreaThemePageState extends ExampleMultiViewPageState<_View> {
       ..middleGap = 5
       ..minimalFinalGap = 5;
 
-    TabbedWiew tabbedView = TabbedWiew(model: model, theme: theme);
+    TabbedWiew tabbedView = TabbedWiew(controller: model, theme: theme);
     return tabbedView;
   }
 
@@ -56,7 +56,7 @@ class TabsAreaThemePageState extends ExampleMultiViewPageState<_View> {
     theme.tabsArea.color = Colors.green[100];
 
     TabbedWiew tabbedView =
-        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
     return tabbedView;
   }
 }

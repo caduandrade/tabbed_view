@@ -19,7 +19,7 @@ class TabbedViewExamplePage extends StatefulWidget {
 }
 
 class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
-  late TabbedWiewModel _model;
+  late TabbedWiewController _model;
 
   @override
   void initState() {
@@ -28,12 +28,12 @@ class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
     for (int i = 1; i < 5; i++) {
       tabs.add(TabData(text: 'Tab $i', content: Text('Content $i')));
     }
-    _model = TabbedWiewModel(tabs);
+    _model = TabbedWiewController(tabs);
   }
 
   @override
   Widget build(BuildContext context) {
-    TabbedWiew tabbedWiew = TabbedWiew(model: _model);
+    TabbedWiew tabbedWiew = TabbedWiew(controller: _model);
     return Scaffold(
         body: Container(child: tabbedWiew, padding: EdgeInsets.all(32)));
   }

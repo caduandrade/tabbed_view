@@ -16,7 +16,7 @@ class ListeningTabClosePageState extends ExamplePageState {
       TabData(text: 'Tab 3')
     ];
     TabbedWiew tabbedView = TabbedWiew(
-        model: TabbedWiewModel(tabs),
+        controller: TabbedWiewController(tabs),
         closeButtonTooltip: 'Click here to close the tab');
     return tabbedView;
   }

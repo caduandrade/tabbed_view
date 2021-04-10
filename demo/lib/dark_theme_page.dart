@@ -11,7 +11,6 @@ class DarkThemePageState extends ExamplePageState {
   @override
   ThemeData? buildThemeData() {
     return ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.black);
-    return null;
   }
 
   @override
@@ -21,10 +20,9 @@ class DarkThemePageState extends ExamplePageState {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewModel model = TabbedWiewModel(tabs);
 
-    TabbedWiew tabbedView =
-        TabbedWiew(model: model, theme: TabbedViewTheme.dark());
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: TabbedWiewController(tabs), theme: TabbedViewTheme.dark());
     return tabbedView;
   }
 }

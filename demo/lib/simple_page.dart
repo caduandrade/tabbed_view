@@ -15,7 +15,16 @@ class SimplePageState extends ExamplePageState {
       Widget tabContent = Center(child: Text('Content $i'));
       tabs.add(TabData(text: 'Tab $i', content: tabContent));
     }
-    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
+    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
     return tabbedView;
+  }
+
+  @override
+  List<Widget> buildExampleWidgets() {
+    return [ElevatedButton(child: Text('Rebuild'), onPressed: _onRebuild)];
+  }
+
+  _onRebuild() {
+    setState(() {});
   }
 }

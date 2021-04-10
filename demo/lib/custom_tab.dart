@@ -53,7 +53,7 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
     TabData tab = TabData(text: 'Tab', buttons: [
       TabButton(icon: Icons.star, onPressed: () => print('Hello!'))
     ]);
-    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel([tab]));
+    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController([tab]));
     return tabbedView;
   }
 
@@ -62,7 +62,7 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
       TabData(text: 'Tab'),
       TabData(text: 'Non-closable tab', closable: false)
     ];
-    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
+    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
     return tabbedView;
   }
 
@@ -76,7 +76,7 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
     theme.tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
 
     TabbedWiew tabbedView =
-        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
     return tabbedView;
   }
 
@@ -92,7 +92,7 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
       ..verticalAlignment = VerticalAlignment.top;
 
     TabbedWiew tabbedView =
-        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
     return tabbedView;
   }
 
@@ -107,7 +107,7 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
       ])
     ];
 
-    TabbedWiew tabbedView = TabbedWiew(model: TabbedWiewModel(tabs));
+    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
 
     return tabbedView;
   }

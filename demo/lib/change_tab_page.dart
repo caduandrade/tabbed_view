@@ -8,7 +8,7 @@ class ChangeTabPage extends StatefulWidget {
 }
 
 class ChangeTabPageState extends ExamplePageState {
-  late TabbedWiewModel _model;
+  late TabbedWiewController _controller;
 
   @override
   void initState() {
@@ -19,12 +19,12 @@ class ChangeTabPageState extends ExamplePageState {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    _model = TabbedWiewModel(tabs);
+    _controller = TabbedWiewController(tabs);
   }
 
   @override
   Widget buildContent() {
-    TabbedWiew tabbedView = TabbedWiew(model: _model);
+    TabbedWiew tabbedView = TabbedWiew(controller: _controller);
     return tabbedView;
   }
 
@@ -38,17 +38,17 @@ class ChangeTabPageState extends ExamplePageState {
   }
 
   _onChangeTabText() {
-    if (_model.tabs.length > 0) {
+    if (_controller.tabs.length > 0) {
       setState(() {
-        _model.tabs[0].text = 'New text';
+        _controller.tabs[0].text = 'New text';
       });
     }
   }
 
   _onDisableClose() {
-    if (_model.tabs.length > 0) {
+    if (_controller.tabs.length > 0) {
       setState(() {
-        _model.tabs[0].closable = false;
+        _controller.tabs[0].closable = false;
       });
     }
   }

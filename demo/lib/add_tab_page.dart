@@ -8,31 +8,36 @@ class AddTabPage extends StatefulWidget {
 }
 
 class AddTabPageState extends ExamplePageState {
-  late TabbedWiewModel _model;
+  late TabbedWiewController _controller;
   int _lastTabIndex = 1;
 
   @override
   void initState() {
     super.initState();
-    _model = TabbedWiewModel([]);
+    _controller = TabbedWiewController([]);
   }
 
   @override
   Widget buildContent() {
-    TabbedWiew tabbedView = TabbedWiew(model: _model);
+    TabbedWiew tabbedView = TabbedWiew(controller: _controller);
     return tabbedView;
   }
 
   @override
   List<Widget> buildExampleWidgets() {
-    return [ElevatedButton(child: Text('Add tab'), onPressed: _onPressed)];
+    return [
+      ElevatedButton(child: Text('Add tab'), onPressed: _onAdd),
+      ElevatedButton(child: Text('Rebuild'), onPressed: _onRebuild)
+    ];
   }
 
-  _onPressed() {
-    setState(() {
-      _model.add(TabData(
-          text: 'Tab $_lastTabIndex', content: Text('Content $_lastTabIndex')));
-      _lastTabIndex++;
-    });
+  _onAdd() {
+    _controller.add(TabData(
+        text: 'Tab $_lastTabIndex', content: Text('Content $_lastTabIndex')));
+    _lastTabIndex++;
+  }
+
+  _onRebuild() {
+    setState(() {});
   }
 }

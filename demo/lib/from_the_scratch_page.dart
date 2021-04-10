@@ -38,7 +38,7 @@ class FromTheScratchPageState extends ExamplePageState {
           BoxDecoration(color: Colors.green[50], borderRadius: borderRadius);
 
     TabbedWiew tabbedView =
-        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
     return tabbedView;
   }
 }

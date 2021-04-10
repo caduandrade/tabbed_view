@@ -15,10 +15,9 @@ class MobileThemePageState extends ExamplePageState {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewModel model = TabbedWiewModel(tabs);
-
-    TabbedWiew tabbedView =
-        TabbedWiew(model: model, theme: TabbedViewTheme.mobile());
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: TabbedWiewController(tabs),
+        theme: TabbedViewTheme.mobile());
     return tabbedView;
   }
 }

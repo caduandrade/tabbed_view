@@ -21,7 +21,7 @@ class HiddenTabsMenuButtonIconPageState extends ExamplePageState {
         Icons.arrow_drop_down_circle_outlined;
 
     TabbedWiew tabbedView =
-        TabbedWiew(model: TabbedWiewModel(tabs), theme: theme);
+        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
     return tabbedView;
   }
 }
