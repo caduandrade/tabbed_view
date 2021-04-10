@@ -334,8 +334,9 @@ class _ContentArea extends StatelessWidget {
           child: SizeChangedLayoutNotifier(child: stack),
           onNotification: (n) {
             scheduleMicrotask(() {
-              scope.model._menuBuilder = null;
-              scope.model.notifyListeners();
+              _TabbedWiewState? state =
+                  context.findAncestorStateOfType<_TabbedWiewState>();
+              state?._removeMenu();
             });
             return true;
           });
