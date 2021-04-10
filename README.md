@@ -34,7 +34,7 @@ The default theme is *TabbedViewTheme.light()*.
 It allows creating the contents of the tab dynamically during the selection event.
 
 ```dart
-    List<TabData> tabs = [
+    var tabs = [
       TabData(text: 'Tab 1'),
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')
@@ -51,7 +51,7 @@ It allows creating the contents of the tab dynamically during the selection even
 ### Close button tooltip
 
 ```dart
-    List<TabData> tabs = [
+    var tabs = [
       TabData(text: 'Tab 1'),
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')

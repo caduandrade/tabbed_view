@@ -10,7 +10,7 @@ class CloseButtonTooltipPage extends StatefulWidget {
 class ListeningTabClosePageState extends ExamplePageState {
   @override
   Widget buildContent() {
-    List<TabData> tabs = [
+    var tabs = [
       TabData(text: 'Tab 1'),
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')

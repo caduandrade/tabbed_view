@@ -98,6 +98,16 @@ class TabbedWiewController extends ChangeNotifier {
   /// The selected tab index
   int? get selectedIndex => _selectedIndex;
 
+  _updateMenu(TabbedWiewMenuBuilder menuBuilder) {
+    _menuBuilder = menuBuilder;
+    notifyListeners();
+  }
+
+  _removeMenu() {
+    _menuBuilder = null;
+    notifyListeners();
+  }
+
   set selectedIndex(int? tabIndex) {
     if (tabIndex != null) {
       _validateIndex(tabIndex);
@@ -219,18 +229,12 @@ class _TabbedWiewState extends State<TabbedWiew> {
     });
   }
 
-  _changeMenuPopupFor(TabButton button) {
-    if (widget.controller._menuBuilder == null) {
-      widget.controller._menuBuilder = button.menuBuilder!;
+  _invertMenuPopupFor(TabButton button) {
+    if (widget.controller._menuBuilder == null && button.menuBuilder != null) {
+      widget.controller._updateMenu(button.menuBuilder!);
     } else {
-      widget.controller._menuBuilder = null;
+      widget.controller._removeMenu();
     }
-    widget.controller.notifyListeners();
-  }
-
-  _removeMenu() {
-    widget.controller._menuBuilder = null;
-    widget.controller.notifyListeners();
   }
 
   @override
@@ -282,9 +286,7 @@ class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
                   child: Text(items[itemIndex].text)),
               hoverColor: menuTheme.hoverColor,
               onTap: () {
-                _TabbedWiewState? state =
-                    context.findAncestorStateOfType<_TabbedWiewState>();
-                state?._removeMenu();
+                widget.controller._removeMenu();
                 Function? onSelection = items[itemIndex].onSelection;
                 if (onSelection != null) {
                   onSelection();
@@ -330,7 +332,8 @@ class _ContentArea extends StatelessWidget {
       Stack stack = Stack(children: [
         Positioned.fill(
             child: paddingChild, left: 0, right: 0, bottom: 0, top: 0),
-        Positioned.fill(child: _Blur(), left: 0, right: 0, bottom: 0, top: 0),
+        Positioned.fill(
+            child: _Blur(controller), left: 0, right: 0, bottom: 0, top: 0),
         Positioned(
             child: LimitedBox(
                 maxWidth: 200,
@@ -345,9 +348,7 @@ class _ContentArea extends StatelessWidget {
           child: SizeChangedLayoutNotifier(child: stack),
           onNotification: (n) {
             scheduleMicrotask(() {
-              _TabbedWiewState? state =
-                  context.findAncestorStateOfType<_TabbedWiewState>();
-              state?._removeMenu();
+              controller._removeMenu();
             });
             return true;
           });
@@ -363,6 +364,10 @@ class _ContentArea extends StatelessWidget {
 }
 
 class _Blur extends StatelessWidget {
+  _Blur(this.controller);
+
+  final TabbedWiewController controller;
+
   @override
   Widget build(BuildContext context) {
     return ClipRect(
@@ -370,13 +375,7 @@ class _Blur extends StatelessWidget {
             child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
                 child: Container(color: Colors.transparent)),
-            onTap: () => _removePopup(context)));
-  }
-
-  _removePopup(BuildContext context) {
-    _TabbedWiewState? state =
-        context.findAncestorStateOfType<_TabbedWiewState>();
-    state?._removeMenu();
+            onTap: () => controller._removeMenu()));
   }
 }
 
@@ -687,7 +686,7 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
       onPressed = () {
         _TabbedWiewState? tabbedWiewState =
             context.findAncestorStateOfType<_TabbedWiewState>();
-        tabbedWiewState?._changeMenuPopupFor(widget.button);
+        tabbedWiewState?._invertMenuPopupFor(widget.button);
       };
     }
 
