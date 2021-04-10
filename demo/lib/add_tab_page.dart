@@ -32,7 +32,7 @@ class AddTabPageState extends ExamplePageState {
   }
 
   _onAdd() {
-    _controller.add(TabData(
+    _controller.addTab(TabData(
         text: 'Tab $_lastTabIndex', content: Text('Content $_lastTabIndex')));
     _lastTabIndex++;
   }

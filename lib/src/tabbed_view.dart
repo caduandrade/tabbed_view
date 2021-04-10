@@ -117,9 +117,27 @@ class TabbedWiewController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Adds a tab.
-  add(TabData tab) {
+  /// Inserts [TabData] at position [index] in the [tabs].
+  ///
+  /// The [index] value must be non-negative and no greater than [tabs.length].
+  void insertTab(int index, TabData tab) {
+    _tabs.insert(index, tab);
+    _afterIncTabs();
+  }
+
+  /// Adds multiple [TabData].
+  addTabs(Iterable<TabData> iterable) {
+    _tabs.addAll(iterable);
+    _afterIncTabs();
+  }
+
+  /// Adds a [TabData].
+  addTab(TabData tab) {
     _tabs.add(tab);
+    _afterIncTabs();
+  }
+
+  _afterIncTabs() {
     if (_tabs.length == 1) {
       _selectedIndex = 0;
     }
@@ -128,7 +146,7 @@ class TabbedWiewController extends ChangeNotifier {
   }
 
   /// Removes a tab.
-  remove(int tabIndex) {
+  removeTab(int tabIndex) {
     _validateIndex(tabIndex);
     _tabs.removeAt(tabIndex);
     if (_tabs.isEmpty) {
@@ -612,7 +630,7 @@ class _TabWidget extends StatelessWidget {
 
   _onClose(BuildContext context, int index) {
     if (data.onTabClosing == null || data.onTabClosing!(index)) {
-      data.controller.remove(index);
+      data.controller.removeTab(index);
       _TabbedWiewState? tabbedWiewState =
           context.findAncestorStateOfType<_TabbedWiewState>();
       tabbedWiewState?._rebuild();
