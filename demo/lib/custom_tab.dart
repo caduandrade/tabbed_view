@@ -106,9 +106,7 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
             onPressed: () => print('Hello!'))
       ])
     ];
-
     TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
-
     return tabbedView;
   }
 }

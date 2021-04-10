@@ -36,16 +36,15 @@ class TabsAreaThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewController model = TabbedWiewController(tabs);
 
     TabbedViewTheme theme = TabbedViewTheme.light();
-
     theme.tabsArea
       ..initialGap = 20
       ..middleGap = 5
       ..minimalFinalGap = 5;
 
-    TabbedWiew tabbedView = TabbedWiew(controller: model, theme: theme);
+    TabbedWiew tabbedView =
+        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
     return tabbedView;
   }
 

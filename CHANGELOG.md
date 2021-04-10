@@ -3,6 +3,7 @@
 * Changes in thematization
 * Adding documentation
 * Menu builder
+* TabbedWiewModel changed to TabbedWiewController
 
 ## 0.4.0
 
