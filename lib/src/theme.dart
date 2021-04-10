@@ -32,13 +32,16 @@ class ButtonColors {
 
 /// The [TabbedView] theme.
 class TabbedViewTheme {
-  TabbedViewTheme({TabsAreaTheme? tabsArea, ContentAreaTheme? contentArea})
+  TabbedViewTheme(
+      {TabsAreaTheme? tabsArea, ContentAreaTheme? contentArea, MenuTheme? menu})
       : this.tabsArea = tabsArea != null ? tabsArea : TabsAreaTheme(),
         this.contentArea =
-            contentArea != null ? contentArea : ContentAreaTheme();
+            contentArea != null ? contentArea : ContentAreaTheme(),
+        this.menu = menu != null ? menu : MenuTheme();
 
   TabsAreaTheme tabsArea;
   ContentAreaTheme contentArea;
+  MenuTheme menu;
 
   /// Builds the predefined dark theme.
   factory TabbedViewTheme.dark() {
@@ -225,11 +228,62 @@ class ContentAreaTheme {
   EdgeInsetsGeometry? padding;
 }
 
+/// Theme for menu.
+class MenuTheme {
+  MenuTheme(
+      {this.padding,
+      this.margin,
+      this.menuItemPadding,
+      this.textStyle = const TextStyle(fontSize: 13),
+      this.border,
+      this.color,
+      double dividerThickness = 0,
+      this.dividerColor,
+      this.hoverColor})
+      : this._dividerThickness = dividerThickness >= 0 ? dividerThickness : 0;
+
+  EdgeInsetsGeometry? margin;
+
+  /// Empty space to inscribe inside the [decoration]. The menu area, if any, is
+  /// placed inside this padding.
+  ///
+  /// This padding is in addition to any padding inherent in the [decoration];
+  /// see [Decoration.padding].
+  EdgeInsetsGeometry? padding;
+
+  /// Empty space to inscribe inside the [decoration]. The menu item, if any, is
+  /// placed inside this padding.
+  ///
+  /// This padding is in addition to any padding inherent in the [decoration];
+  /// see [Decoration.padding].
+  EdgeInsetsGeometry? menuItemPadding;
+
+  TextStyle? textStyle;
+
+  Border? border;
+
+  Color? color;
+
+  Color? hoverColor;
+
+  double _dividerThickness;
+
+  Color? dividerColor;
+
+  double get dividerThickness => _dividerThickness;
+
+  set dividerThickness(double value) {
+    _dividerThickness = value >= 0 ? value : 0;
+  }
+}
+
 /// Predefined light theme builder.
 class _Light {
   static TabbedViewTheme build() {
     return TabbedViewTheme(
-        tabsArea: _tabsAreaTheme(), contentArea: _contentAreaTheme());
+        tabsArea: _tabsAreaTheme(),
+        contentArea: _contentAreaTheme(),
+        menu: _menuTheme());
   }
 
   static TabsAreaTheme _tabsAreaTheme() {
@@ -271,13 +325,26 @@ class _Light {
     BoxDecoration decoration = BoxDecoration(border: border);
     return ContentAreaTheme(decoration: decoration);
   }
+
+  static MenuTheme _menuTheme() {
+    return MenuTheme(
+        border: Border.all(width: 1, color: Colors.grey),
+        margin: EdgeInsets.all(8),
+        menuItemPadding: EdgeInsets.all(8),
+        color: Colors.white,
+        hoverColor: Colors.grey[200],
+        dividerColor: Colors.grey,
+        dividerThickness: 1);
+  }
 }
 
 /// Predefined dark theme builder.
 class _Dark {
   static TabbedViewTheme build() {
     return TabbedViewTheme(
-        tabsArea: _tabsAreaTheme(), contentArea: _contentAreaTheme());
+        tabsArea: _tabsAreaTheme(),
+        contentArea: _contentAreaTheme(),
+        menu: _menuTheme());
   }
 
   static TabsAreaTheme _tabsAreaTheme() {
@@ -330,6 +397,18 @@ class _Dark {
     return ContentAreaTheme(
         decoration: BoxDecoration(color: Colors.grey[800]), padding: padding);
   }
+
+  static MenuTheme _menuTheme() {
+    return MenuTheme(
+        textStyle: TextStyle(fontSize: 13, color: Colors.grey[100]),
+        border: Border.all(width: 1, color: Colors.grey[600]!),
+        margin: EdgeInsets.all(8),
+        menuItemPadding: EdgeInsets.all(8),
+        color: Colors.grey[700],
+        hoverColor: Colors.grey[600],
+        dividerColor: Colors.grey[500],
+        dividerThickness: 1);
+  }
 }
 
 /// Predefined mobile theme builder.
@@ -337,7 +416,8 @@ class _Mobile {
   static TabbedViewTheme build({Color borderColor = Colors.grey}) {
     return TabbedViewTheme(
         tabsArea: _tabsAreaTheme(borderColor),
-        contentArea: _contentAreaTheme(borderColor));
+        contentArea: _contentAreaTheme(borderColor),
+        menu: _menuTheme());
   }
 
   static TabsAreaTheme _tabsAreaTheme(Color borderColor) {
@@ -383,6 +463,17 @@ class _Mobile {
     BoxDecoration decoration = BoxDecoration(border: border);
     return ContentAreaTheme(decoration: decoration);
   }
+
+  static MenuTheme _menuTheme() {
+    return MenuTheme(
+        border: Border.all(width: 1, color: Colors.grey),
+        margin: EdgeInsets.all(8),
+        menuItemPadding: EdgeInsets.all(8),
+        color: Colors.white,
+        hoverColor: Colors.grey[200],
+        dividerColor: Colors.grey,
+        dividerThickness: 1);
+  }
 }
 
 /// Predefined minimalist theme builder.
@@ -390,7 +481,9 @@ class _Minimalist {
   static TabbedViewTheme build({Color? borderColor}) {
     Color bc = borderColor ?? Colors.grey[700]!;
     return TabbedViewTheme(
-        tabsArea: _tabsAreaTheme(bc), contentArea: _contentAreaTheme(bc));
+        tabsArea: _tabsAreaTheme(bc),
+        contentArea: _contentAreaTheme(bc),
+        menu: _menuTheme());
   }
 
   static TabsAreaTheme _tabsAreaTheme(Color borderColor) {
@@ -421,5 +514,16 @@ class _Minimalist {
         Border(bottom: borderSide, left: borderSide, right: borderSide);
     BoxDecoration decoration = BoxDecoration(border: border);
     return ContentAreaTheme(decoration: decoration);
+  }
+
+  static MenuTheme _menuTheme() {
+    return MenuTheme(
+        border: Border.all(width: 1, color: Colors.grey),
+        margin: EdgeInsets.all(8),
+        menuItemPadding: EdgeInsets.all(8),
+        color: Colors.white,
+        hoverColor: Colors.grey[200],
+        dividerColor: Colors.grey,
+        dividerThickness: 1);
   }
 }

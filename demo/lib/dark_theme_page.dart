@@ -11,6 +11,7 @@ class DarkThemePageState extends ExamplePageState {
   @override
   ThemeData? buildThemeData() {
     return ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.black);
+    return null;
   }
 
   @override

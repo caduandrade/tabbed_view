@@ -1,8 +1,144 @@
+import 'dart:async';
+import 'dart:collection';
+import 'dart:ui';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 import 'dart:math' as math;
+
+/// The tab data.
+///
+/// The text displayed on the tab is defined by [text] parameter.
+///
+/// The optional [value] parameter allows associate the tab to any value.
+///
+/// The optional [content] parameter defines the content of the tab.
+///
+/// The [closable] parameter defines whether the close button is visible.
+///
+/// The [buttons] parameter allows you to define extra buttons in addition
+/// to the Close button.
+///
+/// See also:
+///
+/// * [TabbedWiew.contentBuilder]
+class TabData {
+  TabData(
+      {this.value,
+      required this.text,
+      this.buttons,
+      this.content,
+      this.closable = true});
+
+  final dynamic? value;
+  String text;
+  List<TabButton>? buttons;
+  Widget? content;
+  bool closable;
+}
+
+/// Configures a tab button.
+class TabButton {
+  TabButton(
+      {required this.icon,
+      this.color,
+      this.hoverColor,
+      this.disabledColor,
+      this.onPressed,
+      this.menuBuilder,
+      this.toolTip});
+
+  final IconData icon;
+  final Color? color;
+  final Color? hoverColor;
+  final Color? disabledColor;
+  final VoidCallback? onPressed;
+  final TabbedWiewMenuBuilder? menuBuilder;
+  final String? toolTip;
+}
+
+class TabbedWiewMenuItem {
+  TabbedWiewMenuItem({required this.text, this.onSelection});
+
+  final String text;
+  final Function? onSelection;
+}
+
+typedef TabbedWiewMenuBuilder = List<TabbedWiewMenuItem> Function(
+    BuildContext context);
+
+/// The [TabbedWiew] model.
+///
+/// Stores tabs and selection tab index.
+class TabbedWiewModel extends ChangeNotifier {
+  factory TabbedWiewModel(List<TabData> tabs) {
+    return TabbedWiewModel._(tabs);
+  }
+
+  TabbedWiewModel._(this._tabs) {
+    if (_tabs.length > 0) {
+      _selectedIndex = 0;
+    }
+  }
+
+  final List<TabData> _tabs;
+
+  int? _selectedIndex;
+
+  TabbedWiewMenuBuilder? _menuBuilder;
+
+  UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
+
+  /// The selected tab index
+  int? get selectedIndex => _selectedIndex;
+
+  set selectedIndex(int? tabIndex) {
+    if (tabIndex != null) {
+      _validateIndex(tabIndex);
+    }
+    _selectedIndex = tabIndex;
+    _menuBuilder = null;
+  }
+
+  /// Adds a tab to the model.
+  add(TabData tab) {
+    _tabs.add(tab);
+    if (_tabs.length == 1) {
+      _selectedIndex = 0;
+    }
+    _menuBuilder = null;
+  }
+
+  /// Removes a tab from the model.
+  remove(int tabIndex) {
+    _validateIndex(tabIndex);
+    _tabs.removeAt(tabIndex);
+    if (_tabs.isEmpty) {
+      _selectedIndex = null;
+    } else if (_selectedIndex != null &&
+        (_selectedIndex == tabIndex || _selectedIndex! >= _tabs.length)) {
+      _selectedIndex = 0;
+    }
+    _menuBuilder = null;
+  }
+
+  /// Removes all tabs.
+  removeTabs() {
+    _tabs.clear();
+    _selectedIndex = null;
+    _menuBuilder = null;
+  }
+
+  _validateIndex(int tabIndex) {
+    if (tabIndex < 0 || tabIndex >= _tabs.length) {
+      throw IndexError(tabIndex, _tabs, 'tabIndex');
+    }
+  }
+}
+
+typedef OnTabClosing = bool Function(int tabIndex);
 
 /// Propagates parameters to internal components.
 class _TabbedWiewScope {
@@ -55,6 +191,12 @@ class TabbedWiew extends StatefulWidget {
 /// The [TabbedWiew] state.
 class _TabbedWiewState extends State<TabbedWiew> {
   @override
+  void initState() {
+    super.initState();
+    widget._scope.model.addListener(_rebuild);
+  }
+
+  @override
   Widget build(BuildContext context) {
     _TabbedWiewScope scope = widget._scope;
     Widget tabArea = _TabsArea(scope: scope);
@@ -68,6 +210,89 @@ class _TabbedWiewState extends State<TabbedWiew> {
     setState(() {
       // rebuild
     });
+  }
+
+  _changeMenuPopupFor(TabButton button) {
+    if (widget._scope.model._menuBuilder == null) {
+      widget._scope.model._menuBuilder = button.menuBuilder!;
+    } else {
+      widget._scope.model._menuBuilder = null;
+    }
+    widget._scope.model.notifyListeners();
+  }
+
+  _removeMenu() {
+    widget._scope.model._menuBuilder = null;
+    widget._scope.model.notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    widget._scope.model.removeListener(_rebuild);
+    super.dispose();
+  }
+}
+
+/// Widget for menu.
+class _TabbedViewMenuWidget extends StatefulWidget {
+  const _TabbedViewMenuWidget(this.scope);
+
+  final _TabbedWiewScope scope;
+
+  @override
+  State<StatefulWidget> createState() => _TabbedViewMenuWidgetState();
+}
+
+/// State for [_TabbedViewMenuWidget].
+class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
+  @override
+  Widget build(BuildContext context) {
+    MenuTheme menuTheme = widget.scope.theme.menu;
+    List<TabbedWiewMenuItem> items = widget.scope.model._menuBuilder!(context);
+    bool hasDivider =
+        menuTheme.dividerThickness > 0 && menuTheme.dividerColor != null;
+    int itemCount = items.length;
+    if (hasDivider) {
+      itemCount += items.length - 1;
+    }
+    ListView list = ListView.builder(
+        itemCount: itemCount,
+        itemBuilder: (BuildContext context, int index) {
+          int itemIndex = index;
+          if (hasDivider) {
+            itemIndex = index ~/ 2;
+            if (index.isOdd) {
+              return Divider(
+                  height: menuTheme.dividerThickness,
+                  color: menuTheme.dividerColor,
+                  thickness: menuTheme.dividerThickness);
+            }
+          }
+          return InkWell(
+              child: Container(
+                  padding: menuTheme.menuItemPadding,
+                  child: Text(items[itemIndex].text)),
+              hoverColor: menuTheme.hoverColor,
+              onTap: () {
+                _TabbedWiewState? state =
+                    context.findAncestorStateOfType<_TabbedWiewState>();
+                state?._removeMenu();
+                Function? onSelection = items[itemIndex].onSelection;
+                if (onSelection != null) {
+                  onSelection();
+                }
+              });
+        });
+
+    return Container(
+        margin: menuTheme.margin,
+        padding: menuTheme.padding,
+        child: Material(
+            child: list,
+            textStyle: menuTheme.textStyle,
+            color: Colors.transparent),
+        decoration:
+            BoxDecoration(color: menuTheme.color, border: menuTheme.border));
   }
 }
 
@@ -90,6 +315,34 @@ class _ContentArea extends StatelessWidget {
       }
     }
 
+    if (scope.model._menuBuilder != null) {
+      Container paddingChild =
+          Container(child: child, padding: contentAreaTheme.padding);
+      Stack stack = Stack(children: [
+        Positioned.fill(
+            child: paddingChild, left: 0, right: 0, bottom: 0, top: 0),
+        Positioned.fill(child: _Blur(), left: 0, right: 0, bottom: 0, top: 0),
+        Positioned(
+            child:
+                LimitedBox(maxWidth: 200, child: _TabbedViewMenuWidget(scope)),
+            right: 0,
+            top: 0,
+            bottom: 0)
+      ]);
+
+      Widget listener = NotificationListener<SizeChangedLayoutNotification>(
+          child: SizeChangedLayoutNotifier(child: stack),
+          onNotification: (n) {
+            scheduleMicrotask(() {
+              scope.model._menuBuilder = null;
+              scope.model.notifyListeners();
+            });
+            return true;
+          });
+      return Container(
+          child: listener, decoration: contentAreaTheme.decoration);
+    }
+
     return Container(
         child: child,
         decoration: contentAreaTheme.decoration,
@@ -97,9 +350,27 @@ class _ContentArea extends StatelessWidget {
   }
 }
 
+class _Blur extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ClipRect(
+        child: GestureDetector(
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+                child: Container(color: Colors.transparent)),
+            onTap: () => _removePopup(context)));
+  }
+
+  _removePopup(BuildContext context) {
+    _TabbedWiewState? state =
+        context.findAncestorStateOfType<_TabbedWiewState>();
+    state?._removeMenu();
+  }
+}
+
 /// Widget for the tabs and buttons.
 class _TabsArea extends StatefulWidget {
-  const _TabsArea({Key? key, required this.scope}) : super(key: key);
+  const _TabsArea({required this.scope});
 
   final _TabbedWiewScope scope;
 
@@ -150,8 +421,7 @@ class _TabsAreaState extends State<_TabsArea> {
     if (hiddenTabs.hasHiddenTabs) {
       TabButton hiddenTabsMenuButton = TabButton(
           icon: buttonsAreaTheme.hiddenTabsMenuButtonIcon,
-          popupMenuItemBuilder: _buildHiddenTabsMenu,
-          onPopupMenuItemSelected: _onHiddenTabsMenuItemSelected);
+          menuBuilder: _hiddenTabsMenuBuilder);
       buttonsArea = _TabButtonWidget(
           button: hiddenTabsMenuButton,
           enabled: true,
@@ -177,21 +447,20 @@ class _TabsAreaState extends State<_TabsArea> {
     return buttonsArea;
   }
 
-  _onHiddenTabsMenuItemSelected(int index) {
+  _onHiddenTabsMenuItemSelection(int index) {
     setState(() {
       widget.scope.model.selectedIndex = index;
     });
   }
 
-  List<PopupMenuEntry<int>> _buildHiddenTabsMenu(BuildContext context) {
-    List<PopupMenuEntry<int>> list = [];
+  List<TabbedWiewMenuItem> _hiddenTabsMenuBuilder(BuildContext context) {
+    List<TabbedWiewMenuItem> list = [];
     hiddenTabs.indexes.sort();
     for (int index in hiddenTabs.indexes) {
       TabData tab = widget.scope.model.tabs[index];
-      list.add(PopupMenuItem<int>(
-        value: index,
-        child: Text(tab.text),
-      ));
+      list.add(TabbedWiewMenuItem(
+          text: tab.text,
+          onSelection: () => _onHiddenTabsMenuItemSelection(index)));
     }
     return list;
   }
@@ -394,9 +663,8 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
         ? widget.button.hoverColor!
         : widget.colors.hover;
 
-    bool hasEvent = widget.button.onPressed != null ||
-        (widget.button.popupMenuItemBuilder != null &&
-            widget.button.onPopupMenuItemSelected != null);
+    bool hasEvent =
+        widget.button.onPressed != null || widget.button.menuBuilder != null;
 
     if (hasEvent == false || widget.enabled == false) {
       Color disabledColor = widget.button.disabledColor != null
@@ -410,16 +678,13 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
     Widget icon =
         Icon(widget.button.icon, color: finalColor, size: widget.iconSize);
 
-    if (widget.button.popupMenuItemBuilder != null) {
-      // Can't disable tooltip :-(
-      // Waiting for https://github.com/flutter/flutter/issues/60418
-      return PopupMenuButton<int>(
-        key: UniqueKey(),
-        child: icon,
-        tooltip: widget.button.toolTip,
-        onSelected: widget.button.onPopupMenuItemSelected,
-        itemBuilder: widget.button.popupMenuItemBuilder!,
-      );
+    VoidCallback? onPressed = widget.button.onPressed;
+    if (widget.button.menuBuilder != null) {
+      onPressed = () {
+        _TabbedWiewState? tabbedWiewState =
+            context.findAncestorStateOfType<_TabbedWiewState>();
+        tabbedWiewState?._changeMenuPopupFor(widget.button);
+      };
     }
 
     if (widget.button.toolTip != null) {
@@ -432,7 +697,7 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
     return MouseRegion(
         onEnter: _onEnter,
         onExit: _onExit,
-        child: GestureDetector(child: icon, onTap: widget.button.onPressed));
+        child: GestureDetector(child: icon, onTap: onPressed));
   }
 
   _onEnter(PointerEnterEvent event) {
@@ -512,6 +777,12 @@ class _TabsAreaLayoutElement extends MultiChildRenderObjectElement {
   }
 }
 
+/// Holds the hidden tab indexes.
+class _HiddenTabs {
+  List<int> indexes = [];
+  bool get hasHiddenTabs => indexes.isNotEmpty;
+}
+
 /// Constraints with value for [_TabsAreaLayout].
 class _TabsAreaButtonsBoxConstraints extends BoxConstraints {
   _TabsAreaButtonsBoxConstraints({
@@ -545,12 +816,6 @@ class _TabsAreaButtonsBoxConstraints extends BoxConstraints {
     assert(debugAssertIsValid());
     return hashValues(minWidth, maxWidth, minHeight, maxHeight, hasHiddenTabs);
   }
-}
-
-/// Holds the hidden tab indexes.
-class _HiddenTabs {
-  List<int> indexes = [];
-  bool get hasHiddenTabs => indexes.isNotEmpty;
 }
 
 /// Parent data for [_TabsAreaLayoutRenderBox] class.

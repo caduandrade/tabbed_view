@@ -2,6 +2,7 @@
 
 * Changes in thematization
 * Adding documentation
+* Menu builder
 
 ## 0.4.0
 
