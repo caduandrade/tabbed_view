@@ -159,8 +159,8 @@ class TabbedWiewController extends ChangeNotifier {
 typedef OnTabClosing = bool Function(int tabIndex);
 
 /// Propagates parameters to internal components.
-class _TabbedWiewScope {
-  _TabbedWiewScope(
+class _TabbedWiewData {
+  _TabbedWiewData(
       {required this.controller,
       required this.theme,
       this.contentBuilder,
@@ -192,7 +192,7 @@ class TabbedWiew extends StatefulWidget {
       OnTabClosing? onTabClosing,
       bool selectToEnableButtons = true,
       String? closeButtonTooltip})
-      : this._scope = _TabbedWiewScope(
+      : this._data = _TabbedWiewData(
             controller: controller,
             theme: theme == null ? TabbedViewTheme.light() : theme,
             contentBuilder: contentBuilder,
@@ -200,7 +200,7 @@ class TabbedWiew extends StatefulWidget {
             selectToEnableButtons: selectToEnableButtons,
             closeButtonTooltip: closeButtonTooltip);
 
-  final _TabbedWiewScope _scope;
+  final _TabbedWiewData _data;
 
   @override
   State<StatefulWidget> createState() => _TabbedWiewState();
@@ -211,14 +211,13 @@ class _TabbedWiewState extends State<TabbedWiew> {
   @override
   void initState() {
     super.initState();
-    widget._scope.controller.addListener(_rebuild);
+    widget._data.controller.addListener(_rebuild);
   }
 
   @override
   Widget build(BuildContext context) {
-    _TabbedWiewScope scope = widget._scope;
-    Widget tabArea = _TabsArea(scope: scope);
-    _ContentArea contentArea = _ContentArea(scope: scope);
+    Widget tabArea = _TabsArea(data: widget._data);
+    _ContentArea contentArea = _ContentArea(data: widget._data);
     return Column(
         children: [tabArea, Expanded(child: contentArea)],
         crossAxisAlignment: CrossAxisAlignment.stretch);
@@ -231,7 +230,7 @@ class _TabbedWiewState extends State<TabbedWiew> {
   }
 
   _invertMenuPopupFor(TabButton button) {
-    TabbedWiewController controller = widget._scope.controller;
+    TabbedWiewController controller = widget._data.controller;
     if (controller._menuBuilder == null && button.menuBuilder != null) {
       controller._updateMenu(button.menuBuilder!);
     } else {
@@ -241,17 +240,17 @@ class _TabbedWiewState extends State<TabbedWiew> {
 
   @override
   void dispose() {
-    widget._scope.controller.removeListener(_rebuild);
+    widget._data.controller.removeListener(_rebuild);
     super.dispose();
   }
 }
 
 /// Widget for menu.
 class _TabbedViewMenuWidget extends StatefulWidget {
-  const _TabbedViewMenuWidget({required this.controller, required this.scope});
+  const _TabbedViewMenuWidget({required this.controller, required this.data});
 
   final TabbedWiewController controller;
-  final _TabbedWiewScope scope;
+  final _TabbedWiewData data;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewMenuWidgetState();
@@ -261,7 +260,7 @@ class _TabbedViewMenuWidget extends StatefulWidget {
 class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
   @override
   Widget build(BuildContext context) {
-    MenuTheme menuTheme = widget.scope.theme.menu;
+    MenuTheme menuTheme = widget.data.theme.menu;
     List<TabbedWiewMenuItem> items = widget.controller._menuBuilder!(context);
     bool hasDivider =
         menuTheme.dividerThickness > 0 && menuTheme.dividerColor != null;
@@ -310,19 +309,19 @@ class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
 
 // Container widget for the tab content.
 class _ContentArea extends StatelessWidget {
-  _ContentArea({required this.scope});
+  _ContentArea({required this.data});
 
-  final _TabbedWiewScope scope;
+  final _TabbedWiewData data;
 
   @override
   Widget build(BuildContext context) {
-    TabbedWiewController controller = scope.controller;
-    ContentAreaTheme contentAreaTheme = scope.theme.contentArea;
+    TabbedWiewController controller = data.controller;
+    ContentAreaTheme contentAreaTheme = data.theme.contentArea;
     Widget? child;
     if (controller.selectedIndex != null) {
       TabData tab = controller.tabs[controller.selectedIndex!];
-      if (scope.contentBuilder != null) {
-        child = scope.contentBuilder!(context, controller.selectedIndex!);
+      if (data.contentBuilder != null) {
+        child = data.contentBuilder!(context, controller.selectedIndex!);
       } else {
         child = tab.content;
       }
@@ -339,8 +338,8 @@ class _ContentArea extends StatelessWidget {
         Positioned(
             child: LimitedBox(
                 maxWidth: 200,
-                child: _TabbedViewMenuWidget(
-                    controller: controller, scope: scope)),
+                child:
+                    _TabbedViewMenuWidget(controller: controller, data: data)),
             right: 0,
             top: 0,
             bottom: 0)
@@ -383,9 +382,9 @@ class _Blur extends StatelessWidget {
 
 /// Widget for the tabs and buttons.
 class _TabsArea extends StatefulWidget {
-  const _TabsArea({required this.scope});
+  const _TabsArea({required this.data});
 
-  final _TabbedWiewScope scope;
+  final _TabbedWiewData data;
 
   @override
   State<StatefulWidget> createState() => _TabsAreaState();
@@ -399,21 +398,21 @@ class _TabsAreaState extends State<_TabsArea> {
 
   @override
   Widget build(BuildContext context) {
-    TabbedWiewController controller = widget.scope.controller;
-    TabsAreaTheme tabsAreaTheme = widget.scope.theme.tabsArea;
+    TabbedWiewController controller = widget.data.controller;
+    TabsAreaTheme tabsAreaTheme = widget.data.theme.tabsArea;
     List<Widget> children = [];
     for (int index = 0; index < controller.tabs.length; index++) {
       _TabStatus status = _getStatusFor(index);
       children.add(_TabWidget(
           index: index,
           status: status,
-          scope: widget.scope,
+          data: widget.data,
           updateHighlightedIndex: _updateHighlightedIndex));
     }
     Widget tabsAreaLayout = _TabsAreaLayout(
         children: children,
         buttonsAreaBuilder: _buttonsAreaBuilder,
-        theme: widget.scope.theme,
+        theme: widget.data.theme,
         hiddenTabs: hiddenTabs,
         selectedTabIndex: controller.selectedIndex);
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
@@ -428,7 +427,7 @@ class _TabsAreaState extends State<_TabsArea> {
   }
 
   Widget _buttonsAreaBuilder(BuildContext context) {
-    ButtonsAreaTheme buttonsAreaTheme = widget.scope.theme.tabsArea.buttonsArea;
+    ButtonsAreaTheme buttonsAreaTheme = widget.data.theme.tabsArea.buttonsArea;
     Widget buttonsArea;
 
     if (hiddenTabs.hasHiddenTabs) {
@@ -464,16 +463,16 @@ class _TabsAreaState extends State<_TabsArea> {
     List<TabbedWiewMenuItem> list = [];
     hiddenTabs.indexes.sort();
     for (int index in hiddenTabs.indexes) {
-      TabData tab = widget.scope.controller.tabs[index];
+      TabData tab = widget.data.controller.tabs[index];
       list.add(TabbedWiewMenuItem(
           text: tab.text,
-          onSelection: () => widget.scope.controller.selectedIndex = index));
+          onSelection: () => widget.data.controller.selectedIndex = index));
     }
     return list;
   }
 
   _TabStatus _getStatusFor(int tabIndex) {
-    TabbedWiewController controller = widget.scope.controller;
+    TabbedWiewController controller = widget.data.controller;
     if (controller.tabs.isEmpty || tabIndex >= controller.tabs.length) {
       throw Exception('Invalid tab index: $tabIndex');
     }
@@ -507,18 +506,18 @@ class _TabWidget extends StatelessWidget {
   const _TabWidget(
       {required this.index,
       required this.status,
-      required this.scope,
+      required this.data,
       required this.updateHighlightedIndex});
 
   final int index;
   final _TabStatus status;
-  final _TabbedWiewScope scope;
+  final _TabbedWiewData data;
   final _UpdateHighlightedIndex updateHighlightedIndex;
 
   @override
   Widget build(BuildContext context) {
-    TabData data = scope.controller.tabs[index];
-    TabsAreaTheme tabsAreaTheme = scope.theme.tabsArea;
+    TabData tab = data.controller.tabs[index];
+    TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
     TabTheme tabTheme = tabsAreaTheme.tab;
     TabStatusTheme statusTheme = _getTabThemeFor(status);
     ButtonColors buttonColors = statusTheme.buttonColors != null
@@ -533,38 +532,38 @@ class _TabWidget extends StatelessWidget {
         textStyle = TextStyle(color: statusTheme.fontColor);
       }
     }
-    List<Widget> textAndButtons = [Text(data.text, style: textStyle)];
+    List<Widget> textAndButtons = [Text(tab.text, style: textStyle)];
 
-    bool buttonsEnabled = scope.selectToEnableButtons == false ||
-        (scope.selectToEnableButtons && status == _TabStatus.selected);
-    if (data.closable ||
-        (data.buttons != null && data.buttons!.length > 0) &&
+    bool buttonsEnabled = data.selectToEnableButtons == false ||
+        (data.selectToEnableButtons && status == _TabStatus.selected);
+    if (tab.closable ||
+        (tab.buttons != null && tab.buttons!.length > 0) &&
             tabTheme.buttonsOffset > 0) {
       textAndButtons.add(SizedBox(width: tabTheme.buttonsOffset));
     }
-    bool hasButtons = data.buttons != null && data.buttons!.length > 0;
+    bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
 
     if (hasButtons) {
-      for (int i = 0; i < data.buttons!.length; i++) {
-        TabButton button = data.buttons![i];
+      for (int i = 0; i < tab.buttons!.length; i++) {
+        TabButton button = tab.buttons![i];
         textAndButtons.add(_TabButtonWidget(
             button: button,
             enabled: buttonsEnabled,
             colors: buttonColors,
             iconSize: tabTheme.buttonIconSize));
-        if (i < data.buttons!.length - 1 && tabTheme.buttonsGap > 0) {
+        if (i < tab.buttons!.length - 1 && tabTheme.buttonsGap > 0) {
           textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
         }
       }
     }
-    if (data.closable) {
+    if (tab.closable) {
       if (hasButtons && tabTheme.buttonsGap > 0) {
         textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
       }
       TabButton closeButton = TabButton(
           icon: tabsAreaTheme.closeButtonIcon,
           onPressed: () => _onClose(context, index),
-          toolTip: scope.closeButtonTooltip);
+          toolTip: data.closeButtonTooltip);
 
       textAndButtons.add(_TabButtonWidget(
           button: closeButton,
@@ -600,7 +599,7 @@ class _TabWidget extends StatelessWidget {
         decoration: decoration);
 
     GestureDetector gestureDetector = GestureDetector(
-        onTap: () => scope.controller.selectedIndex = index,
+        onTap: () => data.controller.selectedIndex = index,
         child: tabContainer);
 
     MouseRegion mouseRegion = MouseRegion(
@@ -612,8 +611,8 @@ class _TabWidget extends StatelessWidget {
   }
 
   _onClose(BuildContext context, int index) {
-    if (scope.onTabClosing == null || scope.onTabClosing!(index)) {
-      scope.controller.remove(index);
+    if (data.onTabClosing == null || data.onTabClosing!(index)) {
+      data.controller.remove(index);
       _TabbedWiewState? tabbedWiewState =
           context.findAncestorStateOfType<_TabbedWiewState>();
       tabbedWiewState?._rebuild();
@@ -621,7 +620,7 @@ class _TabWidget extends StatelessWidget {
   }
 
   TabStatusTheme _getTabThemeFor(_TabStatus status) {
-    TabsAreaTheme tabsAreaTheme = scope.theme.tabsArea;
+    TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
     switch (status) {
       case _TabStatus.selected:
         return tabsAreaTheme.tab.selectedStatus;
