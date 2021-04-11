@@ -1,6 +1,9 @@
 import 'package:demo/add_tab_page.dart';
+import 'package:demo/change_tab_page.dart';
 import 'package:demo/close_button_tooltip_page.dart';
 import 'package:demo/content_builder_page.dart';
+import 'package:demo/custom_menu.dart';
+import 'package:demo/dark_theme_page.dart';
 import 'package:demo/from_the_scratch_page.dart';
 import 'package:demo/hidden_tabs_menu_button_icon_page.dart';
 import 'package:demo/tab_close_listener_page.dart';
@@ -11,8 +14,6 @@ import 'package:demo/mobile_theme_page.dart';
 import 'package:demo/new_model_page.dart';
 import 'package:demo/simple_page.dart';
 import 'package:flutter/material.dart';
-import 'change_tab_page.dart';
-import 'dark_theme_page.dart';
 
 void main() {
   runApp(TabbedViewDemoApp());
@@ -31,6 +32,7 @@ class Example {
   static const Example add_tab = const Example('Add tab');
   static const Example tabs_area_theme = const Example('Tabs area theme');
   static const Example custom_tab = const Example('Custom tab');
+  static const Example custom_menu = const Example('Custom menu');
   static const Example from_the_scratch = const Example('From the scratch');
   static const Example tab_close_listener = const Example('Tab close listener');
   static const Example close_button_tooltip =
@@ -49,6 +51,7 @@ class Example {
     Example.mobile_theme,
     Example.minimalist_theme,
     Example.custom_tab,
+    Example.custom_menu,
     Example.from_the_scratch,
     Example.tab_close_listener,
     Example.close_button_tooltip,
@@ -149,6 +152,8 @@ class _TabbedViewDemoPageState extends State<TabbedViewDemoPage> {
       example = MinimalistThemePage();
     } else if (_currentExample == Example.custom_tab) {
       example = CustomTabPage();
+    } else if (_currentExample == Example.custom_menu) {
+      example = CustomMenuPage();
     } else if (_currentExample == Example.from_the_scratch) {
       example = FromTheScratchPage();
     } else if (_currentExample == Example.tab_close_listener) {

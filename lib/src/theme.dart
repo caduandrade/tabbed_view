@@ -279,7 +279,7 @@ class MenuTheme {
   double _maxWidth;
 
   /// Use an ellipsis to indicate that the text has overflowed.
-  final bool ellipsisOverflowText;
+  bool ellipsisOverflowText;
 
   double get dividerThickness => _dividerThickness;
 

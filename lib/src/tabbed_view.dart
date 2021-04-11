@@ -233,6 +233,15 @@ class _TabbedWiewState extends State<TabbedWiew> {
   }
 
   @override
+  void didUpdateWidget(covariant TabbedWiew oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget._data.controller != oldWidget._data.controller) {
+      oldWidget._data.controller.removeListener(_rebuild);
+      widget._data.controller.addListener(_rebuild);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget tabArea = _TabsArea(data: widget._data);
     _ContentArea contentArea = _ContentArea(data: widget._data);

@@ -227,6 +227,45 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![hiddentabsbuttonicon](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/hidden_tabs_button_icon.png)
 
+### Menu
+
+#### Max width
+
+```dart
+    List<TabData> tabs = [];
+    for (int i = 1; i < 11; i++) {
+      tabs.add(TabData(text: 'Tab $i'));
+    }
+
+    TabbedViewTheme theme = TabbedViewTheme.light()..menu.maxWidth = 100;
+
+    TabbedWiew tabbedView =
+        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+```
+
+![menumaxwidth](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_max_width.png)
+
+#### Ellipsis on overflow text
+
+```dart
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+      TabData(text: 'Tab 3'),
+      TabData(
+          text: 'The name of the tab is so long that it doesn'
+              't fit on the menu')
+    ];
+
+    TabbedViewTheme theme = TabbedViewTheme.light()
+      ..menu.ellipsisOverflowText = true;
+
+    TabbedWiew tabbedView =
+        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+```
+
+![menuellipsis](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_ellipsis.png)
+
 ### Predefined themes
 
 ####  Dark theme
