@@ -236,9 +236,10 @@ class _TabbedWiewState extends State<TabbedWiew> {
   Widget build(BuildContext context) {
     Widget tabArea = _TabsArea(data: widget._data);
     _ContentArea contentArea = _ContentArea(data: widget._data);
-    return Column(
-        children: [tabArea, Expanded(child: contentArea)],
-        crossAxisAlignment: CrossAxisAlignment.stretch);
+    return Column(children: [
+      Flexible(child: tabArea, flex: 0),
+      Expanded(child: contentArea, flex: 2)
+    ], crossAxisAlignment: CrossAxisAlignment.stretch);
   }
 
   _rebuild() {
@@ -325,7 +326,7 @@ class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
   }
 }
 
-// Container widget for the tab content.
+// Container widget for the tab content and menu.
 class _ContentArea extends StatelessWidget {
   _ContentArea({required this.data});
 
@@ -346,32 +347,32 @@ class _ContentArea extends StatelessWidget {
     }
 
     if (controller._menuBuilder != null) {
-      List<Widget> children = [];
-      children.add(Positioned.fill(
-          child: Container(child: child, padding: contentAreaTheme.padding),
-          left: 0,
-          right: 0,
-          bottom: 0,
-          top: 0));
-      children.add(Positioned.fill(
-          child: _Glass(data), left: 0, right: 0, bottom: 0, top: 0));
-      children.add(Positioned(
-          child: LimitedBox(
-              maxWidth: 200,
-              child: _TabbedViewMenuWidget(controller: controller, data: data)),
-          right: 0,
-          top: 0,
-          bottom: 0));
-      Widget listener = NotificationListener<SizeChangedLayoutNotification>(
-          child: SizeChangedLayoutNotifier(child: Stack(children: children)),
-          onNotification: (n) {
-            scheduleMicrotask(() {
-              controller._removeMenu();
+      return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+        List<Widget> children = [];
+        children.add(Positioned.fill(
+            child: Container(child: child, padding: contentAreaTheme.padding)));
+        children.add(Positioned.fill(child: _Glass(data)));
+        children.add(Positioned(
+            child: LimitedBox(
+                maxWidth:
+                    math.min(data.theme.menu.maxWidth, constraints.maxWidth),
+                child:
+                    _TabbedViewMenuWidget(controller: controller, data: data)),
+            right: 0,
+            top: 0,
+            bottom: 0));
+        Widget listener = NotificationListener<SizeChangedLayoutNotification>(
+            child: SizeChangedLayoutNotifier(child: Stack(children: children)),
+            onNotification: (n) {
+              scheduleMicrotask(() {
+                controller._removeMenu();
+              });
+              return true;
             });
-            return true;
-          });
-      return Container(
-          child: listener, decoration: contentAreaTheme.decoration);
+        return Container(
+            child: listener, decoration: contentAreaTheme.decoration);
+      });
     }
 
     return Container(

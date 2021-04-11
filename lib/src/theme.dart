@@ -239,9 +239,11 @@ class MenuTheme {
       this.color,
       this.blur = true,
       double dividerThickness = 0,
+      double maxWidth = 200,
       this.dividerColor,
       this.hoverColor})
-      : this._dividerThickness = dividerThickness >= 0 ? dividerThickness : 0;
+      : this._dividerThickness = dividerThickness >= 0 ? dividerThickness : 0,
+        this._maxWidth = maxWidth >= 0 ? maxWidth : 0;
 
   EdgeInsetsGeometry? margin;
 
@@ -273,10 +275,18 @@ class MenuTheme {
 
   Color? dividerColor;
 
+  double _maxWidth;
+
   double get dividerThickness => _dividerThickness;
 
   set dividerThickness(double value) {
     _dividerThickness = value >= 0 ? value : 0;
+  }
+
+  double get maxWidth => _maxWidth;
+
+  set maxWidth(double value) {
+    _maxWidth = value >= 0 ? value : 0;
   }
 }
 
