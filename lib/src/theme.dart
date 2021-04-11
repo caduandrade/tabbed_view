@@ -238,6 +238,7 @@ class MenuTheme {
       this.border,
       this.color,
       this.blur = true,
+      this.ellipsisOverflowText = false,
       double dividerThickness = 0,
       double maxWidth = 200,
       this.dividerColor,
@@ -276,6 +277,9 @@ class MenuTheme {
   Color? dividerColor;
 
   double _maxWidth;
+
+  /// Use an ellipsis to indicate that the text has overflowed.
+  final bool ellipsisOverflowText;
 
   double get dividerThickness => _dividerThickness;
 

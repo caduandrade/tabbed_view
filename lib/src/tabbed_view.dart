@@ -303,7 +303,10 @@ class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
           return InkWell(
               child: Container(
                   padding: menuTheme.menuItemPadding,
-                  child: Text(items[itemIndex].text)),
+                  child: Text(items[itemIndex].text,
+                      overflow: menuTheme.ellipsisOverflowText
+                          ? TextOverflow.ellipsis
+                          : null)),
               hoverColor: menuTheme.hoverColor,
               onTap: () {
                 widget.controller._removeMenu();

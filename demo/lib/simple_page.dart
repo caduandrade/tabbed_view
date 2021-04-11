@@ -13,7 +13,7 @@ class SimplePageState extends ExamplePageState {
     List<TabData> tabs = [];
     for (var i = 1; i < 7; i++) {
       Widget tabContent = Center(child: Text('Content $i'));
-      tabs.add(TabData(text: 'Tab $i', content: tabContent));
+      tabs.add(TabData(text: 'Tab ep qwoi ewpqoie qopw  opeqwie opwi $i', content: tabContent));
     }
     TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
     return tabbedView;
