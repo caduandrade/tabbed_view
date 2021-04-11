@@ -59,8 +59,8 @@ class TabbedViewTheme {
   }
 
   /// Builds the predefined minimalist theme.
-  factory TabbedViewTheme.minimalist() {
-    return _Minimalist.build();
+  factory TabbedViewTheme.minimalist({MaterialColor colors = Colors.grey}) {
+    return _Minimalist.build(colors: colors);
   }
 
   static const double minimalIconSize = 8;
@@ -495,37 +495,86 @@ class _Mobile {
 
 /// Predefined minimalist theme builder.
 class _Minimalist {
-  static TabbedViewTheme build({Color? borderColor}) {
-    Color bc = borderColor ?? Colors.grey[700]!;
+  static TabbedViewTheme build({required MaterialColor colors}) {
+    Color borderColor = colors[700]!;
+    Color tabColor = colors[50]!;
+    Color selectedTabColor = borderColor;
+    Color highlightedTabColor = colors[300]!;
+    Color menuColor = colors[50]!;
+    Color hoverMenuColor = colors[200]!;
+    Color dividerMenuColor = colors[400]!;
+    ButtonColors buttonColors = ButtonColors(normal: colors[300]!);
+    ButtonColors selectedButtonColors = ButtonColors(
+        normal: colors[400]!, hover: colors[50]!, disabled: colors[600]!);
+    Color fontColor = colors[900]!;
+    Color selectedFontColor = colors[50]!;
+
     return TabbedViewTheme(
-        tabsArea: _tabsAreaTheme(bc),
-        contentArea: _contentAreaTheme(bc),
-        menu: _menuTheme());
+        tabsArea: _tabsAreaTheme(
+            borderColor: borderColor,
+            tabColor: tabColor,
+            selectedTabColor: selectedTabColor,
+            highlightedTabColor: highlightedTabColor,
+            buttonColors: buttonColors,
+            selectedButtonColors: selectedButtonColors,
+            fontColor: fontColor,
+            selectedFontColor: selectedFontColor),
+        contentArea: _contentAreaTheme(borderColor),
+        menu: _menuTheme(
+            borderColor: borderColor,
+            menuColor: menuColor,
+            hoverMenuColor: hoverMenuColor,
+            dividerMenuColor: dividerMenuColor));
   }
 
-  static TabsAreaTheme _tabsAreaTheme(Color borderColor) {
+  static TabsAreaTheme _tabsAreaTheme(
+      {required Color borderColor,
+      required Color tabColor,
+      required Color selectedTabColor,
+      required Color highlightedTabColor,
+      required ButtonColors buttonColors,
+      required ButtonColors selectedButtonColors,
+      required Color fontColor,
+      required Color selectedFontColor}) {
     return TabsAreaTheme(
-        tab: _tabTheme(borderColor),
-        middleGap: 8,
+        tab: _tabTheme(
+            borderColor: borderColor,
+            tabColor: tabColor,
+            selectedTabColor: selectedTabColor,
+            highlightedTabColor: highlightedTabColor,
+            buttonColors: buttonColors,
+            selectedButtonColors: selectedButtonColors,
+            fontColor: fontColor,
+            selectedFontColor: selectedFontColor),
         equalHeights: EqualHeights.all,
         border: Border(bottom: BorderSide(color: borderColor, width: 1)));
   }
 
-  static TabTheme _tabTheme(Color borderColor) {
+  static TabTheme _tabTheme(
+      {required Color borderColor,
+      required Color tabColor,
+      required Color selectedTabColor,
+      required Color highlightedTabColor,
+      required ButtonColors buttonColors,
+      required ButtonColors selectedButtonColors,
+      required Color fontColor,
+      required Color selectedFontColor}) {
     return TabTheme(
       buttonsOffset: 4,
+      textStyle: TextStyle(color: fontColor, fontSize: 13),
       padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
+      decoration: BoxDecoration(color: tabColor),
+      buttonColors: buttonColors,
+      highlightedStatus:
+          TabStatusTheme(decoration: BoxDecoration(color: highlightedTabColor)),
       selectedStatus: TabStatusTheme(
-          buttonColors: ButtonColors(
-              normal: Colors.white60,
-              hover: Colors.white,
-              disabled: Colors.white24),
-          fontColor: Colors.white,
-          decoration: BoxDecoration(color: borderColor)),
+          buttonColors: selectedButtonColors,
+          fontColor: selectedFontColor,
+          decoration: BoxDecoration(color: selectedTabColor)),
     );
   }
 
-  static ContentAreaTheme _contentAreaTheme(Color borderColor) {
+  static ContentAreaTheme _contentAreaTheme(borderColor) {
     BorderSide borderSide = BorderSide(width: 1, color: borderColor);
     BoxBorder border =
         Border(bottom: borderSide, left: borderSide, right: borderSide);
@@ -533,14 +582,18 @@ class _Minimalist {
     return ContentAreaTheme(decoration: decoration);
   }
 
-  static MenuTheme _menuTheme() {
+  static MenuTheme _menuTheme(
+      {required Color borderColor,
+      required Color menuColor,
+      required Color hoverMenuColor,
+      required Color dividerMenuColor}) {
     return MenuTheme(
-        border: Border.all(width: 1, color: Colors.grey),
+        border: Border.all(width: 1, color: borderColor),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),
-        color: Colors.white,
-        hoverColor: Colors.grey[200],
-        dividerColor: Colors.grey,
+        color: menuColor,
+        hoverColor: hoverMenuColor,
+        dividerColor: dividerMenuColor,
         dividerThickness: 1);
   }
 }

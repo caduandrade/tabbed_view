@@ -1,4 +1,4 @@
-import 'package:demo/example_page.dart';
+import 'package:demo/example_multi_view_page.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
@@ -7,9 +7,33 @@ class MinimalistThemePage extends StatefulWidget {
   MinimalistThemePageState createState() => MinimalistThemePageState();
 }
 
-class MinimalistThemePageState extends ExamplePageState {
+enum _View { normal, change_color }
+
+class MinimalistThemePageState extends ExampleMultiViewPageState<_View> {
   @override
-  Widget buildContent() {
+  _View defaultView() {
+    return _View.normal;
+  }
+
+  @override
+  List<Widget> buildExampleWidgets() {
+    return [
+      buttonView('Normal', _View.normal),
+      buttonView('Change color', _View.change_color)
+    ];
+  }
+
+  @override
+  Widget buildContentView(_View currentView) {
+    switch (currentView) {
+      case _View.normal:
+        return _normal();
+      case _View.change_color:
+        return _changeColor();
+    }
+  }
+
+  Widget _normal() {
     List<TabData> tabs = [];
     for (var i = 1; i < 7; i++) {
       tabs.add(
@@ -18,6 +42,19 @@ class MinimalistThemePageState extends ExamplePageState {
     TabbedWiewController controller = TabbedWiewController(tabs);
     TabbedWiew tabbedView =
         TabbedWiew(controller: controller, theme: TabbedViewTheme.minimalist());
+    return tabbedView;
+  }
+
+  Widget _changeColor() {
+    List<TabData> tabs = [];
+    for (var i = 1; i < 7; i++) {
+      tabs.add(
+          TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
+    }
+    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: controller,
+        theme: TabbedViewTheme.minimalist(colors: Colors.blue));
     return tabbedView;
   }
 }

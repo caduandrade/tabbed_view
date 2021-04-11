@@ -286,6 +286,25 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![mobile](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
 
+####  Minimalist theme
+
+```dart
+    TabbedWiew tabbedView =
+        TabbedWiew(controller: controller, theme: TabbedViewTheme.minimalist());
+```
+
+![minimalist](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist.gif)
+
+####  Minimalist theme - Color set
+
+```dart
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: controller,
+        theme: TabbedViewTheme.minimalist(colors: Colors.blue));
+```
+
+![minimalistchangecolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_change_color.png)
+
 ### Creating new theme
 
 It is possible to create an entire theme from scratch.
