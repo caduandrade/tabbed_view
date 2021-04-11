@@ -508,7 +508,8 @@ class _Minimalist {
         normal: colors[400]!, hover: colors[50]!, disabled: colors[600]!);
     Color fontColor = colors[900]!;
     Color selectedFontColor = colors[50]!;
-
+    Color hiddenTabsMenuButtonColor = borderColor;
+    Color menuFontColor = colors[900]!;
     return TabbedViewTheme(
         tabsArea: _tabsAreaTheme(
             borderColor: borderColor,
@@ -518,13 +519,15 @@ class _Minimalist {
             buttonColors: buttonColors,
             selectedButtonColors: selectedButtonColors,
             fontColor: fontColor,
-            selectedFontColor: selectedFontColor),
+            selectedFontColor: selectedFontColor,
+            hiddenTabsMenuButtonColor: hiddenTabsMenuButtonColor),
         contentArea: _contentAreaTheme(borderColor),
         menu: _menuTheme(
             borderColor: borderColor,
             menuColor: menuColor,
             hoverMenuColor: hoverMenuColor,
-            dividerMenuColor: dividerMenuColor));
+            dividerMenuColor: dividerMenuColor,
+            menuFontColor: menuFontColor));
   }
 
   static TabsAreaTheme _tabsAreaTheme(
@@ -535,8 +538,11 @@ class _Minimalist {
       required ButtonColors buttonColors,
       required ButtonColors selectedButtonColors,
       required Color fontColor,
-      required Color selectedFontColor}) {
+      required Color selectedFontColor,
+      required Color hiddenTabsMenuButtonColor}) {
     return TabsAreaTheme(
+        buttonsArea: ButtonsAreaTheme(
+            buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor)),
         tab: _tabTheme(
             borderColor: borderColor,
             tabColor: tabColor,
@@ -586,11 +592,13 @@ class _Minimalist {
       {required Color borderColor,
       required Color menuColor,
       required Color hoverMenuColor,
-      required Color dividerMenuColor}) {
+      required Color dividerMenuColor,
+      required Color menuFontColor}) {
     return MenuTheme(
         border: Border.all(width: 1, color: borderColor),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),
+        textStyle: TextStyle(color: menuFontColor, fontSize: 13),
         color: menuColor,
         hoverColor: hoverMenuColor,
         dividerColor: dividerMenuColor,
