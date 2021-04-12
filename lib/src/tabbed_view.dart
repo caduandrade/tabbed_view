@@ -16,7 +16,7 @@ import 'dart:math' as math;
 ///
 /// The optional [content] parameter defines the content of the tab.
 ///
-/// The [closable] parameter defines whether the close button is visible.
+/// The [closable] parameter defines whether the Close button is visible.
 ///
 /// The [buttons] parameter allows you to define extra buttons in addition
 /// to the Close button.
@@ -93,6 +93,7 @@ class TabbedWiewController extends ChangeNotifier {
 
   int? _selectedIndex;
 
+  /// The menu builder.
   TabbedWiewMenuBuilder? _menuBuilder;
 
   UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
@@ -110,6 +111,7 @@ class TabbedWiewController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Changes the index of the selection and notifies.
   set selectedIndex(int? tabIndex) {
     if (tabIndex != null) {
       _validateIndex(tabIndex);
@@ -139,6 +141,8 @@ class TabbedWiewController extends ChangeNotifier {
     _afterIncTabs();
   }
 
+  /// Method that should be used after adding a tab.
+  /// Updates the status and notifies.
   _afterIncTabs() {
     if (_tabs.length == 1) {
       _selectedIndex = 0;
@@ -176,6 +180,8 @@ class TabbedWiewController extends ChangeNotifier {
   }
 }
 
+/// Event that will be triggered when starting the tab closing.
+/// The return indicates whether the tab can be closed.
 typedef OnTabClosing = bool Function(int tabIndex);
 
 /// Propagates parameters to internal components.
@@ -478,6 +484,9 @@ class _TabsAreaState extends State<_TabsArea> {
         child: MouseRegion(child: tabsAreaLayout), decoration: decoration);
   }
 
+  /// Area for buttons like the hidden tabs menu button.
+  ///
+  /// Even if there are no visible buttons, an empty container must be created.
   Widget _buttonsAreaBuilder(BuildContext context) {
     ButtonsAreaTheme buttonsAreaTheme = widget.data.theme.tabsArea.buttonsArea;
     Widget buttonsArea;
@@ -511,6 +520,7 @@ class _TabsAreaState extends State<_TabsArea> {
     return buttonsArea;
   }
 
+  /// Builder for hidden tabs menu.
   List<TabbedWiewMenuItem> _hiddenTabsMenuBuilder(BuildContext context) {
     List<TabbedWiewMenuItem> list = [];
     hiddenTabs.indexes.sort();
@@ -523,6 +533,7 @@ class _TabsAreaState extends State<_TabsArea> {
     return list;
   }
 
+  /// Gets the status of the tab for a given index.
   _TabStatus _getStatusFor(int tabIndex) {
     TabbedWiewController controller = widget.data.controller;
     if (controller.tabs.isEmpty || tabIndex >= controller.tabs.length) {
@@ -671,6 +682,7 @@ class _TabWidget extends StatelessWidget {
     }
   }
 
+  /// Gets the theme of a tab according to its status.
   TabStatusTheme _getTabThemeFor(_TabStatus status) {
     TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
     switch (status) {
@@ -879,6 +891,7 @@ class _TabsAreaLayoutParentData extends ContainerBoxParentData<RenderBox> {
   double leftBorderHeight = 0;
   double rightBorderHeight = 0;
 
+  /// Resets all values.
   reset() {
     visible = false;
     selected = false;

@@ -81,12 +81,20 @@ class ButtonsAreaTheme {
             ? buttonIconSize
             : TabbedViewTheme.minimalIconSize;
 
+  /// The decoration to paint behind the buttons.
   BoxDecoration? decoration;
+
+  /// Empty space to inscribe inside the [decoration]. The buttons, if any, is
+  /// placed inside this padding.
+  ///
+  /// This padding is in addition to any padding inherent in the [decoration];
+  /// see [Decoration.padding].
   EdgeInsetsGeometry? padding;
   double _offset;
   double buttonIconSize;
   ButtonColors buttonColors;
 
+  /// Icon for the hidden tabs menu.
   IconData hiddenTabsMenuButtonIcon;
 
   double get offset => _offset;
@@ -218,6 +226,7 @@ class TabStatusTheme {
 class ContentAreaTheme {
   ContentAreaTheme({this.decoration, this.padding});
 
+  /// The decoration to paint behind the content.
   BoxDecoration? decoration;
 
   /// Empty space to inscribe inside the [decoration]. The content child, if any, is
@@ -270,6 +279,7 @@ class MenuTheme {
 
   Color? hoverColor;
 
+  /// Indicates whether to apply a blur effect on the content.
   bool blur;
 
   double _dividerThickness;
