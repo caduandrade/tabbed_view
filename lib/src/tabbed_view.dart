@@ -59,6 +59,7 @@ class TabButton {
   final String? toolTip;
 }
 
+/// Menu item
 class TabbedWiewMenuItem {
   TabbedWiewMenuItem({required this.text, this.onSelection});
 
@@ -66,6 +67,7 @@ class TabbedWiewMenuItem {
   final Function? onSelection;
 }
 
+/// Menu builder
 typedef TabbedWiewMenuBuilder = List<TabbedWiewMenuItem> Function(
     BuildContext context);
 
@@ -245,10 +247,10 @@ class _TabbedWiewState extends State<TabbedWiew> {
   Widget build(BuildContext context) {
     Widget tabArea = _TabsArea(data: widget._data);
     _ContentArea contentArea = _ContentArea(data: widget._data);
-    return Column(children: [
-      Flexible(child: tabArea, flex: 0),
-      Expanded(child: contentArea, flex: 2)
-    ], crossAxisAlignment: CrossAxisAlignment.stretch);
+    return CustomMultiChildLayout(children: [
+      LayoutId(id: 1, child: tabArea),
+      LayoutId(id: 2, child: contentArea)
+    ], delegate: _TabbedWiewLayout());
   }
 
   _rebuild() {
@@ -270,6 +272,23 @@ class _TabbedWiewState extends State<TabbedWiew> {
   void dispose() {
     widget._data.controller.removeListener(_rebuild);
     super.dispose();
+  }
+}
+
+// Layout delegate for [TabbedWiew]
+class _TabbedWiewLayout extends MultiChildLayoutDelegate {
+  @override
+  void performLayout(Size size) {
+    Size childSize = layoutChild(1, BoxConstraints.tightFor(width: size.width));
+    positionChild(1, Offset.zero);
+    double height = math.max(0, size.height - childSize.height);
+    layoutChild(2, BoxConstraints.tightFor(width: size.width, height: height));
+    positionChild(2, Offset(0, childSize.height));
+  }
+
+  @override
+  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
+    return false;
   }
 }
 
