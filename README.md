@@ -103,7 +103,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![nonclosabletab](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/nonclosable_tab.png)
 
-### Tab close listener
+### Close listener
 
 ```dart
     bool _onTabClosing(int tabIndex) {
@@ -122,6 +122,23 @@ It allows creating the contents of the tab dynamically during the selection even
     ];
     TabbedWiew tabbedView = TabbedWiew(
         controller: TabbedWiewController(tabs), onTabClosing: _onTabClosing);
+```
+
+### Selection listener
+
+```dart
+    _onTabSelection(int? newTabIndex) {
+      print('The new selected tab is $newTabIndex.');
+    }
+
+    List<TabData> tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+      TabData(text: 'Tab 3')
+    ];
+    TabbedWiew tabbedView = TabbedWiew(
+        controller:
+            TabbedWiewController(tabs, onTabSelection: _onTabSelection));
 ```
 
 ## Themes

@@ -4,10 +4,10 @@ import 'package:tabbed_view/tabbed_view.dart';
 
 class TabCloseListenerPage extends StatefulWidget {
   @override
-  ListeningTabClosePageState createState() => ListeningTabClosePageState();
+  TabCloseListenerPageState createState() => TabCloseListenerPageState();
 }
 
-class ListeningTabClosePageState extends ExamplePageState {
+class TabCloseListenerPageState extends ExamplePageState {
   @override
   Widget buildContent() {
     bool _onTabClosing(int tabIndex) {

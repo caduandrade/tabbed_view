@@ -7,6 +7,7 @@ import 'package:demo/dark_theme_page.dart';
 import 'package:demo/from_the_scratch_page.dart';
 import 'package:demo/hidden_tabs_menu_button_icon_page.dart';
 import 'package:demo/tab_close_listener_page.dart';
+import 'package:demo/tab_selection_listener_page.dart';
 import 'package:demo/tabs_area_theme_page.dart';
 import 'package:demo/custom_tab.dart';
 import 'package:demo/minimalist_theme_page.dart';
@@ -35,6 +36,8 @@ class Example {
   static const Example custom_menu = const Example('Custom menu');
   static const Example from_the_scratch = const Example('From the scratch');
   static const Example tab_close_listener = const Example('Tab close listener');
+  static const Example tab_selection_listener =
+      const Example('Tab selection listener');
   static const Example close_button_tooltip =
       const Example('Close button tooltip');
   static const Example hidden_tabs_menu_button_icon =
@@ -54,6 +57,7 @@ class Example {
     Example.custom_menu,
     Example.from_the_scratch,
     Example.tab_close_listener,
+    Example.tab_selection_listener,
     Example.close_button_tooltip,
     Example.hidden_tabs_menu_button_icon
   ];
@@ -158,6 +162,8 @@ class _TabbedViewDemoPageState extends State<TabbedViewDemoPage> {
       example = FromTheScratchPage();
     } else if (_currentExample == Example.tab_close_listener) {
       example = TabCloseListenerPage();
+    } else if (_currentExample == Example.tab_selection_listener) {
+      example = TabSelectionListenerPage();
     } else if (_currentExample == Example.close_button_tooltip) {
       example = CloseButtonTooltipPage();
     } else if (_currentExample == Example.hidden_tabs_menu_button_icon) {

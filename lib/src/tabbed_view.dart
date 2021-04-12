@@ -79,17 +79,20 @@ typedef TabbedWiewMenuBuilder = List<TabbedWiewMenuItem> Function(
 ///
 /// Remember to dispose of the [TabbedWiew] when it is no longer needed. This will ensure we discard any resources used by the object.
 class TabbedWiewController extends ChangeNotifier {
-  factory TabbedWiewController(List<TabData> tabs) {
-    return TabbedWiewController._(tabs);
+  factory TabbedWiewController(List<TabData> tabs,
+      {OnTabSelection? onTabSelection}) {
+    return TabbedWiewController._(tabs, onTabSelection: onTabSelection);
   }
 
-  TabbedWiewController._(this._tabs) {
+  TabbedWiewController._(this._tabs, {this.onTabSelection}) {
     if (_tabs.length > 0) {
       _selectedIndex = 0;
     }
   }
 
   final List<TabData> _tabs;
+
+  OnTabSelection? onTabSelection;
 
   int? _selectedIndex;
 
@@ -116,9 +119,18 @@ class TabbedWiewController extends ChangeNotifier {
     if (tabIndex != null) {
       _validateIndex(tabIndex);
     }
-    _selectedIndex = tabIndex;
+    _setSelectedIndex(tabIndex);
     _menuBuilder = null;
     notifyListeners();
+  }
+
+  /// Set the new tab index and notifies.
+  _setSelectedIndex(int? newTabIndex) {
+    bool notify = _selectedIndex != newTabIndex;
+    _selectedIndex = newTabIndex;
+    if (notify && onTabSelection != null) {
+      onTabSelection!(newTabIndex);
+    }
   }
 
   /// Inserts [TabData] at position [index] in the [tabs].
@@ -145,7 +157,7 @@ class TabbedWiewController extends ChangeNotifier {
   /// Updates the status and notifies.
   _afterIncTabs() {
     if (_tabs.length == 1) {
-      _selectedIndex = 0;
+      _setSelectedIndex(0);
     }
     _menuBuilder = null;
     notifyListeners();
@@ -156,10 +168,10 @@ class TabbedWiewController extends ChangeNotifier {
     _validateIndex(tabIndex);
     _tabs.removeAt(tabIndex);
     if (_tabs.isEmpty) {
-      _selectedIndex = null;
+      _setSelectedIndex(null);
     } else if (_selectedIndex != null &&
         (_selectedIndex == tabIndex || _selectedIndex! >= _tabs.length)) {
-      _selectedIndex = 0;
+      _setSelectedIndex(0);
     }
     _menuBuilder = null;
     notifyListeners();
@@ -168,7 +180,7 @@ class TabbedWiewController extends ChangeNotifier {
   /// Removes all tabs.
   removeTabs() {
     _tabs.clear();
-    _selectedIndex = null;
+    _setSelectedIndex(null);
     _menuBuilder = null;
     notifyListeners();
   }
@@ -183,6 +195,9 @@ class TabbedWiewController extends ChangeNotifier {
 /// Event that will be triggered when starting the tab closing.
 /// The return indicates whether the tab can be closed.
 typedef OnTabClosing = bool Function(int tabIndex);
+
+/// Event that will be triggered when the tab selection is changed.
+typedef OnTabSelection = Function(int? newTabIndex);
 
 /// Propagates parameters to internal components.
 class _TabbedWiewData {
