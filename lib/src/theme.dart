@@ -164,9 +164,7 @@ class TabTheme {
         this.selectedStatus =
             selectedStatus != null ? selectedStatus : TabStatusTheme(),
         this.highlightedStatus =
-            highlightedStatus != null ? highlightedStatus : TabStatusTheme(),
-        this.normalStatus =
-            normalStatus != null ? normalStatus : TabStatusTheme();
+            highlightedStatus != null ? highlightedStatus : TabStatusTheme();
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.
@@ -188,7 +186,6 @@ class TabTheme {
 
   TabStatusTheme selectedStatus;
   TabStatusTheme highlightedStatus;
-  TabStatusTheme normalStatus;
 
   double get buttonsOffset => _buttonsOffset;
 
@@ -204,9 +201,12 @@ class TabTheme {
 }
 
 /// Theme for tab in a given status.
+/// Allows you to overwrite [TabTheme] properties.
 class TabStatusTheme {
   TabStatusTheme(
       {this.decoration, this.fontColor, this.padding, this.buttonColors});
+
+  static final TabStatusTheme empty = TabStatusTheme();
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.

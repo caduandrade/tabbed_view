@@ -701,12 +701,12 @@ class _TabWidget extends StatelessWidget {
   TabStatusTheme _getTabThemeFor(_TabStatus status) {
     TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
     switch (status) {
+      case _TabStatus.normal:
+        return TabStatusTheme.empty;
       case _TabStatus.selected:
         return tabsAreaTheme.tab.selectedStatus;
       case _TabStatus.highlighted:
         return tabsAreaTheme.tab.highlightedStatus;
-      case _TabStatus.normal:
-        return tabsAreaTheme.tab.normalStatus;
     }
   }
 }
