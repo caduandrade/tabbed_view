@@ -79,20 +79,17 @@ typedef TabbedWiewMenuBuilder = List<TabbedWiewMenuItem> Function(
 ///
 /// Remember to dispose of the [TabbedWiew] when it is no longer needed. This will ensure we discard any resources used by the object.
 class TabbedWiewController extends ChangeNotifier {
-  factory TabbedWiewController(List<TabData> tabs,
-      {OnTabSelection? onTabSelection}) {
-    return TabbedWiewController._(tabs, onTabSelection: onTabSelection);
+  factory TabbedWiewController(List<TabData> tabs) {
+    return TabbedWiewController._(tabs);
   }
 
-  TabbedWiewController._(this._tabs, {this.onTabSelection}) {
+  TabbedWiewController._(this._tabs) {
     if (_tabs.length > 0) {
       _selectedIndex = 0;
     }
   }
 
   final List<TabData> _tabs;
-
-  OnTabSelection? onTabSelection;
 
   int? _selectedIndex;
 
@@ -119,18 +116,9 @@ class TabbedWiewController extends ChangeNotifier {
     if (tabIndex != null) {
       _validateIndex(tabIndex);
     }
-    _setSelectedIndex(tabIndex);
+    _selectedIndex = tabIndex;
     _menuBuilder = null;
     notifyListeners();
-  }
-
-  /// Set the new tab index and notifies.
-  _setSelectedIndex(int? newTabIndex) {
-    bool notify = _selectedIndex != newTabIndex;
-    _selectedIndex = newTabIndex;
-    if (notify && onTabSelection != null) {
-      onTabSelection!(newTabIndex);
-    }
   }
 
   /// Inserts [TabData] at position [index] in the [tabs].
@@ -157,7 +145,7 @@ class TabbedWiewController extends ChangeNotifier {
   /// Updates the status and notifies.
   _afterIncTabs() {
     if (_tabs.length == 1) {
-      _setSelectedIndex(0);
+      _selectedIndex = 0;
     }
     _menuBuilder = null;
     notifyListeners();
@@ -168,10 +156,10 @@ class TabbedWiewController extends ChangeNotifier {
     _validateIndex(tabIndex);
     _tabs.removeAt(tabIndex);
     if (_tabs.isEmpty) {
-      _setSelectedIndex(null);
+      _selectedIndex = null;
     } else if (_selectedIndex != null &&
         (_selectedIndex == tabIndex || _selectedIndex! >= _tabs.length)) {
-      _setSelectedIndex(0);
+      _selectedIndex = 0;
     }
     _menuBuilder = null;
     notifyListeners();
@@ -180,7 +168,7 @@ class TabbedWiewController extends ChangeNotifier {
   /// Removes all tabs.
   removeTabs() {
     _tabs.clear();
-    _setSelectedIndex(null);
+    _selectedIndex = null;
     _menuBuilder = null;
     notifyListeners();
   }
@@ -206,6 +194,7 @@ class _TabbedWiewData {
       required this.theme,
       this.contentBuilder,
       this.onTabClosing,
+      this.onTabSelection,
       required this.selectToEnableButtons,
       this.closeButtonTooltip});
 
@@ -213,6 +202,7 @@ class _TabbedWiewData {
   final TabbedViewTheme theme;
   final IndexedWidgetBuilder? contentBuilder;
   final OnTabClosing? onTabClosing;
+  final OnTabSelection? onTabSelection;
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
 }
@@ -231,6 +221,7 @@ class TabbedWiew extends StatefulWidget {
       TabbedViewTheme? theme,
       IndexedWidgetBuilder? contentBuilder,
       OnTabClosing? onTabClosing,
+      OnTabSelection? onTabSelection,
       bool selectToEnableButtons = true,
       String? closeButtonTooltip})
       : this._data = _TabbedWiewData(
@@ -238,6 +229,7 @@ class TabbedWiew extends StatefulWidget {
             theme: theme == null ? TabbedViewTheme.light() : theme,
             contentBuilder: contentBuilder,
             onTabClosing: onTabClosing,
+            onTabSelection: onTabSelection,
             selectToEnableButtons: selectToEnableButtons,
             closeButtonTooltip: closeButtonTooltip);
 
@@ -249,10 +241,13 @@ class TabbedWiew extends StatefulWidget {
 
 /// The [TabbedWiew] state.
 class _TabbedWiewState extends State<TabbedWiew> {
+  int? _lastSelectedIndex;
+
   @override
   void initState() {
     super.initState();
     widget._data.controller.addListener(_rebuild);
+    _lastSelectedIndex = widget._data.controller.selectedIndex;
   }
 
   @override
@@ -261,6 +256,7 @@ class _TabbedWiewState extends State<TabbedWiew> {
     if (widget._data.controller != oldWidget._data.controller) {
       oldWidget._data.controller.removeListener(_rebuild);
       widget._data.controller.addListener(_rebuild);
+      _lastSelectedIndex = widget._data.controller.selectedIndex;
     }
   }
 
@@ -275,6 +271,14 @@ class _TabbedWiewState extends State<TabbedWiew> {
   }
 
   _rebuild() {
+    int? newTabIndex = widget._data.controller.selectedIndex;
+    if (_lastSelectedIndex != newTabIndex) {
+      _lastSelectedIndex = newTabIndex;
+      if (widget._data.onTabSelection != null) {
+        widget._data.onTabSelection!(newTabIndex);
+      }
+    }
+
     setState(() {
       // rebuild
     });

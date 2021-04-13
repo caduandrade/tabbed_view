@@ -21,8 +21,8 @@ class TabSelectionListenerPageState extends ExamplePageState {
       TabData(text: 'Tab 3')
     ];
     TabbedWiew tabbedView = TabbedWiew(
-        controller:
-            TabbedWiewController(tabs, onTabSelection: _onTabSelection));
+        controller: TabbedWiewController(tabs),
+        onTabSelection: _onTabSelection);
     return tabbedView;
   }
 }

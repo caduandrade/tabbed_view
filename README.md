@@ -137,8 +137,8 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 3')
     ];
     TabbedWiew tabbedView = TabbedWiew(
-        controller:
-            TabbedWiewController(tabs, onTabSelection: _onTabSelection));
+        controller: TabbedWiewController(tabs),
+        onTabSelection: _onTabSelection);
 ```
 
 ## Themes
