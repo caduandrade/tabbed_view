@@ -1,3 +1,8 @@
+## 1.0.0
+
+* Tabs area buttons builder
+* Changes in thematization
+
 ## 0.6.0
 
 * Changes in thematization
