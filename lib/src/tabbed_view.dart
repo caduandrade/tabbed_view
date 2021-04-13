@@ -685,6 +685,7 @@ class _TabWidget extends StatelessWidget {
         child: tabContainer);
 
     MouseRegion mouseRegion = MouseRegion(
+        cursor: SystemMouseCursors.click,
         onHover: (details) => updateHighlightedIndex(index),
         onExit: (details) => updateHighlightedIndex(null),
         child: gestureDetector);
@@ -777,6 +778,7 @@ class _TabButtonWidgetState extends State<_TabButtonWidget> {
     }
 
     return MouseRegion(
+        cursor: SystemMouseCursors.click,
         onEnter: _onEnter,
         onExit: _onExit,
         child: GestureDetector(child: icon, onTap: onPressed));
