@@ -1153,8 +1153,12 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       }
     }
 
-    size =
-        constraints.constrain(Size(constraints.maxWidth, biggestChildHeight));
+    double height = biggestChildHeight;
+    if (tabsAreaTheme.gapBottomBorder.style == BorderStyle.solid &&
+        tabsAreaTheme.gapBottomBorder.width > 0) {
+      height = math.max(height, tabsAreaTheme.gapBottomBorder.width);
+    }
+    size = constraints.constrain(Size(constraints.maxWidth, height));
   }
 
   void visitVisibleChildren(RenderObjectVisitor visitor) {
