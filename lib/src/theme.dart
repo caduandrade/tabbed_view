@@ -166,9 +166,7 @@ class TabTheme {
         this.highlightedStatus =
             highlightedStatus != null ? highlightedStatus : TabStatusTheme(),
         this.normalStatus =
-            normalStatus != null ? normalStatus : TabStatusTheme(),
-        this.disabledStatus =
-            disabledStatus != null ? disabledStatus : TabStatusTheme();
+            normalStatus != null ? normalStatus : TabStatusTheme();
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.
@@ -191,7 +189,6 @@ class TabTheme {
   TabStatusTheme selectedStatus;
   TabStatusTheme highlightedStatus;
   TabStatusTheme normalStatus;
-  TabStatusTheme disabledStatus;
 
   double get buttonsOffset => _buttonsOffset;
 

@@ -577,7 +577,7 @@ class _TabsAreaState extends State<_TabsArea> {
 typedef _UpdateHighlightedIndex = void Function(int? tabIndex);
 
 /// Inner enum for tab status.
-enum _TabStatus { selected, highlighted, normal, disabled }
+enum _TabStatus { selected, highlighted, normal }
 
 /// The tab widget. Displays the tab text and its buttons.
 class _TabWidget extends StatelessWidget {
@@ -707,8 +707,6 @@ class _TabWidget extends StatelessWidget {
         return tabsAreaTheme.tab.highlightedStatus;
       case _TabStatus.normal:
         return tabsAreaTheme.tab.normalStatus;
-      case _TabStatus.disabled:
-        return tabsAreaTheme.tab.disabledStatus;
     }
   }
 }
