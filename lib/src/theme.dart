@@ -54,8 +54,9 @@ class TabbedViewTheme {
   }
 
   /// Builds the predefined mobile theme.
-  factory TabbedViewTheme.mobile() {
-    return _Mobile.build();
+  factory TabbedViewTheme.mobile(
+      {Color borderColor = Colors.grey, Color highlightedColor = Colors.blue}) {
+    return _Mobile.build(borderColor, highlightedColor);
   }
 
   /// Builds the predefined minimalist theme.
@@ -150,6 +151,8 @@ class TabTheme {
       double buttonsOffset = 0,
       double buttonsGap = 0,
       this.decoration,
+      this.innerBottomBorder,
+      this.innerTopBorder,
       this.textStyle = const TextStyle(fontSize: 13),
       this.padding,
       TabStatusTheme? selectedStatus,
@@ -178,6 +181,9 @@ class TabTheme {
   /// The decoration to paint behind the tab.
   BoxDecoration? decoration;
 
+  BorderSide? innerBottomBorder;
+  BorderSide? innerTopBorder;
+
   TextStyle? textStyle;
 
   double buttonIconSize;
@@ -205,7 +211,12 @@ class TabTheme {
 /// Allows you to overwrite [TabTheme] properties.
 class TabStatusTheme {
   TabStatusTheme(
-      {this.decoration, this.fontColor, this.padding, this.buttonColors});
+      {this.decoration,
+      this.innerTopBorder,
+      this.innerBottomBorder,
+      this.fontColor,
+      this.padding,
+      this.buttonColors});
 
   static final TabStatusTheme empty = TabStatusTheme();
 
@@ -218,6 +229,8 @@ class TabStatusTheme {
 
   /// The decoration to paint behind the tab.
   BoxDecoration? decoration;
+  BorderSide? innerBottomBorder;
+  BorderSide? innerTopBorder;
   Color? fontColor;
   ButtonColors? buttonColors;
 }
@@ -440,16 +453,17 @@ class _Dark {
 
 /// Predefined mobile theme builder.
 class _Mobile {
-  static TabbedViewTheme build({Color borderColor = Colors.grey}) {
+  static TabbedViewTheme build(Color borderColor, Color highlightedColor) {
     return TabbedViewTheme(
-        tabsArea: _tabsAreaTheme(borderColor),
+        tabsArea: _tabsAreaTheme(borderColor, highlightedColor),
         contentArea: _contentAreaTheme(borderColor),
         menu: _menuTheme());
   }
 
-  static TabsAreaTheme _tabsAreaTheme(Color borderColor) {
+  static TabsAreaTheme _tabsAreaTheme(
+      Color borderColor, Color highlightedColor) {
     return TabsAreaTheme(
-        tab: _tabTheme(borderColor),
+        tab: _tabTheme(borderColor, highlightedColor),
         equalHeights: EqualHeights.all,
         initialGap: -1,
         middleGap: -1,
@@ -458,29 +472,24 @@ class _Mobile {
             decoration: BoxDecoration(color: Colors.grey[300]!)));
   }
 
-  static TabTheme _tabTheme(Color borderColor) {
-    BorderSide verticalBorder = BorderSide(color: borderColor, width: 1);
-    double markHeight = 3;
+  static TabTheme _tabTheme(Color borderColor, Color highlightedColor) {
+    BorderSide verticalBorderSide = BorderSide(color: borderColor, width: 1);
+    Border border = Border(left: verticalBorderSide, right: verticalBorderSide);
+    double markHeight = 4;
     return TabTheme(
         buttonsOffset: 4,
         padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
-        decoration: BoxDecoration(
-            border: Border(
-                bottom: BorderSide(color: Colors.white, width: markHeight),
-                left: verticalBorder,
-                right: verticalBorder)),
+        decoration: BoxDecoration(border: border),
+        innerBottomBorder:
+            BorderSide(color: Colors.transparent, width: markHeight),
         highlightedStatus: TabStatusTheme(
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.grey, width: markHeight),
-                    left: verticalBorder,
-                    right: verticalBorder))),
+            decoration: BoxDecoration(border: border),
+            innerBottomBorder:
+                BorderSide(color: Colors.grey, width: markHeight)),
         selectedStatus: TabStatusTheme(
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.blue, width: markHeight),
-                    left: verticalBorder,
-                    right: verticalBorder))));
+            decoration: BoxDecoration(border: border),
+            innerBottomBorder:
+                BorderSide(color: highlightedColor, width: markHeight)));
   }
 
   static ContentAreaTheme _contentAreaTheme(Color borderColor) {

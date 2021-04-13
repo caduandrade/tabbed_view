@@ -668,6 +668,12 @@ class _TabWidget extends StatelessWidget {
     Widget textAndButtonsContainer =
         Row(children: textAndButtons, crossAxisAlignment: alignment);
 
+    BorderSide innerBottomBorder = statusTheme.innerBottomBorder ??
+        tabTheme.innerBottomBorder ??
+        BorderSide.none;
+    BorderSide innerTopBorder = statusTheme.innerTopBorder ??
+        tabTheme.innerTopBorder ??
+        BorderSide.none;
     BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
 
     EdgeInsetsGeometry? padding = tabsAreaTheme.tab.padding;
@@ -676,8 +682,12 @@ class _TabWidget extends StatelessWidget {
     }
 
     Container tabContainer = Container(
-        child: textAndButtonsContainer,
-        padding: padding,
+        child: Container(
+            child: textAndButtonsContainer,
+            padding: padding,
+            decoration: BoxDecoration(
+                border:
+                    Border(top: innerTopBorder, bottom: innerBottomBorder))),
         decoration: decoration);
 
     GestureDetector gestureDetector = GestureDetector(
