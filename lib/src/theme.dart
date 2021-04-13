@@ -175,6 +175,7 @@ class TabTheme {
 
   VerticalAlignment verticalAlignment;
 
+  /// The decoration to paint behind the tab.
   BoxDecoration? decoration;
 
   TextStyle? textStyle;
@@ -214,6 +215,8 @@ class TabStatusTheme {
   /// This padding is in addition to any padding inherent in the [decoration];
   /// see [Decoration.padding].
   EdgeInsetsGeometry? padding;
+
+  /// The decoration to paint behind the tab.
   BoxDecoration? decoration;
   Color? fontColor;
   ButtonColors? buttonColors;
