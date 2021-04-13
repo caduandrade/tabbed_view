@@ -141,6 +141,38 @@ It allows creating the contents of the tab dynamically during the selection even
         onTabSelection: _onTabSelection);
 ```
 
+## Tabs area
+
+### Buttons
+
+```dart
+    TabbedWiewController controller = TabbedWiewController([]);
+
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: controller,
+        tabsAreaButtonsBuilder: (context, tabsCount) {
+          List<TabButton> buttons = [];
+          buttons.add(TabButton(
+              icon: Icons.add,
+              onPressed: () {
+                int millisecond = DateTime.now().millisecondsSinceEpoch;
+                controller.addTab(TabData(text: '$millisecond'));
+              }));
+          if (tabsCount > 0) {
+            buttons.add(TabButton(
+                icon: Icons.delete,
+                onPressed: () {
+                  if (controller.selectedIndex != null) {
+                    controller.removeTab(controller.selectedIndex!);
+                  }
+                }));
+          }
+          return buttons;
+        });
+```
+
+![tabsareabuttons](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_buttons.gif)
+
 ## Themes
 
 ### Tab

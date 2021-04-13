@@ -67,6 +67,10 @@ class TabbedWiewMenuItem {
   final Function? onSelection;
 }
 
+/// Tabs area buttons builder
+typedef TabsAreaButtonsBuilder = List<TabButton> Function(
+    BuildContext context, int tabsCount);
+
 /// Menu builder
 typedef TabbedWiewMenuBuilder = List<TabbedWiewMenuItem> Function(
     BuildContext context);
@@ -196,7 +200,8 @@ class _TabbedWiewData {
       this.onTabClosing,
       this.onTabSelection,
       required this.selectToEnableButtons,
-      this.closeButtonTooltip});
+      this.closeButtonTooltip,
+      this.tabsAreaButtonsBuilder});
 
   final TabbedWiewController controller;
   final TabbedViewTheme theme;
@@ -205,6 +210,7 @@ class _TabbedWiewData {
   final OnTabSelection? onTabSelection;
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
+  final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
 }
 
 /// Widget inspired by the classic Desktop-style tab component.
@@ -223,7 +229,8 @@ class TabbedWiew extends StatefulWidget {
       OnTabClosing? onTabClosing,
       OnTabSelection? onTabSelection,
       bool selectToEnableButtons = true,
-      String? closeButtonTooltip})
+      String? closeButtonTooltip,
+      TabsAreaButtonsBuilder? tabsAreaButtonsBuilder})
       : this._data = _TabbedWiewData(
             controller: controller,
             theme: theme == null ? TabbedViewTheme.light() : theme,
@@ -231,7 +238,8 @@ class TabbedWiew extends StatefulWidget {
             onTabClosing: onTabClosing,
             onTabSelection: onTabSelection,
             selectToEnableButtons: selectToEnableButtons,
-            closeButtonTooltip: closeButtonTooltip);
+            closeButtonTooltip: closeButtonTooltip,
+            tabsAreaButtonsBuilder: tabsAreaButtonsBuilder);
 
   final _TabbedWiewData _data;
 
@@ -510,15 +518,31 @@ class _TabsAreaState extends State<_TabsArea> {
     ButtonsAreaTheme buttonsAreaTheme = widget.data.theme.tabsArea.buttonsArea;
     Widget buttonsArea;
 
+    List<TabButton> buttons = [];
+    if (widget.data.tabsAreaButtonsBuilder != null) {
+      buttons = widget.data.tabsAreaButtonsBuilder!(
+          context, widget.data.controller.tabs.length);
+    }
+
     if (hiddenTabs.hasHiddenTabs) {
       TabButton hiddenTabsMenuButton = TabButton(
           icon: buttonsAreaTheme.hiddenTabsMenuButtonIcon,
           menuBuilder: _hiddenTabsMenuBuilder);
-      buttonsArea = _TabButtonWidget(
-          button: hiddenTabsMenuButton,
-          enabled: true,
-          colors: buttonsAreaTheme.buttonColors,
-          iconSize: buttonsAreaTheme.buttonIconSize);
+      buttons.insert(0, hiddenTabsMenuButton);
+    }
+
+    if (buttons.isNotEmpty) {
+      List<Widget> children = [];
+      for (int i = 0; i < buttons.length; i++) {
+        TabButton tabButton = buttons[i];
+        children.add(_TabButtonWidget(
+            button: tabButton,
+            enabled: true,
+            colors: buttonsAreaTheme.buttonColors,
+            iconSize: buttonsAreaTheme.buttonIconSize));
+      }
+
+      buttonsArea = Row(children: children);
 
       EdgeInsetsGeometry? margin;
       if (buttonsAreaTheme.offset > 0) {
