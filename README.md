@@ -1,5 +1,3 @@
-# tabbed_view
-
 [![pub](https://img.shields.io/pub/v/tabbed_view.svg)](https://pub.dev/packages/tabbed_view)
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
@@ -74,7 +72,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![tabbutton](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
 
-### Extra button - overriding theme color
+#### Overriding theme color
 
 ```dart
     var tabs = [
@@ -344,7 +342,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![minimalist](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist.gif)
 
-####  Minimalist theme - Color set
+#####  Color set
 
 ```dart
     TabbedWiew tabbedView = TabbedWiew(
@@ -391,8 +389,3 @@ It is possible to create an entire theme from scratch.
 ```
 
 ![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
-
-## Agenda for the next few days
-
-* Complete documentation and examples to cover all available features.
-* Release the final version (1.0.0). The API may have some small changes.
