@@ -54,7 +54,7 @@ class MinimalistThemePageState extends ExampleMultiViewPageState<_View> {
     TabbedWiewController controller = TabbedWiewController(tabs);
     TabbedWiew tabbedView = TabbedWiew(
         controller: controller,
-        theme: TabbedViewTheme.minimalist(colors: Colors.blue));
+        theme: TabbedViewTheme.minimalist(colorSet: Colors.blue));
     return tabbedView;
   }
 }

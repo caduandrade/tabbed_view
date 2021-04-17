@@ -69,7 +69,7 @@ class DarkThemePageState extends ExampleMultiViewPageState<_View> {
       return Center(child: text);
     };
 
-    TabbedViewTheme theme = TabbedViewTheme.dark(colors: Colors.indigo);
+    TabbedViewTheme theme = TabbedViewTheme.dark(colorSet: Colors.indigo);
 
     TabbedWiew tabbedView = TabbedWiew(
         controller: controller, contentBuilder: contentBuilder, theme: theme);

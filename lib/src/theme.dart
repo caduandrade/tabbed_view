@@ -45,8 +45,8 @@ class TabbedViewTheme {
 
   /// Builds the predefined dark theme.
   factory TabbedViewTheme.dark(
-      {ColorSwatch colors = Colors.grey, double fontSize = 13}) {
-    return _Dark.build(colorSet: colors, fontSize: 13);
+      {MaterialColor colorSet = Colors.grey, double fontSize = 13}) {
+    return _Dark.build(colorSet: colorSet, fontSize: 13);
   }
 
   /// Builds the predefined light theme.
@@ -56,7 +56,7 @@ class TabbedViewTheme {
 
   /// Builds the predefined mobile theme.
   factory TabbedViewTheme.mobile(
-      {ColorSwatch colorSet = Colors.grey,
+      {MaterialColor colorSet = Colors.grey,
       Color highlightedTabColor = Colors.blue,
       double fontSize = 13}) {
     return _Mobile.build(
@@ -66,8 +66,8 @@ class TabbedViewTheme {
   }
 
   /// Builds the predefined minimalist theme.
-  factory TabbedViewTheme.minimalist({MaterialColor colors = Colors.grey}) {
-    return _Minimalist.build(colorSet: colors);
+  factory TabbedViewTheme.minimalist({MaterialColor colorSet = Colors.grey}) {
+    return _Minimalist.build(colorSet: colorSet);
   }
 
   static const double minimalIconSize = 8;
@@ -395,7 +395,7 @@ class _Light {
 /// Predefined dark theme builder.
 class _Dark {
   static TabbedViewTheme build(
-      {required ColorSwatch colorSet, required double fontSize}) {
+      {required MaterialColor colorSet, required double fontSize}) {
     Color tabColor = colorSet[900]!;
     Color selectedTabColor = colorSet[800]!;
     Color highlightedTabColor = colorSet[700]!;
@@ -512,7 +512,7 @@ class _Dark {
 /// Predefined mobile theme builder.
 class _Mobile {
   static TabbedViewTheme build(
-      {required ColorSwatch colorSet,
+      {required MaterialColor colorSet,
       required Color highlightedTabColor,
       required double fontSize}) {
     Color borderColor = colorSet[500]!;
@@ -623,7 +623,7 @@ class _Mobile {
 class _Minimalist {
   static TabbedViewTheme build({required MaterialColor colorSet}) {
     Color borderColor = colorSet[700]!;
-    Color tabColor = colorSet[50]!;
+    Color background = colorSet[50]!;
     Color selectedTabColor = borderColor;
     Color highlightedTabColor = colorSet[300]!;
     Color menuColor = colorSet[50]!;
@@ -638,7 +638,7 @@ class _Minimalist {
     return TabbedViewTheme(
         tabsArea: _tabsAreaTheme(
             borderColor: borderColor,
-            tabColor: tabColor,
+            background: background,
             selectedTabColor: selectedTabColor,
             highlightedTabColor: highlightedTabColor,
             buttonColors: buttonColors,
@@ -646,7 +646,8 @@ class _Minimalist {
             fontColor: fontColor,
             selectedFontColor: selectedFontColor,
             hiddenTabsMenuButtonColor: hiddenTabsMenuButtonColor),
-        contentArea: _contentAreaTheme(borderColor),
+        contentArea:
+            _contentAreaTheme(borderColor: borderColor, background: background),
         menu: _menuTheme(
             borderColor: borderColor,
             menuColor: menuColor,
@@ -657,7 +658,7 @@ class _Minimalist {
 
   static TabsAreaTheme _tabsAreaTheme(
       {required Color borderColor,
-      required Color tabColor,
+      required Color background,
       required Color selectedTabColor,
       required Color highlightedTabColor,
       required ButtonColors buttonColors,
@@ -667,10 +668,11 @@ class _Minimalist {
       required Color hiddenTabsMenuButtonColor}) {
     return TabsAreaTheme(
         buttonsArea: ButtonsAreaTheme(
+            decoration: BoxDecoration(color: background),
             buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor)),
         tab: _tabTheme(
             borderColor: borderColor,
-            tabColor: tabColor,
+            background: background,
             selectedTabColor: selectedTabColor,
             highlightedTabColor: highlightedTabColor,
             buttonColors: buttonColors,
@@ -683,7 +685,7 @@ class _Minimalist {
 
   static TabTheme _tabTheme(
       {required Color borderColor,
-      required Color tabColor,
+      required Color background,
       required Color selectedTabColor,
       required Color highlightedTabColor,
       required ButtonColors buttonColors,
@@ -694,7 +696,7 @@ class _Minimalist {
       buttonsOffset: 4,
       textStyle: TextStyle(color: fontColor, fontSize: 13),
       padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
-      decoration: BoxDecoration(color: tabColor),
+      decoration: BoxDecoration(color: background),
       buttonColors: buttonColors,
       highlightedStatus:
           TabStatusTheme(decoration: BoxDecoration(color: highlightedTabColor)),
@@ -705,11 +707,12 @@ class _Minimalist {
     );
   }
 
-  static ContentAreaTheme _contentAreaTheme(borderColor) {
+  static ContentAreaTheme _contentAreaTheme(
+      {required Color borderColor, required Color background}) {
     BorderSide borderSide = BorderSide(width: 1, color: borderColor);
     BoxBorder border =
         Border(bottom: borderSide, left: borderSide, right: borderSide);
-    BoxDecoration decoration = BoxDecoration(border: border);
+    BoxDecoration decoration = BoxDecoration(color: background, border: border);
     return ContentAreaTheme(decoration: decoration);
   }
 

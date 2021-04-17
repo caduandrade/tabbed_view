@@ -355,7 +355,7 @@ It allows creating the contents of the tab dynamically during the selection even
       return Center(child: text);
     };
 
-    TabbedViewTheme theme = TabbedViewTheme.dark(colors: Colors.indigo);
+    TabbedViewTheme theme = TabbedViewTheme.dark(colorSet: Colors.indigo);
 
     TabbedWiew tabbedView = TabbedWiew(
         controller: controller, contentBuilder: contentBuilder, theme: theme);
@@ -407,7 +407,7 @@ It allows creating the contents of the tab dynamically during the selection even
 ```dart
     TabbedWiew tabbedView = TabbedWiew(
         controller: controller,
-        theme: TabbedViewTheme.minimalist(colors: Colors.blue));
+        theme: TabbedViewTheme.minimalist(colorSet: Colors.blue));
 ```
 
 ![minimalistchangecolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_change_color.png)
