@@ -318,11 +318,52 @@ It allows creating the contents of the tab dynamically during the selection even
 ####  Dark theme
 
 ```dart
-    TabbedWiew tabbedView =
-            TabbedWiew(controller: controller, theme: TabbedViewTheme.dark());
+    List<TabData> tabs = [];
+    for (var i = 1; i < 7; i++) {
+      tabs.add(TabData(text: 'Tab $i'));
+    }
+    TabbedWiewController controller = TabbedWiewController(tabs);
+
+    var contentBuilder = (BuildContext context, int index) {
+      int i = index + 1;
+      Text text = Text('Content $i', style: TextStyle(color: Colors.white));
+      return Center(child: text);
+    };
+
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: controller,
+        contentBuilder: contentBuilder,
+        theme: TabbedViewTheme.dark());
+
+    Container container = Container(child: tabbedView, color: Colors.black);
 ```
 
 ![dark](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
+
+#####  Color set
+
+```dart
+    List<TabData> tabs = [];
+    for (var i = 1; i < 7; i++) {
+      tabs.add(TabData(text: 'Tab $i'));
+    }
+    TabbedWiewController controller = TabbedWiewController(tabs);
+
+    var contentBuilder = (BuildContext context, int index) {
+      int i = index + 1;
+      Text text = Text('Content $i', style: TextStyle(color: Colors.white));
+      return Center(child: text);
+    };
+
+    TabbedViewTheme theme = TabbedViewTheme.dark(colors: Colors.indigo);
+
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: controller, contentBuilder: contentBuilder, theme: theme);
+
+    Container container = Container(child: tabbedView, color: Colors.black12);
+```
+
+![darkcolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_color_set.png)
 
 ####  Mobile theme
 

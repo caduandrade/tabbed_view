@@ -705,6 +705,11 @@ class _TabWidget extends StatelessWidget {
       padding = statusTheme.padding;
     }
 
+    EdgeInsetsGeometry? margin = tabsAreaTheme.tab.margin;
+    if (statusTheme.margin != null) {
+      margin = statusTheme.margin;
+    }
+
     Container tabContainer = Container(
         child: Container(
             child: textAndButtonsContainer,
@@ -712,7 +717,8 @@ class _TabWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 border:
                     Border(top: innerTopBorder, bottom: innerBottomBorder))),
-        decoration: decoration);
+        decoration: decoration,
+        margin: margin);
 
     GestureDetector gestureDetector = GestureDetector(
         onTap: () => data.controller.selectedIndex = index,
