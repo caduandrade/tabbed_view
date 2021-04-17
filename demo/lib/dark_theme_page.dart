@@ -33,13 +33,6 @@ class DarkThemePageState extends ExampleMultiViewPageState<_View> {
     }
   }
 
-  @override
-  ThemeData? buildThemeData() {
-    // return ThemeData.dark().copyWith(scaffoldBackgroundColor: Colors.black);
-    return null;
-  }
-
-  @override
   Widget _normal() {
     List<TabData> tabs = [];
     for (var i = 1; i < 7; i++) {
@@ -63,7 +56,6 @@ class DarkThemePageState extends ExampleMultiViewPageState<_View> {
     return container;
   }
 
-  @override
   Widget _changeColor() {
     List<TabData> tabs = [];
     for (var i = 1; i < 7; i++) {

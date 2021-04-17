@@ -374,6 +374,25 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![mobile](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
 
+#####  Color set
+
+```dart
+    TabbedViewTheme theme = TabbedViewTheme.mobile(colorSet: Colors.blueGrey);
+    TabbedWiew tabbedView = TabbedWiew(controller: controller, theme: theme);
+```
+
+![mobilecolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_color_set.png)
+
+#####  Highlighted tab color
+
+```dart
+    TabbedViewTheme theme =
+        TabbedViewTheme.mobile(highlightedTabColor: Colors.green[700]!);
+    TabbedWiew tabbedView = TabbedWiew(controller: controller, theme: theme);
+```
+
+![mobilehighlightedcolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_highlighted_color.png)
+
 ####  Minimalist theme
 
 ```dart
