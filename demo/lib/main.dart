@@ -1,5 +1,6 @@
 import 'package:demo/add_tab_page.dart';
 import 'package:demo/change_tab_page.dart';
+import 'package:demo/classic_theme_page.dart';
 import 'package:demo/close_button_tooltip_page.dart';
 import 'package:demo/content_builder_page.dart';
 import 'package:demo/custom_menu.dart';
@@ -27,6 +28,7 @@ class Example {
   static const Example simple = const Example('Simple');
   static const Example content_builder = const Example('Content builder');
   static const Example dark_theme = const Example('Dark theme');
+  static const Example classic_theme = const Example('Classic theme');
   static const Example mobile_theme = const Example('Mobile theme');
   static const Example minimalist_theme = const Example('Minimalist theme');
   static const Example new_model = const Example('New model');
@@ -50,6 +52,7 @@ class Example {
     Example.content_builder,
     Example.tabs_area_buttons,
     Example.dark_theme,
+    Example.classic_theme,
     Example.new_model,
     Example.change_tab,
     Example.add_tab,
@@ -147,6 +150,8 @@ class _TabbedViewDemoPageState extends State<TabbedViewDemoPage> {
       example = TabsAreaButtonsPage();
     } else if (_currentExample == Example.dark_theme) {
       example = DarkThemePage();
+    } else if (_currentExample == Example.classic_theme) {
+      example = ClassicThemePage();
     } else if (_currentExample == Example.new_model) {
       example = NewModelPage();
     } else if (_currentExample == Example.change_tab) {

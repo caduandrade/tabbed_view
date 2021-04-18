@@ -233,7 +233,7 @@ class TabbedWiew extends StatefulWidget {
       TabsAreaButtonsBuilder? tabsAreaButtonsBuilder})
       : this._data = _TabbedWiewData(
             controller: controller,
-            theme: theme == null ? TabbedViewTheme.light() : theme,
+            theme: theme == null ? TabbedViewTheme.classic() : theme,
             contentBuilder: contentBuilder,
             onTabClosing: onTabClosing,
             onTabSelection: onTabSelection,

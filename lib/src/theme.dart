@@ -49,9 +49,13 @@ class TabbedViewTheme {
     return _Dark.build(colorSet: colorSet, fontSize: 13);
   }
 
-  /// Builds the predefined light theme.
-  factory TabbedViewTheme.light() {
-    return _Light.build();
+  /// Builds the predefined classic theme.
+  factory TabbedViewTheme.classic(
+      {MaterialColor colorSet = Colors.grey,
+      double fontSize = 13,
+      Color borderColor = Colors.black}) {
+    return _Classic.build(
+        colorSet: colorSet, fontSize: fontSize, borderColor: borderColor);
   }
 
   /// Builds the predefined mobile theme.
@@ -331,63 +335,118 @@ class MenuTheme {
   }
 }
 
-/// Predefined light theme builder.
-class _Light {
-  static TabbedViewTheme build() {
+/// Predefined classic theme builder.
+class _Classic {
+  static TabbedViewTheme build(
+      {required MaterialColor colorSet,
+      required double fontSize,
+      required Color borderColor}) {
+    Color backgroundColor = colorSet[50]!;
+    Color highlightedTabColor = colorSet[300]!;
+    Color fontColor = colorSet[900]!;
+    Color menuHoverColor = colorSet[200]!;
+    ButtonColors buttonColors = ButtonColors(
+        normal: colorSet[600]!,
+        disabled: colorSet[400]!,
+        hover: colorSet[900]!);
+
     return TabbedViewTheme(
-        tabsArea: _tabsAreaTheme(),
-        contentArea: _contentAreaTheme(),
-        menu: _menuTheme());
+        tabsArea: _tabsAreaTheme(
+            backgroundColor: backgroundColor,
+            highlightedTabColor: highlightedTabColor,
+            buttonColors: buttonColors,
+            borderColor: borderColor,
+            fontSize: fontSize,
+            fontColor: fontColor),
+        contentArea: _contentAreaTheme(
+            borderColor: borderColor, backgroundColor: backgroundColor),
+        menu: _menuTheme(
+            hoverColor: menuHoverColor,
+            color: backgroundColor,
+            borderColor: borderColor,
+            fontSize: fontSize,
+            fontColor: fontColor));
   }
 
-  static TabsAreaTheme _tabsAreaTheme() {
+  static TabsAreaTheme _tabsAreaTheme(
+      {required Color borderColor,
+      required Color fontColor,
+      required double fontSize,
+      required Color backgroundColor,
+      required Color highlightedTabColor,
+      required ButtonColors buttonColors}) {
     return TabsAreaTheme(
-        tab: _tabTheme(),
+        tab: _tabTheme(
+            borderColor: borderColor,
+            buttonColors: buttonColors,
+            fontColor: fontColor,
+            fontSize: fontSize,
+            backgroundColor: backgroundColor,
+            highlightedTabColor: highlightedTabColor),
         buttonsArea: ButtonsAreaTheme(
+            buttonColors: buttonColors,
             decoration: BoxDecoration(
-                border:
-                    Border(bottom: BorderSide(color: Colors.black, width: 1))),
+                color: backgroundColor,
+                border: Border.all(color: borderColor, width: 1)),
             padding: EdgeInsets.only(bottom: 2)),
         middleGap: -1,
-        gapBottomBorder: BorderSide(color: Colors.black, width: 1));
+        gapBottomBorder: BorderSide(color: borderColor, width: 1));
   }
 
-  static TabTheme _tabTheme() {
+  static TabTheme _tabTheme(
+      {required Color borderColor,
+      required Color fontColor,
+      required double fontSize,
+      required Color backgroundColor,
+      required Color highlightedTabColor,
+      required ButtonColors buttonColors}) {
     return TabTheme(
+        textStyle: TextStyle(fontSize: fontSize, color: fontColor),
+        buttonColors: buttonColors,
         buttonsOffset: 4,
         padding: EdgeInsets.fromLTRB(6, 2, 6, 2),
-        decoration:
-            BoxDecoration(border: Border.all(color: Colors.black, width: 1)),
+        decoration: BoxDecoration(
+            color: backgroundColor,
+            border: Border.all(color: borderColor, width: 1)),
         highlightedStatus: TabStatusTheme(
             decoration: BoxDecoration(
-                color: const Color.fromRGBO(230, 230, 230, 1),
-                border: Border.all(color: Colors.black, width: 1))),
+                color: highlightedTabColor,
+                border: Border.all(color: borderColor, width: 1))),
         selectedStatus: TabStatusTheme(
           decoration: BoxDecoration(
+              color: backgroundColor,
               border: Border(
-                  left: BorderSide(color: Colors.black, width: 1),
-                  top: BorderSide(color: Colors.black, width: 1),
-                  right: BorderSide(color: Colors.black, width: 1))),
+                  left: BorderSide(color: borderColor, width: 1),
+                  top: BorderSide(color: borderColor, width: 1),
+                  right: BorderSide(color: borderColor, width: 1))),
           padding: EdgeInsets.fromLTRB(6, 2, 6, 8),
         ));
   }
 
-  static ContentAreaTheme _contentAreaTheme() {
-    BorderSide borderSide = BorderSide(width: 1, color: Colors.black);
+  static ContentAreaTheme _contentAreaTheme(
+      {required Color borderColor, required Color backgroundColor}) {
+    BorderSide borderSide = BorderSide(width: 1, color: borderColor);
     BoxBorder border =
         Border(bottom: borderSide, left: borderSide, right: borderSide);
-    BoxDecoration decoration = BoxDecoration(border: border);
+    BoxDecoration decoration =
+        BoxDecoration(color: backgroundColor, border: border);
     return ContentAreaTheme(decoration: decoration);
   }
 
-  static MenuTheme _menuTheme() {
+  static MenuTheme _menuTheme(
+      {required Color fontColor,
+      required double fontSize,
+      required Color color,
+      required hoverColor,
+      required borderColor}) {
     return MenuTheme(
-        border: Border.all(width: 1, color: Colors.grey),
+        textStyle: TextStyle(fontSize: fontSize, color: fontColor),
+        border: Border.all(width: 1, color: borderColor),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),
-        color: Colors.white,
-        hoverColor: Colors.grey[200],
-        dividerColor: Colors.grey,
+        color: color,
+        hoverColor: hoverColor,
+        dividerColor: borderColor,
         dividerThickness: 1);
   }
 }

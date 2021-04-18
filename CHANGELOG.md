@@ -1,7 +1,8 @@
-## 1.0.0
+## 0.7.0
 
 * Tabs area buttons builder
 * Changes in thematization
+  * *Light* theme renamed to *classic* theme
 
 ## 0.6.0
 
@@ -12,7 +13,7 @@
 * Changes in thematization
 * Adding documentation
 * Menu builder
-* TabbedWiewModel changed to TabbedWiewController
+* *TabbedWiewModel* changed to *TabbedWiewController*
 
 ## 0.4.0
 

@@ -72,7 +72,7 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
       TabData(text: 'Tab 2'),
     ];
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
 
     TabbedWiew tabbedView =
@@ -86,7 +86,7 @@ class CustomTabPageState extends ExampleMultiViewPageState<_View> {
       TabData(text: 'Tab 2'),
     ];
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea.tab
       ..textStyle = TextStyle(fontSize: 20)
       ..verticalAlignment = VerticalAlignment.top;

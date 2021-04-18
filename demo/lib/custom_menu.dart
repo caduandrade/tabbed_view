@@ -42,7 +42,7 @@ class CustomMenuPageState extends ExampleMultiViewPageState<_View> {
       tabs.add(TabData(text: 'Tab $i'));
     }
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
 
     TabbedWiew tabbedView =
         TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
@@ -55,7 +55,7 @@ class CustomMenuPageState extends ExampleMultiViewPageState<_View> {
       tabs.add(TabData(text: 'Tab $i'));
     }
 
-    TabbedViewTheme theme = TabbedViewTheme.light()..menu.maxWidth = 100;
+    TabbedViewTheme theme = TabbedViewTheme.classic()..menu.maxWidth = 100;
 
     TabbedWiew tabbedView =
         TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
@@ -72,7 +72,7 @@ class CustomMenuPageState extends ExampleMultiViewPageState<_View> {
               't fit on the menu')
     ];
 
-    TabbedViewTheme theme = TabbedViewTheme.light()
+    TabbedViewTheme theme = TabbedViewTheme.classic()
       ..menu.ellipsisOverflowText = true;
 
     TabbedWiew tabbedView =

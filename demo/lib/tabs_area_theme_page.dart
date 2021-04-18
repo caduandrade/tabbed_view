@@ -37,7 +37,7 @@ class TabsAreaThemePageState extends ExampleMultiViewPageState<_View> {
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea
       ..initialGap = 20
       ..middleGap = 5

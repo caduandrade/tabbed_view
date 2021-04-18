@@ -2,7 +2,7 @@
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
-![lightcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/light_cut.png)
+![classiccut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_cut.png)
 ![darkcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_cut.png)
 ![mobilecut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_cut.png)
 ![minimalistcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_cut.png)
@@ -14,7 +14,7 @@ The *TabbedViewModel* stores the tab data as name, content, buttons or any dynam
 
 ## Get started
 
-The default theme is *TabbedViewTheme.light()*.
+The *TabbedViewTheme.classic()* method builds the default theme.
 
 ```dart
     List<TabData> tabs = [];
@@ -25,7 +25,7 @@ The default theme is *TabbedViewTheme.light()*.
     TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
 ```
 
-![light](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/light.gif)
+![classic](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
 
 ### Content builder
 
@@ -183,7 +183,7 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 2'),
     ];
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
 
     TabbedWiew tabbedView =
@@ -200,7 +200,7 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 2'),
     ];
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea.tab
       ..textStyle = TextStyle(fontSize: 20)
       ..verticalAlignment = VerticalAlignment.top;
@@ -242,7 +242,7 @@ It allows creating the contents of the tab dynamically during the selection even
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea
       ..initialGap = 20
       ..middleGap = 5
@@ -264,7 +264,7 @@ It allows creating the contents of the tab dynamically during the selection even
       tabs.add(TabData(text: 'Tab $i'));
     }
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea.buttonsArea.hiddenTabsMenuButtonIcon =
         Icons.arrow_drop_down_circle_outlined;
 
@@ -284,7 +284,7 @@ It allows creating the contents of the tab dynamically during the selection even
       tabs.add(TabData(text: 'Tab $i'));
     }
 
-    TabbedViewTheme theme = TabbedViewTheme.light()..menu.maxWidth = 100;
+    TabbedViewTheme theme = TabbedViewTheme.classic()..menu.maxWidth = 100;
 
     TabbedWiew tabbedView =
         TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
@@ -304,7 +304,7 @@ It allows creating the contents of the tab dynamically during the selection even
               't fit on the menu')
     ];
 
-    TabbedViewTheme theme = TabbedViewTheme.light()
+    TabbedViewTheme theme = TabbedViewTheme.classic()
       ..menu.ellipsisOverflowText = true;
 
     TabbedWiew tabbedView =
@@ -314,6 +314,40 @@ It allows creating the contents of the tab dynamically during the selection even
 ![menuellipsis](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_ellipsis.png)
 
 ### Predefined themes
+
+####  Classic theme
+
+```dart
+    List<TabData> tabs = [];
+    for (var i = 1; i < 7; i++) {
+      tabs.add(TabData(text: 'Tab $i', content:  Center(child: Text('Content $i'))));
+    }
+    TabbedWiewController controller = TabbedWiewController(tabs);
+
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: controller,
+        theme: TabbedViewTheme.classic());
+```
+
+![classic2](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
+
+#####  Color set
+
+```dart
+    List<TabData> tabs = [];
+    for (var i = 1; i < 7; i++) {
+      tabs.add(TabData(text: 'Tab $i', content:  Center(child: Text('Content $i'))));
+    }
+    TabbedWiewController controller = TabbedWiewController(tabs);
+
+    TabbedViewTheme theme = TabbedViewTheme.classic(colorSet: Colors.green);
+
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: controller,
+        theme: theme);
+```
+
+![classiccolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_color_set.png)
 
 ####  Dark theme
 
@@ -449,3 +483,8 @@ It is possible to create an entire theme from scratch.
 ```
 
 ![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
+
+## Agenda for the next few days
+
+* Complete documentation and examples to cover all available features.
+* Release the final version (1.0.0). The API may have some small changes.

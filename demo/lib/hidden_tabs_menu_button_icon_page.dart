@@ -16,7 +16,7 @@ class HiddenTabsMenuButtonIconPageState extends ExamplePageState {
       tabs.add(TabData(text: 'Tab $i'));
     }
 
-    TabbedViewTheme theme = TabbedViewTheme.light();
+    TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea.buttonsArea.hiddenTabsMenuButtonIcon =
         Icons.arrow_drop_down_circle_outlined;
 
