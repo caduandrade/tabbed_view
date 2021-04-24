@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Final version
+
 ## 0.7.0
 
 * Tabs area buttons builder

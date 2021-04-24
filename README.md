@@ -61,7 +61,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ## Tab
 
-### Extra button
+### Adding buttons
 
 ```dart
     TabData tab = TabData(text: 'Tab', buttons: [
@@ -483,8 +483,3 @@ It is possible to create an entire theme from scratch.
 ```
 
 ![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
-
-## Agenda for the next few days
-
-* Complete documentation and examples to cover all available features.
-* Release the final version (1.0.0). The API may have some small changes.
