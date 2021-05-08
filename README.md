@@ -8,10 +8,6 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
 ![minimalistcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_cut.png)
 ![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
 
-The *TabbedView* renders the presentation of the model.
-
-The *TabbedViewModel* stores the tab data as name, content, buttons or any dynamic value.
-
 ## Get started
 
 The *TabbedViewTheme.classic()* method builds the default theme.

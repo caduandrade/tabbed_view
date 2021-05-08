@@ -1,3 +1,7 @@
+## 1.0.0+1
+
+* Updating the README
+
 ## 1.0.0
 
 * Final version
