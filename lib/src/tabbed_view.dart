@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:tabbed_view/tabbed_view.dart';
-import 'dart:math' as math;
 
 /// The tab data.
 ///
@@ -776,6 +776,7 @@ class _TabButtonWidget extends StatefulWidget {
 /// The [_TabButtonWidget] state.
 class _TabButtonWidgetState extends State<_TabButtonWidget> {
   bool _hover = false;
+
   @override
   Widget build(BuildContext context) {
     Color color = widget.button.color != null
@@ -904,6 +905,7 @@ class _TabsAreaLayoutElement extends MultiChildRenderObjectElement {
 /// Holds the hidden tab indexes.
 class _HiddenTabs {
   List<int> indexes = [];
+
   bool get hasHiddenTabs => indexes.isNotEmpty;
 }
 
@@ -912,7 +914,7 @@ class _TabsAreaButtonsBoxConstraints extends BoxConstraints {
   _TabsAreaButtonsBoxConstraints({
     required _HiddenTabs hiddenTabs,
     required BoxConstraints constraints,
-  })   : this.hasHiddenTabs = hiddenTabs.hasHiddenTabs,
+  })  : this.hasHiddenTabs = hiddenTabs.hasHiddenTabs,
         super(
             minWidth: constraints.minWidth,
             maxWidth: constraints.maxWidth,
