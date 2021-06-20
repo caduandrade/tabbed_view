@@ -8,6 +8,42 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
 ![minimalistcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_cut.png)
 ![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
 
+
+* [Get started](#get-started)
+  * [Content builder](#content-builder)
+  * [Close button tooltip](#close-button-tooltip)
+* [Tab](#tab)
+  * [Adding buttons](#adding-buttons)
+    * [Overriding theme color](#overriding-theme-color)
+  * [Removing the close button](#removing-the-close-button)
+  * [Close listener](#close-listener)
+  * [Selection listener](#selection-listener)
+* [Tabs area](#tabs-area)
+  * [Tabs area buttons](#tabs-area-buttons)
+* [Themes](#themes)
+  * [Themes - Tab](#themes---tab)
+    * [Text style](#text-style)
+    * [Alignment](#alignment)
+  * [Themes - Tabs area](#themes---tabs-area)
+    * [Color](#color)
+    * [Tab gaps](#tab-gaps)
+    * [Buttons area](#buttons-area)
+      * [Button icon for the hidden tabs menu](#button-icon-for-the-hidden-tabs-menu)
+  * [Themes - Menu](#themes---menu)
+    * [Max width](#max-width)
+    * [Ellipsis on overflow text](#ellipsis-on-overflow-text)
+  * [Predefined themes](#predefinedtthemes)
+    *  [Classic theme](#classic-theme)
+      *  [Classic theme - Color set](#classic-theme---color-set)
+    *  [Dark theme](#dark-theme)
+      *  [Dark theme - Color set](#dark-theme---color-set)
+    *  [Mobile theme](#mobilettheme)
+      *  [Mobile theme - Color set](#mobile-theme---color-set)
+      *  [Mobile theme - Highlighted tab color](#mobile-theme---highlighted-tab-color)
+    *  [Minimalist theme](#minimalistttheme)
+      *  [Minimalist theme - Color set](#minimalistitheme---color-set)
+  * [Creating new theme](#creating-new-theme)
+
 ## Get started
 
 The *TabbedViewTheme.classic()* method builds the default theme.
@@ -137,7 +173,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ## Tabs area
 
-### Buttons
+### Tabs area buttons
 
 ```dart
     TabbedWiewController controller = TabbedWiewController([]);
@@ -169,7 +205,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ## Themes
 
-### Tab
+### Themes - Tab
 
 #### Text style
 
@@ -207,7 +243,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![topalignment](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/top_alignment.png)
 
-### Tabs area
+### Themes - Tabs area
 
 #### Color
 
@@ -270,7 +306,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![hiddentabsbuttonicon](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/hidden_tabs_button_icon.png)
 
-### Menu
+### Themes - Menu
 
 #### Max width
 
@@ -327,7 +363,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![classic2](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
 
-#####  Color set
+#####  Classic theme - Color set
 
 ```dart
     List<TabData> tabs = [];
@@ -370,7 +406,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![dark](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
 
-#####  Color set
+#####  Dark theme - Color set
 
 ```dart
     List<TabData> tabs = [];
@@ -404,7 +440,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![mobile](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
 
-#####  Color set
+#####  Mobile theme - Color set
 
 ```dart
     TabbedViewTheme theme = TabbedViewTheme.mobile(colorSet: Colors.blueGrey);
@@ -413,7 +449,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![mobilecolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_color_set.png)
 
-#####  Highlighted tab color
+#####  Mobile theme - Highlighted tab color
 
 ```dart
     TabbedViewTheme theme =
@@ -432,7 +468,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![minimalist](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist.gif)
 
-#####  Color set
+#####  Minimalist theme - Color set
 
 ```dart
     TabbedWiew tabbedView = TabbedWiew(
