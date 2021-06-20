@@ -8,7 +8,6 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
 ![minimalistcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_cut.png)
 ![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
 
-
 * [Get started](#get-started)
   * [Content builder](#content-builder)
   * [Close button tooltip](#close-button-tooltip)
