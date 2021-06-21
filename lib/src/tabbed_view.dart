@@ -32,7 +32,7 @@ class TabData {
       this.content,
       this.closable = true});
 
-  final dynamic? value;
+  final dynamic value;
   String text;
   List<TabButton>? buttons;
   Widget? content;
