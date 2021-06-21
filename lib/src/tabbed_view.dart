@@ -1276,7 +1276,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         RenderBox lastTab = visibleTabs.last;
         _TabsAreaLayoutParentData tabParentData =
             lastTab.tabsAreaLayoutParentData();
-        lastX = tabParentData.offset.dx + lastTab.size.width;
+        lastX = offset.dx + tabParentData.offset.dx + lastTab.size.width;
       } else {
         lastX = offset.dx + tabsAreaTheme.initialGap;
       }

@@ -1,3 +1,8 @@
+## 1.0.1
+
+* Bug fixes
+  * Divisor between tabs and content starting drawing at wrong offset
+
 ## 1.0.0+2
 
 * Updating the README
