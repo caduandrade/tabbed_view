@@ -1,5 +1,6 @@
-## 1.0.1
+## 1.1.0
 
+* Draggable tab builder
 * Bug fixes
   * Divisor between tabs and content starting drawing at wrong offset
 

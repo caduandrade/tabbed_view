@@ -1,5 +1,7 @@
 [![pub](https://img.shields.io/pub/v/tabbed_view.svg)](https://pub.dev/packages/tabbed_view) [![pub2](https://img.shields.io/badge/Flutter-%E2%9D%A4-red)](https://flutter.dev/)
 
+# Tabbbed view
+
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
 ![classiccut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_cut.png)
@@ -17,6 +19,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
   * [Removing the close button](#removing-the-close-button)
   * [Close listener](#close-listener)
   * [Selection listener](#selection-listener)
+  * [Draggable](#draggable-tab-builder)
 * [Tabs area](#tabs-area)
   * [Tabs area buttons](#tabs-area-buttons)
 * [Themes](#themes)
@@ -168,6 +171,32 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedWiew tabbedView = TabbedWiew(
         controller: TabbedWiewController(tabs),
         onTabSelection: _onTabSelection);
+```
+
+### Draggable tab builder
+
+```dart
+    List<TabData> tabs = [];
+    for (var i = 1; i < 7; i++) {
+      Widget tabContent = Center(child: Text('Content $i'));
+      tabs.add(TabData(text: 'Tab $i', content: tabContent));
+    }
+    TabbedWiew tabbedView = TabbedWiew(
+        controller: TabbedWiewController(tabs),
+        draggableTabBuilder: (int tabIndex, TabData tab, Widget tabWidget) {
+          return Draggable<String>(
+              child: tabWidget,
+              feedback: Material(
+                  child: Container(
+                      child: Text(tab.text),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(border: Border.all()))),
+              data: tab.text,
+              dragAnchorStrategy: (Draggable<Object> draggable,
+                  BuildContext context, Offset position) {
+                return Offset.zero;
+              });
+        });
 ```
 
 ## Tabs area

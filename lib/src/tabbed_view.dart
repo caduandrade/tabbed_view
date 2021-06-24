@@ -201,7 +201,8 @@ class _TabbedWiewData {
       this.onTabSelection,
       required this.selectToEnableButtons,
       this.closeButtonTooltip,
-      this.tabsAreaButtonsBuilder});
+      this.tabsAreaButtonsBuilder,
+      this.draggableTabBuilder});
 
   final TabbedWiewController controller;
   final TabbedViewTheme theme;
@@ -211,6 +212,7 @@ class _TabbedWiewData {
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
   final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
+  final DraggableTabBuilder? draggableTabBuilder;
 }
 
 /// Widget inspired by the classic Desktop-style tab component.
@@ -230,7 +232,8 @@ class TabbedWiew extends StatefulWidget {
       OnTabSelection? onTabSelection,
       bool selectToEnableButtons = true,
       String? closeButtonTooltip,
-      TabsAreaButtonsBuilder? tabsAreaButtonsBuilder})
+      TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
+      DraggableTabBuilder? draggableTabBuilder})
       : this._data = _TabbedWiewData(
             controller: controller,
             theme: theme == null ? TabbedViewTheme.classic() : theme,
@@ -239,7 +242,8 @@ class TabbedWiew extends StatefulWidget {
             onTabSelection: onTabSelection,
             selectToEnableButtons: selectToEnableButtons,
             closeButtonTooltip: closeButtonTooltip,
-            tabsAreaButtonsBuilder: tabsAreaButtonsBuilder);
+            tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
+            draggableTabBuilder: draggableTabBuilder);
 
   final _TabbedWiewData _data;
 
@@ -730,6 +734,9 @@ class _TabWidget extends StatelessWidget {
         onExit: (details) => updateHighlightedIndex(null),
         child: gestureDetector);
 
+    if (data.draggableTabBuilder != null) {
+      return data.draggableTabBuilder!(index, tab, mouseRegion);
+    }
     return mouseRegion;
   }
 
@@ -1312,6 +1319,10 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     return false;
   }
 }
+
+/// Defines a draggable builder for each tab.
+typedef DraggableTabBuilder = Draggable Function(
+    int tabIndex, TabData tab, Widget tabWidget);
 
 /// Utility extension to facilitate obtaining parent data.
 extension _TabsAreaLayoutParentDataGetter on RenderObject {

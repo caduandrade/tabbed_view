@@ -5,6 +5,7 @@ import 'package:demo/close_button_tooltip_page.dart';
 import 'package:demo/content_builder_page.dart';
 import 'package:demo/custom_menu.dart';
 import 'package:demo/dark_theme_page.dart';
+import 'package:demo/draggable_tab_page.dart';
 import 'package:demo/from_the_scratch_page.dart';
 import 'package:demo/hidden_tabs_menu_button_icon_page.dart';
 import 'package:demo/tab_close_listener_page.dart';
@@ -34,6 +35,7 @@ class Example {
   static const Example new_model = const Example('New model');
   static const Example change_tab = const Example('Change tab');
   static const Example add_tab = const Example('Add tab');
+  static const Example draggable_tab = const Example('Draggable tab');
   static const Example tabs_area_theme = const Example('Tabs area theme');
   static const Example custom_tab = const Example('Custom tab');
   static const Example custom_menu = const Example('Custom menu');
@@ -56,6 +58,7 @@ class Example {
     Example.new_model,
     Example.change_tab,
     Example.add_tab,
+    Example.draggable_tab,
     Example.tabs_area_theme,
     Example.mobile_theme,
     Example.minimalist_theme,
@@ -158,6 +161,8 @@ class _TabbedViewDemoPageState extends State<TabbedViewDemoPage> {
       example = ChangeTabPage();
     } else if (_currentExample == Example.add_tab) {
       example = AddTabPage();
+    } else if (_currentExample == Example.draggable_tab) {
+      example = DraggableTabPage();
     } else if (_currentExample == Example.tabs_area_theme) {
       example = TabsAreaThemePage();
     } else if (_currentExample == Example.mobile_theme) {
