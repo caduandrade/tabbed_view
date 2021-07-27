@@ -39,10 +39,10 @@ class ClassicThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: controller, theme: TabbedViewTheme.classic());
+    TabbedView tabbedView =
+        TabbedView(controller: controller, theme: TabbedViewTheme.classic());
 
     return tabbedView;
   }
@@ -53,11 +53,11 @@ class ClassicThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
 
     TabbedViewTheme theme = TabbedViewTheme.classic(colorSet: Colors.green);
 
-    TabbedWiew tabbedView = TabbedWiew(controller: controller, theme: theme);
+    TabbedView tabbedView = TabbedView(controller: controller, theme: theme);
 
     return tabbedView;
   }

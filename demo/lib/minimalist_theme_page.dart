@@ -39,9 +39,9 @@ class MinimalistThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: controller, theme: TabbedViewTheme.minimalist());
+    TabbedViewController controller = TabbedViewController(tabs);
+    TabbedView tabbedView =
+        TabbedView(controller: controller, theme: TabbedViewTheme.minimalist());
     return tabbedView;
   }
 
@@ -51,8 +51,8 @@ class MinimalistThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedViewController controller = TabbedViewController(tabs);
+    TabbedView tabbedView = TabbedView(
         controller: controller,
         theme: TabbedViewTheme.minimalist(colorSet: Colors.blue));
     return tabbedView;

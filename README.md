@@ -56,7 +56,7 @@ The *TabbedViewTheme.classic()* method builds the default theme.
       Widget tabContent = Center(child: Text('Content $i'));
       tabs.add(TabData(text: 'Tab $i', content: tabContent));
     }
-    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
 ![classic](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
@@ -72,8 +72,8 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 3')
     ];
 
-    TabbedWiew tabbedView = TabbedWiew(
-        controller: TabbedWiewController(tabs),
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs),
         contentBuilder: (BuildContext context, int tabIndex) {
           int i = tabIndex + 1;
           return Center(child: Text('Content $i'));
@@ -88,8 +88,8 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')
     ];
-    TabbedWiew tabbedView = TabbedWiew(
-        controller: TabbedWiewController(tabs),
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs),
         closeButtonTooltip: 'Click here to close the tab');
 ```
 
@@ -101,7 +101,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabData tab = TabData(text: 'Tab', buttons: [
       TabButton(icon: Icons.star, onPressed: () => print('Hello!'))
     ]);
-    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController([tab]));
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController([tab]));
 ```
 
 ![tabbutton](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
@@ -118,7 +118,7 @@ It allows creating the contents of the tab dynamically during the selection even
             onPressed: () => print('Hello!'))
       ])
     ];
-    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
 ![tabbuttoncolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button_color.png)
@@ -130,7 +130,7 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab'),
       TabData(text: 'Non-closable tab', closable: false)
     ];
-    TabbedWiew tabbedView = TabbedWiew(controller: TabbedWiewController(tabs));
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
 ![nonclosabletab](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/nonclosable_tab.png)
@@ -152,8 +152,8 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')
     ];
-    TabbedWiew tabbedView = TabbedWiew(
-        controller: TabbedWiewController(tabs), onTabClosing: _onTabClosing);
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs), onTabClosing: _onTabClosing);
 ```
 
 ### Selection listener
@@ -168,8 +168,8 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')
     ];
-    TabbedWiew tabbedView = TabbedWiew(
-        controller: TabbedWiewController(tabs),
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs),
         onTabSelection: _onTabSelection);
 ```
 
@@ -181,8 +181,8 @@ It allows creating the contents of the tab dynamically during the selection even
       Widget tabContent = Center(child: Text('Content $i'));
       tabs.add(TabData(text: 'Tab $i', content: tabContent));
     }
-    TabbedWiew tabbedView = TabbedWiew(
-        controller: TabbedWiewController(tabs),
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs),
         draggableTabBuilder: (int tabIndex, TabData tab, Widget tabWidget) {
           return Draggable<String>(
               child: tabWidget,
@@ -204,9 +204,9 @@ It allows creating the contents of the tab dynamically during the selection even
 ### Tabs area buttons
 
 ```dart
-    TabbedWiewController controller = TabbedWiewController([]);
+    TabbedViewController controller = TabbedViewController([]);
 
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller,
         tabsAreaButtonsBuilder: (context, tabsCount) {
           List<TabButton> buttons = [];
@@ -246,8 +246,8 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedViewTheme theme = TabbedViewTheme.classic();
     theme.tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
 ```
 
 ![tabtextstyle](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_text_style.png)
@@ -265,8 +265,8 @@ It allows creating the contents of the tab dynamically during the selection even
       ..textStyle = TextStyle(fontSize: 20)
       ..verticalAlignment = VerticalAlignment.top;
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
 ```
 
 ![topalignment](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/top_alignment.png)
@@ -283,8 +283,8 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedViewTheme theme = TabbedViewTheme.minimalist();
     theme.tabsArea.color = Colors.green[100];
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
 ```
 
 ![tabsareacolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_color.png)
@@ -308,8 +308,8 @@ It allows creating the contents of the tab dynamically during the selection even
       ..middleGap = 5
       ..minimalFinalGap = 5;
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
 ```
 
 ![customgap](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
@@ -328,8 +328,8 @@ It allows creating the contents of the tab dynamically during the selection even
     theme.tabsArea.buttonsArea.hiddenTabsMenuButtonIcon =
         Icons.arrow_drop_down_circle_outlined;
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
 ```
 
 ![hiddentabsbuttonicon](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/hidden_tabs_button_icon.png)
@@ -346,8 +346,8 @@ It allows creating the contents of the tab dynamically during the selection even
 
     TabbedViewTheme theme = TabbedViewTheme.classic()..menu.maxWidth = 100;
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
 ```
 
 ![menumaxwidth](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_max_width.png)
@@ -367,8 +367,8 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedViewTheme theme = TabbedViewTheme.classic()
       ..menu.ellipsisOverflowText = true;
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
 ```
 
 ![menuellipsis](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_ellipsis.png)
@@ -382,9 +382,9 @@ It allows creating the contents of the tab dynamically during the selection even
     for (var i = 1; i < 7; i++) {
       tabs.add(TabData(text: 'Tab $i', content:  Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
 
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller,
         theme: TabbedViewTheme.classic());
 ```
@@ -398,11 +398,11 @@ It allows creating the contents of the tab dynamically during the selection even
     for (var i = 1; i < 7; i++) {
       tabs.add(TabData(text: 'Tab $i', content:  Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
 
     TabbedViewTheme theme = TabbedViewTheme.classic(colorSet: Colors.green);
 
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller,
         theme: theme);
 ```
@@ -416,7 +416,7 @@ It allows creating the contents of the tab dynamically during the selection even
     for (var i = 1; i < 7; i++) {
       tabs.add(TabData(text: 'Tab $i'));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
 
     var contentBuilder = (BuildContext context, int index) {
       int i = index + 1;
@@ -424,7 +424,7 @@ It allows creating the contents of the tab dynamically during the selection even
       return Center(child: text);
     };
 
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller,
         contentBuilder: contentBuilder,
         theme: TabbedViewTheme.dark());
@@ -441,7 +441,7 @@ It allows creating the contents of the tab dynamically during the selection even
     for (var i = 1; i < 7; i++) {
       tabs.add(TabData(text: 'Tab $i'));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
 
     var contentBuilder = (BuildContext context, int index) {
       int i = index + 1;
@@ -451,7 +451,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
     TabbedViewTheme theme = TabbedViewTheme.dark(colorSet: Colors.indigo);
 
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller, contentBuilder: contentBuilder, theme: theme);
 
     Container container = Container(child: tabbedView, color: Colors.black12);
@@ -462,8 +462,8 @@ It allows creating the contents of the tab dynamically during the selection even
 ####  Mobile theme
 
 ```dart
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: controller, theme: TabbedViewTheme.mobile());
+    TabbedView tabbedView =
+        TabbedView(controller: controller, theme: TabbedViewTheme.mobile());
 ```
 
 ![mobile](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
@@ -472,7 +472,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ```dart
     TabbedViewTheme theme = TabbedViewTheme.mobile(colorSet: Colors.blueGrey);
-    TabbedWiew tabbedView = TabbedWiew(controller: controller, theme: theme);
+    TabbedView tabbedView = TabbedView(controller: controller, theme: theme);
 ```
 
 ![mobilecolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_color_set.png)
@@ -482,7 +482,7 @@ It allows creating the contents of the tab dynamically during the selection even
 ```dart
     TabbedViewTheme theme =
         TabbedViewTheme.mobile(highlightedTabColor: Colors.green[700]!);
-    TabbedWiew tabbedView = TabbedWiew(controller: controller, theme: theme);
+    TabbedView tabbedView = TabbedView(controller: controller, theme: theme);
 ```
 
 ![mobilehighlightedcolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_highlighted_color.png)
@@ -490,8 +490,8 @@ It allows creating the contents of the tab dynamically during the selection even
 ####  Minimalist theme
 
 ```dart
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: controller, theme: TabbedViewTheme.minimalist());
+    TabbedView tabbedView =
+        TabbedView(controller: controller, theme: TabbedViewTheme.minimalist());
 ```
 
 ![minimalist](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist.gif)
@@ -499,7 +499,7 @@ It allows creating the contents of the tab dynamically during the selection even
 #####  Minimalist theme - Color set
 
 ```dart
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller,
         theme: TabbedViewTheme.minimalist(colorSet: Colors.blue));
 ```
@@ -538,8 +538,8 @@ It is possible to create an entire theme from scratch.
       ..highlightedStatus.decoration =
           BoxDecoration(color: Colors.green[50], borderRadius: borderRadius);
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
 ```
 
 ![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)

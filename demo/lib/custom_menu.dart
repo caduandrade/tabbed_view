@@ -44,8 +44,8 @@ class CustomMenuPageState extends ExampleMultiViewPageState<_View> {
 
     TabbedViewTheme theme = TabbedViewTheme.classic();
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
     return tabbedView;
   }
 
@@ -57,8 +57,8 @@ class CustomMenuPageState extends ExampleMultiViewPageState<_View> {
 
     TabbedViewTheme theme = TabbedViewTheme.classic()..menu.maxWidth = 100;
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
     return tabbedView;
   }
 
@@ -75,8 +75,8 @@ class CustomMenuPageState extends ExampleMultiViewPageState<_View> {
     TabbedViewTheme theme = TabbedViewTheme.classic()
       ..menu.ellipsisOverflowText = true;
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
     return tabbedView;
   }
 }

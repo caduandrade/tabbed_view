@@ -38,7 +38,7 @@ class DarkThemePageState extends ExampleMultiViewPageState<_View> {
     for (var i = 1; i < 7; i++) {
       tabs.add(TabData(text: 'Tab $i'));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
 
     var contentBuilder = (BuildContext context, int index) {
       int i = index + 1;
@@ -46,7 +46,7 @@ class DarkThemePageState extends ExampleMultiViewPageState<_View> {
       return Center(child: text);
     };
 
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller,
         contentBuilder: contentBuilder,
         theme: TabbedViewTheme.dark());
@@ -61,7 +61,7 @@ class DarkThemePageState extends ExampleMultiViewPageState<_View> {
     for (var i = 1; i < 7; i++) {
       tabs.add(TabData(text: 'Tab $i'));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
 
     var contentBuilder = (BuildContext context, int index) {
       int i = index + 1;
@@ -71,7 +71,7 @@ class DarkThemePageState extends ExampleMultiViewPageState<_View> {
 
     TabbedViewTheme theme = TabbedViewTheme.dark(colorSet: Colors.indigo);
 
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller, contentBuilder: contentBuilder, theme: theme);
 
     Container container = Container(child: tabbedView, color: Colors.black12);

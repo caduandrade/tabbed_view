@@ -1,3 +1,8 @@
+## 1.1.1
+
+* Fixing class name (how embarrassing)
+  * Renaming *TabbedWiew* to *TabbedView*
+  
 ## 1.1.0+1
 
 * Updating the README

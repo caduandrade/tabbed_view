@@ -8,18 +8,18 @@ class AddTabPage extends StatefulWidget {
 }
 
 class AddTabPageState extends ExamplePageState {
-  late TabbedWiewController _controller;
+  late TabbedViewController _controller;
   int _lastTabIndex = 1;
 
   @override
   void initState() {
     super.initState();
-    _controller = TabbedWiewController([]);
+    _controller = TabbedViewController([]);
   }
 
   @override
   Widget buildContent() {
-    TabbedWiew tabbedView = TabbedWiew(controller: _controller);
+    TabbedView tabbedView = TabbedView(controller: _controller);
     return tabbedView;
   }
 

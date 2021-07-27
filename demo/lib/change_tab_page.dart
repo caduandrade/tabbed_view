@@ -8,7 +8,7 @@ class ChangeTabPage extends StatefulWidget {
 }
 
 class ChangeTabPageState extends ExamplePageState {
-  late TabbedWiewController _controller;
+  late TabbedViewController _controller;
 
   @override
   void initState() {
@@ -19,12 +19,12 @@ class ChangeTabPageState extends ExamplePageState {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    _controller = TabbedWiewController(tabs);
+    _controller = TabbedViewController(tabs);
   }
 
   @override
   Widget buildContent() {
-    TabbedWiew tabbedView = TabbedWiew(controller: _controller);
+    TabbedView tabbedView = TabbedView(controller: _controller);
     return tabbedView;
   }
 

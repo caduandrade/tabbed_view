@@ -43,9 +43,9 @@ class MobileThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: controller, theme: TabbedViewTheme.mobile());
+    TabbedViewController controller = TabbedViewController(tabs);
+    TabbedView tabbedView =
+        TabbedView(controller: controller, theme: TabbedViewTheme.mobile());
     return tabbedView;
   }
 
@@ -55,9 +55,9 @@ class MobileThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
     TabbedViewTheme theme = TabbedViewTheme.mobile(colorSet: Colors.blueGrey);
-    TabbedWiew tabbedView = TabbedWiew(controller: controller, theme: theme);
+    TabbedView tabbedView = TabbedView(controller: controller, theme: theme);
     return tabbedView;
   }
 
@@ -67,10 +67,10 @@ class MobileThemePageState extends ExampleMultiViewPageState<_View> {
       tabs.add(
           TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
     }
-    TabbedWiewController controller = TabbedWiewController(tabs);
+    TabbedViewController controller = TabbedViewController(tabs);
     TabbedViewTheme theme =
         TabbedViewTheme.mobile(highlightedTabColor: Colors.green[700]!);
-    TabbedWiew tabbedView = TabbedWiew(controller: controller, theme: theme);
+    TabbedView tabbedView = TabbedView(controller: controller, theme: theme);
     return tabbedView;
   }
 }

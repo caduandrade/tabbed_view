@@ -10,9 +10,9 @@ class TabsAreaButtonsPage extends StatefulWidget {
 class TabsAreaButtonsPageState extends ExamplePageState {
   @override
   Widget buildContent() {
-    TabbedWiewController controller = TabbedWiewController([]);
+    TabbedViewController controller = TabbedViewController([]);
 
-    TabbedWiew tabbedView = TabbedWiew(
+    TabbedView tabbedView = TabbedView(
         controller: controller,
         tabsAreaButtonsBuilder: (context, tabsCount) {
           List<TabButton> buttons = [];

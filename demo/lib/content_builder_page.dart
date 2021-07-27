@@ -16,8 +16,8 @@ class ContentBuilderPageState extends ExamplePageState {
       TabData(text: 'Tab 3')
     ];
 
-    TabbedWiew tabbedView = TabbedWiew(
-        controller: TabbedWiewController(tabs),
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs),
         contentBuilder: (BuildContext context, int tabIndex) {
           int i = tabIndex + 1;
           return Center(child: Text('Content $i'));

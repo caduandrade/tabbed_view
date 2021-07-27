@@ -15,8 +15,8 @@ class DraggableTabPageState extends ExamplePageState {
       Widget tabContent = Center(child: Text('Content $i'));
       tabs.add(TabData(text: 'Tab $i', content: tabContent));
     }
-    TabbedWiew tabbedView = TabbedWiew(
-        controller: TabbedWiewController(tabs),
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs),
         draggableTabBuilder: (int tabIndex, TabData tab, Widget tabWidget) {
           return Draggable<String>(
               child: tabWidget,

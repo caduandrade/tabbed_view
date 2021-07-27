@@ -43,8 +43,8 @@ class TabsAreaThemePageState extends ExampleMultiViewPageState<_View> {
       ..middleGap = 5
       ..minimalFinalGap = 5;
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
     return tabbedView;
   }
 
@@ -54,8 +54,8 @@ class TabsAreaThemePageState extends ExampleMultiViewPageState<_View> {
     TabbedViewTheme theme = TabbedViewTheme.minimalist();
     theme.tabsArea.color = Colors.green[100];
 
-    TabbedWiew tabbedView =
-        TabbedWiew(controller: TabbedWiewController(tabs), theme: theme);
+    TabbedView tabbedView =
+        TabbedView(controller: TabbedViewController(tabs), theme: theme);
     return tabbedView;
   }
 }

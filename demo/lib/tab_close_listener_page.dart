@@ -24,8 +24,8 @@ class TabCloseListenerPageState extends ExamplePageState {
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')
     ];
-    TabbedWiew tabbedView = TabbedWiew(
-        controller: TabbedWiewController(tabs), onTabClosing: _onTabClosing);
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs), onTabClosing: _onTabClosing);
     return tabbedView;
   }
 }

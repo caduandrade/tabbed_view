@@ -1,188 +1,16 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/tabbed_view.dart';
-
-/// The tab data.
-///
-/// The text displayed on the tab is defined by [text] parameter.
-///
-/// The optional [value] parameter allows associate the tab to any value.
-///
-/// The optional [content] parameter defines the content of the tab.
-///
-/// The [closable] parameter defines whether the Close button is visible.
-///
-/// The [buttons] parameter allows you to define extra buttons in addition
-/// to the Close button.
-///
-/// See also:
-///
-/// * [TabbedWiew.contentBuilder]
-class TabData {
-  TabData(
-      {this.value,
-      required this.text,
-      this.buttons,
-      this.content,
-      this.closable = true});
-
-  final dynamic value;
-  String text;
-  List<TabButton>? buttons;
-  Widget? content;
-  bool closable;
-}
-
-/// Configures a tab button.
-class TabButton {
-  TabButton(
-      {required this.icon,
-      this.color,
-      this.hoverColor,
-      this.disabledColor,
-      this.onPressed,
-      this.menuBuilder,
-      this.toolTip});
-
-  final IconData icon;
-  final Color? color;
-  final Color? hoverColor;
-  final Color? disabledColor;
-  final VoidCallback? onPressed;
-  final TabbedWiewMenuBuilder? menuBuilder;
-  final String? toolTip;
-}
-
-/// Menu item
-class TabbedWiewMenuItem {
-  TabbedWiewMenuItem({required this.text, this.onSelection});
-
-  final String text;
-  final Function? onSelection;
-}
 
 /// Tabs area buttons builder
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
     BuildContext context, int tabsCount);
-
-/// Menu builder
-typedef TabbedWiewMenuBuilder = List<TabbedWiewMenuItem> Function(
-    BuildContext context);
-
-/// The [TabbedWiew] controller.
-///
-/// Stores tabs and selection tab index.
-///
-/// When a property is changed, the [TabbedWiew] is notified and updated appropriately.
-///
-/// Remember to dispose of the [TabbedWiew] when it is no longer needed. This will ensure we discard any resources used by the object.
-class TabbedWiewController extends ChangeNotifier {
-  factory TabbedWiewController(List<TabData> tabs) {
-    return TabbedWiewController._(tabs);
-  }
-
-  TabbedWiewController._(this._tabs) {
-    if (_tabs.length > 0) {
-      _selectedIndex = 0;
-    }
-  }
-
-  final List<TabData> _tabs;
-
-  int? _selectedIndex;
-
-  /// The menu builder.
-  TabbedWiewMenuBuilder? _menuBuilder;
-
-  UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
-
-  /// The selected tab index
-  int? get selectedIndex => _selectedIndex;
-
-  _updateMenu(TabbedWiewMenuBuilder menuBuilder) {
-    _menuBuilder = menuBuilder;
-    notifyListeners();
-  }
-
-  _removeMenu() {
-    _menuBuilder = null;
-    notifyListeners();
-  }
-
-  /// Changes the index of the selection and notifies.
-  set selectedIndex(int? tabIndex) {
-    if (tabIndex != null) {
-      _validateIndex(tabIndex);
-    }
-    _selectedIndex = tabIndex;
-    _menuBuilder = null;
-    notifyListeners();
-  }
-
-  /// Inserts [TabData] at position [index] in the [tabs].
-  ///
-  /// The [index] value must be non-negative and no greater than [tabs.length].
-  void insertTab(int index, TabData tab) {
-    _tabs.insert(index, tab);
-    _afterIncTabs();
-  }
-
-  /// Adds multiple [TabData].
-  addTabs(Iterable<TabData> iterable) {
-    _tabs.addAll(iterable);
-    _afterIncTabs();
-  }
-
-  /// Adds a [TabData].
-  addTab(TabData tab) {
-    _tabs.add(tab);
-    _afterIncTabs();
-  }
-
-  /// Method that should be used after adding a tab.
-  /// Updates the status and notifies.
-  _afterIncTabs() {
-    if (_tabs.length == 1) {
-      _selectedIndex = 0;
-    }
-    _menuBuilder = null;
-    notifyListeners();
-  }
-
-  /// Removes a tab.
-  removeTab(int tabIndex) {
-    _validateIndex(tabIndex);
-    _tabs.removeAt(tabIndex);
-    if (_tabs.isEmpty) {
-      _selectedIndex = null;
-    } else if (_selectedIndex != null &&
-        (_selectedIndex == tabIndex || _selectedIndex! >= _tabs.length)) {
-      _selectedIndex = 0;
-    }
-    _menuBuilder = null;
-    notifyListeners();
-  }
-
-  /// Removes all tabs.
-  removeTabs() {
-    _tabs.clear();
-    _selectedIndex = null;
-    _menuBuilder = null;
-    notifyListeners();
-  }
-
-  _validateIndex(int tabIndex) {
-    if (tabIndex < 0 || tabIndex >= _tabs.length) {
-      throw IndexError(tabIndex, _tabs, 'tabIndex');
-    }
-  }
-}
 
 /// Event that will be triggered when starting the tab closing.
 /// The return indicates whether the tab can be closed.
@@ -192,8 +20,8 @@ typedef OnTabClosing = bool Function(int tabIndex);
 typedef OnTabSelection = Function(int? newTabIndex);
 
 /// Propagates parameters to internal components.
-class _TabbedWiewData {
-  _TabbedWiewData(
+class _TabbedViewData {
+  _TabbedViewData(
       {required this.controller,
       required this.theme,
       this.contentBuilder,
@@ -204,7 +32,7 @@ class _TabbedWiewData {
       this.tabsAreaButtonsBuilder,
       this.draggableTabBuilder});
 
-  final TabbedWiewController controller;
+  final TabbedViewController controller;
   final TabbedViewTheme theme;
   final IndexedWidgetBuilder? contentBuilder;
   final OnTabClosing? onTabClosing;
@@ -223,9 +51,9 @@ class _TabbedWiewData {
 /// * [selectToEnableButtons]: allows buttons to be clicked only if the tab is
 ///   selected. The default value is [TRUE].
 /// * [closeButtonTooltip]: optional tooltip for the close button.
-class TabbedWiew extends StatefulWidget {
-  TabbedWiew(
-      {required TabbedWiewController controller,
+class TabbedView extends StatefulWidget {
+  TabbedView(
+      {required TabbedViewController controller,
       TabbedViewTheme? theme,
       IndexedWidgetBuilder? contentBuilder,
       OnTabClosing? onTabClosing,
@@ -234,7 +62,7 @@ class TabbedWiew extends StatefulWidget {
       String? closeButtonTooltip,
       TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
       DraggableTabBuilder? draggableTabBuilder})
-      : this._data = _TabbedWiewData(
+      : this._data = _TabbedViewData(
             controller: controller,
             theme: theme == null ? TabbedViewTheme.classic() : theme,
             contentBuilder: contentBuilder,
@@ -245,14 +73,14 @@ class TabbedWiew extends StatefulWidget {
             tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
             draggableTabBuilder: draggableTabBuilder);
 
-  final _TabbedWiewData _data;
+  final _TabbedViewData _data;
 
   @override
-  State<StatefulWidget> createState() => _TabbedWiewState();
+  State<StatefulWidget> createState() => _TabbedViewState();
 }
 
-/// The [TabbedWiew] state.
-class _TabbedWiewState extends State<TabbedWiew> {
+/// The [TabbedView] state.
+class _TabbedViewState extends State<TabbedView> {
   int? _lastSelectedIndex;
 
   @override
@@ -263,7 +91,7 @@ class _TabbedWiewState extends State<TabbedWiew> {
   }
 
   @override
-  void didUpdateWidget(covariant TabbedWiew oldWidget) {
+  void didUpdateWidget(covariant TabbedView oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget._data.controller != oldWidget._data.controller) {
       oldWidget._data.controller.removeListener(_rebuild);
@@ -279,7 +107,7 @@ class _TabbedWiewState extends State<TabbedWiew> {
     return CustomMultiChildLayout(children: [
       LayoutId(id: 1, child: tabArea),
       LayoutId(id: 2, child: contentArea)
-    ], delegate: _TabbedWiewLayout());
+    ], delegate: _TabbedViewLayout());
   }
 
   _rebuild() {
@@ -296,15 +124,6 @@ class _TabbedWiewState extends State<TabbedWiew> {
     });
   }
 
-  _invertMenuPopupFor(TabButton button) {
-    TabbedWiewController controller = widget._data.controller;
-    if (controller._menuBuilder == null && button.menuBuilder != null) {
-      controller._updateMenu(button.menuBuilder!);
-    } else {
-      controller._removeMenu();
-    }
-  }
-
   @override
   void dispose() {
     widget._data.controller.removeListener(_rebuild);
@@ -312,8 +131,8 @@ class _TabbedWiewState extends State<TabbedWiew> {
   }
 }
 
-// Layout delegate for [TabbedWiew]
-class _TabbedWiewLayout extends MultiChildLayoutDelegate {
+// Layout delegate for [TabbedView]
+class _TabbedViewLayout extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
     Size childSize = layoutChild(1, BoxConstraints.tightFor(width: size.width));
@@ -333,8 +152,8 @@ class _TabbedWiewLayout extends MultiChildLayoutDelegate {
 class _TabbedViewMenuWidget extends StatefulWidget {
   const _TabbedViewMenuWidget({required this.controller, required this.data});
 
-  final TabbedWiewController controller;
-  final _TabbedWiewData data;
+  final TabbedViewController controller;
+  final _TabbedViewData data;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewMenuWidgetState();
@@ -345,7 +164,7 @@ class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
   @override
   Widget build(BuildContext context) {
     MenuTheme menuTheme = widget.data.theme.menu;
-    List<TabbedWiewMenuItem> items = widget.controller._menuBuilder!(context);
+    List<TabbedViewMenuItem> items = widget.controller.menuBuilder!(context);
     bool hasDivider =
         menuTheme.dividerThickness > 0 && menuTheme.dividerColor != null;
     int itemCount = items.length;
@@ -374,7 +193,7 @@ class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
                           : null)),
               hoverColor: menuTheme.hoverColor,
               onTap: () {
-                widget.controller._removeMenu();
+                widget.controller.removeMenu();
                 Function? onSelection = items[itemIndex].onSelection;
                 if (onSelection != null) {
                   onSelection();
@@ -398,11 +217,11 @@ class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
 class _ContentArea extends StatelessWidget {
   _ContentArea({required this.data});
 
-  final _TabbedWiewData data;
+  final _TabbedViewData data;
 
   @override
   Widget build(BuildContext context) {
-    TabbedWiewController controller = data.controller;
+    TabbedViewController controller = data.controller;
     ContentAreaTheme contentAreaTheme = data.theme.contentArea;
     Widget? child;
     if (controller.selectedIndex != null) {
@@ -414,7 +233,7 @@ class _ContentArea extends StatelessWidget {
       }
     }
 
-    if (controller._menuBuilder != null) {
+    if (controller.hasMenu()) {
       return LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
         List<Widget> children = [];
@@ -434,7 +253,7 @@ class _ContentArea extends StatelessWidget {
             child: SizeChangedLayoutNotifier(child: Stack(children: children)),
             onNotification: (n) {
               scheduleMicrotask(() {
-                controller._removeMenu();
+                controller.removeMenu();
               });
               return true;
             });
@@ -453,7 +272,7 @@ class _ContentArea extends StatelessWidget {
 class _Glass extends StatelessWidget {
   _Glass(this.data);
 
-  final _TabbedWiewData data;
+  final _TabbedViewData data;
 
   @override
   Widget build(BuildContext context) {
@@ -465,7 +284,7 @@ class _Glass extends StatelessWidget {
     }
     return ClipRect(
         child: GestureDetector(
-            child: child, onTap: () => data.controller._removeMenu()));
+            child: child, onTap: () => data.controller.removeMenu()));
   }
 }
 
@@ -473,7 +292,7 @@ class _Glass extends StatelessWidget {
 class _TabsArea extends StatefulWidget {
   const _TabsArea({required this.data});
 
-  final _TabbedWiewData data;
+  final _TabbedViewData data;
 
   @override
   State<StatefulWidget> createState() => _TabsAreaState();
@@ -487,7 +306,7 @@ class _TabsAreaState extends State<_TabsArea> {
 
   @override
   Widget build(BuildContext context) {
-    TabbedWiewController controller = widget.data.controller;
+    TabbedViewController controller = widget.data.controller;
     TabsAreaTheme tabsAreaTheme = widget.data.theme.tabsArea;
     List<Widget> children = [];
     for (int index = 0; index < controller.tabs.length; index++) {
@@ -539,7 +358,8 @@ class _TabsAreaState extends State<_TabsArea> {
       List<Widget> children = [];
       for (int i = 0; i < buttons.length; i++) {
         TabButton tabButton = buttons[i];
-        children.add(_TabButtonWidget(
+        children.add(TabButtonWidget(
+            controller: widget.data.controller,
             button: tabButton,
             enabled: true,
             colors: buttonsAreaTheme.buttonColors,
@@ -568,12 +388,12 @@ class _TabsAreaState extends State<_TabsArea> {
   }
 
   /// Builder for hidden tabs menu.
-  List<TabbedWiewMenuItem> _hiddenTabsMenuBuilder(BuildContext context) {
-    List<TabbedWiewMenuItem> list = [];
+  List<TabbedViewMenuItem> _hiddenTabsMenuBuilder(BuildContext context) {
+    List<TabbedViewMenuItem> list = [];
     hiddenTabs.indexes.sort();
     for (int index in hiddenTabs.indexes) {
       TabData tab = widget.data.controller.tabs[index];
-      list.add(TabbedWiewMenuItem(
+      list.add(TabbedViewMenuItem(
           text: tab.text,
           onSelection: () => widget.data.controller.selectedIndex = index));
     }
@@ -582,7 +402,7 @@ class _TabsAreaState extends State<_TabsArea> {
 
   /// Gets the status of the tab for a given index.
   _TabStatus _getStatusFor(int tabIndex) {
-    TabbedWiewController controller = widget.data.controller;
+    TabbedViewController controller = widget.data.controller;
     if (controller.tabs.isEmpty || tabIndex >= controller.tabs.length) {
       throw Exception('Invalid tab index: $tabIndex');
     }
@@ -621,7 +441,7 @@ class _TabWidget extends StatelessWidget {
 
   final int index;
   final _TabStatus status;
-  final _TabbedWiewData data;
+  final _TabbedViewData data;
   final _UpdateHighlightedIndex updateHighlightedIndex;
 
   @override
@@ -656,7 +476,8 @@ class _TabWidget extends StatelessWidget {
     if (hasButtons) {
       for (int i = 0; i < tab.buttons!.length; i++) {
         TabButton button = tab.buttons![i];
-        textAndButtons.add(_TabButtonWidget(
+        textAndButtons.add(TabButtonWidget(
+            controller: data.controller,
             button: button,
             enabled: buttonsEnabled,
             colors: buttonColors,
@@ -675,7 +496,8 @@ class _TabWidget extends StatelessWidget {
           onPressed: () => _onClose(context, index),
           toolTip: data.closeButtonTooltip);
 
-      textAndButtons.add(_TabButtonWidget(
+      textAndButtons.add(TabButtonWidget(
+          controller: data.controller,
           button: closeButton,
           enabled: buttonsEnabled,
           colors: buttonColors,
@@ -743,9 +565,9 @@ class _TabWidget extends StatelessWidget {
   _onClose(BuildContext context, int index) {
     if (data.onTabClosing == null || data.onTabClosing!(index)) {
       data.controller.removeTab(index);
-      _TabbedWiewState? tabbedWiewState =
-          context.findAncestorStateOfType<_TabbedWiewState>();
-      tabbedWiewState?._rebuild();
+      _TabbedViewState? tabbedviewState =
+          context.findAncestorStateOfType<_TabbedViewState>();
+      tabbedviewState?._rebuild();
     }
   }
 
@@ -760,88 +582,6 @@ class _TabWidget extends StatelessWidget {
       case _TabStatus.highlighted:
         return tabsAreaTheme.tab.highlightedStatus;
     }
-  }
-}
-
-/// Widget for tab buttons. Used for any tab button such as the close button.
-class _TabButtonWidget extends StatefulWidget {
-  _TabButtonWidget(
-      {required this.button,
-      required this.enabled,
-      required this.iconSize,
-      required this.colors});
-
-  final TabButton button;
-  final double iconSize;
-  final ButtonColors colors;
-  final bool enabled;
-
-  @override
-  State<StatefulWidget> createState() => _TabButtonWidgetState();
-}
-
-/// The [_TabButtonWidget] state.
-class _TabButtonWidgetState extends State<_TabButtonWidget> {
-  bool _hover = false;
-
-  @override
-  Widget build(BuildContext context) {
-    Color color = widget.button.color != null
-        ? widget.button.color!
-        : widget.colors.normal;
-
-    Color hoverColor = widget.button.hoverColor != null
-        ? widget.button.hoverColor!
-        : widget.colors.hover;
-
-    bool hasEvent =
-        widget.button.onPressed != null || widget.button.menuBuilder != null;
-
-    if (hasEvent == false || widget.enabled == false) {
-      Color disabledColor = widget.button.disabledColor != null
-          ? widget.button.disabledColor!
-          : widget.colors.disabled;
-      return Icon(widget.button.icon,
-          color: disabledColor, size: widget.iconSize);
-    }
-
-    Color finalColor = _hover ? hoverColor : color;
-    Widget icon =
-        Icon(widget.button.icon, color: finalColor, size: widget.iconSize);
-
-    VoidCallback? onPressed = widget.button.onPressed;
-    if (widget.button.menuBuilder != null) {
-      onPressed = () {
-        _TabbedWiewState? tabbedWiewState =
-            context.findAncestorStateOfType<_TabbedWiewState>();
-        tabbedWiewState?._invertMenuPopupFor(widget.button);
-      };
-    }
-
-    if (widget.button.toolTip != null) {
-      icon = Tooltip(
-          message: widget.button.toolTip!,
-          child: icon,
-          waitDuration: Duration(milliseconds: 500));
-    }
-
-    return MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onEnter: _onEnter,
-        onExit: _onExit,
-        child: GestureDetector(child: icon, onTap: onPressed));
-  }
-
-  _onEnter(PointerEnterEvent event) {
-    setState(() {
-      _hover = true;
-    });
-  }
-
-  _onExit(PointerExitEvent event) {
-    setState(() {
-      _hover = false;
-    });
   }
 }
 
