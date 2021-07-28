@@ -1,12 +1,19 @@
-import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:tabbed_view/src/content_area.dart';
+import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_button_widget.dart';
-import 'package:tabbed_view/tabbed_view.dart';
+import 'package:tabbed_view/src/tab_data.dart';
+import 'package:tabbed_view/src/tab_status.dart';
+import 'package:tabbed_view/src/tab_widget.dart';
+import 'package:tabbed_view/src/tabbed_view_controller.dart';
+import 'package:tabbed_view/src/tabbed_view_data.dart';
+import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
+import 'package:tabbed_view/src/theme.dart';
 
 /// Tabs area buttons builder
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
@@ -18,30 +25,6 @@ typedef OnTabClosing = bool Function(int tabIndex);
 
 /// Event that will be triggered when the tab selection is changed.
 typedef OnTabSelection = Function(int? newTabIndex);
-
-/// Propagates parameters to internal components.
-class _TabbedViewData {
-  _TabbedViewData(
-      {required this.controller,
-      required this.theme,
-      this.contentBuilder,
-      this.onTabClosing,
-      this.onTabSelection,
-      required this.selectToEnableButtons,
-      this.closeButtonTooltip,
-      this.tabsAreaButtonsBuilder,
-      this.draggableTabBuilder});
-
-  final TabbedViewController controller;
-  final TabbedViewTheme theme;
-  final IndexedWidgetBuilder? contentBuilder;
-  final OnTabClosing? onTabClosing;
-  final OnTabSelection? onTabSelection;
-  final bool selectToEnableButtons;
-  final String? closeButtonTooltip;
-  final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
-  final DraggableTabBuilder? draggableTabBuilder;
-}
 
 /// Widget inspired by the classic Desktop-style tab component.
 ///
@@ -62,7 +45,7 @@ class TabbedView extends StatefulWidget {
       String? closeButtonTooltip,
       TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
       DraggableTabBuilder? draggableTabBuilder})
-      : this._data = _TabbedViewData(
+      : this._data = TabbedViewData(
             controller: controller,
             theme: theme == null ? TabbedViewTheme.classic() : theme,
             contentBuilder: contentBuilder,
@@ -73,7 +56,7 @@ class TabbedView extends StatefulWidget {
             tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
             draggableTabBuilder: draggableTabBuilder);
 
-  final _TabbedViewData _data;
+  final TabbedViewData _data;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewState();
@@ -103,7 +86,7 @@ class _TabbedViewState extends State<TabbedView> {
   @override
   Widget build(BuildContext context) {
     Widget tabArea = _TabsArea(data: widget._data);
-    _ContentArea contentArea = _ContentArea(data: widget._data);
+    ContentArea contentArea = ContentArea(data: widget._data);
     return CustomMultiChildLayout(children: [
       LayoutId(id: 1, child: tabArea),
       LayoutId(id: 2, child: contentArea)
@@ -148,151 +131,11 @@ class _TabbedViewLayout extends MultiChildLayoutDelegate {
   }
 }
 
-/// Widget for menu.
-class _TabbedViewMenuWidget extends StatefulWidget {
-  const _TabbedViewMenuWidget({required this.controller, required this.data});
-
-  final TabbedViewController controller;
-  final _TabbedViewData data;
-
-  @override
-  State<StatefulWidget> createState() => _TabbedViewMenuWidgetState();
-}
-
-/// State for [_TabbedViewMenuWidget].
-class _TabbedViewMenuWidgetState extends State<_TabbedViewMenuWidget> {
-  @override
-  Widget build(BuildContext context) {
-    MenuTheme menuTheme = widget.data.theme.menu;
-    List<TabbedViewMenuItem> items = widget.controller.menuBuilder!(context);
-    bool hasDivider =
-        menuTheme.dividerThickness > 0 && menuTheme.dividerColor != null;
-    int itemCount = items.length;
-    if (hasDivider) {
-      itemCount += items.length - 1;
-    }
-    ListView list = ListView.builder(
-        itemCount: itemCount,
-        itemBuilder: (BuildContext context, int index) {
-          int itemIndex = index;
-          if (hasDivider) {
-            itemIndex = index ~/ 2;
-            if (index.isOdd) {
-              return Divider(
-                  height: menuTheme.dividerThickness,
-                  color: menuTheme.dividerColor,
-                  thickness: menuTheme.dividerThickness);
-            }
-          }
-          return InkWell(
-              child: Container(
-                  padding: menuTheme.menuItemPadding,
-                  child: Text(items[itemIndex].text,
-                      overflow: menuTheme.ellipsisOverflowText
-                          ? TextOverflow.ellipsis
-                          : null)),
-              hoverColor: menuTheme.hoverColor,
-              onTap: () {
-                widget.controller.removeMenu();
-                Function? onSelection = items[itemIndex].onSelection;
-                if (onSelection != null) {
-                  onSelection();
-                }
-              });
-        });
-
-    return Container(
-        margin: menuTheme.margin,
-        padding: menuTheme.padding,
-        child: Material(
-            child: list,
-            textStyle: menuTheme.textStyle,
-            color: Colors.transparent),
-        decoration:
-            BoxDecoration(color: menuTheme.color, border: menuTheme.border));
-  }
-}
-
-// Container widget for the tab content and menu.
-class _ContentArea extends StatelessWidget {
-  _ContentArea({required this.data});
-
-  final _TabbedViewData data;
-
-  @override
-  Widget build(BuildContext context) {
-    TabbedViewController controller = data.controller;
-    ContentAreaTheme contentAreaTheme = data.theme.contentArea;
-    Widget? child;
-    if (controller.selectedIndex != null) {
-      TabData tab = controller.tabs[controller.selectedIndex!];
-      if (data.contentBuilder != null) {
-        child = data.contentBuilder!(context, controller.selectedIndex!);
-      } else {
-        child = tab.content;
-      }
-    }
-
-    if (controller.hasMenu()) {
-      return LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-        List<Widget> children = [];
-        children.add(Positioned.fill(
-            child: Container(child: child, padding: contentAreaTheme.padding)));
-        children.add(Positioned.fill(child: _Glass(data)));
-        children.add(Positioned(
-            child: LimitedBox(
-                maxWidth:
-                    math.min(data.theme.menu.maxWidth, constraints.maxWidth),
-                child:
-                    _TabbedViewMenuWidget(controller: controller, data: data)),
-            right: 0,
-            top: 0,
-            bottom: 0));
-        Widget listener = NotificationListener<SizeChangedLayoutNotification>(
-            child: SizeChangedLayoutNotifier(child: Stack(children: children)),
-            onNotification: (n) {
-              scheduleMicrotask(() {
-                controller.removeMenu();
-              });
-              return true;
-            });
-        return Container(
-            child: listener, decoration: contentAreaTheme.decoration);
-      });
-    }
-
-    return Container(
-        child: child,
-        decoration: contentAreaTheme.decoration,
-        padding: contentAreaTheme.padding);
-  }
-}
-
-class _Glass extends StatelessWidget {
-  _Glass(this.data);
-
-  final _TabbedViewData data;
-
-  @override
-  Widget build(BuildContext context) {
-    Widget? child;
-    if (data.theme.menu.blur) {
-      child = BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-          child: Container(color: Colors.transparent));
-    }
-    return ClipRect(
-        child: GestureDetector(
-            child: child, onTap: () => data.controller.removeMenu()));
-  }
-}
-
 /// Widget for the tabs and buttons.
 class _TabsArea extends StatefulWidget {
   const _TabsArea({required this.data});
 
-  final _TabbedViewData data;
+  final TabbedViewData data;
 
   @override
   State<StatefulWidget> createState() => _TabsAreaState();
@@ -310,8 +153,8 @@ class _TabsAreaState extends State<_TabsArea> {
     TabsAreaTheme tabsAreaTheme = widget.data.theme.tabsArea;
     List<Widget> children = [];
     for (int index = 0; index < controller.tabs.length; index++) {
-      _TabStatus status = _getStatusFor(index);
-      children.add(_TabWidget(
+      TabStatus status = _getStatusFor(index);
+      children.add(TabWidget(
           index: index,
           status: status,
           data: widget.data,
@@ -401,7 +244,7 @@ class _TabsAreaState extends State<_TabsArea> {
   }
 
   /// Gets the status of the tab for a given index.
-  _TabStatus _getStatusFor(int tabIndex) {
+  TabStatus _getStatusFor(int tabIndex) {
     TabbedViewController controller = widget.data.controller;
     if (controller.tabs.isEmpty || tabIndex >= controller.tabs.length) {
       throw Exception('Invalid tab index: $tabIndex');
@@ -409,11 +252,11 @@ class _TabsAreaState extends State<_TabsArea> {
 
     if (controller.selectedIndex != null &&
         controller.selectedIndex == tabIndex) {
-      return _TabStatus.selected;
+      return TabStatus.selected;
     } else if (_highlightedIndex != null && _highlightedIndex == tabIndex) {
-      return _TabStatus.highlighted;
+      return TabStatus.highlighted;
     }
-    return _TabStatus.normal;
+    return TabStatus.normal;
   }
 
   _updateHighlightedIndex(int? tabIndex) {
@@ -425,169 +268,9 @@ class _TabsAreaState extends State<_TabsArea> {
   }
 }
 
-/// Listener for the tabs with the mouse over.
-typedef _UpdateHighlightedIndex = void Function(int? tabIndex);
-
-/// Inner enum for tab status.
-enum _TabStatus { selected, highlighted, normal }
-
-/// The tab widget. Displays the tab text and its buttons.
-class _TabWidget extends StatelessWidget {
-  const _TabWidget(
-      {required this.index,
-      required this.status,
-      required this.data,
-      required this.updateHighlightedIndex});
-
-  final int index;
-  final _TabStatus status;
-  final _TabbedViewData data;
-  final _UpdateHighlightedIndex updateHighlightedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    TabData tab = data.controller.tabs[index];
-    TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
-    TabTheme tabTheme = tabsAreaTheme.tab;
-    TabStatusTheme statusTheme = _getTabThemeFor(status);
-    ButtonColors buttonColors = statusTheme.buttonColors != null
-        ? statusTheme.buttonColors!
-        : tabTheme.buttonColors;
-
-    TextStyle? textStyle = tabTheme.textStyle;
-    if (statusTheme.fontColor != null) {
-      if (textStyle != null) {
-        textStyle = textStyle.copyWith(color: statusTheme.fontColor);
-      } else {
-        textStyle = TextStyle(color: statusTheme.fontColor);
-      }
-    }
-    List<Widget> textAndButtons = [Text(tab.text, style: textStyle)];
-
-    bool buttonsEnabled = data.selectToEnableButtons == false ||
-        (data.selectToEnableButtons && status == _TabStatus.selected);
-    if (tab.closable ||
-        (tab.buttons != null && tab.buttons!.length > 0) &&
-            tabTheme.buttonsOffset > 0) {
-      textAndButtons.add(SizedBox(width: tabTheme.buttonsOffset));
-    }
-    bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
-
-    if (hasButtons) {
-      for (int i = 0; i < tab.buttons!.length; i++) {
-        TabButton button = tab.buttons![i];
-        textAndButtons.add(TabButtonWidget(
-            controller: data.controller,
-            button: button,
-            enabled: buttonsEnabled,
-            colors: buttonColors,
-            iconSize: tabTheme.buttonIconSize));
-        if (i < tab.buttons!.length - 1 && tabTheme.buttonsGap > 0) {
-          textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
-        }
-      }
-    }
-    if (tab.closable) {
-      if (hasButtons && tabTheme.buttonsGap > 0) {
-        textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
-      }
-      TabButton closeButton = TabButton(
-          icon: tabsAreaTheme.closeButtonIcon,
-          onPressed: () => _onClose(context, index),
-          toolTip: data.closeButtonTooltip);
-
-      textAndButtons.add(TabButtonWidget(
-          controller: data.controller,
-          button: closeButton,
-          enabled: buttonsEnabled,
-          colors: buttonColors,
-          iconSize: tabTheme.buttonIconSize));
-    }
-
-    CrossAxisAlignment? alignment;
-    switch (tabTheme.verticalAlignment) {
-      case VerticalAlignment.top:
-        alignment = CrossAxisAlignment.start;
-        break;
-      case VerticalAlignment.center:
-        alignment = CrossAxisAlignment.center;
-        break;
-      case VerticalAlignment.bottom:
-        alignment = CrossAxisAlignment.end;
-    }
-    Widget textAndButtonsContainer =
-        Row(children: textAndButtons, crossAxisAlignment: alignment);
-
-    BorderSide innerBottomBorder = statusTheme.innerBottomBorder ??
-        tabTheme.innerBottomBorder ??
-        BorderSide.none;
-    BorderSide innerTopBorder = statusTheme.innerTopBorder ??
-        tabTheme.innerTopBorder ??
-        BorderSide.none;
-    BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
-
-    EdgeInsetsGeometry? padding = tabsAreaTheme.tab.padding;
-    if (statusTheme.padding != null) {
-      padding = statusTheme.padding;
-    }
-
-    EdgeInsetsGeometry? margin = tabsAreaTheme.tab.margin;
-    if (statusTheme.margin != null) {
-      margin = statusTheme.margin;
-    }
-
-    Container tabContainer = Container(
-        child: Container(
-            child: textAndButtonsContainer,
-            padding: padding,
-            decoration: BoxDecoration(
-                border:
-                    Border(top: innerTopBorder, bottom: innerBottomBorder))),
-        decoration: decoration,
-        margin: margin);
-
-    GestureDetector gestureDetector = GestureDetector(
-        onTap: () => data.controller.selectedIndex = index,
-        child: tabContainer);
-
-    MouseRegion mouseRegion = MouseRegion(
-        cursor: SystemMouseCursors.click,
-        onHover: (details) => updateHighlightedIndex(index),
-        onExit: (details) => updateHighlightedIndex(null),
-        child: gestureDetector);
-
-    if (data.draggableTabBuilder != null) {
-      return data.draggableTabBuilder!(index, tab, mouseRegion);
-    }
-    return mouseRegion;
-  }
-
-  _onClose(BuildContext context, int index) {
-    if (data.onTabClosing == null || data.onTabClosing!(index)) {
-      data.controller.removeTab(index);
-      _TabbedViewState? tabbedviewState =
-          context.findAncestorStateOfType<_TabbedViewState>();
-      tabbedviewState?._rebuild();
-    }
-  }
-
-  /// Gets the theme of a tab according to its status.
-  TabStatusTheme _getTabThemeFor(_TabStatus status) {
-    TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
-    switch (status) {
-      case _TabStatus.normal:
-        return TabStatusTheme.empty;
-      case _TabStatus.selected:
-        return tabsAreaTheme.tab.selectedStatus;
-      case _TabStatus.highlighted:
-        return tabsAreaTheme.tab.highlightedStatus;
-    }
-  }
-}
-
 /// Inner widget for [_TabsArea] layout.
 /// Displays the popup menu button for tabs hidden due to lack of space.
-/// The selected [_TabWidget] will always be visible.
+/// The selected [TabWidget] will always be visible.
 class _TabsAreaLayout extends MultiChildRenderObjectWidget {
   _TabsAreaLayout(
       {Key? key,
