@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
-// Container widget for the tab content and menu.
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tab_data.dart';
@@ -11,6 +10,7 @@ import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_widget.dart';
 import 'package:tabbed_view/src/theme.dart';
 
+/// Container widget for the tab content and menu.
 class ContentArea extends StatelessWidget {
   ContentArea({required this.data});
 
