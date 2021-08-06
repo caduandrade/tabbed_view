@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tabbed_view/src/flow_layout.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
@@ -28,73 +31,14 @@ class TabWidget extends StatelessWidget {
     TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
     TabTheme tabTheme = tabsAreaTheme.tab;
     TabStatusTheme statusTheme = _getTabThemeFor(status);
-    ButtonColors buttonColors = statusTheme.buttonColors != null
-        ? statusTheme.buttonColors!
-        : tabTheme.buttonColors;
 
-    TextStyle? textStyle = tabTheme.textStyle;
-    if (statusTheme.fontColor != null) {
-      if (textStyle != null) {
-        textStyle = textStyle.copyWith(color: statusTheme.fontColor);
-      } else {
-        textStyle = TextStyle(color: statusTheme.fontColor);
-      }
-    }
-    List<Widget> textAndButtons = [Text(tab.text, style: textStyle)];
+    List<Widget> textAndButtons = _textAndButtons(context);
 
-    bool buttonsEnabled = data.selectToEnableButtons == false ||
-        (data.selectToEnableButtons && status == TabStatus.selected);
-    if (tab.closable ||
-        (tab.buttons != null && tab.buttons!.length > 0) &&
-            tabTheme.buttonsOffset > 0) {
-      textAndButtons.add(SizedBox(width: tabTheme.buttonsOffset));
-    }
-    bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
-
-    if (hasButtons) {
-      for (int i = 0; i < tab.buttons!.length; i++) {
-        TabButton button = tab.buttons![i];
-        textAndButtons.add(TabButtonWidget(
-            controller: data.controller,
-            button: button,
-            enabled: buttonsEnabled,
-            colors: buttonColors,
-            iconSize: tabTheme.buttonIconSize));
-        if (i < tab.buttons!.length - 1 && tabTheme.buttonsGap > 0) {
-          textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
-        }
-      }
-    }
-    if (tab.closable) {
-      if (hasButtons && tabTheme.buttonsGap > 0) {
-        textAndButtons.add(SizedBox(width: tabTheme.buttonsGap));
-      }
-      TabButton closeButton = TabButton(
-          icon: tabsAreaTheme.closeButtonIcon,
-          onPressed: () => _onClose(context, index),
-          toolTip: data.closeButtonTooltip);
-
-      textAndButtons.add(TabButtonWidget(
-          controller: data.controller,
-          button: closeButton,
-          enabled: buttonsEnabled,
-          colors: buttonColors,
-          iconSize: tabTheme.buttonIconSize));
-    }
-
-    CrossAxisAlignment? alignment;
-    switch (tabTheme.verticalAlignment) {
-      case VerticalAlignment.top:
-        alignment = CrossAxisAlignment.start;
-        break;
-      case VerticalAlignment.center:
-        alignment = CrossAxisAlignment.center;
-        break;
-      case VerticalAlignment.bottom:
-        alignment = CrossAxisAlignment.end;
-    }
-    Widget textAndButtonsContainer =
-        Row(children: textAndButtons, crossAxisAlignment: alignment);
+    Widget textAndButtonsContainer = ClipRect(
+        child: FlowLayout(
+            children: textAndButtons,
+            firstChildFlex: true,
+            verticalAlignment: tabTheme.verticalAlignment));
 
     BorderSide innerBottomBorder = statusTheme.innerBottomBorder ??
         tabTheme.innerBottomBorder ??
@@ -138,6 +82,82 @@ class TabWidget extends StatelessWidget {
       return data.draggableTabBuilder!(index, tab, mouseRegion);
     }
     return mouseRegion;
+  }
+
+  /// Builds a list with title text and buttons.
+  List<Widget> _textAndButtons(BuildContext context) {
+    List<Widget> textAndButtons = [];
+
+    TabData tab = data.controller.tabs[index];
+    TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
+    TabTheme tabTheme = tabsAreaTheme.tab;
+    TabStatusTheme statusTheme = _getTabThemeFor(status);
+    ButtonColors buttonColors = statusTheme.buttonColors != null
+        ? statusTheme.buttonColors!
+        : tabTheme.buttonColors;
+
+    TextStyle? textStyle = tabTheme.textStyle;
+    if (statusTheme.fontColor != null) {
+      if (textStyle != null) {
+        textStyle = textStyle.copyWith(color: statusTheme.fontColor);
+      } else {
+        textStyle = TextStyle(color: statusTheme.fontColor);
+      }
+    }
+
+    bool buttonsEnabled = data.selectToEnableButtons == false ||
+        (data.selectToEnableButtons && status == TabStatus.selected);
+    EdgeInsets? padding;
+    if (tab.closable ||
+        (tab.buttons != null && tab.buttons!.length > 0) &&
+            tabTheme.buttonsOffset > 0) {
+      padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
+    }
+
+    textAndButtons.add(Container(
+        child:
+            Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis),
+        padding: padding));
+
+    bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
+    if (hasButtons) {
+      for (int i = 0; i < tab.buttons!.length; i++) {
+        EdgeInsets? padding;
+        if (i > 0 && i < tab.buttons!.length && tabTheme.buttonsGap > 0) {
+          padding = EdgeInsets.only(left: tabTheme.buttonsGap);
+        }
+        TabButton button = tab.buttons![i];
+        textAndButtons.add(Container(
+            child: TabButtonWidget(
+                controller: data.controller,
+                button: button,
+                enabled: buttonsEnabled,
+                colors: buttonColors,
+                iconSize: tabTheme.buttonIconSize),
+            padding: padding));
+      }
+    }
+    if (tab.closable) {
+      EdgeInsets? padding;
+      if (hasButtons && tabTheme.buttonsGap > 0) {
+        padding = EdgeInsets.only(left: tabTheme.buttonsGap);
+      }
+      TabButton closeButton = TabButton(
+          icon: tabsAreaTheme.closeButtonIcon,
+          onPressed: () => _onClose(context, index),
+          toolTip: data.closeButtonTooltip);
+
+      textAndButtons.add(Container(
+          child: TabButtonWidget(
+              controller: data.controller,
+              button: closeButton,
+              enabled: buttonsEnabled,
+              colors: buttonColors,
+              iconSize: tabTheme.buttonIconSize),
+          padding: padding));
+    }
+
+    return textAndButtons;
   }
 
   _onClose(BuildContext context, int index) {

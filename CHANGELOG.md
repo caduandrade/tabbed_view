@@ -1,3 +1,8 @@
+## 1.1.2
+
+* Bug fix
+  * Overlap between tabs and button area
+
 ## 1.1.1
 
 * Fixing class name (how embarrassing)
@@ -10,7 +15,7 @@
 ## 1.1.0
 
 * Draggable tab builder
-* Bug fixes
+* Bug fix
   * Divisor between tabs and content starting drawing at wrong offset
 
 ## 1.0.0+2

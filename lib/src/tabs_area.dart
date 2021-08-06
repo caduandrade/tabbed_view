@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tabbed_view/src/flow_layout.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
@@ -52,8 +54,7 @@ class _TabsAreaState extends State<TabsArea> {
       decoration = BoxDecoration(
           color: tabsAreaTheme.color, border: tabsAreaTheme.border);
     }
-    return Container(
-        child: MouseRegion(child: tabsAreaLayout), decoration: decoration);
+    return Container(child: tabsAreaLayout, decoration: decoration);
   }
 
   /// Area for buttons like the hidden tabs menu button.
@@ -88,7 +89,7 @@ class _TabsAreaState extends State<TabsArea> {
             iconSize: buttonsAreaTheme.buttonIconSize));
       }
 
-      buttonsArea = Row(children: children);
+      buttonsArea = FlowLayout(children: children, firstChildFlex: false);
 
       EdgeInsetsGeometry? margin;
       if (buttonsAreaTheme.offset > 0) {
@@ -104,7 +105,7 @@ class _TabsAreaState extends State<TabsArea> {
             margin: margin);
       }
     } else {
-      buttonsArea = Container();
+      buttonsArea = SizedBox(width: 0);
     }
     return buttonsArea;
   }
