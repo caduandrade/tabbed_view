@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Added `keepAlive` parameter to prevent loss of tab content state due to tree change during tab selection event.
+
 ## 1.1.2
 
 * Bug fix

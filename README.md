@@ -20,6 +20,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
   * [Close listener](#close-listener)
   * [Selection listener](#selection-listener)
   * [Draggable](#draggable-tab-builder)
+  * [Keep alive](#keep-alive)
 * [Tabs area](#tabs-area)
   * [Tabs area buttons](#tabs-area-buttons)
 * [Themes](#themes)
@@ -198,6 +199,12 @@ It allows creating the contents of the tab dynamically during the selection even
               });
         });
 ```
+
+### Keep alive
+
+The `keepAlive` parameter indicates whether to keep the tab content widget in memory even if it is not visible. Indicated to prevent loss of state due to tree change by tab selection.  If enabled, the Widget will continue to be instantiated in the tree but will remain invisible.  The default value is `FALSE`.
+
+A more efficient alternative is to keep the data in `TabData`'s `value` parameter as long as the `TabbedViewController` is being kept in the state of its class.
 
 ## Tabs area
 
