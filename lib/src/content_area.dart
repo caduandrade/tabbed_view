@@ -20,22 +20,36 @@ class ContentArea extends StatelessWidget {
   Widget build(BuildContext context) {
     TabbedViewController controller = data.controller;
     ContentAreaTheme contentAreaTheme = data.theme.contentArea;
-    Widget? child;
-    if (controller.selectedIndex != null) {
-      TabData tab = controller.tabs[controller.selectedIndex!];
-      if (data.contentBuilder != null) {
-        child = data.contentBuilder!(context, controller.selectedIndex!);
-      } else {
-        child = tab.content;
-      }
-    }
 
-    if (controller.hasMenu()) {
-      return LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-        List<Widget> children = [];
-        children.add(Positioned.fill(
-            child: Container(child: child, padding: contentAreaTheme.padding)));
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      List<Widget> children = [];
+
+      for (int i = 0; i < controller.tabs.length; i++) {
+        TabData tab = controller.tabs[i];
+        bool selectedTab =
+            controller.selectedIndex != null && i == controller.selectedIndex;
+        if (tab.keepAlive || selectedTab) {
+          Widget? child;
+          if (data.contentBuilder != null) {
+            child = data.contentBuilder!(context, i);
+          } else {
+            child = tab.content;
+          }
+
+          if (tab.keepAlive) {
+            child = Offstage(offstage: !selectedTab, child: child);
+          }
+          children.add(Positioned.fill(
+              key: tab.uniqueKey,
+              child:
+                  Container(child: child, padding: contentAreaTheme.padding)));
+        }
+      }
+
+      NotificationListenerCallback<SizeChangedLayoutNotification>?
+          onSizeNotification;
+      if (controller.hasMenu()) {
         children.add(Positioned.fill(child: _Glass(data)));
         children.add(Positioned(
             child: LimitedBox(
@@ -46,23 +60,19 @@ class ContentArea extends StatelessWidget {
             right: 0,
             top: 0,
             bottom: 0));
-        Widget listener = NotificationListener<SizeChangedLayoutNotification>(
-            child: SizeChangedLayoutNotifier(child: Stack(children: children)),
-            onNotification: (n) {
-              scheduleMicrotask(() {
-                controller.removeMenu();
-              });
-              return true;
-            });
-        return Container(
-            child: listener, decoration: contentAreaTheme.decoration);
-      });
-    }
-
-    return Container(
-        child: child,
-        decoration: contentAreaTheme.decoration,
-        padding: contentAreaTheme.padding);
+        onSizeNotification = (n) {
+          scheduleMicrotask(() {
+            controller.removeMenu();
+          });
+          return true;
+        };
+      }
+      Widget listener = NotificationListener<SizeChangedLayoutNotification>(
+          child: SizeChangedLayoutNotifier(child: Stack(children: children)),
+          onNotification: onSizeNotification);
+      return Container(
+          child: listener, decoration: contentAreaTheme.decoration);
+    });
   }
 }
 

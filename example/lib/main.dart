@@ -19,21 +19,35 @@ class TabbedViewExamplePage extends StatefulWidget {
 }
 
 class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
-  late TabbedViewController _model;
+  late TabbedViewController _controller;
 
   @override
   void initState() {
     super.initState();
     List<TabData> tabs = [];
-    for (int i = 1; i < 5; i++) {
-      tabs.add(TabData(text: 'Tab $i', content: Text('Content $i')));
-    }
-    _model = TabbedViewController(tabs);
+
+    tabs.add(TabData(
+        text: 'Tab 1',
+        content: Padding(child: Text('Hello'), padding: EdgeInsets.all(8))));
+    tabs.add(TabData(
+        text: 'Tab 2',
+        content:
+            Padding(child: Text('Hello again'), padding: EdgeInsets.all(8))));
+    tabs.add(TabData(
+        text: 'Tab 3',
+        content: Padding(
+            child: TextField(
+                decoration: InputDecoration(
+                    isDense: true, border: OutlineInputBorder())),
+            padding: EdgeInsets.all(8)),
+        keepAlive: true));
+
+    _controller = TabbedViewController(tabs);
   }
 
   @override
   Widget build(BuildContext context) {
-    TabbedView tabbedView = TabbedView(controller: _model);
+    TabbedView tabbedView = TabbedView(controller: _controller);
     return Scaffold(
         body: Container(child: tabbedView, padding: EdgeInsets.all(32)));
   }
