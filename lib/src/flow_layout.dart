@@ -70,17 +70,14 @@ class _FlowLayoutRenderBox extends RenderBox
     }
   }
 
-  double _y(double childHeight, double biggestChildHeight) {
-    if (constraints.maxHeight != double.infinity) {
-      biggestChildHeight = constraints.maxHeight;
-    }
+  double _y(double childHeight) {
     switch (verticalAlignment) {
       case VerticalAlignment.top:
         return 0;
       case VerticalAlignment.center:
-        return (biggestChildHeight - childHeight) / 2;
+        return (constraints.maxHeight - childHeight) / 2;
       case VerticalAlignment.bottom:
-        return biggestChildHeight - childHeight;
+        return constraints.maxHeight - childHeight;
     }
   }
 
@@ -123,7 +120,7 @@ class _FlowLayoutRenderBox extends RenderBox
           } else {
             children[i].flowLayoutParentData().offset = Offset(
                 availableWidth - children[i].size.width,
-                _y(children[i].size.height, biggestChildHeight));
+                _y(children[i].size.height));
             availableWidth -= children[i].size.width;
           }
         }
@@ -131,14 +128,16 @@ class _FlowLayoutRenderBox extends RenderBox
     } else {
       if (firstChildFlex && firstWidth + otherWidths > constraints.maxWidth) {
         children[0].layout(
-            BoxConstraints.loose(Size(
-                constraints.maxWidth - otherWidths, constraints.maxHeight)),
+            BoxConstraints(
+                minWidth: 0,
+                maxWidth: constraints.maxWidth - otherWidths,
+                minHeight: biggestChildHeight,
+                maxHeight: biggestChildHeight),
             parentUsesSize: true);
       }
       double x = 0;
       children.forEach((child) {
-        child.flowLayoutParentData().offset =
-            Offset(x, _y(child.size.height, biggestChildHeight));
+        child.flowLayoutParentData().offset = Offset(x, _y(child.size.height));
         x += child.size.width;
       });
       width = x;

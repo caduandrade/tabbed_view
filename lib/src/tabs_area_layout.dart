@@ -147,9 +147,9 @@ class _VisibleTabs {
   }
 
   /// Layouts the single selected tab.
-  layoutSingleTab(BoxConstraints constraints, Size tabsAreaButtonsSize) {
+  layoutSingleTab(double maxWidth, double maxHeight, Size tabsAreaButtonsSize) {
     if (_tabs.length == 1) {
-      double availableWidth = constraints.maxWidth -
+      double availableWidth = maxWidth -
           tabsAreaButtonsSize.width -
           tabsAreaTheme.initialGap -
           tabsAreaTheme.minimalFinalGap;
@@ -158,7 +158,7 @@ class _VisibleTabs {
         RenderBox tab = _tabs.first;
         if (tab.size.width > availableWidth) {
           final BoxConstraints childConstraints =
-              BoxConstraints.loose(Size(availableWidth, constraints.maxHeight));
+              BoxConstraints.loose(Size(availableWidth, maxHeight));
           tab.layout(childConstraints, parentUsesSize: true);
         }
       }
@@ -166,7 +166,7 @@ class _VisibleTabs {
   }
 
   /// Updates the offset given the tab width, initial offset and gap values.
-  updateOffsets(BoxConstraints constraints, Size tabsAreaButtonsSize) {
+  updateOffsets(Size tabsAreaButtonsSize) {
     double offset = tabsAreaTheme.initialGap;
     for (int i = 0; i < _tabs.length; i++) {
       RenderBox tab = _tabs[i];
@@ -248,6 +248,19 @@ class _TabsAreaLayoutRenderBox extends RenderBox
   @override
   void performLayout() {
     List<RenderBox> children = [];
+
+    // Defines the biggest height to avoid displacement of tabs when
+    // changing visibility.
+    double height = 0;
+
+    BoxConstraints childConstraints =
+        BoxConstraints.loose(Size(double.infinity, constraints.maxHeight));
+
+    hiddenTabs.indexes.clear();
+
+    // layout all (tabs + tabs area buttons)
+    _VisibleTabs visibleTabs = _VisibleTabs(tabsAreaTheme);
+
     // There will always be at least 1 child (tabs area buttons).
     visitChildren((child) {
       final _TabsAreaLayoutParentData parentData =
@@ -258,24 +271,20 @@ class _TabsAreaLayoutRenderBox extends RenderBox
               ? true
               : false;
       children.add(child as RenderBox);
-    });
-
-    hiddenTabs.indexes.clear();
-
-    // layout all (tabs + tabs area buttons)
-    _VisibleTabs visibleTabs = _VisibleTabs(tabsAreaTheme);
-
-    final BoxConstraints childConstraints =
-        BoxConstraints.loose(Size(constraints.maxWidth, constraints.maxHeight));
-
-    for (int i = 0; i < children.length; i++) {
-      RenderBox child = children[i];
       child.layout(childConstraints, parentUsesSize: true);
-      if (i < children.length - 1) {
+      height = math.max(height, child.size.height);
+
+      if (child != lastChild) {
         // ignoring tabs area buttons
         visibleTabs.add(child);
       }
+    });
+    if (tabsAreaTheme.gapBottomBorder.style == BorderStyle.solid &&
+        tabsAreaTheme.gapBottomBorder.width > 0) {
+      height = math.max(height, tabsAreaTheme.gapBottomBorder.width);
     }
+
+    childConstraints = BoxConstraints.loose(Size(constraints.maxWidth, height));
 
     // lastChild is the tabs area buttons and will always exist and be visible.
     // It can be an empty SizedBox, a single button or a Container with buttons.
@@ -287,7 +296,8 @@ class _TabsAreaLayoutRenderBox extends RenderBox
             tabsAreaButtons.size.width,
         0);
 
-    visibleTabs.layoutSingleTab(constraints, tabsAreaButtons.size);
+    visibleTabs.layoutSingleTab(
+        constraints.maxWidth, height, tabsAreaButtons.size);
     while (visibleTabs.length > 0 &&
         visibleTabs.requiredTotalWidth() > availableWidth) {
       int? removedIndex;
@@ -313,9 +323,10 @@ class _TabsAreaLayoutRenderBox extends RenderBox
                 tabsAreaButtons.size.width,
             0);
       }
-      visibleTabs.layoutSingleTab(constraints, tabsAreaButtons.size);
+      visibleTabs.layoutSingleTab(
+          constraints.maxWidth, height, tabsAreaButtons.size);
     }
-    visibleTabs.updateOffsets(constraints, tabsAreaButtons.size);
+    visibleTabs.updateOffsets(tabsAreaButtons.size);
 
     List<RenderBox> visibleChildren = [];
     for (int i = 0; i < visibleTabs.length; i++) {
@@ -338,23 +349,20 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       visibleChildren.add(tabsAreaButtons);
     }
 
-    // Defines the biggest height to avoid displacement of tabs when
-    // changing visibility.
-    final double biggestChildHeight = children.fold(
-      0,
-      (previousValue, child) => math.max(
-        previousValue,
-        child.size.height,
-      ),
-    );
-
     if (tabsAreaTheme.equalHeights == EqualHeights.none) {
-      // Aligning visible children.
+      // Aligning and fix max height on visible children.
       for (RenderBox tab in visibleChildren) {
         final _TabsAreaLayoutParentData parentData =
             tab.tabsAreaLayoutParentData();
+        tab.layout(
+            BoxConstraints(
+                minWidth: tab.size.width,
+                maxWidth: tab.size.width,
+                minHeight: tab.size.height,
+                maxHeight: tab.size.height),
+            parentUsesSize: true);
         parentData.offset =
-            Offset(parentData.offset.dx, biggestChildHeight - tab.size.height);
+            Offset(parentData.offset.dx, height - tab.size.height);
       }
     } else {
       if (tabsAreaTheme.equalHeights == EqualHeights.tabs) {
@@ -365,8 +373,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         for (int i = 0; i < visibleCount; i++) {
           RenderBox tab = visibleChildren[i];
           tab.layout(
-              BoxConstraints.tightFor(
-                  width: tab.size.width, height: biggestChildHeight),
+              BoxConstraints.tightFor(width: tab.size.width, height: height),
               parentUsesSize: true);
           final _TabsAreaLayoutParentData parentData =
               tab.tabsAreaLayoutParentData();
@@ -376,14 +383,13 @@ class _TabsAreaLayoutRenderBox extends RenderBox
           RenderBox tabsAreaButtons = visibleChildren.last;
           final _TabsAreaLayoutParentData parentData =
               tabsAreaButtons.tabsAreaLayoutParentData();
-          parentData.offset = Offset(parentData.offset.dx,
-              biggestChildHeight - tabsAreaButtons.size.height);
+          parentData.offset = Offset(
+              parentData.offset.dx, height - tabsAreaButtons.size.height);
         }
       } else if (tabsAreaTheme.equalHeights == EqualHeights.all) {
         for (RenderBox child in visibleChildren) {
           child.layout(
-              BoxConstraints.tightFor(
-                  width: child.size.width, height: biggestChildHeight),
+              BoxConstraints.tightFor(width: child.size.width, height: height),
               parentUsesSize: true);
 
           final _TabsAreaLayoutParentData parentData =
@@ -391,12 +397,6 @@ class _TabsAreaLayoutRenderBox extends RenderBox
           parentData.offset = Offset(parentData.offset.dx, 0);
         }
       }
-    }
-
-    double height = biggestChildHeight;
-    if (tabsAreaTheme.gapBottomBorder.style == BorderStyle.solid &&
-        tabsAreaTheme.gapBottomBorder.width > 0) {
-      height = math.max(height, tabsAreaTheme.gapBottomBorder.width);
     }
 
     size = constraints.constrain(Size(constraints.maxWidth, height));
