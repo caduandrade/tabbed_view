@@ -43,6 +43,7 @@ class TabbedView extends StatefulWidget {
       OnTabClosing? onTabClosing,
       OnTabSelection? onTabSelection,
       bool selectToEnableButtons = true,
+        bool contentClip = true,
       String? closeButtonTooltip,
       TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
       DraggableTabBuilder? draggableTabBuilder})
@@ -52,6 +53,7 @@ class TabbedView extends StatefulWidget {
             contentBuilder: contentBuilder,
             onTabClosing: onTabClosing,
             onTabSelection: onTabSelection,
+            contentClip: contentClip,
             selectToEnableButtons: selectToEnableButtons,
             closeButtonTooltip: closeButtonTooltip,
             tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
@@ -119,13 +121,7 @@ class _TabbedViewState extends State<TabbedView> {
 class _TabbedViewLayout extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
-    Size childSize = layoutChild(
-        1,
-        BoxConstraints(
-            minHeight: 0,
-            maxHeight: size.height,
-            minWidth: size.width,
-            maxWidth: size.width));
+    Size childSize = layoutChild(1, BoxConstraints.tightFor(width: size.width));
     positionChild(1, Offset.zero);
     double height = math.max(0, size.height - childSize.height);
     layoutChild(2, BoxConstraints.tightFor(width: size.width, height: height));

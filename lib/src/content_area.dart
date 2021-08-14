@@ -21,7 +21,7 @@ class ContentArea extends StatelessWidget {
     TabbedViewController controller = data.controller;
     ContentAreaTheme contentAreaTheme = data.theme.contentArea;
 
-    return LayoutBuilder(
+    LayoutBuilder layoutBuilder= LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       List<Widget> children = [];
 
@@ -73,6 +73,10 @@ class ContentArea extends StatelessWidget {
       return Container(
           child: listener, decoration: contentAreaTheme.decoration);
     });
+    if(data.contentClip){
+      return ClipRect(child: layoutBuilder);
+    }
+    return layoutBuilder;
   }
 }
 

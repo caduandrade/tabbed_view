@@ -10,6 +10,7 @@ class TabbedViewData {
       required this.theme,
       this.contentBuilder,
       this.onTabClosing,
+      required this.contentClip,
       this.onTabSelection,
       required this.selectToEnableButtons,
       this.closeButtonTooltip,
@@ -18,6 +19,7 @@ class TabbedViewData {
 
   final TabbedViewController controller;
   final TabbedViewTheme theme;
+  final bool contentClip;
   final IndexedWidgetBuilder? contentBuilder;
   final OnTabClosing? onTabClosing;
   final OnTabSelection? onTabSelection;

@@ -1,3 +1,7 @@
+## 1.3.0
+
+* Feature for clipping tab content
+
 ## 1.2.1
 
 * Bug fix
