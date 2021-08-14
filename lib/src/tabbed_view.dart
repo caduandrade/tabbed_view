@@ -121,7 +121,13 @@ class _TabbedViewState extends State<TabbedView> {
 class _TabbedViewLayout extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
-    Size childSize = layoutChild(1, BoxConstraints.tightFor(width: size.width));
+    Size childSize = layoutChild(
+        1,
+        BoxConstraints(
+            minWidth: size.width,
+            maxWidth: size.width,
+            minHeight: 0,
+            maxHeight: size.height));
     positionChild(1, Offset.zero);
     double height = math.max(0, size.height - childSize.height);
     layoutChild(2, BoxConstraints.tightFor(width: size.width, height: height));
