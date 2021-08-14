@@ -231,12 +231,37 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         ContainerRenderObjectMixin<RenderBox, _TabsAreaLayoutParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _TabsAreaLayoutParentData> {
   _TabsAreaLayoutRenderBox(
-      TabbedViewTheme theme, this.hiddenTabs, this.selectedTabIndex)
-      : this.tabsAreaTheme = theme.tabsArea;
+      TabbedViewTheme theme, HiddenTabs hiddenTabs, int? selectedTabIndex)
+      : this._tabsAreaTheme = theme.tabsArea,
+        this._hiddenTabs = hiddenTabs,
+        this._selectedTabIndex = selectedTabIndex;
 
-  int? selectedTabIndex;
-  TabsAreaTheme tabsAreaTheme;
-  HiddenTabs hiddenTabs;
+  int? _selectedTabIndex;
+  int? get selectedTabIndex => _selectedTabIndex;
+  set selectedTabIndex(int? value) {
+    if (_selectedTabIndex != value) {
+      _selectedTabIndex = value;
+      markNeedsLayout();
+    }
+  }
+
+  TabsAreaTheme _tabsAreaTheme;
+  TabsAreaTheme get tabsAreaTheme => _tabsAreaTheme;
+  set tabsAreaTheme(TabsAreaTheme value) {
+    if (_tabsAreaTheme != value) {
+      _tabsAreaTheme = value;
+      markNeedsLayout();
+    }
+  }
+
+  HiddenTabs _hiddenTabs;
+  HiddenTabs get hiddenTabs => _hiddenTabs;
+  set hiddenTabs(HiddenTabs value) {
+    if (_hiddenTabs != value) {
+      _hiddenTabs = value;
+      markNeedsLayout();
+    }
+  }
 
   @override
   void setupParentData(RenderBox child) {

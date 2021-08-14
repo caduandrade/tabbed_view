@@ -1,6 +1,8 @@
 ## 1.3.0
 
 * Feature for clipping tab content
+* Bug fix
+  * Tab area without performing the layout after tab selection
 
 ## 1.2.1
 
