@@ -43,7 +43,7 @@ class TabbedView extends StatefulWidget {
       OnTabClosing? onTabClosing,
       OnTabSelection? onTabSelection,
       bool selectToEnableButtons = true,
-        bool contentClip = true,
+      bool contentClip = true,
       String? closeButtonTooltip,
       TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
       DraggableTabBuilder? draggableTabBuilder})
