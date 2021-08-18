@@ -1,7 +1,8 @@
 ## 1.4.0
 
 * API changes
-  * Theme classes have been renamed
+  * *TabbedViewTheme* refactored to be a widget following the same pattern used by Flutter's *Theme*
+  * Old theme classes have been renamed
     * *TabbedViewTheme* to *TabbedViewThemeData*
     * *TabsAreaTheme* to *TabsAreaThemeData*
     * *ContentAreaTheme* to *ContentAreaThemeData*
@@ -9,7 +10,6 @@
     * *ButtonsAreaTheme* to *ButtonsAreaThemeData*
     * *TabTheme* to *TabThemeData*
     * *TabStatusTheme* to *TabStatusThemeData*
-  * *TabbedViewTheme* widget following the same pattern used by Flutter's *Theme*
 
 ## 1.3.1
 
