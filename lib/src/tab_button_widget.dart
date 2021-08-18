@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
-import 'package:tabbed_view/src/theme.dart';
+import 'package:tabbed_view/src/theme_data.dart';
 
 /// Widget for tab buttons. Used for any tab button such as the close button.
 class TabButtonWidget extends StatefulWidget {

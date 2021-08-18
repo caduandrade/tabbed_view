@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tabbed_view/src/theme.dart';
+import 'package:tabbed_view/src/theme_data.dart';
 
 /// Inner widget for [TabsArea] layout.
 /// Displays the popup menu button for tabs hidden due to lack of space.
@@ -26,7 +26,7 @@ class TabsAreaLayout extends MultiChildRenderObjectWidget {
           ],
         );
 
-  final TabbedViewTheme theme;
+  final TabbedViewThemeData theme;
   final HiddenTabs hiddenTabs;
   final int? selectedTabIndex;
 
@@ -134,7 +134,7 @@ class _TabsAreaLayoutParentData extends ContainerBoxParentData<RenderBox> {
 class _VisibleTabs {
   _VisibleTabs(this.tabsAreaTheme);
 
-  final TabsAreaTheme tabsAreaTheme;
+  final TabsAreaThemeData tabsAreaTheme;
 
   List<RenderBox> _tabs = [];
 
@@ -233,7 +233,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         ContainerRenderObjectMixin<RenderBox, _TabsAreaLayoutParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _TabsAreaLayoutParentData> {
   _TabsAreaLayoutRenderBox(
-      TabbedViewTheme theme, HiddenTabs hiddenTabs, int? selectedTabIndex)
+      TabbedViewThemeData theme, HiddenTabs hiddenTabs, int? selectedTabIndex)
       : this._tabsAreaTheme = theme.tabsArea,
         this._hiddenTabs = hiddenTabs,
         this._selectedTabIndex = selectedTabIndex;
@@ -247,9 +247,9 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     }
   }
 
-  TabsAreaTheme _tabsAreaTheme;
-  TabsAreaTheme get tabsAreaTheme => _tabsAreaTheme;
-  set tabsAreaTheme(TabsAreaTheme value) {
+  TabsAreaThemeData _tabsAreaTheme;
+  TabsAreaThemeData get tabsAreaTheme => _tabsAreaTheme;
+  set tabsAreaTheme(TabsAreaThemeData value) {
     if (_tabsAreaTheme != value) {
       _tabsAreaTheme = value;
       markNeedsLayout();

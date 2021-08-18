@@ -245,16 +245,11 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #### Text style
 
 ```dart
-    var tabs = [
-      TabData(text: 'Tab 1'),
-      TabData(text: 'Tab 2'),
-    ];
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 
-    TabbedViewTheme theme = TabbedViewTheme.classic();
-    theme.tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
-
-    TabbedView tabbedView =
-        TabbedView(controller: TabbedViewController(tabs), theme: theme);
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
+      ..tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![tabtextstyle](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_text_style.png)
@@ -262,18 +257,14 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #### Alignment
 
 ```dart
-    var tabs = [
-      TabData(text: 'Tab 1'),
-      TabData(text: 'Tab 2'),
-    ];
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 
-    TabbedViewTheme theme = TabbedViewTheme.classic();
-    theme.tabsArea.tab
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic();
+    themeData.tabsArea.tab
       ..textStyle = TextStyle(fontSize: 20)
       ..verticalAlignment = VerticalAlignment.top;
 
-    TabbedView tabbedView =
-        TabbedView(controller: TabbedViewController(tabs), theme: theme);
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![topalignment](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/top_alignment.png)
@@ -285,13 +276,12 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 * The default *TabsAreaTheme* color is null.
 
 ```dart
-    var tabs = [TabData(text: 'Tab 1'), TabData(text: 'Tab 2')];
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedViewTheme theme = TabbedViewTheme.minimalist();
-    theme.tabsArea.color = Colors.green[100];
+    TabbedViewThemeData themeData = TabbedViewThemeData.minimalist();
+    themeData.tabsArea.color = Colors.green[100];
 
-    TabbedView tabbedView =
-        TabbedView(controller: TabbedViewController(tabs), theme: theme);
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![tabsareacolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_color.png)
@@ -303,20 +293,15 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 * Minimum gap after tabs. Separates the last tab and the buttons area.
 
 ```dart
-    List<TabData> tabs = [];
-    for (var i = 1; i < 7; i++) {
-      tabs.add(
-          TabData(text: 'Tab $i', content: Center(child: Text('Content $i'))));
-    }
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedViewTheme theme = TabbedViewTheme.classic();
-    theme.tabsArea
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic();
+    themeData.tabsArea
       ..initialGap = 20
       ..middleGap = 5
       ..minimalFinalGap = 5;
 
-    TabbedView tabbedView =
-        TabbedView(controller: TabbedViewController(tabs), theme: theme);
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![customgap](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
@@ -326,17 +311,13 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 ##### Button icon for the hidden tabs menu
 
 ```dart
-    List<TabData> tabs = [];
-    for (var i = 1; i < 7; i++) {
-      tabs.add(TabData(text: 'Tab $i'));
-    }
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedViewTheme theme = TabbedViewTheme.classic();
-    theme.tabsArea.buttonsArea.hiddenTabsMenuButtonIcon =
-        Icons.arrow_drop_down_circle_outlined;
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
+      ..tabsArea.buttonsArea.hiddenTabsMenuButtonIcon =
+          Icons.arrow_drop_down_circle_outlined;
 
-    TabbedView tabbedView =
-        TabbedView(controller: TabbedViewController(tabs), theme: theme);
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![hiddentabsbuttonicon](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/hidden_tabs_button_icon.png)
@@ -346,15 +327,11 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #### Max width
 
 ```dart
-    List<TabData> tabs = [];
-    for (int i = 1; i < 11; i++) {
-      tabs.add(TabData(text: 'Tab $i'));
-    }
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedViewTheme theme = TabbedViewTheme.classic()..menu.maxWidth = 100;
-
-    TabbedView tabbedView =
-        TabbedView(controller: TabbedViewController(tabs), theme: theme);
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
+      ..menu.maxWidth = 100;
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![menumaxwidth](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_max_width.png)
@@ -370,12 +347,13 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
           text: 'The name of the tab is so long that it doesn'
               't fit on the menu')
     ];
+    TabbedViewController controller = TabbedViewController(tabs);
 
-    TabbedViewTheme theme = TabbedViewTheme.classic()
+    TabbedView tabbedView = TabbedView(controller: controller);
+
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
       ..menu.ellipsisOverflowText = true;
-
-    TabbedView tabbedView =
-        TabbedView(controller: TabbedViewController(tabs), theme: theme);
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![menuellipsis](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_ellipsis.png)
@@ -385,15 +363,10 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 ####  Classic theme
 
 ```dart
-    List<TabData> tabs = [];
-    for (var i = 1; i < 7; i++) {
-      tabs.add(TabData(text: 'Tab $i', content:  Center(child: Text('Content $i'))));
-    }
-    TabbedViewController controller = TabbedViewController(tabs);
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedView tabbedView = TabbedView(
-        controller: controller,
-        theme: TabbedViewTheme.classic());
+    TabbedViewTheme theme =
+        TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.classic());
 ```
 
 ![classic2](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
@@ -401,17 +374,11 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #####  Classic theme - Color set
 
 ```dart
-    List<TabData> tabs = [];
-    for (var i = 1; i < 7; i++) {
-      tabs.add(TabData(text: 'Tab $i', content:  Center(child: Text('Content $i'))));
-    }
-    TabbedViewController controller = TabbedViewController(tabs);
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedViewTheme theme = TabbedViewTheme.classic(colorSet: Colors.green);
-
-    TabbedView tabbedView = TabbedView(
-        controller: controller,
-        theme: theme);
+    TabbedViewTheme theme = TabbedViewTheme(
+        child: tabbedView,
+        data: TabbedViewThemeData.classic(colorSet: Colors.green));
 ```
 
 ![classiccolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_color_set.png)
@@ -419,24 +386,10 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 ####  Dark theme
 
 ```dart
-    List<TabData> tabs = [];
-    for (var i = 1; i < 7; i++) {
-      tabs.add(TabData(text: 'Tab $i'));
-    }
-    TabbedViewController controller = TabbedViewController(tabs);
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    var contentBuilder = (BuildContext context, int index) {
-      int i = index + 1;
-      Text text = Text('Content $i', style: TextStyle(color: Colors.white));
-      return Center(child: text);
-    };
-
-    TabbedView tabbedView = TabbedView(
-        controller: controller,
-        contentBuilder: contentBuilder,
-        theme: TabbedViewTheme.dark());
-
-    Container container = Container(child: tabbedView, color: Colors.black);
+    TabbedViewTheme theme =
+        TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.dark());
 ```
 
 ![dark](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
@@ -444,24 +397,11 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #####  Dark theme - Color set
 
 ```dart
-    List<TabData> tabs = [];
-    for (var i = 1; i < 7; i++) {
-      tabs.add(TabData(text: 'Tab $i'));
-    }
-    TabbedViewController controller = TabbedViewController(tabs);
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    var contentBuilder = (BuildContext context, int index) {
-      int i = index + 1;
-      Text text = Text('Content $i', style: TextStyle(color: Colors.white));
-      return Center(child: text);
-    };
-
-    TabbedViewTheme theme = TabbedViewTheme.dark(colorSet: Colors.indigo);
-
-    TabbedView tabbedView = TabbedView(
-        controller: controller, contentBuilder: contentBuilder, theme: theme);
-
-    Container container = Container(child: tabbedView, color: Colors.black12);
+    TabbedViewTheme theme = TabbedViewTheme(
+        child: tabbedView,
+        data: TabbedViewThemeData.dark(colorSet: Colors.indigo));
 ```
 
 ![darkcolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_color_set.png)
@@ -469,8 +409,10 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 ####  Mobile theme
 
 ```dart
-    TabbedView tabbedView =
-        TabbedView(controller: controller, theme: TabbedViewTheme.mobile());
+    TabbedView tabbedView = TabbedView(controller: controller);
+
+    TabbedViewTheme theme =
+        TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.mobile());
 ```
 
 ![mobile](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
@@ -478,8 +420,11 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #####  Mobile theme - Color set
 
 ```dart
-    TabbedViewTheme theme = TabbedViewTheme.mobile(colorSet: Colors.blueGrey);
-    TabbedView tabbedView = TabbedView(controller: controller, theme: theme);
+    TabbedView tabbedView = TabbedView(controller: controller);
+
+    TabbedViewTheme theme = TabbedViewTheme(
+        child: tabbedView,
+        data: TabbedViewThemeData.mobile(colorSet: Colors.blueGrey));
 ```
 
 ![mobilecolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_color_set.png)
@@ -487,9 +432,12 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #####  Mobile theme - Highlighted tab color
 
 ```dart
-    TabbedViewTheme theme =
-        TabbedViewTheme.mobile(highlightedTabColor: Colors.green[700]!);
-    TabbedView tabbedView = TabbedView(controller: controller, theme: theme);
+    TabbedView tabbedView = TabbedView(controller: controller);
+
+    TabbedViewTheme theme = TabbedViewTheme(
+        child: tabbedView,
+        data: TabbedViewThemeData.mobile(
+            highlightedTabColor: Colors.green[700]!));
 ```
 
 ![mobilehighlightedcolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_highlighted_color.png)
@@ -497,8 +445,10 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 ####  Minimalist theme
 
 ```dart
-    TabbedView tabbedView =
-        TabbedView(controller: controller, theme: TabbedViewTheme.minimalist());
+    TabbedView tabbedView = TabbedView(controller: controller);
+
+    TabbedViewTheme theme = TabbedViewTheme(
+        child: tabbedView, data: TabbedViewThemeData.minimalist());
 ```
 
 ![minimalist](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist.gif)
@@ -506,9 +456,11 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #####  Minimalist theme - Color set
 
 ```dart
-    TabbedView tabbedView = TabbedView(
-        controller: controller,
-        theme: TabbedViewTheme.minimalist(colorSet: Colors.blue));
+    TabbedView tabbedView = TabbedView(controller: controller);
+
+    TabbedViewTheme theme = TabbedViewTheme(
+        child: tabbedView,
+        data: TabbedViewThemeData.minimalist(colorSet: Colors.blue));
 ```
 
 ![minimalistchangecolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_change_color.png)
@@ -523,9 +475,11 @@ It is possible to create an entire theme from scratch.
       TabData(text: 'Tab 2'),
       TabData(text: 'Tab 3')
     ];
+    TabbedViewController controller = TabbedViewController(tabs);
+    TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedViewTheme theme = TabbedViewTheme();
-    theme.tabsArea
+    TabbedViewThemeData themeData = TabbedViewThemeData();
+    themeData.tabsArea
       ..border = Border(bottom: BorderSide(color: Colors.green[700]!, width: 3))
       ..middleGap = 6;
 
@@ -533,7 +487,7 @@ It is possible to create an entire theme from scratch.
     BorderRadiusGeometry? borderRadius =
         BorderRadius.only(topLeft: radius, topRight: radius);
 
-    theme.tabsArea.tab
+    themeData.tabsArea.tab
       ..padding = EdgeInsets.fromLTRB(10, 4, 10, 4)
       ..buttonsOffset = 8
       ..decoration = BoxDecoration(
@@ -545,8 +499,7 @@ It is possible to create an entire theme from scratch.
       ..highlightedStatus.decoration =
           BoxDecoration(color: Colors.green[50], borderRadius: borderRadius);
 
-    TabbedView tabbedView =
-        TabbedView(controller: TabbedViewController(tabs), theme: theme);
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)

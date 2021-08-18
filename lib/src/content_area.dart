@@ -8,7 +8,8 @@ import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_widget.dart';
-import 'package:tabbed_view/src/theme.dart';
+import 'package:tabbed_view/src/theme_data.dart';
+import 'package:tabbed_view/src/theme_widget.dart';
 
 /// Container widget for the tab content and menu.
 class ContentArea extends StatelessWidget {
@@ -19,7 +20,8 @@ class ContentArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TabbedViewController controller = data.controller;
-    ContentAreaTheme contentAreaTheme = data.theme.contentArea;
+    TabbedViewThemeData theme = TabbedViewTheme.of(context);
+    ContentAreaThemeData contentAreaTheme = theme.contentArea;
 
     LayoutBuilder layoutBuilder = LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -50,11 +52,11 @@ class ContentArea extends StatelessWidget {
       NotificationListenerCallback<SizeChangedLayoutNotification>?
           onSizeNotification;
       if (controller.hasMenu()) {
-        children.add(Positioned.fill(child: _Glass(data)));
+        children.add(
+            Positioned.fill(child: _Glass(theme.menu.blur, data.controller)));
         children.add(Positioned(
             child: LimitedBox(
-                maxWidth:
-                    math.min(data.theme.menu.maxWidth, constraints.maxWidth),
+                maxWidth: math.min(theme.menu.maxWidth, constraints.maxWidth),
                 child:
                     TabbedViewMenuWidget(controller: controller, data: data)),
             right: 0,
@@ -81,20 +83,21 @@ class ContentArea extends StatelessWidget {
 }
 
 class _Glass extends StatelessWidget {
-  _Glass(this.data);
+  _Glass(this.blur, this.controller);
 
-  final TabbedViewData data;
+  final bool blur;
+  final TabbedViewController controller;
 
   @override
   Widget build(BuildContext context) {
     Widget? child;
-    if (data.theme.menu.blur) {
+    if (blur) {
       child = BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
           child: Container(color: Colors.transparent));
     }
     return ClipRect(
         child: GestureDetector(
-            child: child, onTap: () => data.controller.removeMenu()));
+            child: child, onTap: () => controller.removeMenu()));
   }
 }

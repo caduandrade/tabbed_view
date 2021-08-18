@@ -7,7 +7,8 @@ import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
-import 'package:tabbed_view/src/theme.dart';
+import 'package:tabbed_view/src/theme_data.dart';
+import 'package:tabbed_view/src/theme_widget.dart';
 
 /// Listener for the tabs with the mouse over.
 typedef UpdateHighlightedIndex = void Function(int? tabIndex);
@@ -28,11 +29,12 @@ class TabWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TabData tab = data.controller.tabs[index];
-    TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
-    TabTheme tabTheme = tabsAreaTheme.tab;
-    TabStatusTheme statusTheme = _getTabThemeFor(status);
+    TabbedViewThemeData theme = TabbedViewTheme.of(context);
+    TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
+    TabThemeData tabTheme = tabsAreaTheme.tab;
+    TabStatusThemeData statusTheme = _getTabThemeFor(theme, status);
 
-    List<Widget> textAndButtons = _textAndButtons(context);
+    List<Widget> textAndButtons = _textAndButtons(context, theme);
 
     Widget textAndButtonsContainer = ClipRect(
         child: FlowLayout(
@@ -85,13 +87,14 @@ class TabWidget extends StatelessWidget {
   }
 
   /// Builds a list with title text and buttons.
-  List<Widget> _textAndButtons(BuildContext context) {
+  List<Widget> _textAndButtons(
+      BuildContext context, TabbedViewThemeData theme) {
     List<Widget> textAndButtons = [];
 
     TabData tab = data.controller.tabs[index];
-    TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
-    TabTheme tabTheme = tabsAreaTheme.tab;
-    TabStatusTheme statusTheme = _getTabThemeFor(status);
+    TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
+    TabThemeData tabTheme = tabsAreaTheme.tab;
+    TabStatusThemeData statusTheme = _getTabThemeFor(theme, status);
     ButtonColors buttonColors = statusTheme.buttonColors != null
         ? statusTheme.buttonColors!
         : tabTheme.buttonColors;
@@ -167,11 +170,12 @@ class TabWidget extends StatelessWidget {
   }
 
   /// Gets the theme of a tab according to its status.
-  TabStatusTheme _getTabThemeFor(TabStatus status) {
-    TabsAreaTheme tabsAreaTheme = data.theme.tabsArea;
+  TabStatusThemeData _getTabThemeFor(
+      TabbedViewThemeData theme, TabStatus status) {
+    TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
     switch (status) {
       case TabStatus.normal:
-        return TabStatusTheme.empty;
+        return TabStatusThemeData.empty;
       case TabStatus.selected:
         return tabsAreaTheme.tab.selectedStatus;
       case TabStatus.highlighted:

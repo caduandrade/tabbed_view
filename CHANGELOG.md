@@ -1,3 +1,16 @@
+## 1.4.0
+
+* API changes
+  * Theme classes have been renamed
+    * *TabbedViewTheme* to *TabbedViewThemeData*
+    * *TabsAreaTheme* to *TabsAreaThemeData*
+    * *ContentAreaTheme* to *ContentAreaThemeData*
+    * *MenuTheme* to *MenuThemeData*
+    * *ButtonsAreaTheme* to *ButtonsAreaThemeData*
+    * *TabTheme* to *TabThemeData*
+    * *TabStatusTheme* to *TabStatusThemeData*
+  * *TabbedViewTheme* widget following the same pattern used by Flutter's *Theme*
+
 ## 1.3.1
 
 * Bug fix
@@ -25,8 +38,8 @@
 
 ## 1.1.1
 
-* Fixing class name (how embarrassing)
-  * Renaming *TabbedWiew* to *TabbedView*
+* Class name has been fixed (how embarrassing)
+  * *TabbedWiew* has been renamed to *TabbedView*
   
 ## 1.1.0+1
 
@@ -40,11 +53,11 @@
 
 ## 1.0.0+2
 
-* Updating the README
+* README update
 
 ## 1.0.0+1
 
-* Updating the README
+* README update
 
 ## 1.0.0
 
@@ -53,28 +66,28 @@
 ## 0.7.0
 
 * Tabs area buttons builder
-* Changes in thematization
-  * *Light* theme renamed to *classic* theme
+* Theme changes
+  * *light* theme has been renamed to *classic* theme
 
 ## 0.6.0
 
-* Changes in thematization
+* Theme changes
 
 ## 0.5.0
 
-* Changes in thematization
-* Adding documentation
+* Theme changes
+* Documentation
 * Menu builder
-* *TabbedWiewModel* changed to *TabbedWiewController*
+* *TabbedWiewModel* has been changed to *TabbedWiewController*
 
 ## 0.4.0
 
-* API changes to simplify changing themes
+* API has been changed to simplify changing themes
 
 ## 0.3.0
 
-* Changes in thematization
-* Adding new themes
+* Theme changes
+* New themes
 
 ## 0.2.0
 

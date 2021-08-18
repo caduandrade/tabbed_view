@@ -3,7 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
-import 'package:tabbed_view/src/theme.dart';
+import 'package:tabbed_view/src/theme_data.dart';
+import 'package:tabbed_view/src/theme_widget.dart';
 
 /// Widget for menu.
 class TabbedViewMenuWidget extends StatefulWidget {
@@ -20,7 +21,8 @@ class TabbedViewMenuWidget extends StatefulWidget {
 class _TabbedViewMenuWidgetState extends State<TabbedViewMenuWidget> {
   @override
   Widget build(BuildContext context) {
-    MenuTheme menuTheme = widget.data.theme.menu;
+    TabbedViewThemeData theme = TabbedViewTheme.of(context);
+    MenuThemeData menuTheme = theme.menu;
     List<TabbedViewMenuItem> items = widget.controller.menuBuilder!(context);
     bool hasDivider =
         menuTheme.dividerThickness > 0 && menuTheme.dividerColor != null;

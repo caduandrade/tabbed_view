@@ -10,7 +10,6 @@ import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabs_area.dart';
-import 'package:tabbed_view/src/theme.dart';
 
 /// Defines a draggable builder for each tab.
 typedef DraggableTabBuilder = Draggable Function(
@@ -38,7 +37,6 @@ typedef OnTabSelection = Function(int? newTabIndex);
 class TabbedView extends StatefulWidget {
   TabbedView(
       {required TabbedViewController controller,
-      TabbedViewTheme? theme,
       IndexedWidgetBuilder? contentBuilder,
       OnTabClosing? onTabClosing,
       OnTabSelection? onTabSelection,
@@ -49,7 +47,6 @@ class TabbedView extends StatefulWidget {
       DraggableTabBuilder? draggableTabBuilder})
       : this._data = TabbedViewData(
             controller: controller,
-            theme: theme == null ? TabbedViewTheme.classic() : theme,
             contentBuilder: contentBuilder,
             onTabClosing: onTabClosing,
             onTabSelection: onTabSelection,

@@ -10,7 +10,8 @@ import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/tabs_area_layout.dart';
-import 'package:tabbed_view/src/theme.dart';
+import 'package:tabbed_view/src/theme_data.dart';
+import 'package:tabbed_view/src/theme_widget.dart';
 
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {
@@ -31,7 +32,8 @@ class _TabsAreaState extends State<TabsArea> {
   @override
   Widget build(BuildContext context) {
     TabbedViewController controller = widget.data.controller;
-    TabsAreaTheme tabsAreaTheme = widget.data.theme.tabsArea;
+    TabbedViewThemeData theme = TabbedViewTheme.of(context);
+    TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
     List<Widget> children = [];
     for (int index = 0; index < controller.tabs.length; index++) {
       TabStatus status = _getStatusFor(index);
@@ -44,7 +46,7 @@ class _TabsAreaState extends State<TabsArea> {
     Widget tabsAreaLayout = TabsAreaLayout(
         children: children,
         buttonsAreaBuilder: _buttonsAreaBuilder,
-        theme: widget.data.theme,
+        theme: theme,
         hiddenTabs: hiddenTabs,
         selectedTabIndex: controller.selectedIndex);
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
@@ -61,7 +63,8 @@ class _TabsAreaState extends State<TabsArea> {
   ///
   /// Even if there are no visible buttons, an empty container must be created.
   Widget _buttonsAreaBuilder(BuildContext context) {
-    ButtonsAreaTheme buttonsAreaTheme = widget.data.theme.tabsArea.buttonsArea;
+    TabbedViewThemeData theme = TabbedViewTheme.of(context);
+    ButtonsAreaThemeData buttonsAreaTheme = theme.tabsArea.buttonsArea;
     Widget buttonsArea;
 
     List<TabButton> buttons = [];

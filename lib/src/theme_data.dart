@@ -31,26 +31,29 @@ class ButtonColors {
 }
 
 /// The [TabbedView] theme.
-class TabbedViewTheme {
-  TabbedViewTheme(
-      {TabsAreaTheme? tabsArea, ContentAreaTheme? contentArea, MenuTheme? menu})
-      : this.tabsArea = tabsArea != null ? tabsArea : TabsAreaTheme(),
+/// Defines the configuration of the overall visual [Theme] for a widget subtree within the app.
+class TabbedViewThemeData {
+  TabbedViewThemeData(
+      {TabsAreaThemeData? tabsArea,
+      ContentAreaThemeData? contentArea,
+      MenuThemeData? menu})
+      : this.tabsArea = tabsArea != null ? tabsArea : TabsAreaThemeData(),
         this.contentArea =
-            contentArea != null ? contentArea : ContentAreaTheme(),
-        this.menu = menu != null ? menu : MenuTheme();
+            contentArea != null ? contentArea : ContentAreaThemeData(),
+        this.menu = menu != null ? menu : MenuThemeData();
 
-  TabsAreaTheme tabsArea;
-  ContentAreaTheme contentArea;
-  MenuTheme menu;
+  TabsAreaThemeData tabsArea;
+  ContentAreaThemeData contentArea;
+  MenuThemeData menu;
 
   /// Builds the predefined dark theme.
-  factory TabbedViewTheme.dark(
+  factory TabbedViewThemeData.dark(
       {MaterialColor colorSet = Colors.grey, double fontSize = 13}) {
     return _Dark.build(colorSet: colorSet, fontSize: 13);
   }
 
   /// Builds the predefined classic theme.
-  factory TabbedViewTheme.classic(
+  factory TabbedViewThemeData.classic(
       {MaterialColor colorSet = Colors.grey,
       double fontSize = 13,
       Color borderColor = Colors.black}) {
@@ -59,7 +62,7 @@ class TabbedViewTheme {
   }
 
   /// Builds the predefined mobile theme.
-  factory TabbedViewTheme.mobile(
+  factory TabbedViewThemeData.mobile(
       {MaterialColor colorSet = Colors.grey,
       Color highlightedTabColor = Colors.blue,
       double fontSize = 13}) {
@@ -70,7 +73,8 @@ class TabbedViewTheme {
   }
 
   /// Builds the predefined minimalist theme.
-  factory TabbedViewTheme.minimalist({MaterialColor colorSet = Colors.grey}) {
+  factory TabbedViewThemeData.minimalist(
+      {MaterialColor colorSet = Colors.grey}) {
     return _Minimalist.build(colorSet: colorSet);
   }
 
@@ -79,18 +83,19 @@ class TabbedViewTheme {
 }
 
 /// Theme for buttons area.
-class ButtonsAreaTheme {
-  ButtonsAreaTheme(
+class ButtonsAreaThemeData {
+  ButtonsAreaThemeData(
       {this.decoration,
       this.padding,
       double offset = 0,
-      double buttonIconSize = TabbedViewTheme.defaultIconSize,
+      double buttonIconSize = TabbedViewThemeData.defaultIconSize,
       this.buttonColors = const ButtonColors(),
       this.hiddenTabsMenuButtonIcon = Icons.arrow_drop_down})
       : this._offset = offset >= 0 ? offset : 0,
-        this.buttonIconSize = buttonIconSize >= TabbedViewTheme.minimalIconSize
-            ? buttonIconSize
-            : TabbedViewTheme.minimalIconSize;
+        this.buttonIconSize =
+            buttonIconSize >= TabbedViewThemeData.minimalIconSize
+                ? buttonIconSize
+                : TabbedViewThemeData.minimalIconSize;
 
   /// The decoration to paint behind the buttons.
   BoxDecoration? decoration;
@@ -116,11 +121,11 @@ class ButtonsAreaTheme {
 }
 
 ///Theme for tabs and buttons area.
-class TabsAreaTheme {
-  TabsAreaTheme(
+class TabsAreaThemeData {
+  TabsAreaThemeData(
       {this.closeButtonIcon = Icons.clear,
-      TabTheme? tab,
-      ButtonsAreaTheme? buttonsArea,
+      TabThemeData? tab,
+      ButtonsAreaThemeData? buttonsArea,
       this.color,
       this.border,
       this.initialGap = 0,
@@ -128,20 +133,20 @@ class TabsAreaTheme {
       double minimalFinalGap = 0,
       this.gapBottomBorder = BorderSide.none,
       this.equalHeights = EqualHeights.none})
-      : this.tab = tab != null ? tab : TabTheme(),
+      : this.tab = tab != null ? tab : TabThemeData(),
         this.buttonsArea =
-            buttonsArea != null ? buttonsArea : ButtonsAreaTheme(),
+            buttonsArea != null ? buttonsArea : ButtonsAreaThemeData(),
         this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0;
 
   Color? color;
   Border? border;
-  TabTheme tab;
+  TabThemeData tab;
   double initialGap;
   double middleGap;
   double _minimalFinalGap;
   BorderSide gapBottomBorder;
 
-  ButtonsAreaTheme buttonsArea;
+  ButtonsAreaThemeData buttonsArea;
   IconData closeButtonIcon;
   EqualHeights equalHeights;
 
@@ -153,10 +158,10 @@ class TabsAreaTheme {
 }
 
 /// Theme for tab.
-class TabTheme {
-  TabTheme(
+class TabThemeData {
+  TabThemeData(
       {this.buttonColors = const ButtonColors(),
-      double buttonIconSize = TabbedViewTheme.defaultIconSize,
+      double buttonIconSize = TabbedViewThemeData.defaultIconSize,
       this.verticalAlignment = VerticalAlignment.center,
       double buttonsOffset = 0,
       double buttonsGap = 0,
@@ -166,19 +171,21 @@ class TabTheme {
       this.textStyle = const TextStyle(fontSize: 13),
       this.padding,
       this.margin,
-      TabStatusTheme? selectedStatus,
-      TabStatusTheme? highlightedStatus,
-      TabStatusTheme? normalStatus,
-      TabStatusTheme? disabledStatus})
+      TabStatusThemeData? selectedStatus,
+      TabStatusThemeData? highlightedStatus,
+      TabStatusThemeData? normalStatus,
+      TabStatusThemeData? disabledStatus})
       : this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
-        this.buttonIconSize = buttonIconSize >= TabbedViewTheme.minimalIconSize
-            ? buttonIconSize
-            : TabbedViewTheme.minimalIconSize,
+        this.buttonIconSize =
+            buttonIconSize >= TabbedViewThemeData.minimalIconSize
+                ? buttonIconSize
+                : TabbedViewThemeData.minimalIconSize,
         this.selectedStatus =
-            selectedStatus != null ? selectedStatus : TabStatusTheme(),
-        this.highlightedStatus =
-            highlightedStatus != null ? highlightedStatus : TabStatusTheme();
+            selectedStatus != null ? selectedStatus : TabStatusThemeData(),
+        this.highlightedStatus = highlightedStatus != null
+            ? highlightedStatus
+            : TabStatusThemeData();
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.
@@ -205,8 +212,8 @@ class TabTheme {
   double _buttonsOffset;
   double _buttonsGap;
 
-  TabStatusTheme selectedStatus;
-  TabStatusTheme highlightedStatus;
+  TabStatusThemeData selectedStatus;
+  TabStatusThemeData highlightedStatus;
 
   double get buttonsOffset => _buttonsOffset;
 
@@ -222,9 +229,9 @@ class TabTheme {
 }
 
 /// Theme for tab in a given status.
-/// Allows you to overwrite [TabTheme] properties.
-class TabStatusTheme {
-  TabStatusTheme(
+/// Allows you to overwrite [TabThemeData] properties.
+class TabStatusThemeData {
+  TabStatusThemeData(
       {this.decoration,
       this.innerTopBorder,
       this.innerBottomBorder,
@@ -233,7 +240,7 @@ class TabStatusTheme {
       this.margin,
       this.buttonColors});
 
-  static final TabStatusTheme empty = TabStatusTheme();
+  static final TabStatusThemeData empty = TabStatusThemeData();
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.
@@ -254,8 +261,8 @@ class TabStatusTheme {
 }
 
 // Theme for tab content container.
-class ContentAreaTheme {
-  ContentAreaTheme({this.decoration, this.padding});
+class ContentAreaThemeData {
+  ContentAreaThemeData({this.decoration, this.padding});
 
   /// The decoration to paint behind the content.
   BoxDecoration? decoration;
@@ -269,8 +276,8 @@ class ContentAreaTheme {
 }
 
 /// Theme for menu.
-class MenuTheme {
-  MenuTheme(
+class MenuThemeData {
+  MenuThemeData(
       {this.padding,
       this.margin,
       this.menuItemPadding,
@@ -337,7 +344,7 @@ class MenuTheme {
 
 /// Predefined classic theme builder.
 class _Classic {
-  static TabbedViewTheme build(
+  static TabbedViewThemeData build(
       {required MaterialColor colorSet,
       required double fontSize,
       required Color borderColor}) {
@@ -350,7 +357,7 @@ class _Classic {
         disabled: colorSet[400]!,
         hover: colorSet[900]!);
 
-    return TabbedViewTheme(
+    return TabbedViewThemeData(
         tabsArea: _tabsAreaTheme(
             backgroundColor: backgroundColor,
             highlightedTabColor: highlightedTabColor,
@@ -368,14 +375,14 @@ class _Classic {
             fontColor: fontColor));
   }
 
-  static TabsAreaTheme _tabsAreaTheme(
+  static TabsAreaThemeData _tabsAreaTheme(
       {required Color borderColor,
       required Color fontColor,
       required double fontSize,
       required Color backgroundColor,
       required Color highlightedTabColor,
       required ButtonColors buttonColors}) {
-    return TabsAreaTheme(
+    return TabsAreaThemeData(
         tab: _tabTheme(
             borderColor: borderColor,
             buttonColors: buttonColors,
@@ -383,7 +390,7 @@ class _Classic {
             fontSize: fontSize,
             backgroundColor: backgroundColor,
             highlightedTabColor: highlightedTabColor),
-        buttonsArea: ButtonsAreaTheme(
+        buttonsArea: ButtonsAreaThemeData(
             buttonColors: buttonColors,
             decoration: BoxDecoration(
                 color: backgroundColor,
@@ -393,14 +400,14 @@ class _Classic {
         gapBottomBorder: BorderSide(color: borderColor, width: 1));
   }
 
-  static TabTheme _tabTheme(
+  static TabThemeData _tabTheme(
       {required Color borderColor,
       required Color fontColor,
       required double fontSize,
       required Color backgroundColor,
       required Color highlightedTabColor,
       required ButtonColors buttonColors}) {
-    return TabTheme(
+    return TabThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         buttonColors: buttonColors,
         buttonsOffset: 4,
@@ -408,11 +415,11 @@ class _Classic {
         decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 1)),
-        highlightedStatus: TabStatusTheme(
+        highlightedStatus: TabStatusThemeData(
             decoration: BoxDecoration(
                 color: highlightedTabColor,
                 border: Border.all(color: borderColor, width: 1))),
-        selectedStatus: TabStatusTheme(
+        selectedStatus: TabStatusThemeData(
           decoration: BoxDecoration(
               color: backgroundColor,
               border: Border(
@@ -423,23 +430,23 @@ class _Classic {
         ));
   }
 
-  static ContentAreaTheme _contentAreaTheme(
+  static ContentAreaThemeData _contentAreaTheme(
       {required Color borderColor, required Color backgroundColor}) {
     BorderSide borderSide = BorderSide(width: 1, color: borderColor);
     BoxBorder border =
         Border(bottom: borderSide, left: borderSide, right: borderSide);
     BoxDecoration decoration =
         BoxDecoration(color: backgroundColor, border: border);
-    return ContentAreaTheme(decoration: decoration);
+    return ContentAreaThemeData(decoration: decoration);
   }
 
-  static MenuTheme _menuTheme(
+  static MenuThemeData _menuTheme(
       {required Color fontColor,
       required double fontSize,
       required Color color,
       required hoverColor,
       required borderColor}) {
-    return MenuTheme(
+    return MenuThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         border: Border.all(width: 1, color: borderColor),
         margin: EdgeInsets.all(8),
@@ -453,7 +460,7 @@ class _Classic {
 
 /// Predefined dark theme builder.
 class _Dark {
-  static TabbedViewTheme build(
+  static TabbedViewThemeData build(
       {required MaterialColor colorSet, required double fontSize}) {
     Color tabColor = colorSet[900]!;
     Color selectedTabColor = colorSet[800]!;
@@ -468,7 +475,7 @@ class _Dark {
     Color fontColor = colorSet[100]!;
     Color buttonsAreaColor = colorSet[800]!;
 
-    return TabbedViewTheme(
+    return TabbedViewThemeData(
         tabsArea: _tabsAreaTheme(
             buttonsAreaColor: buttonsAreaColor,
             fontSize: fontSize,
@@ -486,7 +493,7 @@ class _Dark {
             dividerColor: menuDividerColor));
   }
 
-  static TabsAreaTheme _tabsAreaTheme(
+  static TabsAreaThemeData _tabsAreaTheme(
       {required Color buttonsAreaColor,
       required Color fontColor,
       required double fontSize,
@@ -494,7 +501,7 @@ class _Dark {
       required Color selectedTabColor,
       required Color highlightedTabColor,
       required ButtonColors buttonColors}) {
-    return TabsAreaTheme(
+    return TabsAreaThemeData(
         tab: _tabTheme(
             fontSize: fontSize,
             fontColor: fontColor,
@@ -508,15 +515,15 @@ class _Dark {
             buttonsAreaColor: buttonsAreaColor, buttonColors: buttonColors));
   }
 
-  static ButtonsAreaTheme _buttonsAreaTheme(
+  static ButtonsAreaThemeData _buttonsAreaTheme(
       {required Color buttonsAreaColor, required ButtonColors buttonColors}) {
-    return ButtonsAreaTheme(
+    return ButtonsAreaThemeData(
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(color: buttonsAreaColor),
         buttonColors: buttonColors);
   }
 
-  static TabTheme _tabTheme(
+  static TabThemeData _tabTheme(
       {required Color fontColor,
       required double fontSize,
       required Color tabColor,
@@ -525,13 +532,13 @@ class _Dark {
       required ButtonColors buttonColors}) {
     double bottomWidth = 3;
     EdgeInsetsGeometry padding = EdgeInsets.fromLTRB(6, 2, 6, 2);
-    return TabTheme(
+    return TabThemeData(
         buttonsOffset: 4,
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         decoration: BoxDecoration(color: tabColor),
         margin: EdgeInsets.only(bottom: bottomWidth),
         padding: padding,
-        selectedStatus: TabStatusTheme(
+        selectedStatus: TabStatusThemeData(
             decoration: BoxDecoration(
                 color: selectedTabColor,
                 border: Border(
@@ -539,25 +546,26 @@ class _Dark {
                         width: bottomWidth, color: selectedTabColor))),
             margin: EdgeInsets.zero,
             padding: padding),
-        highlightedStatus: TabStatusTheme(
+        highlightedStatus: TabStatusThemeData(
             decoration: BoxDecoration(color: highlightedTabColor),
             padding: padding),
         buttonColors: buttonColors);
   }
 
-  static ContentAreaTheme _contentAreaTheme({required Color selectedTabColor}) {
-    return ContentAreaTheme(
+  static ContentAreaThemeData _contentAreaTheme(
+      {required Color selectedTabColor}) {
+    return ContentAreaThemeData(
         decoration: BoxDecoration(color: selectedTabColor),
         padding: EdgeInsets.all(8));
   }
 
-  static MenuTheme _menuTheme(
+  static MenuThemeData _menuTheme(
       {required Color fontColor,
       required double fontSize,
       required Color color,
       required hoverColor,
       required dividerColor}) {
-    return MenuTheme(
+    return MenuThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),
@@ -570,7 +578,7 @@ class _Dark {
 
 /// Predefined mobile theme builder.
 class _Mobile {
-  static TabbedViewTheme build(
+  static TabbedViewThemeData build(
       {required MaterialColor colorSet,
       required Color highlightedTabColor,
       required double fontSize}) {
@@ -583,7 +591,7 @@ class _Mobile {
         normal: colorSet[500]!,
         disabled: colorSet[300]!,
         hover: colorSet[900]!);
-    return TabbedViewTheme(
+    return TabbedViewThemeData(
         tabsArea: _tabsAreaTheme(
             buttonColors: buttonColors,
             foregroundColor: foregroundColor,
@@ -601,14 +609,14 @@ class _Mobile {
             backgroundColor: menuColor));
   }
 
-  static TabsAreaTheme _tabsAreaTheme(
+  static TabsAreaThemeData _tabsAreaTheme(
       {required ButtonColors buttonColors,
       required double fontSize,
       required Color borderColor,
       required Color highlightedTabColor,
       required Color foregroundColor,
       required Color backgroundColor}) {
-    return TabsAreaTheme(
+    return TabsAreaThemeData(
         tab: _tabTheme(
             buttonColors: buttonColors,
             borderColor: borderColor,
@@ -618,12 +626,12 @@ class _Mobile {
         equalHeights: EqualHeights.all,
         initialGap: -1,
         middleGap: -1,
-        buttonsArea: ButtonsAreaTheme(buttonColors: buttonColors),
+        buttonsArea: ButtonsAreaThemeData(buttonColors: buttonColors),
         border: Border.all(color: borderColor, width: 1),
         color: backgroundColor);
   }
 
-  static TabTheme _tabTheme(
+  static TabThemeData _tabTheme(
       {required ButtonColors buttonColors,
       required double fontSize,
       required Color borderColor,
@@ -632,7 +640,7 @@ class _Mobile {
     BorderSide verticalBorderSide = BorderSide(color: borderColor, width: 1);
     Border border = Border(left: verticalBorderSide, right: verticalBorderSide);
     double borderHeight = 4;
-    return TabTheme(
+    return TabThemeData(
         buttonColors: buttonColors,
         textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
         buttonsOffset: 4,
@@ -640,33 +648,33 @@ class _Mobile {
         decoration: BoxDecoration(border: border),
         innerBottomBorder:
             BorderSide(color: Colors.transparent, width: borderHeight),
-        highlightedStatus: TabStatusTheme(
+        highlightedStatus: TabStatusThemeData(
             decoration: BoxDecoration(border: border),
             innerBottomBorder:
                 BorderSide(color: borderColor, width: borderHeight)),
-        selectedStatus: TabStatusTheme(
+        selectedStatus: TabStatusThemeData(
             decoration: BoxDecoration(border: border),
             innerBottomBorder:
                 BorderSide(color: highlightedColor, width: borderHeight)));
   }
 
-  static ContentAreaTheme _contentAreaTheme(
+  static ContentAreaThemeData _contentAreaTheme(
       {required Color borderColor, required Color backgroundColor}) {
     BorderSide borderSide = BorderSide(width: 1, color: borderColor);
     BoxBorder border =
         Border(bottom: borderSide, left: borderSide, right: borderSide);
     BoxDecoration decoration =
         BoxDecoration(color: backgroundColor, border: border);
-    return ContentAreaTheme(decoration: decoration);
+    return ContentAreaThemeData(decoration: decoration);
   }
 
-  static MenuTheme _menuTheme(
+  static MenuThemeData _menuTheme(
       {required Color backgroundColor,
       required double fontSize,
       required Color borderColor,
       required Color foregroundColor,
       required Color hoverColor}) {
-    return MenuTheme(
+    return MenuThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
         border: Border.all(width: 1, color: borderColor),
         margin: EdgeInsets.all(8),
@@ -680,7 +688,7 @@ class _Mobile {
 
 /// Predefined minimalist theme builder.
 class _Minimalist {
-  static TabbedViewTheme build({required MaterialColor colorSet}) {
+  static TabbedViewThemeData build({required MaterialColor colorSet}) {
     Color borderColor = colorSet[700]!;
     Color background = colorSet[50]!;
     Color selectedTabColor = borderColor;
@@ -694,7 +702,7 @@ class _Minimalist {
     Color fontColor = colorSet[900]!;
     Color selectedFontColor = colorSet[50]!;
     Color hiddenTabsMenuButtonColor = borderColor;
-    return TabbedViewTheme(
+    return TabbedViewThemeData(
         tabsArea: _tabsAreaTheme(
             borderColor: borderColor,
             background: background,
@@ -715,7 +723,7 @@ class _Minimalist {
             menuFontColor: fontColor));
   }
 
-  static TabsAreaTheme _tabsAreaTheme(
+  static TabsAreaThemeData _tabsAreaTheme(
       {required Color borderColor,
       required Color background,
       required Color selectedTabColor,
@@ -725,8 +733,8 @@ class _Minimalist {
       required Color fontColor,
       required Color selectedFontColor,
       required Color hiddenTabsMenuButtonColor}) {
-    return TabsAreaTheme(
-        buttonsArea: ButtonsAreaTheme(
+    return TabsAreaThemeData(
+        buttonsArea: ButtonsAreaThemeData(
             decoration: BoxDecoration(color: background),
             buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor)),
         tab: _tabTheme(
@@ -742,7 +750,7 @@ class _Minimalist {
         border: Border(bottom: BorderSide(color: borderColor, width: 1)));
   }
 
-  static TabTheme _tabTheme(
+  static TabThemeData _tabTheme(
       {required Color borderColor,
       required Color background,
       required Color selectedTabColor,
@@ -751,37 +759,37 @@ class _Minimalist {
       required ButtonColors selectedButtonColors,
       required Color fontColor,
       required Color selectedFontColor}) {
-    return TabTheme(
+    return TabThemeData(
       buttonsOffset: 4,
       textStyle: TextStyle(color: fontColor, fontSize: 13),
       padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
       decoration: BoxDecoration(color: background),
       buttonColors: buttonColors,
-      highlightedStatus:
-          TabStatusTheme(decoration: BoxDecoration(color: highlightedTabColor)),
-      selectedStatus: TabStatusTheme(
+      highlightedStatus: TabStatusThemeData(
+          decoration: BoxDecoration(color: highlightedTabColor)),
+      selectedStatus: TabStatusThemeData(
           buttonColors: selectedButtonColors,
           fontColor: selectedFontColor,
           decoration: BoxDecoration(color: selectedTabColor)),
     );
   }
 
-  static ContentAreaTheme _contentAreaTheme(
+  static ContentAreaThemeData _contentAreaTheme(
       {required Color borderColor, required Color background}) {
     BorderSide borderSide = BorderSide(width: 1, color: borderColor);
     BoxBorder border =
         Border(bottom: borderSide, left: borderSide, right: borderSide);
     BoxDecoration decoration = BoxDecoration(color: background, border: border);
-    return ContentAreaTheme(decoration: decoration);
+    return ContentAreaThemeData(decoration: decoration);
   }
 
-  static MenuTheme _menuTheme(
+  static MenuThemeData _menuTheme(
       {required Color borderColor,
       required Color menuColor,
       required Color hoverMenuColor,
       required Color dividerMenuColor,
       required Color menuFontColor}) {
-    return MenuTheme(
+    return MenuThemeData(
         border: Border.all(width: 1, color: borderColor),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),
