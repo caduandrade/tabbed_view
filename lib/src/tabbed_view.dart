@@ -19,9 +19,11 @@ typedef DraggableTabBuilder = Draggable Function(
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
     BuildContext context, int tabsCount);
 
-/// Event that will be triggered when starting the tab closing.
-/// The return indicates whether the tab can be closed.
-typedef OnTabClosing = bool Function(int tabIndex);
+/// The event that will be triggered after the tab close.
+typedef OnTabClose = void Function(int tabIndex, TabData tabData);
+
+/// Intercepts a close event to indicates whether the tab can be closed.
+typedef TabCloseInterceptor = bool Function(int tabIndex);
 
 /// Event that will be triggered when the tab selection is changed.
 typedef OnTabSelection = Function(int? newTabIndex);
@@ -38,7 +40,8 @@ class TabbedView extends StatefulWidget {
   TabbedView(
       {required TabbedViewController controller,
       IndexedWidgetBuilder? contentBuilder,
-      OnTabClosing? onTabClosing,
+      OnTabClose? onTabClose,
+      TabCloseInterceptor? tabCloseInterceptor,
       OnTabSelection? onTabSelection,
       bool selectToEnableButtons = true,
       bool contentClip = true,
@@ -48,7 +51,8 @@ class TabbedView extends StatefulWidget {
       : this._data = TabbedViewData(
             controller: controller,
             contentBuilder: contentBuilder,
-            onTabClosing: onTabClosing,
+            onTabClose: onTabClose,
+            tabCloseInterceptor: tabCloseInterceptor,
             onTabSelection: onTabSelection,
             contentClip: contentClip,
             selectToEnableButtons: selectToEnableButtons,
@@ -93,7 +97,7 @@ class _TabbedViewState extends State<TabbedView> {
     ], delegate: _TabbedViewLayout());
   }
 
-  _rebuild() {
+  void _rebuild() {
     int? newTabIndex = widget._data.controller.selectedIndex;
     if (_lastSelectedIndex != newTabIndex) {
       _lastSelectedIndex = newTabIndex;

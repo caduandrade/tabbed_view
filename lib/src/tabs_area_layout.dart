@@ -138,7 +138,7 @@ class _VisibleTabs {
 
   List<RenderBox> _tabs = [];
 
-  add(RenderBox tab) {
+  void add(RenderBox tab) {
     _tabs.add(tab);
   }
 
@@ -168,7 +168,7 @@ class _VisibleTabs {
   }
 
   /// Updates the offset given the tab width, initial offset and gap values.
-  updateOffsets(Size tabsAreaButtonsSize) {
+  void updateOffsets(Size tabsAreaButtonsSize) {
     double offset = tabsAreaTheme.initialGap;
     for (int i = 0; i < _tabs.length; i++) {
       RenderBox tab = _tabs[i];

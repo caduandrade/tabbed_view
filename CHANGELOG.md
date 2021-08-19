@@ -1,3 +1,9 @@
+## 1.5.0
+
+* API changes
+  * *OnTabClosing* typedef renamed to *TabCloseInterceptor*
+  * Added *OnTabClose* typedef
+
 ## 1.4.0
 
 * API changes

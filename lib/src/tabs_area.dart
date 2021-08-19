@@ -142,7 +142,7 @@ class _TabsAreaState extends State<TabsArea> {
     return TabStatus.normal;
   }
 
-  _updateHighlightedIndex(int? tabIndex) {
+  void _updateHighlightedIndex(int? tabIndex) {
     if (_highlightedIndex != tabIndex) {
       setState(() {
         _highlightedIndex = tabIndex;

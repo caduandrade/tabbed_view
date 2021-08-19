@@ -17,6 +17,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
   * [Adding buttons](#adding-buttons)
     * [Overriding theme color](#overriding-theme-color)
   * [Removing the close button](#removing-the-close-button)
+  * [Close interceptor](#close-interceptor)
   * [Close listener](#close-listener)
   * [Selection listener](#selection-listener)
   * [Draggable](#draggable-tab-builder)
@@ -136,15 +137,14 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![nonclosabletab](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/nonclosable_tab.png)
 
-### Close listener
+### Close interceptor
 
 ```dart
-    bool _onTabClosing(int tabIndex) {
+    bool _tabCloseInterceptor(int tabIndex) {
       if (tabIndex == 0) {
         print('The tab $tabIndex is busy and cannot be closed.');
         return false;
       }
-      print('Closing tab $tabIndex...');
       return true;
     }
 
@@ -154,7 +154,23 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 3')
     ];
     TabbedView tabbedView = TabbedView(
-        controller: TabbedViewController(tabs), onTabClosing: _onTabClosing);
+        controller: TabbedViewController(tabs),
+        tabCloseInterceptor: _tabCloseInterceptor);
+```
+
+### Close listener
+
+```dart
+    List<TabData> tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+      TabData(text: 'Tab 3')
+    ];
+    TabbedView tabbedView = TabbedView(
+        controller: TabbedViewController(tabs),
+        onTabClose: (index, tabData) {
+          print('$index: ' + tabData.text);
+        });
 ```
 
 ### Selection listener

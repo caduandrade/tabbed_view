@@ -73,20 +73,20 @@ class TabbedViewController extends ChangeNotifier {
   }
 
   /// Adds multiple [TabData].
-  addTabs(Iterable<TabData> iterable) {
+  void addTabs(Iterable<TabData> iterable) {
     _tabs.addAll(iterable);
     _afterIncTabs();
   }
 
   /// Adds a [TabData].
-  addTab(TabData tab) {
+  void addTab(TabData tab) {
     _tabs.add(tab);
     _afterIncTabs();
   }
 
   /// Method that should be used after adding a tab.
   /// Updates the status and notifies.
-  _afterIncTabs() {
+  void _afterIncTabs() {
     if (_tabs.length == 1) {
       _selectedIndex = 0;
     }
@@ -95,9 +95,9 @@ class TabbedViewController extends ChangeNotifier {
   }
 
   /// Removes a tab.
-  removeTab(int tabIndex) {
+  TabData removeTab(int tabIndex) {
     _validateIndex(tabIndex);
-    _tabs.removeAt(tabIndex);
+    TabData tabData = _tabs.removeAt(tabIndex);
     if (_tabs.isEmpty) {
       _selectedIndex = null;
     } else if (_selectedIndex != null &&
@@ -106,17 +106,18 @@ class TabbedViewController extends ChangeNotifier {
     }
     _menuBuilder = null;
     notifyListeners();
+    return tabData;
   }
 
   /// Removes all tabs.
-  removeTabs() {
+  void removeTabs() {
     _tabs.clear();
     _selectedIndex = null;
     _menuBuilder = null;
     notifyListeners();
   }
 
-  _validateIndex(int tabIndex) {
+  void _validateIndex(int tabIndex) {
     if (tabIndex < 0 || tabIndex >= _tabs.length) {
       throw IndexError(tabIndex, _tabs, 'tabIndex');
     }

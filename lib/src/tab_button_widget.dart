@@ -79,13 +79,13 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
         child: GestureDetector(child: icon, onTap: onPressed));
   }
 
-  _onEnter(PointerEnterEvent event) {
+  void _onEnter(PointerEnterEvent event) {
     setState(() {
       _hover = true;
     });
   }
 
-  _onExit(PointerExitEvent event) {
+  void _onExit(PointerExitEvent event) {
     setState(() {
       _hover = false;
     });

@@ -7,7 +7,8 @@ class TabbedViewData {
   TabbedViewData(
       {required this.controller,
       this.contentBuilder,
-      this.onTabClosing,
+      this.onTabClose,
+      this.tabCloseInterceptor,
       required this.contentClip,
       this.onTabSelection,
       required this.selectToEnableButtons,
@@ -18,7 +19,8 @@ class TabbedViewData {
   final TabbedViewController controller;
   final bool contentClip;
   final IndexedWidgetBuilder? contentBuilder;
-  final OnTabClosing? onTabClosing;
+  final OnTabClose? onTabClose;
+  final TabCloseInterceptor? tabCloseInterceptor;
   final OnTabSelection? onTabSelection;
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
