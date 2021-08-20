@@ -124,6 +124,8 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button_color.png)
+
 #### Menu button
 
 ```dart
@@ -145,7 +147,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![tabbuttoncolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_menu_button_v1.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_menu_button_v1.png)
 
 ### Removing the close button
 
