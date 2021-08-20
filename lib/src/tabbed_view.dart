@@ -9,6 +9,7 @@ import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
+import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/tabs_area.dart';
 
 /// Defines a draggable builder for each tab.
@@ -38,29 +39,27 @@ typedef OnTabSelection = Function(int? newTabIndex);
 /// * [closeButtonTooltip]: optional tooltip for the close button.
 class TabbedView extends StatefulWidget {
   TabbedView(
-      {required TabbedViewController controller,
-      IndexedWidgetBuilder? contentBuilder,
-      OnTabClose? onTabClose,
-      TabCloseInterceptor? tabCloseInterceptor,
-      OnTabSelection? onTabSelection,
-      bool selectToEnableButtons = true,
-      bool contentClip = true,
-      String? closeButtonTooltip,
-      TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
-      DraggableTabBuilder? draggableTabBuilder})
-      : this._data = TabbedViewData(
-            controller: controller,
-            contentBuilder: contentBuilder,
-            onTabClose: onTabClose,
-            tabCloseInterceptor: tabCloseInterceptor,
-            onTabSelection: onTabSelection,
-            contentClip: contentClip,
-            selectToEnableButtons: selectToEnableButtons,
-            closeButtonTooltip: closeButtonTooltip,
-            tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
-            draggableTabBuilder: draggableTabBuilder);
+      {required this.controller,
+      this.contentBuilder,
+      this.onTabClose,
+      this.tabCloseInterceptor,
+      this.onTabSelection,
+      this.selectToEnableButtons = true,
+      this.contentClip = true,
+      this.closeButtonTooltip,
+      this.tabsAreaButtonsBuilder,
+      this.draggableTabBuilder});
 
-  final TabbedViewData _data;
+  final TabbedViewController controller;
+  final bool contentClip;
+  final IndexedWidgetBuilder? contentBuilder;
+  final OnTabClose? onTabClose;
+  final TabCloseInterceptor? tabCloseInterceptor;
+  final OnTabSelection? onTabSelection;
+  final bool selectToEnableButtons;
+  final String? closeButtonTooltip;
+  final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
+  final DraggableTabBuilder? draggableTabBuilder;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewState();
@@ -69,51 +68,76 @@ class TabbedView extends StatefulWidget {
 /// The [TabbedView] state.
 class _TabbedViewState extends State<TabbedView> {
   int? _lastSelectedIndex;
+  List<TabbedViewMenuItem> _menuItems = [];
 
   @override
   void initState() {
     super.initState();
-    widget._data.controller.addListener(_rebuild);
-    _lastSelectedIndex = widget._data.controller.selectedIndex;
+    widget.controller.addListener(_rebuildByTabOrSelection);
+    _lastSelectedIndex = widget.controller.selectedIndex;
   }
 
   @override
   void didUpdateWidget(covariant TabbedView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget._data.controller != oldWidget._data.controller) {
-      oldWidget._data.controller.removeListener(_rebuild);
-      widget._data.controller.addListener(_rebuild);
-      _lastSelectedIndex = widget._data.controller.selectedIndex;
+    if (widget.controller != oldWidget.controller) {
+      oldWidget.controller.removeListener(_rebuildByTabOrSelection);
+      widget.controller.addListener(_rebuildByTabOrSelection);
+      _lastSelectedIndex = widget.controller.selectedIndex;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget tabArea = TabsArea(data: widget._data);
-    ContentArea contentArea = ContentArea(data: widget._data);
+    TabbedViewData data = TabbedViewData(
+        controller: widget.controller,
+        contentBuilder: widget.contentBuilder,
+        onTabClose: widget.onTabClose,
+        tabCloseInterceptor: widget.tabCloseInterceptor,
+        onTabSelection: widget.onTabSelection,
+        contentClip: widget.contentClip,
+        selectToEnableButtons: widget.selectToEnableButtons,
+        closeButtonTooltip: widget.closeButtonTooltip,
+        tabsAreaButtonsBuilder: widget.tabsAreaButtonsBuilder,
+        draggableTabBuilder: widget.draggableTabBuilder,
+        menuItemsUpdater: _setMenuItems,
+        menuItems: _menuItems);
+
+    Widget tabArea = TabsArea(data: data);
+    ContentArea contentArea = ContentArea(data: data);
     return CustomMultiChildLayout(children: [
       LayoutId(id: 1, child: tabArea),
       LayoutId(id: 2, child: contentArea)
     ], delegate: _TabbedViewLayout());
   }
 
-  void _rebuild() {
-    int? newTabIndex = widget._data.controller.selectedIndex;
+  /// Set a new menu items.
+  void _setMenuItems(List<TabbedViewMenuItem> menuItems) {
+    setState(() {
+      _menuItems = menuItems;
+    });
+  }
+
+  /// Rebuilds after any change in tabs or selection.
+  void _rebuildByTabOrSelection() {
+    int? newTabIndex = widget.controller.selectedIndex;
     if (_lastSelectedIndex != newTabIndex) {
       _lastSelectedIndex = newTabIndex;
-      if (widget._data.onTabSelection != null) {
-        widget._data.onTabSelection!(newTabIndex);
+      if (widget.onTabSelection != null) {
+        widget.onTabSelection!(newTabIndex);
       }
     }
 
+    // rebuild
     setState(() {
-      // rebuild
+      // any change must remove menus
+      _menuItems.clear();
     });
   }
 
   @override
   void dispose() {
-    widget._data.controller.removeListener(_rebuild);
+    widget.controller.removeListener(_rebuildByTabOrSelection);
     super.dispose();
   }
 }

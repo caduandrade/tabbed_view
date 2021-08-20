@@ -26,33 +26,10 @@ class TabbedViewController extends ChangeNotifier {
 
   int? _selectedIndex;
 
-  /// The menu builder.
-  TabbedViewMenuBuilder? _menuBuilder;
-
-  /// Get the current menu.
-  TabbedViewMenuBuilder? get menuBuilder => _menuBuilder;
-
   UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
 
   /// The selected tab index
   int? get selectedIndex => _selectedIndex;
-
-  /// Updates the menu.
-  void updateMenu(TabbedViewMenuBuilder menuBuilder) {
-    _menuBuilder = menuBuilder;
-    notifyListeners();
-  }
-
-  /// Indicates whether there is a menu.
-  bool hasMenu() {
-    return _menuBuilder != null;
-  }
-
-  /// Removes the menu.
-  void removeMenu() {
-    _menuBuilder = null;
-    notifyListeners();
-  }
 
   /// Changes the index of the selection and notifies.
   set selectedIndex(int? tabIndex) {
@@ -60,7 +37,6 @@ class TabbedViewController extends ChangeNotifier {
       _validateIndex(tabIndex);
     }
     _selectedIndex = tabIndex;
-    _menuBuilder = null;
     notifyListeners();
   }
 
@@ -90,7 +66,6 @@ class TabbedViewController extends ChangeNotifier {
     if (_tabs.length == 1) {
       _selectedIndex = 0;
     }
-    _menuBuilder = null;
     notifyListeners();
   }
 
@@ -104,7 +79,6 @@ class TabbedViewController extends ChangeNotifier {
         (_selectedIndex == tabIndex || _selectedIndex! >= _tabs.length)) {
       _selectedIndex = 0;
     }
-    _menuBuilder = null;
     notifyListeners();
     return tabData;
   }
@@ -113,7 +87,6 @@ class TabbedViewController extends ChangeNotifier {
   void removeTabs() {
     _tabs.clear();
     _selectedIndex = null;
-    _menuBuilder = null;
     notifyListeners();
   }
 

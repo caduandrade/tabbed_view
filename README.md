@@ -16,6 +16,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
 * [Tab](#tab)
   * [Adding buttons](#adding-buttons)
     * [Overriding theme color](#overriding-theme-color)
+    * [Menu button](#menu-button)
   * [Removing the close button](#removing-the-close-button)
   * [Close interceptor](#close-interceptor)
   * [Close listener](#close-listener)
@@ -123,7 +124,28 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![tabbuttoncolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button_color.png)
+#### Menu button
+
+```dart
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2', buttons: [
+        TabButton(
+            icon: Icons.arrow_drop_down,
+            menuBuilder: (context) {
+              return [
+                TabbedViewMenuItem(
+                    text: 'Menu 1', onSelection: () => print('1')),
+                TabbedViewMenuItem(
+                    text: 'Menu 2', onSelection: () => print('2'))
+              ];
+            })
+      ])
+    ];
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
+```
+
+![tabbuttoncolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_menu_button_v1.png)
 
 ### Removing the close button
 

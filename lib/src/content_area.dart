@@ -51,20 +51,18 @@ class ContentArea extends StatelessWidget {
 
       NotificationListenerCallback<SizeChangedLayoutNotification>?
           onSizeNotification;
-      if (controller.hasMenu()) {
-        children.add(
-            Positioned.fill(child: _Glass(theme.menu.blur, data.controller)));
+      if (data.menuItems.isNotEmpty) {
+        children.add(Positioned.fill(child: _Glass(theme.menu.blur, data)));
         children.add(Positioned(
             child: LimitedBox(
                 maxWidth: math.min(theme.menu.maxWidth, constraints.maxWidth),
-                child:
-                    TabbedViewMenuWidget(controller: controller, data: data)),
+                child: TabbedViewMenuWidget(data: data)),
             right: 0,
             top: 0,
             bottom: 0));
         onSizeNotification = (n) {
           scheduleMicrotask(() {
-            controller.removeMenu();
+            data.menuItemsUpdater([]);
           });
           return true;
         };
@@ -83,10 +81,10 @@ class ContentArea extends StatelessWidget {
 }
 
 class _Glass extends StatelessWidget {
-  _Glass(this.blur, this.controller);
+  _Glass(this.blur, this.data);
 
   final bool blur;
-  final TabbedViewController controller;
+  final TabbedViewData data;
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +96,6 @@ class _Glass extends StatelessWidget {
     }
     return ClipRect(
         child: GestureDetector(
-            child: child, onTap: () => controller.removeMenu()));
+            child: child, onTap: () => data.menuItemsUpdater([])));
   }
 }

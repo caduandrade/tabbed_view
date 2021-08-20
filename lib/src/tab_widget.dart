@@ -132,7 +132,7 @@ class TabWidget extends StatelessWidget {
         TabButton button = tab.buttons![i];
         textAndButtons.add(Container(
             child: TabButtonWidget(
-                controller: data.controller,
+                data: data,
                 button: button,
                 enabled: buttonsEnabled,
                 colors: buttonColors,
@@ -152,7 +152,7 @@ class TabWidget extends StatelessWidget {
 
       textAndButtons.add(Container(
           child: TabButtonWidget(
-              controller: data.controller,
+              data: data,
               button: closeButton,
               enabled: buttonsEnabled,
               colors: buttonColors,

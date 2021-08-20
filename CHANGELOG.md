@@ -1,3 +1,10 @@
+## 1.6.0
+
+* API changes
+  * *menuBuilder* has been removed from *TabbedViewController*
+* Bug fix
+  * Error building menu with empty list of *TabbedViewMenuItem*
+
 ## 1.5.0
 
 * API changes

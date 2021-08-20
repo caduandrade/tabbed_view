@@ -85,7 +85,7 @@ class _TabsAreaState extends State<TabsArea> {
       for (int i = 0; i < buttons.length; i++) {
         TabButton tabButton = buttons[i];
         children.add(TabButtonWidget(
-            controller: widget.data.controller,
+            data: widget.data,
             button: tabButton,
             enabled: true,
             colors: buttonsAreaTheme.buttonColors,
