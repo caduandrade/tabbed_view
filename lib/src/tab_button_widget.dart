@@ -46,13 +46,20 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
       Color disabledColor = widget.button.disabledColor != null
           ? widget.button.disabledColor!
           : widget.colors.disabled;
-      return Icon(widget.button.icon,
-          color: disabledColor, size: widget.iconSize);
+      Widget icon =
+          Icon(widget.button.icon, color: disabledColor, size: widget.iconSize);
+      if (widget.button.padding != null) {
+        icon = Padding(child: icon, padding: widget.button.padding!);
+      }
+      return icon;
     }
 
     Color finalColor = _hover ? hoverColor : color;
     Widget icon =
         Icon(widget.button.icon, color: finalColor, size: widget.iconSize);
+    if (widget.button.padding != null) {
+      icon = Padding(child: icon, padding: widget.button.padding!);
+    }
 
     VoidCallback? onPressed = widget.button.onPressed;
     if (widget.button.menuBuilder != null) {

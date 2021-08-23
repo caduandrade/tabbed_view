@@ -10,10 +10,12 @@ class TabButton {
       this.disabledColor,
       this.onPressed,
       this.menuBuilder,
-      this.toolTip});
+      this.toolTip,
+      this.padding});
 
   final IconData icon;
   final Color? color;
+  final EdgeInsetsGeometry? padding;
   final Color? hoverColor;
   final Color? disabledColor;
   final VoidCallback? onPressed;
