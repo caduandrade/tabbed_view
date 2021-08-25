@@ -32,6 +32,11 @@ flutter:
 # An image asset can refer to one or more resolution-specific "variants", see
 # https://flutter.dev/assets-and-images/#resolution-aware.
 
+  fonts:
+    - family: TabbedView
+      fonts:
+        - asset: packages/tabbed_view/fonts/TabbedView.ttf
+
 # To add custom fonts to your package, add a fonts section here,
 # in this "flutter" section. Each entry in this list should have a
 # "family" key with the font family name, and a "fonts" key with a

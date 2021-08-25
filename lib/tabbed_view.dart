@@ -1,6 +1,7 @@
 library tabbed_view;
 
 export 'src/tabbed_view.dart';
+export 'src/tabbed_view_icons.dart';
 export 'src/tab_data.dart';
 export 'src/tabbed_view_controller.dart';
 export 'src/theme_data.dart';

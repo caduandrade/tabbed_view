@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:tabbed_view/src/tabbed_view_icons.dart';
 
 enum EqualHeights { none, tabs, all }
 
@@ -79,7 +80,7 @@ class TabbedViewThemeData {
   }
 
   static const double minimalIconSize = 8;
-  static const double defaultIconSize = 16;
+  static const double defaultIconSize = 10;
 }
 
 /// Theme for buttons area.
@@ -90,7 +91,7 @@ class ButtonsAreaThemeData {
       double offset = 0,
       double buttonIconSize = TabbedViewThemeData.defaultIconSize,
       this.buttonColors = const ButtonColors(),
-      this.hiddenTabsMenuButtonIcon = Icons.arrow_drop_down})
+      this.hiddenTabsMenuButtonIcon = TabbedViewIcons.menu})
       : this._offset = offset >= 0 ? offset : 0,
         this.buttonIconSize =
             buttonIconSize >= TabbedViewThemeData.minimalIconSize
@@ -123,7 +124,7 @@ class ButtonsAreaThemeData {
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
   TabsAreaThemeData(
-      {this.closeButtonIcon = Icons.clear,
+      {this.closeButtonIcon = TabbedViewIcons.close,
       TabThemeData? tab,
       ButtonsAreaThemeData? buttonsArea,
       this.color,
@@ -395,7 +396,8 @@ class _Classic {
             decoration: BoxDecoration(
                 color: backgroundColor,
                 border: Border.all(color: borderColor, width: 1)),
-            padding: EdgeInsets.only(bottom: 2)),
+            padding: EdgeInsets.all(3)
+        ),
         middleGap: -1,
         gapBottomBorder: BorderSide(color: borderColor, width: 1));
   }
@@ -736,7 +738,8 @@ class _Minimalist {
     return TabsAreaThemeData(
         buttonsArea: ButtonsAreaThemeData(
             decoration: BoxDecoration(color: background),
-            buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor)),
+            buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor),
+        padding: EdgeInsets.all(2)),
         tab: _tabTheme(
             borderColor: borderColor,
             background: background,

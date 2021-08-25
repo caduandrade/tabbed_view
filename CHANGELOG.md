@@ -1,3 +1,7 @@
+## 1.8.0
+
+* New icons
+
 ## 1.7.0
 
 * *TabButton* padding
