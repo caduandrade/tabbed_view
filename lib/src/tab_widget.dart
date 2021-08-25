@@ -7,8 +7,8 @@ import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
-import 'package:tabbed_view/src/theme_data.dart';
-import 'package:tabbed_view/src/theme_widget.dart';
+import 'package:tabbed_view/src/theme/theme_data.dart';
+import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Listener for the tabs with the mouse over.
 typedef UpdateHighlightedIndex = void Function(int? tabIndex);

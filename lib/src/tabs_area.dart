@@ -10,8 +10,8 @@ import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/tabs_area_layout.dart';
-import 'package:tabbed_view/src/theme_data.dart';
-import 'package:tabbed_view/src/theme_widget.dart';
+import 'package:tabbed_view/src/theme/theme_data.dart';
+import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {

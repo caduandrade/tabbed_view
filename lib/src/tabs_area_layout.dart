@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tabbed_view/src/theme_data.dart';
+import 'package:tabbed_view/src/theme/theme_data.dart';
 
 /// Inner widget for [TabsArea] layout.
 /// Displays the popup menu button for tabs hidden due to lack of space.
