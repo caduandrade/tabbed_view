@@ -83,13 +83,19 @@ class _TabsAreaState extends State<TabsArea> {
     if (buttons.isNotEmpty) {
       List<Widget> children = [];
       for (int i = 0; i < buttons.length; i++) {
+        EdgeInsets? padding;
+        if (i > 0 && buttonsAreaTheme.buttonsGap > 0) {
+          padding = EdgeInsets.only(left: buttonsAreaTheme.buttonsGap);
+        }
         TabButton tabButton = buttons[i];
-        children.add(TabButtonWidget(
-            data: widget.data,
-            button: tabButton,
-            enabled: true,
-            colors: buttonsAreaTheme.buttonColors,
-            iconSize: buttonsAreaTheme.buttonIconSize));
+        children.add(Container(
+            child: TabButtonWidget(
+                data: widget.data,
+                button: tabButton,
+                enabled: true,
+                colors: buttonsAreaTheme.buttonColors,
+                iconSize: buttonsAreaTheme.buttonIconSize),
+            padding: padding));
       }
 
       buttonsArea = FlowLayout(children: children, firstChildFlex: false);

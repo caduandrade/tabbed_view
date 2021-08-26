@@ -55,7 +55,8 @@ class ClassicTheme {
             decoration: BoxDecoration(
                 color: backgroundColor,
                 border: Border.all(color: borderColor, width: 1)),
-            padding: EdgeInsets.all(3)),
+            padding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+            buttonsGap: 4),
         middleGap: -1,
         gapBottomBorder: BorderSide(color: borderColor, width: 1));
   }
@@ -70,8 +71,9 @@ class ClassicTheme {
     return TabThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         buttonColors: buttonColors,
-        buttonsOffset: 4,
-        padding: EdgeInsets.fromLTRB(6, 2, 6, 2),
+        buttonsOffset: 8,
+        buttonsGap: 4,
+        padding: EdgeInsets.fromLTRB(6, 2, 6, 3),
         decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 1)),

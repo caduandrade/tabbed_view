@@ -52,7 +52,10 @@ class MobileTheme {
         equalHeights: EqualHeights.all,
         initialGap: -1,
         middleGap: -1,
-        buttonsArea: ButtonsAreaThemeData(buttonColors: buttonColors),
+        buttonsArea: ButtonsAreaThemeData(
+            buttonColors: buttonColors,
+            buttonsGap: 4,
+            padding: EdgeInsets.fromLTRB(4, 2, 4, 2)),
         border: Border.all(color: borderColor, width: 1),
         color: backgroundColor);
   }
@@ -69,7 +72,8 @@ class MobileTheme {
     return TabThemeData(
         buttonColors: buttonColors,
         textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
-        buttonsOffset: 4,
+        buttonsOffset: 8,
+        buttonsGap: 4,
         padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
         decoration: BoxDecoration(border: border),
         innerBottomBorder:

@@ -1,6 +1,8 @@
 ## 1.8.0
 
 * New icons
+* Default themes adjustments, such as gaps and paddings
+* *buttonsGap* setting in *ButtonsAreaThemeData*
 
 ## 1.7.0
 

@@ -92,11 +92,13 @@ class ButtonsAreaThemeData {
   ButtonsAreaThemeData(
       {this.decoration,
       this.padding,
+      double buttonsGap = 0,
       double offset = 0,
       double buttonIconSize = TabbedViewThemeData.defaultIconSize,
       this.buttonColors = const ButtonColors(),
       this.hiddenTabsMenuButtonIcon = TabbedViewIcons.menu})
       : this._offset = offset >= 0 ? offset : 0,
+        this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
             buttonIconSize >= TabbedViewThemeData.minimalIconSize
                 ? buttonIconSize
@@ -111,15 +113,20 @@ class ButtonsAreaThemeData {
   /// This padding is in addition to any padding inherent in the [decoration];
   /// see [Decoration.padding].
   EdgeInsetsGeometry? padding;
-  double _offset;
   double buttonIconSize;
   ButtonColors buttonColors;
 
   /// Icon for the hidden tabs menu.
   IconData hiddenTabsMenuButtonIcon;
 
-  double get offset => _offset;
+  double _buttonsGap;
+  double get buttonsGap => _buttonsGap;
+  set buttonsGap(double value) {
+    _buttonsGap = value >= 0 ? value : 0;
+  }
 
+  double _offset;
+  double get offset => _offset;
   set offset(double value) {
     _offset = value >= 0 ? value : 0;
   }
@@ -215,7 +222,6 @@ class TabThemeData {
   double buttonIconSize;
   ButtonColors buttonColors;
   double _buttonsOffset;
-  double _buttonsGap;
 
   TabStatusThemeData selectedStatus;
   TabStatusThemeData highlightedStatus;
@@ -226,8 +232,8 @@ class TabThemeData {
     _buttonsOffset = value >= 0 ? value : 0;
   }
 
+  double _buttonsGap;
   double get buttonsGap => _buttonsGap;
-
   set buttonsGap(double value) {
     _buttonsGap = value >= 0 ? value : 0;
   }
