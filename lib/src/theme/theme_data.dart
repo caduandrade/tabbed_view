@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
-import 'package:tabbed_view/src/theme/classic_theme.dart';
-import 'package:tabbed_view/src/theme/dark_theme.dart';
-import 'package:tabbed_view/src/theme/minimalist_theme.dart';
-import 'package:tabbed_view/src/theme/mobile_theme.dart';
+import 'package:tabbed_view/src/theme/default_themes/classic_theme.dart';
+import 'package:tabbed_view/src/theme/default_themes/dark_theme.dart';
+import 'package:tabbed_view/src/theme/default_themes/minimalist_theme.dart';
+import 'package:tabbed_view/src/theme/default_themes/mobile_theme.dart';
 
 enum EqualHeights { none, tabs, all }
 
