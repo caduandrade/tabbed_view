@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:tabbed_view/src/theme/theme_data.dart';
+import 'package:tabbed_view/src/theme/button_colors.dart';
+import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
+import 'package:tabbed_view/src/theme/equal_heights.dart';
+import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
+import 'package:tabbed_view/src/theme/tab_theme_data.dart';
+import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
+import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 
 /// Predefined minimalist theme builder.
 class MinimalistTheme {

@@ -7,7 +7,11 @@ import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
-import 'package:tabbed_view/src/theme/theme_data.dart';
+import 'package:tabbed_view/src/theme/button_colors.dart';
+import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
+import 'package:tabbed_view/src/theme/tab_theme_data.dart';
+import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
+import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Listener for the tabs with the mouse over.

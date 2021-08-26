@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tabbed_view.dart';
-import 'package:tabbed_view/src/theme/theme_data.dart';
+import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 
 /// Applies a [TabbedView] theme to descendant widgets.
 /// See also:

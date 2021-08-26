@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
-import 'package:tabbed_view/src/theme/theme_data.dart';
+import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Widget for menu.
