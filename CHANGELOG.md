@@ -2,9 +2,10 @@
 
 * New icons
 * Default themes adjustments, such as gaps and paddings
-* *buttonsGap* setting in *ButtonsAreaThemeData*
+* *buttonsGap* setting in *TabsAreaThemeData*
 * API changes
-  * *minimalIconSize* and *defaultIconSize* constants has been moved from *TabbedViewThemeData* to *TabbedViewThemeConstants*
+  * *minimalIconSize* and *defaultIconSize* constants moved from *TabbedViewThemeData* to *TabbedViewThemeConstants*
+  * *ButtonsAreaThemeData* attributes moved to TabsAreaThemeData
 
 ## 1.7.0
 

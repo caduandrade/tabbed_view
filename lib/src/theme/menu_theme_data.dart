@@ -20,17 +20,17 @@ class MenuThemeData {
 
   EdgeInsetsGeometry? margin;
 
-  /// Empty space to inscribe inside the [decoration]. The menu area, if any, is
+  /// Empty space to inscribe inside the [buttonsAreaDecoration]. The menu area, if any, is
   /// placed inside this padding.
   ///
-  /// This padding is in addition to any padding inherent in the [decoration];
+  /// This padding is in addition to any padding inherent in the [buttonsAreaDecoration];
   /// see [Decoration.padding].
   EdgeInsetsGeometry? padding;
 
-  /// Empty space to inscribe inside the [decoration]. The menu item, if any, is
+  /// Empty space to inscribe inside the [buttonsAreaDecoration]. The menu item, if any, is
   /// placed inside this padding.
   ///
-  /// This padding is in addition to any padding inherent in the [decoration];
+  /// This padding is in addition to any padding inherent in the [buttonsAreaDecoration];
   /// see [Decoration.padding].
   EdgeInsetsGeometry? menuItemPadding;
 

@@ -102,16 +102,16 @@ class _TabsAreaState extends State<TabsArea> {
       buttonsArea = FlowLayout(children: children, firstChildFlex: false);
 
       EdgeInsetsGeometry? margin;
-      if (buttonsAreaTheme.offset > 0) {
-        margin = EdgeInsets.only(left: buttonsAreaTheme.offset);
+      if (buttonsAreaTheme.buttonsOffset > 0) {
+        margin = EdgeInsets.only(left: buttonsAreaTheme.buttonsOffset);
       }
-      if (buttonsAreaTheme.decoration != null ||
-          buttonsAreaTheme.padding != null ||
+      if (buttonsAreaTheme.buttonsAreaDecoration != null ||
+          buttonsAreaTheme.buttonsAreaPadding != null ||
           margin != null) {
         buttonsArea = Container(
             child: buttonsArea,
-            decoration: buttonsAreaTheme.decoration,
-            padding: buttonsAreaTheme.padding,
+            decoration: buttonsAreaTheme.buttonsAreaDecoration,
+            padding: buttonsAreaTheme.buttonsAreaPadding,
             margin: margin);
       }
     } else {

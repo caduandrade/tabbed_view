@@ -58,10 +58,10 @@ class ClassicTheme {
             highlightedTabColor: highlightedTabColor),
         buttonsArea: ButtonsAreaThemeData(
             buttonColors: buttonColors,
-            decoration: BoxDecoration(
+            buttonsAreaDecoration: BoxDecoration(
                 color: backgroundColor,
                 border: Border.all(color: borderColor, width: 1)),
-            padding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+            buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
             buttonsGap: 4),
         middleGap: -1,
         gapBottomBorder: BorderSide(color: borderColor, width: 1));

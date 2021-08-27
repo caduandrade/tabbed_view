@@ -9,14 +9,14 @@ import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 /// Theme for buttons area.
 class ButtonsAreaThemeData {
   ButtonsAreaThemeData(
-      {this.decoration,
-      this.padding,
+      {this.buttonsAreaDecoration,
+      this.buttonsAreaPadding,
       double buttonsGap = 0,
-      double offset = 0,
+      double buttonsOffset = 0,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
       this.buttonColors = const ButtonColors(),
       this.hiddenTabsMenuButtonIcon = TabbedViewIcons.menu})
-      : this._offset = offset >= 0 ? offset : 0,
+      : this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
             buttonIconSize >= TabbedViewThemeConstants.minimalIconSize
@@ -24,14 +24,14 @@ class ButtonsAreaThemeData {
                 : TabbedViewThemeConstants.minimalIconSize;
 
   /// The decoration to paint behind the buttons.
-  BoxDecoration? decoration;
+  BoxDecoration? buttonsAreaDecoration;
 
-  /// Empty space to inscribe inside the [decoration]. The buttons, if any, is
+  /// Empty space to inscribe inside the [buttonsAreaDecoration]. The buttons, if any, is
   /// placed inside this padding.
   ///
-  /// This padding is in addition to any padding inherent in the [decoration];
+  /// This padding is in addition to any padding inherent in the [buttonsAreaDecoration];
   /// see [Decoration.padding].
-  EdgeInsetsGeometry? padding;
+  EdgeInsetsGeometry? buttonsAreaPadding;
   double buttonIconSize;
   ButtonColors buttonColors;
 
@@ -44,10 +44,10 @@ class ButtonsAreaThemeData {
     _buttonsGap = value >= 0 ? value : 0;
   }
 
-  double _offset;
-  double get offset => _offset;
-  set offset(double value) {
-    _offset = value >= 0 ? value : 0;
+  double _buttonsOffset;
+  double get buttonsOffset => _buttonsOffset;
+  set buttonsOffset(double value) {
+    _buttonsOffset = value >= 0 ? value : 0;
   }
 }
 
