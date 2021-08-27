@@ -17,7 +17,7 @@ class DarkTheme {
     Color selectedTabColor = colorSet[800]!;
     Color highlightedTabColor = colorSet[700]!;
     ButtonColors buttonColors = ButtonColors(
-        normal: colorSet[400]!,
+        normal: colorSet[300]!,
         disabled: colorSet[600]!,
         hover: colorSet[100]!);
     Color menuColor = colorSet[700]!;

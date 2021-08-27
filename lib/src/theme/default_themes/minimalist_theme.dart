@@ -21,7 +21,7 @@ class MinimalistTheme {
     Color menuDividerColor = colorSet[400]!;
     ButtonColors buttonColors = ButtonColors(normal: colorSet[300]!);
     ButtonColors selectedButtonColors = ButtonColors(
-        normal: colorSet[400]!, hover: colorSet[50]!, disabled: colorSet[600]!);
+        normal: colorSet[300]!, hover: colorSet[50]!, disabled: colorSet[600]!);
     Color fontColor = colorSet[900]!;
     Color selectedFontColor = colorSet[50]!;
     Color hiddenTabsMenuButtonColor = borderColor;

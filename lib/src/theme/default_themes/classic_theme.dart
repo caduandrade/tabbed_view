@@ -19,7 +19,7 @@ class ClassicTheme {
     Color fontColor = colorSet[900]!;
     Color menuHoverColor = colorSet[200]!;
     ButtonColors buttonColors = ButtonColors(
-        normal: colorSet[600]!,
+        normal: colorSet[700]!,
         disabled: colorSet[400]!,
         hover: colorSet[900]!);
 

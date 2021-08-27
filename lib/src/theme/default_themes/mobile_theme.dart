@@ -21,7 +21,7 @@ class MobileTheme {
     Color menuColor = colorSet[100]!;
     Color menuHoverColor = colorSet[300]!;
     ButtonColors buttonColors = ButtonColors(
-        normal: colorSet[500]!,
+        normal: colorSet[700]!,
         disabled: colorSet[300]!,
         hover: colorSet[900]!);
     return TabbedViewThemeData(
