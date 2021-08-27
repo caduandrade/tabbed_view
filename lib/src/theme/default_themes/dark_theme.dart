@@ -62,7 +62,7 @@ class DarkTheme {
             buttonColors: buttonColors),
         equalHeights: EqualHeights.all,
         middleGap: 4,
-        buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+        buttonsAreaPadding: EdgeInsets.all(4),
         buttonsAreaDecoration: BoxDecoration(color: buttonsAreaColor),
         buttonColors: buttonColors,
         buttonsGap: 4);

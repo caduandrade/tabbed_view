@@ -59,7 +59,7 @@ class MinimalistTheme {
     return TabsAreaThemeData(
         buttonsAreaDecoration: BoxDecoration(color: background),
         buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor),
-        buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+        buttonsAreaPadding: EdgeInsets.all(4),
         buttonsGap: 4,
         tab: tabTheme(
             borderColor: borderColor,

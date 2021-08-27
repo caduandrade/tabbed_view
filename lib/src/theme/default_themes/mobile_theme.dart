@@ -61,7 +61,7 @@ class MobileTheme {
         middleGap: -1,
         buttonColors: buttonColors,
         buttonsGap: 4,
-        buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+        buttonsAreaPadding: EdgeInsets.all(4),
         border: Border.all(color: borderColor, width: 1),
         color: backgroundColor);
   }

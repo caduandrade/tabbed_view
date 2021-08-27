@@ -60,7 +60,7 @@ class ClassicTheme {
         buttonsAreaDecoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 1)),
-        buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+        buttonsAreaPadding: EdgeInsets.all(4),
         buttonsGap: 4,
         middleGap: -1,
         gapBottomBorder: BorderSide(color: borderColor, width: 1));
