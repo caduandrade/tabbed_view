@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tabbed_view/src/icon_path.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
@@ -46,8 +47,7 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
       Color disabledColor = widget.button.disabledColor != null
           ? widget.button.disabledColor!
           : widget.colors.disabled;
-      Widget icon =
-          Icon(widget.button.icon, color: disabledColor, size: widget.iconSize);
+      Widget icon = _buildIcon(disabledColor);
       if (widget.button.padding != null) {
         icon = Padding(child: icon, padding: widget.button.padding!);
       }
@@ -55,8 +55,7 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
     }
 
     Color finalColor = _hover ? hoverColor : color;
-    Widget icon =
-        Icon(widget.button.icon, color: finalColor, size: widget.iconSize);
+    Widget icon = _buildIcon(finalColor);
     if (widget.button.padding != null) {
       icon = Padding(child: icon, padding: widget.button.padding!);
     }
@@ -100,5 +99,37 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
     setState(() {
       _hover = false;
     });
+  }
+
+  /// Builds an icon
+  Widget _buildIcon(Color color) {
+    if (widget.button.iconData != null) {
+      return Icon(widget.button.iconData, color: color, size: widget.iconSize);
+    }
+    double size = widget.iconSize;
+    return CustomPaint(
+      size: Size(size, (size * 1).toDouble()),
+      painter: _IconPathPainter(widget.button.iconPath!, color),
+    );
+  }
+}
+
+/// [IconPath] painter
+class _IconPathPainter extends CustomPainter {
+  _IconPathPainter(this.iconPath, this.color);
+
+  final IconPath iconPath;
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..style = PaintingStyle.fill;
+    paint.color = color;
+    canvas.drawPath(iconPath.build(size), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

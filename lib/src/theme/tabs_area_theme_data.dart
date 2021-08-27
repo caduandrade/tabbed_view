@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:tabbed_view/src/icon_path.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
 import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
@@ -9,7 +10,8 @@ import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
   TabsAreaThemeData(
-      {this.closeButtonIcon = TabbedViewIcons.close,
+      {this.closeIconData,
+      this.closeIconPath = TabbedViewIcons.close,
       TabThemeData? tab,
       this.color,
       this.border,
@@ -24,7 +26,8 @@ class TabsAreaThemeData {
       double buttonsOffset = 0,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
       this.buttonColors = const ButtonColors(),
-      this.hiddenTabsMenuButtonIcon = TabbedViewIcons.menu})
+      this.menuIconData,
+      this.menuIconPath = TabbedViewIcons.menu})
       : this.tab = tab != null ? tab : TabThemeData(),
         this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
@@ -42,7 +45,11 @@ class TabsAreaThemeData {
   double _minimalFinalGap;
   BorderSide gapBottomBorder;
 
-  IconData closeButtonIcon;
+  /// Icon data for the close button.
+  IconData? closeIconData;
+
+  /// Icon path for the close button.
+  IconPath? closeIconPath;
   EqualHeights equalHeights;
 
   double get minimalFinalGap => _minimalFinalGap;
@@ -63,8 +70,11 @@ class TabsAreaThemeData {
   double buttonIconSize;
   ButtonColors buttonColors;
 
-  /// Icon for the hidden tabs menu.
-  IconData hiddenTabsMenuButtonIcon;
+  /// Icon data for the hidden tabs menu.
+  IconData? menuIconData;
+
+  /// Icon path for the hidden tabs menu.
+  IconPath? menuIconPath;
 
   double _buttonsGap;
   double get buttonsGap => _buttonsGap;

@@ -18,3 +18,4 @@ export 'src/theme/tabs_area_theme_data.dart';
 export 'src/tabbed_view_menu_item.dart';
 export 'src/tabbed_view_menu_builder.dart';
 export 'src/tab_button.dart';
+export 'src/icon_path.dart';
