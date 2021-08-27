@@ -125,7 +125,7 @@ class _IconPathPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()..style = PaintingStyle.fill;
     paint.color = color;
-    canvas.drawPath(iconPath.build(size), paint);
+    canvas.drawPath(iconPath(size), paint);
   }
 
   @override

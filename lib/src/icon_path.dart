@@ -1,9 +1,4 @@
 import 'package:flutter/rendering.dart';
 
-/// Path to draw a icon
-abstract class IconPath {
-  const IconPath();
-
-  /// Builds a responsive path given a size.
-  Path build(Size size);
-}
+/// Builds a responsive path given a size. Used to draw a icon.
+typedef IconPath = Path Function(Size size);

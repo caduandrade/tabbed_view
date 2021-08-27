@@ -10,8 +10,8 @@ import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
   TabsAreaThemeData(
-      {this.closeIconData,
-      this.closeIconPath = TabbedViewIcons.close,
+      {IconData? closeIconData,
+      IconPath? closeIconPath,
       TabThemeData? tab,
       this.color,
       this.border,
@@ -26,8 +26,8 @@ class TabsAreaThemeData {
       double buttonsOffset = 0,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
       this.buttonColors = const ButtonColors(),
-      this.menuIconData,
-      this.menuIconPath = TabbedViewIcons.menu})
+      IconData? menuIconData,
+      IconPath? menuIconPath})
       : this.tab = tab != null ? tab : TabThemeData(),
         this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
@@ -35,7 +35,15 @@ class TabsAreaThemeData {
         this.buttonIconSize =
             buttonIconSize >= TabbedViewThemeConstants.minimalIconSize
                 ? buttonIconSize
-                : TabbedViewThemeConstants.minimalIconSize;
+                : TabbedViewThemeConstants.minimalIconSize,
+        this.closeIconData = closeIconData,
+        this.closeIconPath = (closeIconData == null && closeIconPath == null)
+            ? TabbedViewIcons.close
+            : closeIconPath,
+        this.menuIconData = menuIconData,
+        this.menuIconPath = (menuIconData == null && menuIconPath == null)
+            ? TabbedViewIcons.menu
+            : menuIconPath;
 
   Color? color;
   Border? border;
