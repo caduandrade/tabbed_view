@@ -56,13 +56,12 @@ class ClassicTheme {
             fontSize: fontSize,
             backgroundColor: backgroundColor,
             highlightedTabColor: highlightedTabColor),
-        buttonsArea: ButtonsAreaThemeData(
-            buttonColors: buttonColors,
-            buttonsAreaDecoration: BoxDecoration(
-                color: backgroundColor,
-                border: Border.all(color: borderColor, width: 1)),
-            buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
-            buttonsGap: 4),
+        buttonColors: buttonColors,
+        buttonsAreaDecoration: BoxDecoration(
+            color: backgroundColor,
+            border: Border.all(color: borderColor, width: 1)),
+        buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+        buttonsGap: 4,
         middleGap: -1,
         gapBottomBorder: BorderSide(color: borderColor, width: 1));
   }

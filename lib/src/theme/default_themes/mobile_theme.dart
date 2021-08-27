@@ -59,10 +59,9 @@ class MobileTheme {
         equalHeights: EqualHeights.all,
         initialGap: -1,
         middleGap: -1,
-        buttonsArea: ButtonsAreaThemeData(
-            buttonColors: buttonColors,
-            buttonsGap: 4,
-            buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2)),
+        buttonColors: buttonColors,
+        buttonsGap: 4,
+        buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
         border: Border.all(color: borderColor, width: 1),
         color: backgroundColor);
   }

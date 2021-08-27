@@ -62,13 +62,6 @@ class DarkTheme {
             buttonColors: buttonColors),
         equalHeights: EqualHeights.all,
         middleGap: 4,
-        buttonsArea: buttonsAreaTheme(
-            buttonsAreaColor: buttonsAreaColor, buttonColors: buttonColors));
-  }
-
-  static ButtonsAreaThemeData buttonsAreaTheme(
-      {required Color buttonsAreaColor, required ButtonColors buttonColors}) {
-    return ButtonsAreaThemeData(
         buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
         buttonsAreaDecoration: BoxDecoration(color: buttonsAreaColor),
         buttonColors: buttonColors,

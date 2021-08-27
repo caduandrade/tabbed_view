@@ -65,7 +65,7 @@ class _TabsAreaState extends State<TabsArea> {
   /// Even if there are no visible buttons, an empty container must be created.
   Widget _buttonsAreaBuilder(BuildContext context) {
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
-    ButtonsAreaThemeData buttonsAreaTheme = theme.tabsArea.buttonsArea;
+    TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
     Widget buttonsArea;
 
     List<TabButton> buttons = [];
@@ -76,7 +76,7 @@ class _TabsAreaState extends State<TabsArea> {
 
     if (hiddenTabs.hasHiddenTabs) {
       TabButton hiddenTabsMenuButton = TabButton(
-          icon: buttonsAreaTheme.hiddenTabsMenuButtonIcon,
+          icon: tabsAreaTheme.hiddenTabsMenuButtonIcon,
           menuBuilder: _hiddenTabsMenuBuilder);
       buttons.insert(0, hiddenTabsMenuButton);
     }
@@ -85,8 +85,8 @@ class _TabsAreaState extends State<TabsArea> {
       List<Widget> children = [];
       for (int i = 0; i < buttons.length; i++) {
         EdgeInsets? padding;
-        if (i > 0 && buttonsAreaTheme.buttonsGap > 0) {
-          padding = EdgeInsets.only(left: buttonsAreaTheme.buttonsGap);
+        if (i > 0 && tabsAreaTheme.buttonsGap > 0) {
+          padding = EdgeInsets.only(left: tabsAreaTheme.buttonsGap);
         }
         TabButton tabButton = buttons[i];
         children.add(Container(
@@ -94,24 +94,24 @@ class _TabsAreaState extends State<TabsArea> {
                 data: widget.data,
                 button: tabButton,
                 enabled: true,
-                colors: buttonsAreaTheme.buttonColors,
-                iconSize: buttonsAreaTheme.buttonIconSize),
+                colors: tabsAreaTheme.buttonColors,
+                iconSize: tabsAreaTheme.buttonIconSize),
             padding: padding));
       }
 
       buttonsArea = FlowLayout(children: children, firstChildFlex: false);
 
       EdgeInsetsGeometry? margin;
-      if (buttonsAreaTheme.buttonsOffset > 0) {
-        margin = EdgeInsets.only(left: buttonsAreaTheme.buttonsOffset);
+      if (tabsAreaTheme.buttonsOffset > 0) {
+        margin = EdgeInsets.only(left: tabsAreaTheme.buttonsOffset);
       }
-      if (buttonsAreaTheme.buttonsAreaDecoration != null ||
-          buttonsAreaTheme.buttonsAreaPadding != null ||
+      if (tabsAreaTheme.buttonsAreaDecoration != null ||
+          tabsAreaTheme.buttonsAreaPadding != null ||
           margin != null) {
         buttonsArea = Container(
             child: buttonsArea,
-            decoration: buttonsAreaTheme.buttonsAreaDecoration,
-            padding: buttonsAreaTheme.buttonsAreaPadding,
+            decoration: tabsAreaTheme.buttonsAreaDecoration,
+            padding: tabsAreaTheme.buttonsAreaPadding,
             margin: margin);
       }
     } else {

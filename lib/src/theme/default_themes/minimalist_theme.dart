@@ -57,11 +57,10 @@ class MinimalistTheme {
       required Color selectedFontColor,
       required Color hiddenTabsMenuButtonColor}) {
     return TabsAreaThemeData(
-        buttonsArea: ButtonsAreaThemeData(
-            buttonsAreaDecoration: BoxDecoration(color: background),
-            buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor),
-            buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
-            buttonsGap: 4),
+        buttonsAreaDecoration: BoxDecoration(color: background),
+        buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor),
+        buttonsAreaPadding: EdgeInsets.fromLTRB(4, 2, 4, 2),
+        buttonsGap: 4,
         tab: tabTheme(
             borderColor: borderColor,
             background: background,

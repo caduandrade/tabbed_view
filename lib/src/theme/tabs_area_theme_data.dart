@@ -6,22 +6,50 @@ import 'package:tabbed_view/src/theme/equal_heights.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 
-/// Theme for buttons area.
-class ButtonsAreaThemeData {
-  ButtonsAreaThemeData(
-      {this.buttonsAreaDecoration,
+///Theme for tabs and buttons area.
+class TabsAreaThemeData {
+  TabsAreaThemeData(
+      {this.closeButtonIcon = TabbedViewIcons.close,
+      TabThemeData? tab,
+      this.color,
+      this.border,
+      this.initialGap = 0,
+      this.middleGap = 0,
+      double minimalFinalGap = 0,
+      this.gapBottomBorder = BorderSide.none,
+      this.equalHeights = EqualHeights.none,
+      this.buttonsAreaDecoration,
       this.buttonsAreaPadding,
       double buttonsGap = 0,
       double buttonsOffset = 0,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
       this.buttonColors = const ButtonColors(),
       this.hiddenTabsMenuButtonIcon = TabbedViewIcons.menu})
-      : this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
+      : this.tab = tab != null ? tab : TabThemeData(),
+        this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
+        this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
             buttonIconSize >= TabbedViewThemeConstants.minimalIconSize
                 ? buttonIconSize
                 : TabbedViewThemeConstants.minimalIconSize;
+
+  Color? color;
+  Border? border;
+  TabThemeData tab;
+  double initialGap;
+  double middleGap;
+  double _minimalFinalGap;
+  BorderSide gapBottomBorder;
+
+  IconData closeButtonIcon;
+  EqualHeights equalHeights;
+
+  double get minimalFinalGap => _minimalFinalGap;
+
+  set minimalFinalGap(double value) {
+    _minimalFinalGap = value >= 0 ? value : 0;
+  }
 
   /// The decoration to paint behind the buttons.
   BoxDecoration? buttonsAreaDecoration;
@@ -48,42 +76,5 @@ class ButtonsAreaThemeData {
   double get buttonsOffset => _buttonsOffset;
   set buttonsOffset(double value) {
     _buttonsOffset = value >= 0 ? value : 0;
-  }
-}
-
-///Theme for tabs and buttons area.
-class TabsAreaThemeData {
-  TabsAreaThemeData(
-      {this.closeButtonIcon = TabbedViewIcons.close,
-      TabThemeData? tab,
-      ButtonsAreaThemeData? buttonsArea,
-      this.color,
-      this.border,
-      this.initialGap = 0,
-      this.middleGap = 0,
-      double minimalFinalGap = 0,
-      this.gapBottomBorder = BorderSide.none,
-      this.equalHeights = EqualHeights.none})
-      : this.tab = tab != null ? tab : TabThemeData(),
-        this.buttonsArea =
-            buttonsArea != null ? buttonsArea : ButtonsAreaThemeData(),
-        this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0;
-
-  Color? color;
-  Border? border;
-  TabThemeData tab;
-  double initialGap;
-  double middleGap;
-  double _minimalFinalGap;
-  BorderSide gapBottomBorder;
-
-  ButtonsAreaThemeData buttonsArea;
-  IconData closeButtonIcon;
-  EqualHeights equalHeights;
-
-  double get minimalFinalGap => _minimalFinalGap;
-
-  set minimalFinalGap(double value) {
-    _minimalFinalGap = value >= 0 ? value : 0;
   }
 }
