@@ -78,7 +78,7 @@ class ClassicTheme {
         buttonColors: buttonColors,
         buttonsOffset: 8,
         buttonsGap: 4,
-        padding: EdgeInsets.fromLTRB(6, 2, 6, 3),
+        padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
         decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 1)),
@@ -93,7 +93,7 @@ class ClassicTheme {
                   left: BorderSide(color: borderColor, width: 1),
                   top: BorderSide(color: borderColor, width: 1),
                   right: BorderSide(color: borderColor, width: 1))),
-          padding: EdgeInsets.fromLTRB(6, 2, 6, 8),
+          padding: EdgeInsets.fromLTRB(6, 3, 6, 8),
         ));
   }
 

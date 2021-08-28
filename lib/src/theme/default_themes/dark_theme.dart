@@ -76,25 +76,22 @@ class DarkTheme {
       required Color highlightedTabColor,
       required ButtonColors buttonColors}) {
     double bottomWidth = 3;
-    EdgeInsetsGeometry padding = EdgeInsets.fromLTRB(6, 2, 6, 2);
     return TabThemeData(
         buttonsOffset: 8,
         buttonsGap: 4,
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         decoration: BoxDecoration(color: tabColor),
         margin: EdgeInsets.only(bottom: bottomWidth),
-        padding: padding,
+        padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
         selectedStatus: TabStatusThemeData(
             decoration: BoxDecoration(
                 color: selectedTabColor,
                 border: Border(
                     bottom: BorderSide(
                         width: bottomWidth, color: selectedTabColor))),
-            margin: EdgeInsets.zero,
-            padding: padding),
+            margin: EdgeInsets.zero),
         highlightedStatus: TabStatusThemeData(
-            decoration: BoxDecoration(color: highlightedTabColor),
-            padding: padding),
+            decoration: BoxDecoration(color: highlightedTabColor)),
         buttonColors: buttonColors);
   }
 

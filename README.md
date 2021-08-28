@@ -1,14 +1,14 @@
-[![pub](https://img.shields.io/pub/v/tabbed_view.svg)](https://pub.dev/packages/tabbed_view) ![](https://github.com/caduandrade/tabbed_view/actions/workflows/test.yml/badge.svg) [![](https://img.shields.io/badge/demo-try%20it%20out-blue)](https://caduandrade.github.io/tabbed_view_demo/) [![pub2](https://img.shields.io/badge/Flutter-%E2%9D%A4-red)](https://flutter.dev/)
+[![](https://img.shields.io/pub/v/tabbed_view.svg)](https://pub.dev/packages/tabbed_view) ![](https://github.com/caduandrade/tabbed_view/actions/workflows/test.yml/badge.svg) [![](https://img.shields.io/badge/demo-try%20it%20out-blue)](https://caduandrade.github.io/tabbed_view_demo/) [![](https://img.shields.io/badge/Flutter-%E2%9D%A4-red)](https://flutter.dev/)
 
 # Tabbed view
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
-![classiccut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_cut.png)
-![darkcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_cut.png)
-![mobilecut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_cut.png)
-![minimalistcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_cut.png)
-![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_cut.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_cut.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_cut.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_cut.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
 
 * [Get started](#get-started)
   * [Content builder](#content-builder)
@@ -62,7 +62,7 @@ The *TabbedViewTheme.classic()* method builds the default theme.
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![classic](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
 
 ### Content builder
 
@@ -107,7 +107,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController([tab]));
 ```
 
-![tabbutton](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
 
 #### Overriding theme color
 
@@ -159,7 +159,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![nonclosabletab](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/nonclosable_tab.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/nonclosable_tab.png)
 
 ### Close interceptor
 
@@ -276,7 +276,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         });
 ```
 
-![tabsareabuttons](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_buttons.gif)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_buttons.gif)
 
 ## Themes
 
@@ -292,7 +292,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![tabtextstyle](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_text_style.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_text_style.png)
 
 #### Alignment
 
@@ -307,7 +307,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![topalignment](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/top_alignment.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/top_alignment.png)
 
 ### Themes - Tabs area
 
@@ -324,7 +324,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![tabsareacolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_color.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_color.png)
 
 #### Tab gaps
 
@@ -344,7 +344,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![customgap](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
 
 #### Buttons area
 
@@ -359,7 +359,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![hiddentabsbuttonicon](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/hidden_tabs_button_icon.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/hidden_tabs_button_icon.png)
 
 ### Themes - Menu
 
@@ -373,7 +373,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![menumaxwidth](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_max_width.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_max_width.png)
 
 #### Ellipsis on overflow text
 
@@ -395,7 +395,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![menuellipsis](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_ellipsis.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_ellipsis.png)
 
 ### Predefined themes
 
@@ -408,7 +408,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.classic());
 ```
 
-![classic2](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
 
 #####  Classic theme - Color set
 
@@ -420,7 +420,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         data: TabbedViewThemeData.classic(colorSet: Colors.green));
 ```
 
-![classiccolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_color_set.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_color_set.png)
 
 ####  Dark theme
 
@@ -431,7 +431,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.dark());
 ```
 
-![dark](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark.gif)
 
 #####  Dark theme - Color set
 
@@ -443,7 +443,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         data: TabbedViewThemeData.dark(colorSet: Colors.indigo));
 ```
 
-![darkcolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_color_set.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/dark_color_set.png)
 
 ####  Mobile theme
 
@@ -454,7 +454,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.mobile());
 ```
 
-![mobile](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
 
 #####  Mobile theme - Color set
 
@@ -466,7 +466,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         data: TabbedViewThemeData.mobile(colorSet: Colors.blueGrey));
 ```
 
-![mobilecolorset](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_color_set.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_color_set.png)
 
 #####  Mobile theme - Highlighted tab color
 
@@ -479,7 +479,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
             highlightedTabColor: Colors.green[700]!));
 ```
 
-![mobilehighlightedcolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_highlighted_color.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_highlighted_color.png)
 
 ####  Minimalist theme
 
@@ -490,7 +490,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         child: tabbedView, data: TabbedViewThemeData.minimalist());
 ```
 
-![minimalist](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist.gif)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist.gif)
 
 #####  Minimalist theme - Color set
 
@@ -502,7 +502,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         data: TabbedViewThemeData.minimalist(colorSet: Colors.blue));
 ```
 
-![minimalistchangecolor](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_change_color.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_change_color.png)
 
 ### Creating new theme
 
@@ -541,4 +541,4 @@ It is possible to create an entire theme from scratch.
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![fromthescratchcut](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
+![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)

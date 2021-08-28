@@ -87,7 +87,7 @@ class MinimalistTheme {
       buttonsOffset: 8,
       buttonsGap: 4,
       textStyle: TextStyle(color: fontColor, fontSize: 13),
-      padding: EdgeInsets.fromLTRB(8, 3, 8, 3),
+      padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
       decoration: BoxDecoration(color: background),
       buttonColors: buttonColors,
       highlightedStatus: TabStatusThemeData(
