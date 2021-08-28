@@ -511,7 +511,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.mobile());
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile.gif)
+![](./screenshots/mobile_theme.png)
 
 #####  Mobile theme - Color set
 
@@ -523,7 +523,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         data: TabbedViewThemeData.mobile(colorSet: Colors.blueGrey));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_color_set.png)
+![](./screenshots/mobile_theme_color_set.png)
 
 #####  Mobile theme - Highlighted tab color
 
@@ -536,7 +536,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
             highlightedTabColor: Colors.green[700]!));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/mobile_highlighted_color.png)
+![](./screenshots/mobile_theme_highlight_color.png)
 
 ####  Minimalist theme
 
