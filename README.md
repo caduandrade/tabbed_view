@@ -400,7 +400,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/custom_gap.png)
+![](./screenshots/tabs_area_gaps.png)
 
 #### Buttons area
 
