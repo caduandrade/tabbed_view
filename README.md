@@ -102,7 +102,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ```dart
     TabData tab = TabData(text: 'Tab', buttons: [
-      TabButton(icon: Icons.star, onPressed: () => print('Hello!'))
+      TabButton(iconData: Icons.star, onPressed: () => print('Hello!'))
     ]);
     TabbedView tabbedView = TabbedView(controller: TabbedViewController([tab]));
 ```
@@ -116,7 +116,7 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 1'),
       TabData(text: 'Tab 2', buttons: [
         TabButton(
-            icon: Icons.star,
+            iconData: Icons.star,
             color: Colors.green,
             onPressed: () => print('Hello!'))
       ])
@@ -133,7 +133,7 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab 1'),
       TabData(text: 'Tab 2', buttons: [
         TabButton(
-            icon: Icons.arrow_drop_down,
+            iconData: Icons.arrow_drop_down,
             menuBuilder: (context) {
               return [
                 TabbedViewMenuItem(
@@ -258,14 +258,14 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         tabsAreaButtonsBuilder: (context, tabsCount) {
           List<TabButton> buttons = [];
           buttons.add(TabButton(
-              icon: Icons.add,
+              iconData: Icons.add,
               onPressed: () {
                 int millisecond = DateTime.now().millisecondsSinceEpoch;
                 controller.addTab(TabData(text: '$millisecond'));
               }));
           if (tabsCount > 0) {
             buttons.add(TabButton(
-                icon: Icons.delete,
+                iconData: Icons.delete,
                 onPressed: () {
                   if (controller.selectedIndex != null) {
                     controller.removeTab(controller.selectedIndex!);
@@ -354,8 +354,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedView tabbedView = TabbedView(controller: controller);
 
     TabbedViewThemeData themeData = TabbedViewThemeData.classic()
-      ..tabsArea.buttonsArea.hiddenTabsMenuButtonIcon =
-          Icons.arrow_drop_down_circle_outlined;
+      ..tabsArea.menuIconData = Icons.arrow_drop_down_circle_outlined;
 
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
