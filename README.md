@@ -37,16 +37,16 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
   * [Themes - Menu](#themes---menu)
     * [Max width](#max-width)
     * [Ellipsis on overflow text](#ellipsis-on-overflow-text)
-  * [Predefined themes](#predefined-themes)
+  * [Default themes](#default-themes)
     *  [Classic theme](#classic-theme)
-      *  [Classic theme - Color set](#classic-theme---color-set)
+       *  [Color set](#classic-theme---color-set)
     *  [Dark theme](#dark-theme)
-      *  [Dark theme - Color set](#dark-theme---color-set)
+       *  [Color set](#dark-theme---color-set)
     *  [Mobile theme](#mobile-theme)
-      *  [Mobile theme - Color set](#mobile-theme---color-set)
-      *  [Mobile theme - Highlighted tab color](#mobile-theme---highlighted-tab-color)
+       *  [Color set](#mobile-theme---color-set)
+       *  [Highlighted tab color](#mobile-theme---highlighted-tab-color)
     *  [Minimalist theme](#minimalist-theme)
-      *  [Minimalist theme - Color set](#minimalist-theme---color-set)
+       *  [Color set](#minimalist-theme---color-set)
   * [Creating new theme](#creating-new-theme)
 
 ## Get started
@@ -397,7 +397,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 
 ![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_ellipsis.png)
 
-### Predefined themes
+### Default themes
 
 ####  Classic theme
 
