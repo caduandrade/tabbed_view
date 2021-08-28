@@ -326,10 +326,15 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #### Text style
 
 ```dart
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+    ];
+
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 
     TabbedViewThemeData themeData = TabbedViewThemeData.classic()
-      ..tabsArea.tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
+      ..tab.textStyle = TextStyle(fontSize: 20, color: Colors.blue);
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
@@ -338,10 +343,15 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 #### Alignment
 
 ```dart
+    var tabs = [
+      TabData(text: 'Tab 1'),
+      TabData(text: 'Tab 2'),
+    ];
+
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 
     TabbedViewThemeData themeData = TabbedViewThemeData.classic();
-    themeData.tabsArea.tab
+    themeData.tab
       ..textStyle = TextStyle(fontSize: 20)
       ..verticalAlignment = VerticalAlignment.top;
 
@@ -567,7 +577,7 @@ It is possible to create an entire theme from scratch.
     BorderRadiusGeometry? borderRadius =
         BorderRadius.only(topLeft: radius, topRight: radius);
 
-    themeData.tabsArea.tab
+    themeData.tab
       ..padding = EdgeInsets.fromLTRB(10, 4, 10, 4)
       ..buttonsOffset = 8
       ..decoration = BoxDecoration(
