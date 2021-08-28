@@ -547,7 +547,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         child: tabbedView, data: TabbedViewThemeData.minimalist());
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist.gif)
+![](./screenshots/minimalist_theme.png)
 
 #####  Minimalist theme - Color set
 
@@ -559,7 +559,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         data: TabbedViewThemeData.minimalist(colorSet: Colors.blue));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_change_color.png)
+![](./screenshots/minimalist_theme_color_set.png)
 
 ### Theme from scratch
 
