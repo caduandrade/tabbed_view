@@ -24,6 +24,22 @@ class TabbedViewThemeData {
   ContentAreaThemeData contentArea;
   MenuThemeData menu;
 
+  /// Sets the theme to Material Design patterns: Close and menu icons;
+  /// Icons size; Remove the paddings, the Material Design already
+  /// defines them in the icons.
+  void materialDesign() {
+    this.tabsArea.buttonsAreaPadding = null;
+    this.tabsArea.buttonIconSize = 15;
+    this.tabsArea.buttonsGap = 0;
+    this.tabsArea.closeIconData = Icons.close;
+    this.tabsArea.closeIconPath = null;
+    this.tabsArea.menuIconData = Icons.arrow_drop_down;
+    this.tabsArea.menuIconPath = null;
+
+    this.tabsArea.tab.buttonsGap = 0;
+    this.tabsArea.tab.buttonIconSize = 15;
+  }
+
   /// Builds the predefined dark theme.
   factory TabbedViewThemeData.dark(
       {MaterialColor colorSet = Colors.grey, double fontSize = 13}) {
