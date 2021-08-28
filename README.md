@@ -410,12 +410,13 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedView tabbedView = TabbedView(controller: controller);
 
     TabbedViewThemeData themeData = TabbedViewThemeData.classic()
+      ..materialDesign()
       ..tabsArea.menuIconData = Icons.arrow_drop_down_circle_outlined;
 
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/hidden_tabs_button_icon.png)
+![](./screenshots/tabs_area_menu_button.png)
 
 ### Themes - Menu
 
