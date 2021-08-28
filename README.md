@@ -465,7 +465,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.classic());
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
+![](./screenshots/classic_theme.png)
 
 #####  Classic theme - Color set
 
@@ -477,7 +477,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         data: TabbedViewThemeData.classic(colorSet: Colors.green));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic_color_set.png)
+![](./screenshots/classic_theme_color_set.png)
 
 ####  Dark theme
 
