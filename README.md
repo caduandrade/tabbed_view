@@ -112,7 +112,7 @@ It allows creating the contents of the tab dynamically during the selection even
     ]);
 
     TabbedView tabbedView = TabbedView(controller: TabbedViewController([tab]));
-    // using material design paddings, size, etc
+    // using material design icon patterns
     TabbedViewThemeData themeData = TabbedViewThemeData.classic()
       ..materialDesign();
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
@@ -298,7 +298,6 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
           List<TabButton> buttons = [];
           buttons.add(TabButton(
               iconData: Icons.add,
-              iconSize: 15,
               onPressed: () {
                 int millisecond = DateTime.now().millisecondsSinceEpoch;
                 controller.addTab(TabData(text: '$millisecond'));
@@ -306,7 +305,6 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
           if (tabsCount > 0) {
             buttons.add(TabButton(
                 iconData: Icons.delete,
-                iconSize: 15,
                 onPressed: () {
                   if (controller.selectedIndex != null) {
                     controller.removeTab(controller.selectedIndex!);
@@ -315,6 +313,11 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
           }
           return buttons;
         });
+
+    // using material design icon patterns
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
+      ..materialDesign();
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![](./screenshots/tabs_area_buttons.png)
