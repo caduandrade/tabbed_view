@@ -294,6 +294,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
           List<TabButton> buttons = [];
           buttons.add(TabButton(
               iconData: Icons.add,
+              iconSize: 15,
               onPressed: () {
                 int millisecond = DateTime.now().millisecondsSinceEpoch;
                 controller.addTab(TabData(text: '$millisecond'));
@@ -301,6 +302,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
           if (tabsCount > 0) {
             buttons.add(TabButton(
                 iconData: Icons.delete,
+                iconSize: 15,
                 onPressed: () {
                   if (controller.selectedIndex != null) {
                     controller.removeTab(controller.selectedIndex!);
@@ -311,7 +313,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
         });
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_buttons.gif)
+![](./screenshots/tabs_area_buttons.png)
 
 ## Themes
 
