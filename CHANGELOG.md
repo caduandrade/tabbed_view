@@ -4,6 +4,7 @@
 * Default themes adjustments, such as gaps and paddings
 * *buttonsGap* setting in *TabsAreaThemeData*
 * *IconPath* to be used in icons drawing
+* *iconSize* setting in *TabButton*
 * API changes
   * *minimalIconSize* and *defaultIconSize* constants moved from *TabbedViewThemeData* to *TabbedViewThemeConstants*
   * *ButtonsAreaThemeData* attributes moved to TabsAreaThemeData

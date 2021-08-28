@@ -25,9 +25,7 @@ class TabThemeData {
       : this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
-            buttonIconSize >= TabbedViewThemeConstants.minimalIconSize
-                ? buttonIconSize
-                : TabbedViewThemeConstants.minimalIconSize,
+            TabbedViewThemeConstants.normalize(buttonIconSize),
         this.selectedStatus =
             selectedStatus != null ? selectedStatus : TabStatusThemeData(),
         this.highlightedStatus = highlightedStatus != null

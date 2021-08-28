@@ -96,7 +96,9 @@ class _TabsAreaState extends State<TabsArea> {
                 button: tabButton,
                 enabled: true,
                 colors: tabsAreaTheme.buttonColors,
-                iconSize: tabsAreaTheme.buttonIconSize),
+                iconSize: tabButton.iconSize != null
+                    ? tabButton.iconSize!
+                    : tabsAreaTheme.buttonIconSize),
             padding: padding));
       }
 

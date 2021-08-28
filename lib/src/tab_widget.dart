@@ -140,7 +140,9 @@ class TabWidget extends StatelessWidget {
                 button: button,
                 enabled: buttonsEnabled,
                 colors: buttonColors,
-                iconSize: tabTheme.buttonIconSize),
+                iconSize: button.iconSize != null
+                    ? button.iconSize!
+                    : tabTheme.buttonIconSize),
             padding: padding));
       }
     }

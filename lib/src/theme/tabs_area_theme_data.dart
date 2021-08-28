@@ -33,9 +33,7 @@ class TabsAreaThemeData {
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
-            buttonIconSize >= TabbedViewThemeConstants.minimalIconSize
-                ? buttonIconSize
-                : TabbedViewThemeConstants.minimalIconSize,
+            TabbedViewThemeConstants.normalize(buttonIconSize),
         this.closeIconData = closeIconData,
         this.closeIconPath = (closeIconData == null && closeIconPath == null)
             ? TabbedViewIcons.close

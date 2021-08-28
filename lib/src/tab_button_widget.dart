@@ -106,9 +106,8 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
     if (widget.button.iconData != null) {
       return Icon(widget.button.iconData, color: color, size: widget.iconSize);
     }
-    double size = widget.iconSize;
     return CustomPaint(
-      size: Size(size, (size * 1).toDouble()),
+      size: Size(widget.iconSize, (widget.iconSize * 1).toDouble()),
       painter: _IconPathPainter(widget.button.iconPath!, color),
     );
   }
