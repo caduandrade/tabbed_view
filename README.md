@@ -19,7 +19,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
     * [Icon path](#icon-path)
     * [Overriding theme color](#overriding-theme-color)
     * [Menu button](#menu-button)
-  * [Non-closable tab](#non---closable-tab)
+  * [Non-closable tab](#non-closable-tab)
   * [Close interceptor](#close-interceptor)
   * [Close listener](#close-listener)
   * [Selection listener](#selection-listener)
