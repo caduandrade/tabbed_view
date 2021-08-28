@@ -47,7 +47,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
        *  [Highlighted tab color](#mobile-theme---highlighted-tab-color)
     *  [Minimalist theme](#minimalist-theme)
        *  [Color set](#minimalist-theme---color-set)
-  * [Creating new theme](#creating-new-theme)
+  * [Theme from scratch](#theme-from-scratch)
 
 ## Get started
 
@@ -504,7 +504,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 
 ![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/minimalist_change_color.png)
 
-### Creating new theme
+### Theme from scratch
 
 It is possible to create an entire theme from scratch.
 
