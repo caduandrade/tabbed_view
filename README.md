@@ -145,33 +145,36 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ```dart
     var tabs = [
-      TabData(text: 'Tab 1'),
-      TabData(text: 'Tab 2', buttons: [
+      TabData(text: 'Tab', buttons: [
         TabButton(
             iconData: Icons.star,
+            iconSize: 16,
             color: Colors.green,
-            onPressed: () => print('Hello!'))
+            onPressed: () => showSnackBar(context: context, msg: 'Hello!'))
       ])
     ];
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button_color.png)
+![](./screenshots/tab_button_override_theme_color.png)
 
 #### Menu button
 
 ```dart
     var tabs = [
-      TabData(text: 'Tab 1'),
-      TabData(text: 'Tab 2', buttons: [
+      TabData(text: 'Tab', buttons: [
         TabButton(
-            iconData: Icons.arrow_drop_down,
+            iconPath: TabbedViewIcons.menu,
             menuBuilder: (context) {
               return [
                 TabbedViewMenuItem(
-                    text: 'Menu 1', onSelection: () => print('1')),
+                    text: 'Menu item 1',
+                    onSelection: () =>
+                        showSnackBar(context: context, msg: 'menu item 1')),
                 TabbedViewMenuItem(
-                    text: 'Menu 2', onSelection: () => print('2'))
+                    text: 'Menu item 2',
+                    onSelection: () =>
+                        showSnackBar(context: context, msg: 'menu item 2'))
               ];
             })
       ])
@@ -179,7 +182,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_menu_button_v1.png)
+![](./screenshots/tab_menu_button.png)
 
 ### Removing the close button
 
