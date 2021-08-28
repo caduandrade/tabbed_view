@@ -15,6 +15,8 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
   * [Close button tooltip](#close-button-tooltip)
 * [Tab](#tab)
   * [Adding buttons](#adding-buttons)
+    * [Icon data](#icon-data)
+    * [Icon path](#icon-path)
     * [Overriding theme color](#overriding-theme-color)
     * [Menu button](#menu-button)
   * [Removing the close button](#removing-the-close-button)
@@ -100,14 +102,44 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ### Adding buttons
 
+#### Icon data
+
 ```dart
     TabData tab = TabData(text: 'Tab', buttons: [
-      TabButton(iconData: Icons.star, onPressed: () => print('Hello!'))
+      TabButton(
+          iconData: Icons.star,
+          iconSize: 16,
+          onPressed: () => showSnackBar(context: context, msg: 'Hello!'))
     ]);
     TabbedView tabbedView = TabbedView(controller: TabbedViewController([tab]));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_button.png)
+![](./screenshots/tab_button_icon_data.png)
+
+#### Icon path
+
+```dart
+    TabData tab = TabData(text: 'Tab', buttons: [
+      TabButton(
+          iconPath: _path,
+          onPressed: () => showSnackBar(context: context, msg: 'Hello!'))
+    ]);
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController([tab]));
+```
+
+```dart
+  Path _path(Size size) {
+    Path path = Path();
+    path.moveTo(size.width * 0.1, size.height * 0.1);
+    path.lineTo(size.width * 0.9, size.height * 0.1);
+    path.lineTo(size.width * 0.9, size.height * 0.9);
+    path.lineTo(size.width * 0.1, size.height * 0.9);
+    path.close();
+    return path;
+  }
+```
+
+![](./screenshots/tab_button_icon_path.png)
 
 #### Overriding theme color
 
