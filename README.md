@@ -329,7 +329,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tab_text_style.png)
+![](./screenshots/tab_text_style.png)
 
 #### Alignment
 
@@ -344,7 +344,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/top_alignment.png)
+![](./screenshots/tab_alignment.png)
 
 ### Themes - Tabs area
 
