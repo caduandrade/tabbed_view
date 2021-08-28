@@ -152,12 +152,16 @@ It allows creating the contents of the tab dynamically during the selection even
       TabData(text: 'Tab', buttons: [
         TabButton(
             iconData: Icons.star,
-            iconSize: 16,
             color: Colors.green,
             onPressed: () => showSnackBar(context: context, msg: 'Hello!'))
       ])
     ];
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
+
+    // using material design icon patterns
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
+      ..materialDesign();
+    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![](./screenshots/tab_button_override_theme_color.png)
