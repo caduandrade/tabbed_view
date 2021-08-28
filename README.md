@@ -19,7 +19,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
     * [Icon path](#icon-path)
     * [Overriding theme color](#overriding-theme-color)
     * [Menu button](#menu-button)
-  * [Removing the close button](#removing-the-close-button)
+  * [Non-closable tab](#non---closable-tab)
   * [Close interceptor](#close-interceptor)
   * [Close listener](#close-listener)
   * [Selection listener](#selection-listener)
@@ -184,7 +184,7 @@ It allows creating the contents of the tab dynamically during the selection even
 
 ![](./screenshots/tab_menu_button.png)
 
-### Removing the close button
+### Non-closable tab
 
 ```dart
     var tabs = [
@@ -194,7 +194,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/nonclosable_tab.png)
+![](./screenshots/non_closable_tab.png)
 
 ### Close interceptor
 
