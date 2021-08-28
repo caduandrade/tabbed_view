@@ -367,18 +367,16 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
 
 #### Color
 
-* The default *TabsAreaTheme* color is null.
-
 ```dart
     TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedViewThemeData themeData = TabbedViewThemeData.minimalist();
+    TabbedViewThemeData themeData = TabbedViewThemeData.classic();
     themeData.tabsArea.color = Colors.green[100];
 
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/tabs_area_color.png)
+![](./screenshots/tabs_area_color.png)
 
 #### Tab gaps
 
