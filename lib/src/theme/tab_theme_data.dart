@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:tabbed_view/src/icon_path.dart';
+import 'package:tabbed_view/src/tabbed_view_icons.dart';
 import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
@@ -7,7 +9,9 @@ import 'package:tabbed_view/src/theme/vertical_alignment.dart';
 /// Theme for tab.
 class TabThemeData {
   TabThemeData(
-      {this.buttonColors = const ButtonColors(),
+      {IconData? closeIconData,
+      IconPath? closeIconPath,
+      this.buttonColors = const ButtonColors(),
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
       this.verticalAlignment = VerticalAlignment.center,
       double buttonsOffset = 0,
@@ -26,6 +30,10 @@ class TabThemeData {
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
             TabbedViewThemeConstants.normalize(buttonIconSize),
+        this.closeIconData = closeIconData,
+        this.closeIconPath = (closeIconData == null && closeIconPath == null)
+            ? TabbedViewIcons.close
+            : closeIconPath,
         this.selectedStatus =
             selectedStatus != null ? selectedStatus : TabStatusThemeData(),
         this.highlightedStatus = highlightedStatus != null
@@ -55,6 +63,12 @@ class TabThemeData {
   double buttonIconSize;
   ButtonColors buttonColors;
   double _buttonsOffset;
+
+  /// Icon data for the close button.
+  IconData? closeIconData;
+
+  /// Icon path for the close button.
+  IconPath? closeIconPath;
 
   TabStatusThemeData selectedStatus;
   TabStatusThemeData highlightedStatus;

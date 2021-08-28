@@ -32,6 +32,12 @@ class MobileTheme {
             highlightedTabColor: highlightedTabColor,
             fontSize: fontSize,
             backgroundColor: backgroundColor),
+        tab: tabTheme(
+            buttonColors: buttonColors,
+            borderColor: borderColor,
+            highlightedColor: highlightedTabColor,
+            fontSize: fontSize,
+            foregroundColor: foregroundColor),
         contentArea: contentAreaTheme(
             backgroundColor: backgroundColor, borderColor: borderColor),
         menu: menuTheme(
@@ -50,12 +56,6 @@ class MobileTheme {
       required Color foregroundColor,
       required Color backgroundColor}) {
     return TabsAreaThemeData(
-        tab: tabTheme(
-            buttonColors: buttonColors,
-            borderColor: borderColor,
-            highlightedColor: highlightedTabColor,
-            fontSize: fontSize,
-            foregroundColor: foregroundColor),
         equalHeights: EqualHeights.all,
         initialGap: -1,
         middleGap: -1,

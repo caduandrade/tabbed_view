@@ -6,6 +6,7 @@ import 'package:tabbed_view/src/theme/default_themes/dark_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/minimalist_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/mobile_theme.dart';
 import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 
 /// The [TabbedView] theme.
@@ -13,14 +14,17 @@ import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 class TabbedViewThemeData {
   TabbedViewThemeData(
       {TabsAreaThemeData? tabsArea,
+      TabThemeData? tab,
       ContentAreaThemeData? contentArea,
       MenuThemeData? menu})
-      : this.tabsArea = tabsArea != null ? tabsArea : TabsAreaThemeData(),
+      : this.tab = tab != null ? tab : TabThemeData(),
+        this.tabsArea = tabsArea != null ? tabsArea : TabsAreaThemeData(),
         this.contentArea =
             contentArea != null ? contentArea : ContentAreaThemeData(),
         this.menu = menu != null ? menu : MenuThemeData();
 
   TabsAreaThemeData tabsArea;
+  TabThemeData tab;
   ContentAreaThemeData contentArea;
   MenuThemeData menu;
 
@@ -31,13 +35,13 @@ class TabbedViewThemeData {
     this.tabsArea.buttonsAreaPadding = null;
     this.tabsArea.buttonIconSize = 15;
     this.tabsArea.buttonsGap = 0;
-    this.tabsArea.closeIconData = Icons.close;
-    this.tabsArea.closeIconPath = null;
     this.tabsArea.menuIconData = Icons.arrow_drop_down;
     this.tabsArea.menuIconPath = null;
 
-    this.tabsArea.tab.buttonsGap = 0;
-    this.tabsArea.tab.buttonIconSize = 15;
+    this.tab.buttonIconSize = 15;
+    this.tab.buttonsGap = 0;
+    this.tab.closeIconData = Icons.close;
+    this.tab.closeIconPath = null;
   }
 
   /// Builds the predefined dark theme.

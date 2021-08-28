@@ -13,6 +13,9 @@
   * *TabsAreaThemeData*
     * *closeButtonIcon* renamed to *closeIconData*
     * *hiddenTabsMenuButtonIcon* renamed to *menuIconData*
+    * *tab* attribute moved to *TabbedViewThemeData*
+    * *closeIconData* attribute moved to *TabThemeData*
+    * *closeIconPath* attribute moved to *TabThemeData*
 
 ## 1.7.0
 

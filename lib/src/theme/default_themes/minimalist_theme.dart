@@ -36,6 +36,15 @@ class MinimalistTheme {
             fontColor: fontColor,
             selectedFontColor: selectedFontColor,
             hiddenTabsMenuButtonColor: hiddenTabsMenuButtonColor),
+        tab: tabTheme(
+            borderColor: borderColor,
+            background: background,
+            selectedTabColor: selectedTabColor,
+            highlightedTabColor: highlightedTabColor,
+            buttonColors: buttonColors,
+            selectedButtonColors: selectedButtonColors,
+            fontColor: fontColor,
+            selectedFontColor: selectedFontColor),
         contentArea:
             contentAreaTheme(borderColor: borderColor, background: background),
         menu: menuTheme(
@@ -61,15 +70,6 @@ class MinimalistTheme {
         buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor),
         buttonsAreaPadding: EdgeInsets.all(4),
         buttonsGap: 4,
-        tab: tabTheme(
-            borderColor: borderColor,
-            background: background,
-            selectedTabColor: selectedTabColor,
-            highlightedTabColor: highlightedTabColor,
-            buttonColors: buttonColors,
-            selectedButtonColors: selectedButtonColors,
-            fontColor: fontColor,
-            selectedFontColor: selectedFontColor),
         equalHeights: EqualHeights.all,
         border: Border(bottom: BorderSide(color: borderColor, width: 1)));
   }

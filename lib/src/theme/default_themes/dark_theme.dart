@@ -35,6 +35,13 @@ class DarkTheme {
             selectedTabColor: selectedTabColor,
             highlightedTabColor: highlightedTabColor,
             buttonColors: buttonColors),
+        tab: tabTheme(
+            fontSize: fontSize,
+            fontColor: fontColor,
+            tabColor: tabColor,
+            selectedTabColor: selectedTabColor,
+            highlightedTabColor: highlightedTabColor,
+            buttonColors: buttonColors),
         contentArea: contentAreaTheme(selectedTabColor: selectedTabColor),
         menu: menuTheme(
             fontColor: fontColor,
@@ -53,13 +60,6 @@ class DarkTheme {
       required Color highlightedTabColor,
       required ButtonColors buttonColors}) {
     return TabsAreaThemeData(
-        tab: tabTheme(
-            fontSize: fontSize,
-            fontColor: fontColor,
-            tabColor: tabColor,
-            selectedTabColor: selectedTabColor,
-            highlightedTabColor: highlightedTabColor,
-            buttonColors: buttonColors),
         equalHeights: EqualHeights.all,
         middleGap: 4,
         buttonsAreaPadding: EdgeInsets.all(4),

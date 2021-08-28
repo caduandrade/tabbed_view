@@ -31,6 +31,13 @@ class ClassicTheme {
             borderColor: borderColor,
             fontSize: fontSize,
             fontColor: fontColor),
+        tab: tabTheme(
+            borderColor: borderColor,
+            buttonColors: buttonColors,
+            fontColor: fontColor,
+            fontSize: fontSize,
+            backgroundColor: backgroundColor,
+            highlightedTabColor: highlightedTabColor),
         contentArea: contentAreaTheme(
             borderColor: borderColor, backgroundColor: backgroundColor),
         menu: menuTheme(
@@ -49,13 +56,6 @@ class ClassicTheme {
       required Color highlightedTabColor,
       required ButtonColors buttonColors}) {
     return TabsAreaThemeData(
-        tab: tabTheme(
-            borderColor: borderColor,
-            buttonColors: buttonColors,
-            fontColor: fontColor,
-            fontSize: fontSize,
-            backgroundColor: backgroundColor,
-            highlightedTabColor: highlightedTabColor),
         buttonColors: buttonColors,
         buttonsAreaDecoration: BoxDecoration(
             color: backgroundColor,

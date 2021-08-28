@@ -4,16 +4,12 @@ import 'package:tabbed_view/src/icon_path.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
 import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
-import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
   TabsAreaThemeData(
-      {IconData? closeIconData,
-      IconPath? closeIconPath,
-      TabThemeData? tab,
-      this.color,
+      {this.color,
       this.border,
       this.initialGap = 0,
       this.middleGap = 0,
@@ -28,16 +24,11 @@ class TabsAreaThemeData {
       this.buttonColors = const ButtonColors(),
       IconData? menuIconData,
       IconPath? menuIconPath})
-      : this.tab = tab != null ? tab : TabThemeData(),
-        this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
+      : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
             TabbedViewThemeConstants.normalize(buttonIconSize),
-        this.closeIconData = closeIconData,
-        this.closeIconPath = (closeIconData == null && closeIconPath == null)
-            ? TabbedViewIcons.close
-            : closeIconPath,
         this.menuIconData = menuIconData,
         this.menuIconPath = (menuIconData == null && menuIconPath == null)
             ? TabbedViewIcons.menu
@@ -45,17 +36,11 @@ class TabsAreaThemeData {
 
   Color? color;
   Border? border;
-  TabThemeData tab;
   double initialGap;
   double middleGap;
   double _minimalFinalGap;
   BorderSide gapBottomBorder;
 
-  /// Icon data for the close button.
-  IconData? closeIconData;
-
-  /// Icon path for the close button.
-  IconPath? closeIconPath;
   EqualHeights equalHeights;
 
   double get minimalFinalGap => _minimalFinalGap;

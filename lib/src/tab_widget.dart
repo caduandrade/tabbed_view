@@ -11,7 +11,6 @@ import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
-import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Listener for the tabs with the mouse over.
@@ -34,11 +33,10 @@ class TabWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     TabData tab = data.controller.tabs[index];
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
-    TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
-    TabThemeData tabTheme = tabsAreaTheme.tab;
-    TabStatusThemeData statusTheme = _getTabThemeFor(theme, status);
+    TabThemeData tabTheme = theme.tab;
+    TabStatusThemeData statusTheme = _getTabThemeFor(tabTheme, status);
 
-    List<Widget> textAndButtons = _textAndButtons(context, theme);
+    List<Widget> textAndButtons = _textAndButtons(context, tabTheme);
 
     Widget textAndButtonsContainer = ClipRect(
         child: FlowLayout(
@@ -54,12 +52,12 @@ class TabWidget extends StatelessWidget {
         BorderSide.none;
     BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
 
-    EdgeInsetsGeometry? padding = tabsAreaTheme.tab.padding;
+    EdgeInsetsGeometry? padding = tabTheme.padding;
     if (statusTheme.padding != null) {
       padding = statusTheme.padding;
     }
 
-    EdgeInsetsGeometry? margin = tabsAreaTheme.tab.margin;
+    EdgeInsetsGeometry? margin = tabTheme.margin;
     if (statusTheme.margin != null) {
       margin = statusTheme.margin;
     }
@@ -91,14 +89,11 @@ class TabWidget extends StatelessWidget {
   }
 
   /// Builds a list with title text and buttons.
-  List<Widget> _textAndButtons(
-      BuildContext context, TabbedViewThemeData theme) {
+  List<Widget> _textAndButtons(BuildContext context, TabThemeData tabTheme) {
     List<Widget> textAndButtons = [];
 
     TabData tab = data.controller.tabs[index];
-    TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
-    TabThemeData tabTheme = tabsAreaTheme.tab;
-    TabStatusThemeData statusTheme = _getTabThemeFor(theme, status);
+    TabStatusThemeData statusTheme = _getTabThemeFor(tabTheme, status);
     ButtonColors buttonColors = statusTheme.buttonColors != null
         ? statusTheme.buttonColors!
         : tabTheme.buttonColors;
@@ -152,8 +147,8 @@ class TabWidget extends StatelessWidget {
         padding = EdgeInsets.only(left: tabTheme.buttonsGap);
       }
       TabButton closeButton = TabButton(
-          iconData: tabsAreaTheme.closeIconData,
-          iconPath: tabsAreaTheme.closeIconPath,
+          iconData: tabTheme.closeIconData,
+          iconPath: tabTheme.closeIconPath,
           onPressed: () => _onClose(context, index),
           toolTip: data.closeButtonTooltip);
 
@@ -180,16 +175,14 @@ class TabWidget extends StatelessWidget {
   }
 
   /// Gets the theme of a tab according to its status.
-  TabStatusThemeData _getTabThemeFor(
-      TabbedViewThemeData theme, TabStatus status) {
-    TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
+  TabStatusThemeData _getTabThemeFor(TabThemeData tabTheme, TabStatus status) {
     switch (status) {
       case TabStatus.normal:
         return TabStatusThemeData.empty;
       case TabStatus.selected:
-        return tabsAreaTheme.tab.selectedStatus;
+        return tabTheme.selectedStatus;
       case TabStatus.highlighted:
-        return tabsAreaTheme.tab.highlightedStatus;
+        return tabTheme.highlightedStatus;
     }
   }
 }
