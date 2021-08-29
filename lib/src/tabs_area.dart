@@ -76,9 +76,7 @@ class _TabsAreaState extends State<TabsArea> {
 
     if (hiddenTabs.hasHiddenTabs) {
       TabButton hiddenTabsMenuButton = TabButton(
-          iconData: tabsAreaTheme.menuIconData,
-          iconPath: tabsAreaTheme.menuIconPath,
-          menuBuilder: _hiddenTabsMenuBuilder);
+          icon: tabsAreaTheme.menuIcon, menuBuilder: _hiddenTabsMenuBuilder);
       buttons.insert(0, hiddenTabsMenuButton);
     }
 

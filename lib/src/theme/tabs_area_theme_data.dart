@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:tabbed_view/src/icon_path.dart';
+import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
 import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
@@ -22,17 +22,15 @@ class TabsAreaThemeData {
       double buttonsOffset = 0,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
       this.buttonColors = const ButtonColors(),
-      IconData? menuIconData,
-      IconPath? menuIconPath})
+      IconProvider? menuIcon})
       : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
             TabbedViewThemeConstants.normalize(buttonIconSize),
-        this.menuIconData = menuIconData,
-        this.menuIconPath = (menuIconData == null && menuIconPath == null)
-            ? TabbedViewIcons.menu
-            : menuIconPath;
+        this.menuIcon = menuIcon == null
+            ? IconProvider.path(TabbedViewIcons.menu)
+            : menuIcon;
 
   Color? color;
   Border? border;
@@ -61,11 +59,8 @@ class TabsAreaThemeData {
   double buttonIconSize;
   ButtonColors buttonColors;
 
-  /// Icon data for the hidden tabs menu.
-  IconData? menuIconData;
-
-  /// Icon path for the hidden tabs menu.
-  IconPath? menuIconPath;
+  /// Icon for the hidden tabs menu.
+  IconProvider menuIcon;
 
   double _buttonsGap;
   double get buttonsGap => _buttonsGap;

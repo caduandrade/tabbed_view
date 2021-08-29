@@ -109,7 +109,7 @@ It allows creating the contents of the tab dynamically during the selection even
 ```dart
     TabData tab = TabData(text: 'Tab', buttons: [
       TabButton(
-          iconData: Icons.star,
+          icon: IconProvider.data(Icons.star),
           onPressed: () => showSnackBar(context: context, msg: 'Hello!'))
     ]);
 
@@ -123,7 +123,7 @@ It allows creating the contents of the tab dynamically during the selection even
 ```dart
     TabData tab = TabData(text: 'Tab', buttons: [
       TabButton(
-          iconPath: _path,
+          icon: IconProvider.path(_path),
           onPressed: () => showSnackBar(context: context, msg: 'Hello!'))
     ]);
     TabbedView tabbedView = TabbedView(controller: TabbedViewController([tab]));
@@ -149,7 +149,7 @@ It allows creating the contents of the tab dynamically during the selection even
     var tabs = [
       TabData(text: 'Tab', buttons: [
         TabButton(
-            iconData: Icons.star,
+            icon: IconProvider.data(Icons.star),
             color: Colors.green,
             onPressed: () => showSnackBar(context: context, msg: 'Hello!'))
       ])
@@ -165,7 +165,7 @@ It allows creating the contents of the tab dynamically during the selection even
     var tabs = [
       TabData(text: 'Tab', buttons: [
         TabButton(
-            iconPath: TabbedViewIcons.menu,
+            icon: IconProvider.path(TabbedViewIcons.menu),
             menuBuilder: (context) {
               return [
                 TabbedViewMenuItem(
@@ -292,14 +292,14 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         tabsAreaButtonsBuilder: (context, tabsCount) {
           List<TabButton> buttons = [];
           buttons.add(TabButton(
-              iconData: Icons.add,
+              icon: IconProvider.data(Icons.add),
               onPressed: () {
                 int millisecond = DateTime.now().millisecondsSinceEpoch;
                 controller.addTab(TabData(text: '$millisecond'));
               }));
           if (tabsCount > 0) {
             buttons.add(TabButton(
-                iconData: Icons.delete,
+                icon: IconProvider.data(Icons.delete),
                 onPressed: () {
                   if (controller.selectedIndex != null) {
                     controller.removeTab(controller.selectedIndex!);
@@ -396,7 +396,8 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedView tabbedView = TabbedView(controller: controller);
 
     TabbedViewThemeData themeData = TabbedViewThemeData.classic()
-      ..tabsArea.menuIconData = Icons.arrow_drop_down_circle_outlined;
+      ..tabsArea.menuIcon =
+          IconProvider.data(Icons.arrow_drop_down_circle_outlined);
 
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/default_themes/classic_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/dark_theme.dart';
@@ -30,10 +31,8 @@ class TabbedViewThemeData {
 
   /// Sets the Material Design icons.
   void materialDesignIcons() {
-    this.tabsArea.menuIconData = Icons.arrow_drop_down;
-    this.tabsArea.menuIconPath = null;
-    this.tab.closeIconData = Icons.close;
-    this.tab.closeIconPath = null;
+    this.tabsArea.menuIcon = IconProvider.data(Icons.arrow_drop_down);
+    this.tab.closeIcon = IconProvider.data(Icons.close);
   }
 
   /// Builds the predefined dark theme.

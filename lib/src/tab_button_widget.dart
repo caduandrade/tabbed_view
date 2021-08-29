@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tabbed_view/src/icon_path.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
@@ -47,7 +46,8 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
       Color disabledColor = widget.button.disabledColor != null
           ? widget.button.disabledColor!
           : widget.colors.disabled;
-      Widget icon = _buildIcon(disabledColor);
+      Widget icon =
+          widget.button.icon.buildIcon(disabledColor, widget.iconSize);
       if (widget.button.padding != null) {
         icon = Padding(child: icon, padding: widget.button.padding!);
       }
@@ -55,7 +55,7 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
     }
 
     Color finalColor = _hover ? hoverColor : color;
-    Widget icon = _buildIcon(finalColor);
+    Widget icon = widget.button.icon.buildIcon(finalColor, widget.iconSize);
     if (widget.button.padding != null) {
       icon = Padding(child: icon, padding: widget.button.padding!);
     }
@@ -99,16 +99,5 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
     setState(() {
       _hover = false;
     });
-  }
-
-  /// Builds an icon
-  Widget _buildIcon(Color color) {
-    if (widget.button.iconData != null) {
-      return Icon(widget.button.iconData, color: color, size: widget.iconSize);
-    }
-    return IconPathWidget(
-        iconSize: widget.iconSize,
-        iconPath: widget.button.iconPath!,
-        color: color);
   }
 }

@@ -1,13 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:tabbed_view/src/icon_path.dart';
+import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_builder.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 
 /// Configures a tab button.
 class TabButton {
   TabButton(
-      {this.iconData,
-      this.iconPath,
+      {required this.icon,
       this.color,
       this.hoverColor,
       this.disabledColor,
@@ -18,15 +17,9 @@ class TabButton {
       double? iconSize})
       : this.iconSize = iconSize == null
             ? iconSize
-            : TabbedViewThemeConstants.normalize(iconSize) {
-    if ((this.iconData != null && this.iconPath != null) ||
-        (this.iconData == null && this.iconPath == null)) {
-      throw ArgumentError('iconData or iconPath must be set');
-    }
-  }
+            : TabbedViewThemeConstants.normalize(iconSize);
 
-  final IconData? iconData;
-  final IconPath? iconPath;
+  final IconProvider icon;
   final Color? color;
   final EdgeInsetsGeometry? padding;
   final Color? hoverColor;

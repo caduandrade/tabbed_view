@@ -4,24 +4,31 @@ import 'package:flutter/widgets.dart';
 /// Builds a responsive path given a size. Used to draw a icon.
 typedef IconPath = Path Function(Size size);
 
-/// [IconPath] widget
-class IconPathWidget extends StatelessWidget {
-  const IconPathWidget(
-      {Key? key,
-      required this.iconSize,
-      required this.iconPath,
-      required this.color})
-      : super(key: key);
+/// Provides an icon
+class IconProvider {
+  IconProvider._(this.iconPath, this.iconData);
 
-  final double iconSize;
-  final IconPath iconPath;
-  final Color color;
+  /// Provides an [IconData]
+  factory IconProvider.data(IconData iconData) {
+    return IconProvider._(null, iconData);
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  /// Provides an [IconPath]
+  factory IconProvider.path(IconPath iconPath) {
+    return IconProvider._(iconPath, null);
+  }
+
+  final IconPath? iconPath;
+  final IconData? iconData;
+
+  /// Builds an icon
+  Widget buildIcon(Color color, double size) {
+    if (iconData != null) {
+      return Icon(iconData, color: color, size: size);
+    }
     return CustomPaint(
-      size: Size(iconSize, (iconSize * 1).toDouble()),
-      painter: _IconPathPainter(iconPath, color),
+      size: Size(size, (size * 1).toDouble()),
+      painter: _IconPathPainter(iconPath!, color),
     );
   }
 }

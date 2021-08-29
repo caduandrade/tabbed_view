@@ -2,6 +2,8 @@
 
 * Padding added to path icons to conform to Material Design standards
   * Gap of the buttons removed from the default themes
+* API change
+  * *IconProvider* to hold an *IconPath* or an *IconData* in the themes and *TabButton*
 
 ## 1.8.0+1
 

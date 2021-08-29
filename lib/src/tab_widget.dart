@@ -147,8 +147,7 @@ class TabWidget extends StatelessWidget {
         padding = EdgeInsets.only(left: tabTheme.buttonsGap);
       }
       TabButton closeButton = TabButton(
-          iconData: tabTheme.closeIconData,
-          iconPath: tabTheme.closeIconPath,
+          icon: tabTheme.closeIcon,
           onPressed: () => _onClose(context, index),
           toolTip: data.closeButtonTooltip);
 
