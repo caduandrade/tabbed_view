@@ -63,7 +63,7 @@ The *TabbedViewTheme.classic()* method builds the default theme.
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/classic.gif)
+![](./screenshots/get_started.gif)
 
 ### Content builder
 
