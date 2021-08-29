@@ -4,10 +4,10 @@
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
-![](./screenshots/main_classic.png)
-![](./screenshots/main_dark.png)
-![](./screenshots/main_mobile.png)
-![](./screenshots/main_minimalist.png)
+![](https://caduandrade.github.io/tabbed_view/main_classic.png)
+![](https://caduandrade.github.io/tabbed_view/main_dark.png)
+![](https://caduandrade.github.io/tabbed_view/main_mobile.png)
+![](https://caduandrade.github.io/tabbed_view/main_minimalist.png)
 
 * [Get started](#get-started)
   * [Content builder](#content-builder)
@@ -63,7 +63,7 @@ The *TabbedViewTheme.classic()* method builds the default theme.
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![](./screenshots/get_started.gif)
+![](https://caduandrade.github.io/tabbed_view/get_started.gif)
 
 ### Content builder
 
@@ -117,7 +117,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/tab_button_icon_data.png)
+![](https://caduandrade.github.io/tabbed_view/tab_button_icon_data.png)
 
 #### Icon path
 
@@ -142,7 +142,7 @@ It allows creating the contents of the tab dynamically during the selection even
   }
 ```
 
-![](./screenshots/tab_button_icon_path.png)
+![](https://caduandrade.github.io/tabbed_view/tab_button_icon_path.png)
 
 #### Overriding theme color
 
@@ -163,7 +163,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/tab_button_override_theme_color.png)
+![](https://caduandrade.github.io/tabbed_view/tab_button_override_theme_color.png)
 
 #### Menu button
 
@@ -189,7 +189,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![](./screenshots/tab_menu_button.png)
+![](https://caduandrade.github.io/tabbed_view/tab_menu_button.png)
 
 ### Non-closable tab
 
@@ -201,7 +201,7 @@ It allows creating the contents of the tab dynamically during the selection even
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
 ```
 
-![](./screenshots/non_closable_tab.png)
+![](https://caduandrade.github.io/tabbed_view/non_closable_tab.png)
 
 ### Close interceptor
 
@@ -321,7 +321,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/tabs_area_buttons.png)
+![](https://caduandrade.github.io/tabbed_view/tabs_area_buttons.png)
 
 ## Themes
 
@@ -342,7 +342,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/tab_text_style.png)
+![](https://caduandrade.github.io/tabbed_view/tab_text_style.png)
 
 #### Alignment
 
@@ -362,7 +362,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/tab_alignment.png)
+![](https://caduandrade.github.io/tabbed_view/tab_alignment.png)
 
 ### Themes - Tabs area
 
@@ -377,7 +377,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/tabs_area_color.png)
+![](https://caduandrade.github.io/tabbed_view/tabs_area_color.png)
 
 #### Tab gaps
 
@@ -397,7 +397,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/tabs_area_gaps.png)
+![](https://caduandrade.github.io/tabbed_view/tabs_area_gaps.png)
 
 #### Buttons area
 
@@ -413,7 +413,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/tabs_area_menu_button.png)
+![](https://caduandrade.github.io/tabbed_view/tabs_area_menu_button.png)
 
 ### Themes - Menu
 
@@ -427,7 +427,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/menu_max_width.png)
+![](https://caduandrade.github.io/tabbed_view/menu_max_width.png)
 
 #### Ellipsis on text overflow
 
@@ -449,7 +449,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/menu_ellipsis.png)
+![](https://caduandrade.github.io/tabbed_view/menu_ellipsis.png)
 
 ### Default themes
 
@@ -462,7 +462,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.classic());
 ```
 
-![](./screenshots/classic_theme.png)
+![](https://caduandrade.github.io/tabbed_view/classic_theme.png)
 
 #####  Classic theme - Color set
 
@@ -474,7 +474,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         data: TabbedViewThemeData.classic(colorSet: Colors.green));
 ```
 
-![](./screenshots/classic_theme_color_set.png)
+![](https://caduandrade.github.io/tabbed_view/classic_theme_color_set.png)
 
 ####  Dark theme
 
@@ -485,7 +485,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.dark());
 ```
 
-![](./screenshots/dark_theme.png)
+![](https://caduandrade.github.io/tabbed_view/dark_theme.png)
 
 #####  Dark theme - Color set
 
@@ -497,7 +497,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         data: TabbedViewThemeData.dark(colorSet: Colors.indigo));
 ```
 
-![](./screenshots/dark_theme_color_set.png)
+![](https://caduandrade.github.io/tabbed_view/dark_theme_color_set.png)
 
 ####  Mobile theme
 
@@ -508,7 +508,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.mobile());
 ```
 
-![](./screenshots/mobile_theme.png)
+![](https://caduandrade.github.io/tabbed_view/mobile_theme.png)
 
 #####  Mobile theme - Color set
 
@@ -520,7 +520,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         data: TabbedViewThemeData.mobile(colorSet: Colors.blueGrey));
 ```
 
-![](./screenshots/mobile_theme_color_set.png)
+![](https://caduandrade.github.io/tabbed_view/mobile_theme_color_set.png)
 
 #####  Mobile theme - Highlighted tab color
 
@@ -533,7 +533,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
             highlightedTabColor: Colors.green[700]!));
 ```
 
-![](./screenshots/mobile_theme_highlight_color.png)
+![](https://caduandrade.github.io/tabbed_view/mobile_theme_highlight_color.png)
 
 ####  Minimalist theme
 
@@ -544,7 +544,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         child: tabbedView, data: TabbedViewThemeData.minimalist());
 ```
 
-![](./screenshots/minimalist_theme.png)
+![](https://caduandrade.github.io/tabbed_view/minimalist_theme.png)
 
 #####  Minimalist theme - Color set
 
@@ -556,7 +556,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         data: TabbedViewThemeData.minimalist(colorSet: Colors.blue));
 ```
 
-![](./screenshots/minimalist_theme_color_set.png)
+![](https://caduandrade.github.io/tabbed_view/minimalist_theme_color_set.png)
 
 ### Theme from scratch
 
@@ -595,4 +595,4 @@ It is possible to create an entire theme from scratch.
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](./screenshots/theme_from_scratch.png)
+![](https://caduandrade.github.io/tabbed_view/theme_from_scratch.png)
