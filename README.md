@@ -38,7 +38,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
       * [Button icon for the hidden tabs menu](#button-icon-for-the-hidden-tabs-menu)
   * [Menu](#themes---menu)
     * [Max width](#max-width)
-    * [Ellipsis on overflow text](#ellipsis-on-overflow-text)
+    * [Ellipsis on text overflow](#ellipsis-on-text-overflow)
   * [Default themes](#default-themes)
     *  [Classic theme](#classic-theme)
        *  [Color set](#classic-theme---color-set)
@@ -430,9 +430,9 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_max_width.png)
+![](./screenshots/menu_max_width.png)
 
-#### Ellipsis on overflow text
+#### Ellipsis on text overflow
 
 ```dart
     var tabs = [
@@ -452,7 +452,7 @@ A more efficient alternative is to keep the data in `TabData`'s `value` paramete
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/menu_ellipsis.png)
+![](./screenshots/menu_ellipsis.png)
 
 ### Default themes
 
@@ -598,4 +598,4 @@ It is possible to create an entire theme from scratch.
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://raw.githubusercontent.com/caduandrade/images/main/tabbed_view/from_the_scratch_cut.png)
+![](./screenshots/theme_from_scratch.png)
