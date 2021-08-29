@@ -28,17 +28,10 @@ class TabbedViewThemeData {
   ContentAreaThemeData contentArea;
   MenuThemeData menu;
 
-  /// Sets the theme to Material Design patterns: Close and menu icons;
-  /// Icons size; No icon gaps, the Material Design already
-  /// defines padding in the icons.
-  void materialDesign() {
-    this.tabsArea.buttonIconSize = 15;
-    this.tabsArea.buttonsGap = 0;
+  /// Sets the Material Design icons.
+  void materialDesignIcons() {
     this.tabsArea.menuIconData = Icons.arrow_drop_down;
     this.tabsArea.menuIconPath = null;
-
-    this.tab.buttonIconSize = 15;
-    this.tab.buttonsGap = 0;
     this.tab.closeIconData = Icons.close;
     this.tab.closeIconPath = null;
   }

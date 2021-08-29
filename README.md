@@ -114,10 +114,6 @@ It allows creating the contents of the tab dynamically during the selection even
     ]);
 
     TabbedView tabbedView = TabbedView(controller: TabbedViewController([tab]));
-    // using material design icon patterns
-    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
-      ..materialDesign();
-    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![](https://caduandrade.github.io/tabbed_view/tab_button_icon_data.png)
@@ -159,11 +155,6 @@ It allows creating the contents of the tab dynamically during the selection even
       ])
     ];
     TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
-
-    // using material design icon patterns
-    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
-      ..materialDesign();
-    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![](https://caduandrade.github.io/tabbed_view/tab_button_override_theme_color.png)
@@ -317,11 +308,6 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
           }
           return buttons;
         });
-
-    // using material design icon patterns
-    TabbedViewThemeData themeData = TabbedViewThemeData.classic()
-      ..materialDesign();
-    TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
 ![](https://caduandrade.github.io/tabbed_view/tabs_area_buttons.png)
@@ -410,7 +396,6 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
     TabbedView tabbedView = TabbedView(controller: controller);
 
     TabbedViewThemeData themeData = TabbedViewThemeData.classic()
-      ..materialDesign()
       ..tabsArea.menuIconData = Icons.arrow_drop_down_circle_outlined;
 
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);

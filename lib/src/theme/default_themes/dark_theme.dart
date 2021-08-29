@@ -62,10 +62,9 @@ class DarkTheme {
     return TabsAreaThemeData(
         equalHeights: EqualHeights.all,
         middleGap: 4,
-        buttonsAreaPadding: EdgeInsets.all(4),
+        buttonsAreaPadding: EdgeInsets.all(2),
         buttonsAreaDecoration: BoxDecoration(color: buttonsAreaColor),
-        buttonColors: buttonColors,
-        buttonsGap: 4);
+        buttonColors: buttonColors);
   }
 
   static TabThemeData tabTheme(
@@ -78,7 +77,6 @@ class DarkTheme {
     double bottomWidth = 3;
     return TabThemeData(
         buttonsOffset: 8,
-        buttonsGap: 4,
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         decoration: BoxDecoration(color: tabColor),
         margin: EdgeInsets.only(bottom: bottomWidth),

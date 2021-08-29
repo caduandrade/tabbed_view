@@ -106,29 +106,9 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
     if (widget.button.iconData != null) {
       return Icon(widget.button.iconData, color: color, size: widget.iconSize);
     }
-    return CustomPaint(
-      size: Size(widget.iconSize, (widget.iconSize * 1).toDouble()),
-      painter: _IconPathPainter(widget.button.iconPath!, color),
-    );
-  }
-}
-
-/// [IconPath] painter
-class _IconPathPainter extends CustomPainter {
-  _IconPathPainter(this.iconPath, this.color);
-
-  final IconPath iconPath;
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..style = PaintingStyle.fill;
-    paint.color = color;
-    canvas.drawPath(iconPath(size), paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+    return IconPathWidget(
+        iconSize: widget.iconSize,
+        iconPath: widget.button.iconPath!,
+        color: color);
   }
 }

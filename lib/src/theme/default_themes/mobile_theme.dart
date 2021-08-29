@@ -60,8 +60,7 @@ class MobileTheme {
         initialGap: -1,
         middleGap: -1,
         buttonColors: buttonColors,
-        buttonsGap: 4,
-        buttonsAreaPadding: EdgeInsets.all(4),
+        buttonsAreaPadding: EdgeInsets.all(2),
         border: Border.all(color: borderColor, width: 1),
         color: backgroundColor);
   }
@@ -79,7 +78,6 @@ class MobileTheme {
         buttonColors: buttonColors,
         textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
         buttonsOffset: 8,
-        buttonsGap: 4,
         padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
         decoration: BoxDecoration(border: border),
         innerBottomBorder:

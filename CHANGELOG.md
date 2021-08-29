@@ -1,6 +1,11 @@
+## 1.9.0
+
+* Padding added to path icons to conform to MaterialDesign standards
+  * Gap of the buttons removed from the default themes
+
 ## 1.8.0+1
 
-* Updating the README
+* README update
 
 ## 1.8.0
 
@@ -83,7 +88,7 @@
   
 ## 1.1.0+1
 
-* Updating the README
+* README update
 
 ## 1.1.0
 

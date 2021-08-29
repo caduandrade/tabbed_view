@@ -68,8 +68,7 @@ class MinimalistTheme {
     return TabsAreaThemeData(
         buttonsAreaDecoration: BoxDecoration(color: background),
         buttonColors: ButtonColors(normal: hiddenTabsMenuButtonColor),
-        buttonsAreaPadding: EdgeInsets.all(4),
-        buttonsGap: 4,
+        buttonsAreaPadding: EdgeInsets.all(2),
         equalHeights: EqualHeights.all,
         border: Border(bottom: BorderSide(color: borderColor, width: 1)));
   }
@@ -85,7 +84,6 @@ class MinimalistTheme {
       required Color selectedFontColor}) {
     return TabThemeData(
       buttonsOffset: 8,
-      buttonsGap: 4,
       textStyle: TextStyle(color: fontColor, fontSize: 13),
       padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
       decoration: BoxDecoration(color: background),
