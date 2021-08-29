@@ -1,3 +1,7 @@
+## 1.8.0+1
+
+* Updating the README
+
 ## 1.8.0
 
 * New icons
