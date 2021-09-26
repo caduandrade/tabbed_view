@@ -6,7 +6,6 @@ export 'src/tab_data.dart';
 export 'src/tabbed_view_controller.dart';
 export 'src/theme/tabbed_view_theme_data.dart';
 export 'src/theme/theme_widget.dart';
-export 'src/theme/button_colors.dart';
 export 'src/theme/menu_theme_data.dart';
 export 'src/theme/content_area_theme_data.dart';
 export 'src/theme/tab_status_theme_data.dart';

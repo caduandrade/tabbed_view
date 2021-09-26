@@ -93,10 +93,16 @@ class _TabsAreaState extends State<TabsArea> {
                 data: widget.data,
                 button: tabButton,
                 enabled: true,
-                colors: tabsAreaTheme.buttonColors,
+                normalColor: tabsAreaTheme.normalButtonColor,
+                hoverColor: tabsAreaTheme.hoverButtonColor,
+                disabledColor: tabsAreaTheme.disabledButtonColor,
+                normalBackground: tabsAreaTheme.normalButtonBackground,
+                hoverBackground: tabsAreaTheme.hoverButtonBackground,
+                disabledBackground: tabsAreaTheme.disabledButtonBackground,
                 iconSize: tabButton.iconSize != null
                     ? tabButton.iconSize!
-                    : tabsAreaTheme.buttonIconSize),
+                    : tabsAreaTheme.buttonIconSize,
+                themePadding: tabsAreaTheme.buttonPadding),
             padding: padding));
       }
 

@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
-import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 import 'package:tabbed_view/src/theme/vertical_alignment.dart';
@@ -10,10 +10,16 @@ import 'package:tabbed_view/src/theme/vertical_alignment.dart';
 class TabThemeData {
   TabThemeData(
       {IconProvider? closeIcon,
-      this.buttonColors = const ButtonColors(),
+      this.normalButtonColor = Colors.black,
+      this.hoverButtonColor = Colors.black,
+      this.disabledButtonColor = Colors.black12,
+      this.normalButtonBackground,
+      this.hoverButtonBackground,
+      this.disabledButtonBackground,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
       this.verticalAlignment = VerticalAlignment.center,
       double buttonsOffset = 0,
+      this.buttonPadding,
       double buttonsGap = 0,
       this.decoration,
       this.innerBottomBorder,
@@ -59,8 +65,12 @@ class TabThemeData {
   TextStyle? textStyle;
 
   double buttonIconSize;
-  ButtonColors buttonColors;
-  double _buttonsOffset;
+  Color normalButtonColor;
+  Color hoverButtonColor;
+  Color disabledButtonColor;
+  BoxDecoration? normalButtonBackground;
+  BoxDecoration? hoverButtonBackground;
+  BoxDecoration? disabledButtonBackground;
 
   /// Icon for the close button.
   IconProvider closeIcon;
@@ -68,11 +78,13 @@ class TabThemeData {
   TabStatusThemeData selectedStatus;
   TabStatusThemeData highlightedStatus;
 
+  double _buttonsOffset;
   double get buttonsOffset => _buttonsOffset;
-
   set buttonsOffset(double value) {
     _buttonsOffset = value >= 0 ? value : 0;
   }
+
+  EdgeInsetsGeometry? buttonPadding;
 
   double _buttonsGap;
   double get buttonsGap => _buttonsGap;

@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:tabbed_view/src/theme/button_colors.dart';
 
 /// Theme for tab in a given status.
 /// Allows you to overwrite [TabThemeData] properties.
@@ -11,7 +10,12 @@ class TabStatusThemeData {
       this.fontColor,
       this.padding,
       this.margin,
-      this.buttonColors});
+      this.normalButtonColor,
+      this.hoverButtonColor,
+      this.disabledButtonColor,
+      this.normalButtonBackground,
+      this.hoverButtonBackground,
+      this.disabledButtonBackground});
 
   static final TabStatusThemeData empty = TabStatusThemeData();
 
@@ -30,5 +34,10 @@ class TabStatusThemeData {
   BorderSide? innerBottomBorder;
   BorderSide? innerTopBorder;
   Color? fontColor;
-  ButtonColors? buttonColors;
+  Color? normalButtonColor;
+  Color? hoverButtonColor;
+  Color? disabledButtonColor;
+  BoxDecoration? normalButtonBackground;
+  BoxDecoration? hoverButtonBackground;
+  BoxDecoration? disabledButtonBackground;
 }

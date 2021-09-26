@@ -53,12 +53,10 @@ class TabbedViewThemeData {
   /// Builds the predefined mobile theme.
   factory TabbedViewThemeData.mobile(
       {MaterialColor colorSet = Colors.grey,
-      Color highlightedTabColor = Colors.blue,
+      Color accentColor = Colors.blue,
       double fontSize = 13}) {
     return MobileTheme.build(
-        colorSet: colorSet,
-        highlightedTabColor: highlightedTabColor,
-        fontSize: fontSize);
+        colorSet: colorSet, accentColor: accentColor, fontSize: fontSize);
   }
 
   /// Builds the predefined minimalist theme.

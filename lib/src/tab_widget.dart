@@ -7,7 +7,6 @@ import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tabbed_view_data.dart';
-import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -94,9 +93,27 @@ class TabWidget extends StatelessWidget {
 
     TabData tab = data.controller.tabs[index];
     TabStatusThemeData statusTheme = _getTabThemeFor(tabTheme, status);
-    ButtonColors buttonColors = statusTheme.buttonColors != null
-        ? statusTheme.buttonColors!
-        : tabTheme.buttonColors;
+
+    Color normalColor = statusTheme.normalButtonColor != null
+        ? statusTheme.normalButtonColor!
+        : tabTheme.normalButtonColor;
+    Color hoverColor = statusTheme.hoverButtonColor != null
+        ? statusTheme.hoverButtonColor!
+        : tabTheme.hoverButtonColor;
+    Color disabledColor = statusTheme.disabledButtonColor != null
+        ? statusTheme.disabledButtonColor!
+        : tabTheme.disabledButtonColor;
+
+    BoxDecoration? normalBackground = statusTheme.normalButtonBackground != null
+        ? statusTheme.normalButtonBackground
+        : tabTheme.normalButtonBackground;
+    BoxDecoration? hoverBackground = statusTheme.hoverButtonBackground != null
+        ? statusTheme.hoverButtonBackground
+        : tabTheme.hoverButtonBackground;
+    BoxDecoration? disabledBackground =
+        statusTheme.disabledButtonBackground != null
+            ? statusTheme.disabledButtonBackground
+            : tabTheme.disabledButtonBackground;
 
     TextStyle? textStyle = tabTheme.textStyle;
     if (statusTheme.fontColor != null) {
@@ -134,10 +151,16 @@ class TabWidget extends StatelessWidget {
                 data: data,
                 button: button,
                 enabled: buttonsEnabled,
-                colors: buttonColors,
+                normalColor: normalColor,
+                hoverColor: hoverColor,
+                disabledColor: disabledColor,
+                normalBackground: normalBackground,
+                hoverBackground: hoverBackground,
+                disabledBackground: disabledBackground,
                 iconSize: button.iconSize != null
                     ? button.iconSize!
-                    : tabTheme.buttonIconSize),
+                    : tabTheme.buttonIconSize,
+                themePadding: tabTheme.buttonPadding),
             padding: padding));
       }
     }
@@ -156,8 +179,14 @@ class TabWidget extends StatelessWidget {
               data: data,
               button: closeButton,
               enabled: buttonsEnabled,
-              colors: buttonColors,
-              iconSize: tabTheme.buttonIconSize),
+              normalColor: normalColor,
+              hoverColor: hoverColor,
+              disabledColor: disabledColor,
+              normalBackground: normalBackground,
+              hoverBackground: hoverBackground,
+              disabledBackground: disabledBackground,
+              iconSize: tabTheme.buttonIconSize,
+              themePadding: tabTheme.buttonPadding),
           padding: padding));
     }
 

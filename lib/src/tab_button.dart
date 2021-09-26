@@ -10,6 +10,9 @@ class TabButton {
       this.color,
       this.hoverColor,
       this.disabledColor,
+      this.background,
+      this.hoverBackground,
+      this.disabledBackground,
       this.onPressed,
       this.menuBuilder,
       this.toolTip,
@@ -20,10 +23,13 @@ class TabButton {
             : TabbedViewThemeConstants.normalize(iconSize);
 
   final IconProvider icon;
-  final Color? color;
   final EdgeInsetsGeometry? padding;
+  final Color? color;
   final Color? hoverColor;
   final Color? disabledColor;
+  final BoxDecoration? background;
+  final BoxDecoration? hoverBackground;
+  final BoxDecoration? disabledBackground;
   final VoidCallback? onPressed;
   final TabbedViewMenuBuilder? menuBuilder;
   final String? toolTip;

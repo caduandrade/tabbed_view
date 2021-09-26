@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
@@ -15,29 +14,32 @@ class ClassicTheme {
       required double fontSize,
       required Color borderColor}) {
     Color backgroundColor = colorSet[50]!;
-    Color highlightedTabColor = colorSet[300]!;
+    Color highlightedColor = colorSet[300]!;
     Color fontColor = colorSet[900]!;
     Color menuHoverColor = colorSet[200]!;
-    ButtonColors buttonColors = ButtonColors(
-        normal: colorSet[700]!,
-        disabled: colorSet[400]!,
-        hover: colorSet[900]!);
+    Color normalButtonColor = colorSet[900]!;
+    Color disabledButtonColor = colorSet[400]!;
+    Color hoverButtonColor = colorSet[900]!;
 
     return TabbedViewThemeData(
         tabsArea: tabsAreaTheme(
             backgroundColor: backgroundColor,
-            highlightedTabColor: highlightedTabColor,
-            buttonColors: buttonColors,
+            highlightedColor: highlightedColor,
+            normalButtonColor: normalButtonColor,
+            hoverButtonColor: hoverButtonColor,
+            disabledButtonColor: disabledButtonColor,
             borderColor: borderColor,
             fontSize: fontSize,
             fontColor: fontColor),
         tab: tabTheme(
             borderColor: borderColor,
-            buttonColors: buttonColors,
+            normalButtonColor: normalButtonColor,
+            hoverButtonColor: hoverButtonColor,
+            disabledButtonColor: disabledButtonColor,
             fontColor: fontColor,
             fontSize: fontSize,
             backgroundColor: backgroundColor,
-            highlightedTabColor: highlightedTabColor),
+            highlightedColor: highlightedColor),
         contentArea: contentAreaTheme(
             borderColor: borderColor, backgroundColor: backgroundColor),
         menu: menuTheme(
@@ -53,10 +55,16 @@ class ClassicTheme {
       required Color fontColor,
       required double fontSize,
       required Color backgroundColor,
-      required Color highlightedTabColor,
-      required ButtonColors buttonColors}) {
+      required Color highlightedColor,
+      required Color normalButtonColor,
+      required Color hoverButtonColor,
+      required Color disabledButtonColor}) {
     return TabsAreaThemeData(
-        buttonColors: buttonColors,
+        normalButtonColor: normalButtonColor,
+        hoverButtonColor: hoverButtonColor,
+        disabledButtonColor: disabledButtonColor,
+        buttonPadding: const EdgeInsets.all(2),
+        hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonsAreaDecoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 1)),
@@ -70,19 +78,25 @@ class ClassicTheme {
       required Color fontColor,
       required double fontSize,
       required Color backgroundColor,
-      required Color highlightedTabColor,
-      required ButtonColors buttonColors}) {
+      required Color highlightedColor,
+      required Color normalButtonColor,
+      required Color hoverButtonColor,
+      required Color disabledButtonColor}) {
     return TabThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
-        buttonColors: buttonColors,
+        normalButtonColor: normalButtonColor,
+        hoverButtonColor: hoverButtonColor,
+        disabledButtonColor: disabledButtonColor,
+        hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonsOffset: 8,
-        padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
+        buttonPadding: const EdgeInsets.all(2),
+        padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
         decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 1)),
         highlightedStatus: TabStatusThemeData(
             decoration: BoxDecoration(
-                color: highlightedTabColor,
+                color: highlightedColor,
                 border: Border.all(color: borderColor, width: 1))),
         selectedStatus: TabStatusThemeData(
           decoration: BoxDecoration(
@@ -91,7 +105,7 @@ class ClassicTheme {
                   left: BorderSide(color: borderColor, width: 1),
                   top: BorderSide(color: borderColor, width: 1),
                   right: BorderSide(color: borderColor, width: 1))),
-          padding: EdgeInsets.fromLTRB(6, 3, 6, 8),
+          padding: EdgeInsets.fromLTRB(6, 3, 3, 8),
         ));
   }
 

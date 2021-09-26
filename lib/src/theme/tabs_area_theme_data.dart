@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
-import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 
@@ -18,10 +17,16 @@ class TabsAreaThemeData {
       this.equalHeights = EqualHeights.none,
       this.buttonsAreaDecoration,
       this.buttonsAreaPadding,
+      this.buttonPadding,
       double buttonsGap = 0,
       double buttonsOffset = 0,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
-      this.buttonColors = const ButtonColors(),
+      this.normalButtonColor = Colors.black,
+      this.hoverButtonColor = Colors.black,
+      this.disabledButtonColor = Colors.black12,
+      this.normalButtonBackground,
+      this.hoverButtonBackground,
+      this.disabledButtonBackground,
       IconProvider? menuIcon})
       : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
@@ -57,7 +62,12 @@ class TabsAreaThemeData {
   /// see [Decoration.padding].
   EdgeInsetsGeometry? buttonsAreaPadding;
   double buttonIconSize;
-  ButtonColors buttonColors;
+  Color normalButtonColor;
+  Color hoverButtonColor;
+  Color disabledButtonColor;
+  BoxDecoration? normalButtonBackground;
+  BoxDecoration? hoverButtonBackground;
+  BoxDecoration? disabledButtonBackground;
 
   /// Icon for the hidden tabs menu.
   IconProvider menuIcon;
@@ -73,4 +83,6 @@ class TabsAreaThemeData {
   set buttonsOffset(double value) {
     _buttonsOffset = value >= 0 ? value : 0;
   }
+
+  EdgeInsetsGeometry? buttonPadding;
 }

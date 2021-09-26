@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:tabbed_view/src/theme/button_colors.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
 import 'package:tabbed_view/src/theme/menu_theme_data.dart';
@@ -13,29 +12,34 @@ import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 class MobileTheme {
   static TabbedViewThemeData build(
       {required MaterialColor colorSet,
-      required Color highlightedTabColor,
+      required Color accentColor,
       required double fontSize}) {
     Color borderColor = colorSet[500]!;
     Color foregroundColor = colorSet[900]!;
     Color backgroundColor = colorSet[50]!;
     Color menuColor = colorSet[100]!;
     Color menuHoverColor = colorSet[300]!;
-    ButtonColors buttonColors = ButtonColors(
-        normal: colorSet[700]!,
-        disabled: colorSet[300]!,
-        hover: colorSet[900]!);
+    Color normalButtonColor = colorSet[700]!;
+    Color disabledButtonColor = colorSet[300]!;
+    Color hoverButtonColor = colorSet[900]!;
+    Color highlightedColor = colorSet[300]!;
     return TabbedViewThemeData(
         tabsArea: tabsAreaTheme(
-            buttonColors: buttonColors,
+            normalButtonColor: normalButtonColor,
+            hoverButtonColor: hoverButtonColor,
+            disabledButtonColor: disabledButtonColor,
+            highlightedColor: highlightedColor,
             foregroundColor: foregroundColor,
             borderColor: borderColor,
-            highlightedTabColor: highlightedTabColor,
             fontSize: fontSize,
             backgroundColor: backgroundColor),
         tab: tabTheme(
-            buttonColors: buttonColors,
+            normalButtonColor: normalButtonColor,
+            hoverButtonColor: hoverButtonColor,
+            disabledButtonColor: disabledButtonColor,
+            highlightedColor: highlightedColor,
             borderColor: borderColor,
-            highlightedColor: highlightedTabColor,
+            accentColor: accentColor,
             fontSize: fontSize,
             foregroundColor: foregroundColor),
         contentArea: contentAreaTheme(
@@ -49,36 +53,49 @@ class MobileTheme {
   }
 
   static TabsAreaThemeData tabsAreaTheme(
-      {required ButtonColors buttonColors,
+      {required Color normalButtonColor,
+      required Color hoverButtonColor,
+      required Color disabledButtonColor,
+      required Color highlightedColor,
       required double fontSize,
       required Color borderColor,
-      required Color highlightedTabColor,
       required Color foregroundColor,
       required Color backgroundColor}) {
     return TabsAreaThemeData(
         equalHeights: EqualHeights.all,
         initialGap: -1,
         middleGap: -1,
-        buttonColors: buttonColors,
+        normalButtonColor: normalButtonColor,
+        hoverButtonColor: hoverButtonColor,
+        disabledButtonColor: disabledButtonColor,
         buttonsAreaPadding: EdgeInsets.all(2),
+        hoverButtonBackground: BoxDecoration(color: highlightedColor),
+        buttonPadding: const EdgeInsets.all(2),
         border: Border.all(color: borderColor, width: 1),
         color: backgroundColor);
   }
 
   static TabThemeData tabTheme(
-      {required ButtonColors buttonColors,
+      {required Color normalButtonColor,
+      required Color hoverButtonColor,
+      required Color disabledButtonColor,
+      required Color highlightedColor,
       required double fontSize,
       required Color borderColor,
-      required Color highlightedColor,
+      required Color accentColor,
       required Color foregroundColor}) {
     BorderSide verticalBorderSide = BorderSide(color: borderColor, width: 1);
     Border border = Border(left: verticalBorderSide, right: verticalBorderSide);
     double borderHeight = 4;
     return TabThemeData(
-        buttonColors: buttonColors,
+        normalButtonColor: normalButtonColor,
+        hoverButtonColor: hoverButtonColor,
+        disabledButtonColor: disabledButtonColor,
         textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
         buttonsOffset: 8,
-        padding: EdgeInsets.fromLTRB(6, 3, 6, 3),
+        padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
+        hoverButtonBackground: BoxDecoration(color: highlightedColor),
+        buttonPadding: const EdgeInsets.all(2),
         decoration: BoxDecoration(border: border),
         innerBottomBorder:
             BorderSide(color: Colors.transparent, width: borderHeight),
@@ -89,7 +106,7 @@ class MobileTheme {
         selectedStatus: TabStatusThemeData(
             decoration: BoxDecoration(border: border),
             innerBottomBorder:
-                BorderSide(color: highlightedColor, width: borderHeight)));
+                BorderSide(color: accentColor, width: borderHeight)));
   }
 
   static ContentAreaThemeData contentAreaTheme(
