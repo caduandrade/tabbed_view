@@ -48,7 +48,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
        *  [Color set](#dark-theme---color-set)
     *  [Mobile theme](#mobile-theme)
        *  [Color set](#mobile-theme---color-set)
-       *  [Highlighted tab color](#mobile-theme---highlighted-tab-color)
+       *  [Accent color](#mobile-theme---accent-color)
     *  [Minimalist theme](#minimalist-theme)
        *  [Color set](#minimalist-theme---color-set)
   * [Theme from scratch](#theme-from-scratch)
@@ -511,15 +511,14 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
 
 ![](https://caduandrade.github.io/tabbed_view/mobile_theme_color_set.png)
 
-#####  Mobile theme - Highlighted tab color
+#####  Mobile theme - Accent color
 
 ```dart
     TabbedView tabbedView = TabbedView(controller: controller);
 
-    TabbedViewTheme theme = TabbedViewTheme(
+TabbedViewTheme theme = TabbedViewTheme(
         child: tabbedView,
-        data: TabbedViewThemeData.mobile(
-            highlightedTabColor: Colors.green[700]!));
+        data: TabbedViewThemeData.mobile(accentColor: Colors.green[700]!));
 ```
 
 ![](https://caduandrade.github.io/tabbed_view/mobile_theme_highlight_color.png)

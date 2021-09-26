@@ -1,3 +1,11 @@
+## 1.10.0
+
+* API change
+  * *ButtonColors* has been split into *normalButtonColor*, *hoverButtonColor* and *disabledButtonColor*
+  * New buttons theme configurations:  
+    * *buttonPadding*, *normalButtonBackground*, *hoverButtonBackground* and *disabledButtonBackground*
+* Default themes have been changed to use buttons decoration
+
 ## 1.9.0
 
 * Padding added to path icons to conform to Material Design standards
