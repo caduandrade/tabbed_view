@@ -447,14 +447,26 @@ class _TabsAreaLayoutRenderBox extends RenderBox
   @override
   void paint(PaintingContext context, Offset offset) {
     List<RenderBox> visibleTabs = [];
+    RenderBox? selectedTab;
+    _TabsAreaLayoutParentData? selectedTabParentData;
     visitVisibleChildren((RenderObject child) {
       final _TabsAreaLayoutParentData childParentData =
           child.tabsAreaLayoutParentData();
-      context.paintChild(child, childParentData.offset + offset);
       if (child != lastChild) {
+        if (childParentData.selected) {
+          selectedTab = child as RenderBox;
+          selectedTabParentData = childParentData;
+        } else {
+          context.paintChild(child, childParentData.offset + offset);
+        }
         visibleTabs.add(child as RenderBox);
+      } else {
+        context.paintChild(child, childParentData.offset + offset);
       }
     });
+    if (selectedTab != null) {
+      context.paintChild(selectedTab!, selectedTabParentData!.offset + offset);
+    }
 
     Canvas canvas = context.canvas;
 
@@ -523,21 +535,35 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
   @override
   bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
+    List<RenderBox> visibleTabs = [];
     visitVisibleChildren((renderObject) {
       final RenderBox child = renderObject as RenderBox;
       final _TabsAreaLayoutParentData childParentData =
           child.tabsAreaLayoutParentData();
-      result.addWithPaintOffset(
-        offset: childParentData.offset,
-        position: position,
-        hitTest: (BoxHitTestResult result, Offset transformed) {
-          assert(transformed == position - childParentData.offset);
-          return child.hitTest(result, position: transformed);
-        },
-      );
+      if (childParentData.selected) {
+        visibleTabs.insert(0, child);
+      } else {
+        visibleTabs.add(child);
+      }
     });
 
-    return false;
+    bool hitTest = false;
+    visibleTabs.forEach((child) {
+      if (!hitTest) {
+        final _TabsAreaLayoutParentData childParentData =
+            child.tabsAreaLayoutParentData();
+        hitTest = result.addWithPaintOffset(
+          offset: childParentData.offset,
+          position: position,
+          hitTest: (BoxHitTestResult result, Offset transformed) {
+            assert(transformed == position - childParentData.offset);
+            return child.hitTest(result, position: transformed);
+          },
+        );
+      }
+    });
+
+    return hitTest;
   }
 }
 

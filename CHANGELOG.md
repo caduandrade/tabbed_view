@@ -5,6 +5,8 @@
   * New buttons theme configurations:  
     * *buttonPadding*, *normalButtonBackground*, *hoverButtonBackground* and *disabledButtonBackground*
 * Default themes have been changed to use buttons decoration
+* Bug fix
+  * Selected tab not being painted on top
 
 ## 1.9.0
 
