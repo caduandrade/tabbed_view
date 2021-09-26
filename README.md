@@ -4,13 +4,13 @@
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
-![](https://caduandrade.github.io/tabbed_view/main_classic.png)
+![](https://caduandrade.github.io/tabbed_view/main_classic_v2.png)
 
-![](https://caduandrade.github.io/tabbed_view/main_dark.png)
+![](https://caduandrade.github.io/tabbed_view/main_dark_v2.png)
 
-![](https://caduandrade.github.io/tabbed_view/main_mobile.png)
+![](https://caduandrade.github.io/tabbed_view/main_mobile_v2.png)
 
-![](https://caduandrade.github.io/tabbed_view/main_minimalist.png)
+![](https://caduandrade.github.io/tabbed_view/main_minimalist_v2.png)
 
 * [Get started](#get-started)
   * [Content builder](#content-builder)
@@ -451,7 +451,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.classic());
 ```
 
-![](https://caduandrade.github.io/tabbed_view/classic_theme.png)
+![](https://caduandrade.github.io/tabbed_view/classic_theme_v2.png)
 
 #####  Classic theme - Color set
 
@@ -463,7 +463,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         data: TabbedViewThemeData.classic(colorSet: Colors.green));
 ```
 
-![](https://caduandrade.github.io/tabbed_view/classic_theme_color_set.png)
+![](https://caduandrade.github.io/tabbed_view/classic_theme_color_set_v2.png)
 
 ####  Dark theme
 
@@ -474,7 +474,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.dark());
 ```
 
-![](https://caduandrade.github.io/tabbed_view/dark_theme.png)
+![](https://caduandrade.github.io/tabbed_view/dark_theme_v2.png)
 
 #####  Dark theme - Color set
 
@@ -486,7 +486,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         data: TabbedViewThemeData.dark(colorSet: Colors.indigo));
 ```
 
-![](https://caduandrade.github.io/tabbed_view/dark_theme_color_set.png)
+![](https://caduandrade.github.io/tabbed_view/dark_theme_color_set_v2.png)
 
 ####  Mobile theme
 
@@ -497,7 +497,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.mobile());
 ```
 
-![](https://caduandrade.github.io/tabbed_view/mobile_theme.png)
+![](https://caduandrade.github.io/tabbed_view/mobile_theme_v2.png)
 
 #####  Mobile theme - Color set
 
@@ -509,7 +509,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
         data: TabbedViewThemeData.mobile(colorSet: Colors.blueGrey));
 ```
 
-![](https://caduandrade.github.io/tabbed_view/mobile_theme_color_set.png)
+![](https://caduandrade.github.io/tabbed_view/mobile_theme_color_set_v2.png)
 
 #####  Mobile theme - Accent color
 
@@ -521,7 +521,7 @@ TabbedViewTheme theme = TabbedViewTheme(
         data: TabbedViewThemeData.mobile(accentColor: Colors.green[700]!));
 ```
 
-![](https://caduandrade.github.io/tabbed_view/mobile_theme_highlight_color.png)
+![](https://caduandrade.github.io/tabbed_view/mobile_theme_accent_color.png)
 
 ####  Minimalist theme
 
@@ -532,7 +532,7 @@ TabbedViewTheme theme = TabbedViewTheme(
         child: tabbedView, data: TabbedViewThemeData.minimalist());
 ```
 
-![](https://caduandrade.github.io/tabbed_view/minimalist_theme.png)
+![](https://caduandrade.github.io/tabbed_view/minimalist_theme_v2.png)
 
 #####  Minimalist theme - Color set
 
@@ -544,7 +544,7 @@ TabbedViewTheme theme = TabbedViewTheme(
         data: TabbedViewThemeData.minimalist(colorSet: Colors.blue));
 ```
 
-![](https://caduandrade.github.io/tabbed_view/minimalist_theme_color_set.png)
+![](https://caduandrade.github.io/tabbed_view/minimalist_theme_color_set_v2.png)
 
 ### Theme from scratch
 
@@ -583,4 +583,4 @@ It is possible to create an entire theme from scratch.
     TabbedViewTheme theme = TabbedViewTheme(child: tabbedView, data: themeData);
 ```
 
-![](https://caduandrade.github.io/tabbed_view/theme_from_scratch.png)
+![](https://caduandrade.github.io/tabbed_view/theme_from_scratch_v2.png)
