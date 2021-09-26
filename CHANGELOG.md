@@ -7,6 +7,7 @@
 * Default themes have been changed to use buttons decoration
 * Bug fix
   * Selected tab not being painted on top
+  * Changed mouse cursor over selected tab
 
 ## 1.9.0
 

@@ -75,8 +75,12 @@ class TabWidget extends StatelessWidget {
         onTap: () => data.controller.selectedIndex = index,
         child: tabContainer);
 
+    MouseCursor cursor = MouseCursor.defer;
+    if (status != TabStatus.selected) {
+      cursor = SystemMouseCursors.click;
+    }
     MouseRegion mouseRegion = MouseRegion(
-        cursor: SystemMouseCursors.click,
+        cursor: cursor,
         onHover: (details) => updateHighlightedIndex(index),
         onExit: (details) => updateHighlightedIndex(null),
         child: gestureDetector);
