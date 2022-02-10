@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/default_themes/classic_theme.dart';

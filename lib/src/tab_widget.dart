@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/flow_layout.dart';
 import 'package:tabbed_view/src/tab_button.dart';

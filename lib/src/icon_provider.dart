@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 /// Builds a responsive path given a size. Used to draw a icon.

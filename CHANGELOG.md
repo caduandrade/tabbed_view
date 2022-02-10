@@ -1,3 +1,7 @@
+## 1.10.0+1
+
+* Removing unnecessary imports
+
 ## 1.10.0
 
 * API change

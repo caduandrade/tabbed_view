@@ -1,8 +1,6 @@
 import 'dart:collection';
-
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tab_data.dart';
-import 'package:tabbed_view/src/tabbed_view_menu_builder.dart';
 
 /// The [TabbedView] controller.
 ///
