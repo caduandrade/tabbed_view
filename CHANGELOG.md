@@ -1,3 +1,7 @@
+## 1.10.1
+
+* Removing unused argument `normalStatus` from `TabThemeData`.
+
 ## 1.10.0+1
 
 * Removing unnecessary imports
@@ -5,9 +9,9 @@
 ## 1.10.0
 
 * API change
-  * *ButtonColors* has been split into *normalButtonColor*, *hoverButtonColor* and *disabledButtonColor*
+  * `ButtonColors` has been split into `normalButtonColor`, `hoverButtonColor` and `disabledButtonColor`
   * New buttons theme configurations:  
-    * *buttonPadding*, *normalButtonBackground*, *hoverButtonBackground* and *disabledButtonBackground*
+    * `buttonPadding`, `normalButtonBackground`, `hoverButtonBackground` and `disabledButtonBackground`
 * Default themes have been changed to use buttons decoration
 * Bug fix
   * Selected tab not being painted on top
@@ -18,7 +22,7 @@
 * Padding added to path icons to conform to Material Design standards
   * Gap of the buttons removed from the default themes
 * API change
-  * *IconProvider* to hold an *IconPath* or an *IconData* in the themes and *TabButton*
+  * `IconProvider` to hold an `IconPath` or an `IconData` in the themes and `TabButton`
 
 ## 1.8.0+1
 
@@ -28,50 +32,50 @@
 
 * New icons
 * Default themes adjustments, such as gaps and paddings
-* *buttonsGap* setting in *TabsAreaThemeData*
-* *IconPath* to be used in icons drawing
-* *iconSize* setting in *TabButton*
+* `buttonsGap` setting in `TabsAreaThemeData`
+* `IconPath` to be used in icons drawing
+* `iconSize` setting in `TabButton`
 * API changes
-  * *minimalIconSize* and *defaultIconSize* constants moved from *TabbedViewThemeData* to *TabbedViewThemeConstants*
-  * *ButtonsAreaThemeData* attributes moved to TabsAreaThemeData
-  * *TabButton*
-    * *icon* parameter renamed to *iconData*
-  * *TabsAreaThemeData*
-    * *closeButtonIcon* renamed to *closeIconData*
-    * *hiddenTabsMenuButtonIcon* renamed to *menuIconData*
-    * *tab* attribute moved to *TabbedViewThemeData*
-    * *closeIconData* attribute moved to *TabThemeData*
-    * *closeIconPath* attribute moved to *TabThemeData*
+  * `minimalIconSize` and `defaultIconSize` constants moved from `TabbedViewThemeData` to `TabbedViewThemeConstants`
+  * `ButtonsAreaThemeData` attributes moved to `TabsAreaThemeData`
+  * `TabButton`
+    * `icon` parameter renamed to `iconData`
+  * `TabsAreaThemeData`
+    * `closeButtonIcon` renamed to `closeIconData`
+    * `hiddenTabsMenuButtonIcon` renamed to `menuIconData`
+    * `tab` attribute moved to `TabbedViewThemeData`
+    * `closeIconData` attribute moved to `TabThemeData`
+    * `closeIconPath` attribute moved to `TabThemeData`
 
 ## 1.7.0
 
-* *TabButton* padding
+* `TabButton` padding
 
 ## 1.6.0
 
 * API changes
-  * *menuBuilder* has been removed from *TabbedViewController*
+  * `menuBuilder` has been removed from `TabbedViewController`
 * Bug fix
-  * Error building menu with empty list of *TabbedViewMenuItem*
+  * Error building menu with empty list of `TabbedViewMenuItem`
 
 ## 1.5.0
 
 * API changes
-  * *OnTabClosing* typedef renamed to *TabCloseInterceptor*
-  * Added *OnTabClose* typedef
+  * `OnTabClosing` typedef renamed to `TabCloseInterceptor`
+  * Added `OnTabClose` typedef
 
 ## 1.4.0
 
 * API changes
-  * *TabbedViewTheme* refactored to be a widget following the same pattern used by Flutter's *Theme*
+  * `TabbedViewTheme` refactored to be a widget following the same pattern used by Flutter's `Theme`
   * Old theme classes have been renamed
-    * *TabbedViewTheme* to *TabbedViewThemeData*
-    * *TabsAreaTheme* to *TabsAreaThemeData*
-    * *ContentAreaTheme* to *ContentAreaThemeData*
-    * *MenuTheme* to *MenuThemeData*
-    * *ButtonsAreaTheme* to *ButtonsAreaThemeData*
-    * *TabTheme* to *TabThemeData*
-    * *TabStatusTheme* to *TabStatusThemeData*
+    * `TabbedViewTheme` to `TabbedViewThemeData`
+    * `TabsAreaTheme` to `TabsAreaThemeData`
+    * `ContentAreaTheme` to `ContentAreaThemeData`
+    * `MenuTheme` to `MenuThemeData`
+    * `ButtonsAreaTheme` to `ButtonsAreaThemeData`
+    * `TabTheme` to `TabThemeData`
+    * `TabStatusTheme` to `TabStatusThemeData`
 
 ## 1.3.1
 
@@ -101,7 +105,7 @@
 ## 1.1.1
 
 * Class name has been fixed (how embarrassing)
-  * *TabbedWiew* has been renamed to *TabbedView*
+  * `TabbedWiew` has been renamed to `TabbedView`
   
 ## 1.1.0+1
 
@@ -129,7 +133,7 @@
 
 * Tabs area buttons builder
 * Theme changes
-  * *light* theme has been renamed to *classic* theme
+  * `light` theme has been renamed to `classic` theme
 
 ## 0.6.0
 
@@ -140,7 +144,7 @@
 * Theme changes
 * Documentation
 * Menu builder
-* *TabbedWiewModel* has been changed to *TabbedWiewController*
+* `TabbedWiewModel` has been changed to `TabbedWiewController`
 
 ## 0.4.0
 
@@ -157,4 +161,4 @@
 
 ## 0.1.0
 
-* Initial commit
+* Package creation

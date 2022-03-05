@@ -28,7 +28,6 @@ class TabThemeData {
       this.margin,
       TabStatusThemeData? selectedStatus,
       TabStatusThemeData? highlightedStatus,
-      TabStatusThemeData? normalStatus,
       TabStatusThemeData? disabledStatus})
       : this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
