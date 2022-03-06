@@ -9,6 +9,7 @@ class TabStatusThemeData {
       this.innerBottomBorder,
       this.fontColor,
       this.padding,
+      this.paddingWithoutButton,
       this.margin,
       this.normalButtonColor,
       this.hoverButtonColor,
@@ -25,6 +26,9 @@ class TabStatusThemeData {
   /// This padding is in addition to any padding inherent in the [decoration];
   /// see [Decoration.padding].
   EdgeInsetsGeometry? padding;
+
+  /// Overrides [padding] when the tab has no buttons.
+  EdgeInsetsGeometry? paddingWithoutButton;
 
   /// Empty space to surround the [decoration] and tab.
   EdgeInsetsGeometry? margin;

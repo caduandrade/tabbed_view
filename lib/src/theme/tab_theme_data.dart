@@ -25,6 +25,7 @@ class TabThemeData {
       this.innerTopBorder,
       this.textStyle = const TextStyle(fontSize: 13),
       this.padding,
+      this.paddingWithoutButton,
       this.margin,
       TabStatusThemeData? selectedStatus,
       TabStatusThemeData? highlightedStatus,
@@ -48,6 +49,9 @@ class TabThemeData {
   /// This padding is in addition to any padding inherent in the [decoration];
   /// see [Decoration.padding].
   EdgeInsetsGeometry? padding;
+
+  /// Overrides [padding] when the tab has no buttons.
+  EdgeInsetsGeometry? paddingWithoutButton;
 
   /// Empty space to surround the [decoration] and tab.
   EdgeInsetsGeometry? margin;

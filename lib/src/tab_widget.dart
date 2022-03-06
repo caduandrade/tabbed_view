@@ -50,9 +50,13 @@ class TabWidget extends StatelessWidget {
         BorderSide.none;
     BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
 
-    EdgeInsetsGeometry? padding = tabTheme.padding;
-    if (statusTheme.padding != null) {
-      padding = statusTheme.padding;
+    EdgeInsetsGeometry? padding;
+    if (textAndButtons.length == 1) {
+      padding =
+          statusTheme.paddingWithoutButton ?? tabTheme.paddingWithoutButton;
+    }
+    if (padding == null) {
+      padding = statusTheme.padding ?? tabTheme.padding;
     }
 
     EdgeInsetsGeometry? margin = tabTheme.margin;
@@ -129,10 +133,9 @@ class TabWidget extends StatelessWidget {
 
     bool buttonsEnabled = data.selectToEnableButtons == false ||
         (data.selectToEnableButtons && status == TabStatus.selected);
+    bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
     EdgeInsets? padding;
-    if (tab.closable ||
-        (tab.buttons != null && tab.buttons!.length > 0) &&
-            tabTheme.buttonsOffset > 0) {
+    if (tab.closable || hasButtons && tabTheme.buttonsOffset > 0) {
       padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
     }
 
@@ -141,7 +144,6 @@ class TabWidget extends StatelessWidget {
             Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis),
         padding: padding));
 
-    bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
     if (hasButtons) {
       for (int i = 0; i < tab.buttons!.length; i++) {
         EdgeInsets? padding;

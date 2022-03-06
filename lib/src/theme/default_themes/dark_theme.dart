@@ -87,11 +87,12 @@ class DarkTheme {
       required Color disabledButtonColor}) {
     double bottomWidth = 3;
     return TabThemeData(
-        buttonsOffset: 8,
+        buttonsOffset: 4,
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         decoration: BoxDecoration(color: tabColor),
         margin: EdgeInsets.only(bottom: bottomWidth),
         padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
+        paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonPadding: const EdgeInsets.all(2),
         selectedStatus: TabStatusThemeData(

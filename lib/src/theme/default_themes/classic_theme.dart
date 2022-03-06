@@ -87,9 +87,10 @@ class ClassicTheme {
         hoverButtonColor: hoverButtonColor,
         disabledButtonColor: disabledButtonColor,
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
-        buttonsOffset: 8,
+        buttonsOffset: 4,
         buttonPadding: const EdgeInsets.all(2),
         padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
+        paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
         decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 1)),

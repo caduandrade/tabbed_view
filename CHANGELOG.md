@@ -1,6 +1,7 @@
-## 1.10.1
+## 1.11.0
 
 * Removing unused argument `normalStatus` from `TabThemeData`.
+* `paddingWithoutButton` setting in `TabThemeData` and `TabStatusThemeData`
 
 ## 1.10.0+1
 

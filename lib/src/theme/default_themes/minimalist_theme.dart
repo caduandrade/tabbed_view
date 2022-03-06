@@ -32,9 +32,10 @@ class MinimalistTheme {
 
   static TabThemeData tabTheme({required MaterialColor colorSet}) {
     return TabThemeData(
-      buttonsOffset: 8,
+      buttonsOffset: 4,
       textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
       padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
+      paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
       decoration: BoxDecoration(color: colorSet[50]!),
       normalButtonColor: colorSet[900]!,
       hoverButtonColor: colorSet[900]!,
