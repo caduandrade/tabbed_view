@@ -1,4 +1,4 @@
-[![](https://img.shields.io/pub/v/tabbed_view.svg)](https://pub.dev/packages/tabbed_view) ![](https://github.com/caduandrade/tabbed_view/actions/workflows/test.yml/badge.svg) [![](https://img.shields.io/badge/demo-try%20it%20out-blue)](https://caduandrade.github.io/tabbed_view_demo/) [![](https://img.shields.io/badge/Flutter-%E2%9D%A4-red)](https://flutter.dev/)
+[![](https://img.shields.io/pub/v/tabbed_view.svg)](https://pub.dev/packages/tabbed_view) ![](https://github.com/caduandrade/tabbed_view/actions/workflows/test.yml/badge.svg) [![](https://img.shields.io/badge/demo-try%20it%20out-blue)](https://caduandrade.github.io/tabbed_view_demo/) [![](https://img.shields.io/badge/Flutter-%E2%9D%A4-red)](https://flutter.dev/) [![](https://img.shields.io/badge/donate-crypto-green)](#support-this-project)
 
 # Tabbed view
 
@@ -52,6 +52,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
     *  [Minimalist theme](#minimalist-theme)
        *  [Color set](#minimalist-theme---color-set)
   * [Theme from scratch](#theme-from-scratch)
+* [Support this project](#support-this-project)
 
 ## Get started
 
@@ -584,3 +585,17 @@ It is possible to create an entire theme from scratch.
 ```
 
 ![](https://caduandrade.github.io/tabbed_view/theme_from_scratch_v2.png)
+
+## Support this project
+
+### Binance Smart Chain (BEP-20) or Ethereum (ERC-20)
+
+[0x9eB815FD4c88A53322304143A9Aa8733D3369985](https://bscscan.com/address/0x9eb815fd4c88a53322304143a9aa8733d3369985)
+
+![](https://dev.caduandrade.net/ethandbsc.png)
+
+### Helium
+
+[13A2fDqoApT9VnoxFjHWcy8kPQgVFiVnzps32MRAdpTzvs3rq68](https://explorer.helium.com/accounts/13A2fDqoApT9VnoxFjHWcy8kPQgVFiVnzps32MRAdpTzvs3rq68)
+
+![](https://dev.caduandrade.net/helium.png)
