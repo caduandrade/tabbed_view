@@ -588,9 +588,15 @@ It is possible to create an entire theme from scratch.
 
 ## Support this project
 
-### Binance Smart Chain (BEP-20) or Ethereum (ERC-20)
+### Bitcoin
 
-[0x9eB815FD4c88A53322304143A9Aa8733D3369985](https://bscscan.com/address/0x9eb815fd4c88a53322304143a9aa8733d3369985)
+[bc1qhqy84y45gya58gtfkvrvass38k4mcyqnav803h](https://www.blockchain.com/pt/btc/address/bc1qhqy84y45gya58gtfkvrvass38k4mcyqnav803h)
+
+![](https://dev.caduandrade.net/bitcoin.png)
+
+### Ethereum (ERC-20) or Binance Smart Chain (BEP-20)
+
+[0x9eB815FD4c88A53322304143A9Aa8733D3369985](https://etherscan.io/address/0x9eb815fd4c88a53322304143a9aa8733d3369985)
 
 ![](https://dev.caduandrade.net/ethandbsc.png)
 
