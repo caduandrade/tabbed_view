@@ -33,7 +33,7 @@ class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
         text: 'Tab 2',
         content:
             Padding(child: Text('Hello again'), padding: EdgeInsets.all(8))));
-    tabs.add(TabData(
+    tabs.add(TabData(closable: false,
         text: 'TextField',
         content: Padding(
             child: TextField(
@@ -47,8 +47,10 @@ class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
 
   @override
   Widget build(BuildContext context) {
+
     TabbedView tabbedView = TabbedView(controller: _controller);
+    Widget w = TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.mobile());
     return Scaffold(
-        body: Container(child: tabbedView, padding: EdgeInsets.all(32)));
+        body: Container(child: w, padding: EdgeInsets.all(32)));
   }
 }

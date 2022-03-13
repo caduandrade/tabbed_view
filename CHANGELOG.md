@@ -1,3 +1,11 @@
+## 1.11.1
+
+* Bugfix
+  * Removing theme settings values equal to inherited ones
+    * Mobile theme
+      * `tab.highlightedStatus.decoration`
+      * `tab.selectedStatus.decoration`
+
 ## 1.11.0
 
 * Removing unused argument `normalStatus` from `TabThemeData`.
