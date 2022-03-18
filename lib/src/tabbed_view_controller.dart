@@ -18,6 +18,9 @@ class TabbedViewController extends ChangeNotifier {
     if (_tabs.length > 0) {
       _selectedIndex = 0;
     }
+    for (TabData tab in _tabs) {
+      tab.addListener(notifyListeners);
+    }
   }
 
   final List<TabData> _tabs;
@@ -43,18 +46,23 @@ class TabbedViewController extends ChangeNotifier {
   /// The [index] value must be non-negative and no greater than [tabs.length].
   void insertTab(int index, TabData tab) {
     _tabs.insert(index, tab);
+    tab.addListener(notifyListeners);
     _afterIncTabs();
   }
 
   /// Adds multiple [TabData].
   void addTabs(Iterable<TabData> iterable) {
     _tabs.addAll(iterable);
+    for (TabData tab in iterable) {
+      tab.addListener(notifyListeners);
+    }
     _afterIncTabs();
   }
 
   /// Adds a [TabData].
   void addTab(TabData tab) {
     _tabs.add(tab);
+    tab.addListener(notifyListeners);
     _afterIncTabs();
   }
 
@@ -71,6 +79,7 @@ class TabbedViewController extends ChangeNotifier {
   TabData removeTab(int tabIndex) {
     _validateIndex(tabIndex);
     TabData tabData = _tabs.removeAt(tabIndex);
+    tabData.removeListener(notifyListeners);
     if (_tabs.isEmpty) {
       _selectedIndex = null;
     } else if (_selectedIndex != null &&
@@ -83,6 +92,9 @@ class TabbedViewController extends ChangeNotifier {
 
   /// Removes all tabs.
   void removeTabs() {
+    for (TabData tab in _tabs) {
+      tab.removeListener(notifyListeners);
+    }
     _tabs.clear();
     _selectedIndex = null;
     notifyListeners();

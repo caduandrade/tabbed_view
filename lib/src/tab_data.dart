@@ -26,21 +26,56 @@ import 'package:tabbed_view/src/tab_button.dart';
 /// See also:
 ///
 /// * [TabbedView.contentBuilder]
-class TabData {
+class TabData extends ChangeNotifier {
   TabData(
-      {this.value,
-      required this.text,
-      this.buttons,
-      this.content,
-      this.closable = true,
-      this.keepAlive = false});
+      {dynamic value,
+      required String text,
+      List<TabButton>? buttons,
+      Widget? content,
+      bool closable = true,
+      this.keepAlive = false})
+      : _value = value,
+        _text = text,
+        _closable = closable,
+        _content = content,
+        _buttons = buttons;
 
   /// Identifies the content of the tab in the tree
   final UniqueKey uniqueKey = UniqueKey();
   final bool keepAlive;
-  final dynamic value;
-  String text;
-  List<TabButton>? buttons;
-  Widget? content;
-  bool closable;
+
+  dynamic _value;
+  dynamic get value => _value;
+  set value(dynamic value) {
+    _value = value;
+    notifyListeners();
+  }
+
+  List<TabButton>? _buttons;
+  List<TabButton>? get buttons => _buttons;
+  set buttons(List<TabButton>? buttons) {
+    _buttons = buttons;
+    notifyListeners();
+  }
+
+  Widget? _content;
+  Widget? get content => _content;
+  set content(Widget? content) {
+    _content = content;
+    notifyListeners();
+  }
+
+  bool _closable;
+  bool get closable => _closable;
+  set closable(bool value) {
+    _closable = value;
+    notifyListeners();
+  }
+
+  String _text;
+  String get text => _text;
+  set text(String value) {
+    _text = value;
+    notifyListeners();
+  }
 }
