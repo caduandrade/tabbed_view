@@ -93,4 +93,9 @@ class TabbedViewController extends ChangeNotifier {
       throw IndexError(tabIndex, _tabs, 'tabIndex');
     }
   }
+
+  /// Gets a tab given an index.
+  TabData getTabByIndex(int index) {
+    return _tabs[index];
+  }
 }

@@ -1,3 +1,7 @@
+## 1.12.0
+
+* Adding `getTabByIndex` method in `TabbedViewController`.
+
 ## 1.11.1
 
 * Bugfix
