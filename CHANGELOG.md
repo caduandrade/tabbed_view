@@ -1,6 +1,7 @@
 ## 1.12.0
 
 * Adding `getTabByIndex` method in `TabbedViewController`.
+* Allowing update the following `TabData` attributes: `buttons`, `closable`, `content`, `text` and `value`.
 
 ## 1.11.1
 
