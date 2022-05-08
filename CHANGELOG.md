@@ -1,3 +1,7 @@
+## 1.13.0
+
+* Adding interceptor for selecting tab.
+
 ## 1.12.0
 
 * Adding `getTabByIndex` method in `TabbedViewController`.
