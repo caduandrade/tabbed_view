@@ -1,6 +1,6 @@
 ## 1.13.0
 
-* Adding interceptor for selecting tab.
+* Adding interceptor for tab selection.
 
 ## 1.12.0
 
