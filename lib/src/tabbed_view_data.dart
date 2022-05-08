@@ -12,6 +12,7 @@ class TabbedViewData {
       this.tabCloseInterceptor,
       required this.contentClip,
       this.onTabSelection,
+      this.tabSelectInterceptor,
       required this.selectToEnableButtons,
       this.closeButtonTooltip,
       this.tabsAreaButtonsBuilder,
@@ -25,6 +26,7 @@ class TabbedViewData {
   final OnTabClose? onTabClose;
   final TabCloseInterceptor? tabCloseInterceptor;
   final OnTabSelection? onTabSelection;
+  final TabSelectInterceptor? tabSelectInterceptor;
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
   final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;

@@ -75,7 +75,7 @@ class TabWidget extends StatelessWidget {
         margin: margin);
 
     GestureDetector gestureDetector = GestureDetector(
-        onTap: () => data.controller.selectedIndex = index,
+        onTap: () => _onSelect(context, index),
         child: tabContainer);
 
     MouseCursor cursor = MouseCursor.defer;
@@ -204,6 +204,12 @@ class TabWidget extends StatelessWidget {
       if (data.onTabClose != null) {
         data.onTabClose!(index, tabData);
       }
+    }
+  }
+
+  void _onSelect(BuildContext context, int newTabIndex) {
+    if (data.tabSelectInterceptor == null || data.tabSelectInterceptor!(newTabIndex)) {
+      data.controller.selectedIndex = newTabIndex;
     }
   }
 
