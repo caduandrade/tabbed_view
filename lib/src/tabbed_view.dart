@@ -22,6 +22,9 @@ typedef OnTabClose = void Function(int tabIndex, TabData tabData);
 /// Intercepts a close event to indicates whether the tab can be closed.
 typedef TabCloseInterceptor = bool Function(int tabIndex);
 
+/// Intercepts a select event to indicate whether the tab can be selected.
+typedef TabSelectInterceptor = bool Function(int newTabIndex);
+
 /// Event that will be triggered when the tab selection is changed.
 typedef OnTabSelection = Function(int? newTabIndex);
 
@@ -40,6 +43,7 @@ class TabbedView extends StatefulWidget {
       this.onTabClose,
       this.tabCloseInterceptor,
       this.onTabSelection,
+      this.tabSelectInterceptor,
       this.selectToEnableButtons = true,
       this.contentClip = true,
       this.closeButtonTooltip,
@@ -52,6 +56,7 @@ class TabbedView extends StatefulWidget {
   final OnTabClose? onTabClose;
   final TabCloseInterceptor? tabCloseInterceptor;
   final OnTabSelection? onTabSelection;
+  final TabSelectInterceptor? tabSelectInterceptor;
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
   final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
@@ -92,6 +97,7 @@ class _TabbedViewState extends State<TabbedView> {
         tabCloseInterceptor: widget.tabCloseInterceptor,
         onTabSelection: widget.onTabSelection,
         contentClip: widget.contentClip,
+        tabSelectInterceptor: widget.tabSelectInterceptor,
         selectToEnableButtons: widget.selectToEnableButtons,
         closeButtonTooltip: widget.closeButtonTooltip,
         tabsAreaButtonsBuilder: widget.tabsAreaButtonsBuilder,
