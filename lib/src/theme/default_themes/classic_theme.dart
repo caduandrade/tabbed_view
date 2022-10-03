@@ -119,13 +119,13 @@ class ClassicTheme {
     return ContentAreaThemeData(decoration: decoration);
   }
 
-  static MenuThemeData menuTheme(
+  static TabbedViewMenuThemeData menuTheme(
       {required Color fontColor,
       required double fontSize,
       required Color color,
       required hoverColor,
       required borderColor}) {
-    return MenuThemeData(
+    return TabbedViewMenuThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         border: Border.all(width: 1, color: borderColor),
         margin: EdgeInsets.all(8),

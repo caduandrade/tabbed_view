@@ -64,8 +64,8 @@ class MinimalistTheme {
     return ContentAreaThemeData(decoration: decoration);
   }
 
-  static MenuThemeData menuTheme({required MaterialColor colorSet}) {
-    return MenuThemeData(
+  static TabbedViewMenuThemeData menuTheme({required MaterialColor colorSet}) {
+    return TabbedViewMenuThemeData(
         border: Border.all(width: 1, color: colorSet[900]!),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),

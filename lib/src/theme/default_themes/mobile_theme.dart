@@ -117,13 +117,13 @@ class MobileTheme {
     return ContentAreaThemeData(decoration: decoration);
   }
 
-  static MenuThemeData menuTheme(
+  static TabbedViewMenuThemeData menuTheme(
       {required Color backgroundColor,
       required double fontSize,
       required Color borderColor,
       required Color foregroundColor,
       required Color hoverColor}) {
-    return MenuThemeData(
+    return TabbedViewMenuThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
         border: Border.all(width: 1, color: borderColor),
         margin: EdgeInsets.all(8),

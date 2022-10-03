@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Theme for menu.
-class MenuThemeData {
-  MenuThemeData(
+class TabbedViewMenuThemeData {
+  TabbedViewMenuThemeData(
       {this.padding,
       this.margin,
       this.menuItemPadding,

@@ -116,13 +116,13 @@ class DarkTheme {
         padding: EdgeInsets.all(8));
   }
 
-  static MenuThemeData menuTheme(
+  static TabbedViewMenuThemeData menuTheme(
       {required Color fontColor,
       required double fontSize,
       required Color color,
       required hoverColor,
       required dividerColor}) {
-    return MenuThemeData(
+    return TabbedViewMenuThemeData(
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),

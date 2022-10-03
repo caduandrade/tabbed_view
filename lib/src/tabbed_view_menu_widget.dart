@@ -19,7 +19,7 @@ class _TabbedViewMenuWidgetState extends State<TabbedViewMenuWidget> {
   @override
   Widget build(BuildContext context) {
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
-    MenuThemeData menuTheme = theme.menu;
+    TabbedViewMenuThemeData menuTheme = theme.menu;
     bool hasDivider =
         menuTheme.dividerThickness > 0 && menuTheme.dividerColor != null;
     int itemCount = widget.data.menuItems.length;

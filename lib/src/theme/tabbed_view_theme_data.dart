@@ -16,17 +16,17 @@ class TabbedViewThemeData {
       {TabsAreaThemeData? tabsArea,
       TabThemeData? tab,
       ContentAreaThemeData? contentArea,
-      MenuThemeData? menu})
+      TabbedViewMenuThemeData? menu})
       : this.tab = tab != null ? tab : TabThemeData(),
         this.tabsArea = tabsArea != null ? tabsArea : TabsAreaThemeData(),
         this.contentArea =
             contentArea != null ? contentArea : ContentAreaThemeData(),
-        this.menu = menu != null ? menu : MenuThemeData();
+        this.menu = menu != null ? menu : TabbedViewMenuThemeData();
 
   TabsAreaThemeData tabsArea;
   TabThemeData tab;
   ContentAreaThemeData contentArea;
-  MenuThemeData menu;
+  TabbedViewMenuThemeData menu;
 
   /// Sets the Material Design icons.
   void materialDesignIcons() {

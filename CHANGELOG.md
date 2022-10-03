@@ -1,3 +1,8 @@
+## 1.14.0
+
+* Renaming `MenuThemeData` to `TabbedViewMenuThemeData`
+  * Avoiding conflict with next Flutter version.
+
 ## 1.13.0+1
 
 * Formatting code.
