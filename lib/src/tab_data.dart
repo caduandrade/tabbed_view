@@ -45,35 +45,45 @@ class TabData extends ChangeNotifier {
   final bool keepAlive;
 
   dynamic _value;
+
   dynamic get value => _value;
+
   set value(dynamic value) {
     _value = value;
     notifyListeners();
   }
 
   List<TabButton>? _buttons;
+
   List<TabButton>? get buttons => _buttons;
+
   set buttons(List<TabButton>? buttons) {
     _buttons = buttons;
     notifyListeners();
   }
 
   Widget? _content;
+
   Widget? get content => _content;
+
   set content(Widget? content) {
     _content = content;
     notifyListeners();
   }
 
   bool _closable;
+
   bool get closable => _closable;
+
   set closable(bool value) {
     _closable = value;
     notifyListeners();
   }
 
   String _text;
+
   String get text => _text;
+
   set text(String value) {
     _text = value;
     notifyListeners();

@@ -1,3 +1,7 @@
+## 1.14.0+1
+
+* Stopping using `hashValues` deprecated method.
+
 ## 1.14.0
 
 * Renaming `MenuThemeData` to `TabbedViewMenuThemeData`

@@ -81,7 +81,9 @@ class TabThemeData {
   TabStatusThemeData highlightedStatus;
 
   double _buttonsOffset;
+
   double get buttonsOffset => _buttonsOffset;
+
   set buttonsOffset(double value) {
     _buttonsOffset = value >= 0 ? value : 0;
   }
@@ -89,7 +91,9 @@ class TabThemeData {
   EdgeInsetsGeometry? buttonPadding;
 
   double _buttonsGap;
+
   double get buttonsGap => _buttonsGap;
+
   set buttonsGap(double value) {
     _buttonsGap = value >= 0 ? value : 0;
   }

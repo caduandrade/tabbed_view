@@ -109,7 +109,7 @@ class _TabsAreaButtonsBoxConstraints extends BoxConstraints {
   @override
   int get hashCode {
     assert(debugAssertIsValid());
-    return hashValues(minWidth, maxWidth, minHeight, maxHeight, hasHiddenTabs);
+    return Object.hash(minWidth, maxWidth, minHeight, maxHeight, hasHiddenTabs);
   }
 }
 
@@ -241,7 +241,9 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         this._selectedTabIndex = selectedTabIndex;
 
   int? _selectedTabIndex;
+
   int? get selectedTabIndex => _selectedTabIndex;
+
   set selectedTabIndex(int? value) {
     if (_selectedTabIndex != value) {
       _selectedTabIndex = value;
@@ -250,7 +252,9 @@ class _TabsAreaLayoutRenderBox extends RenderBox
   }
 
   TabsAreaThemeData _tabsAreaTheme;
+
   TabsAreaThemeData get tabsAreaTheme => _tabsAreaTheme;
+
   set tabsAreaTheme(TabsAreaThemeData value) {
     if (_tabsAreaTheme != value) {
       _tabsAreaTheme = value;
@@ -259,7 +263,9 @@ class _TabsAreaLayoutRenderBox extends RenderBox
   }
 
   HiddenTabs _hiddenTabs;
+
   HiddenTabs get hiddenTabs => _hiddenTabs;
+
   set hiddenTabs(HiddenTabs value) {
     if (_hiddenTabs != value) {
       _hiddenTabs = value;
