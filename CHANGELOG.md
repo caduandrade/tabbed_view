@@ -2,9 +2,10 @@
 
 * Adding properties
   * `TabbedView.tabsAreaVisible`
+  * `TabsAreaThemeData.visible`
   * `ContentAreaThemeData.decorationNoTabsArea`
 * Bugfix
-  * Implementing `hashCode` and `==` of the theme datas. 
+  * Implementing `hashCode` and `==` of the theme data. 
 
 ## 1.14.0+1
 

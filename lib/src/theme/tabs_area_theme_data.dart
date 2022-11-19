@@ -7,7 +7,8 @@ import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
   TabsAreaThemeData(
-      {this.color,
+      {this.visible = true,
+      this.color,
       this.border,
       this.initialGap = 0,
       this.middleGap = 0,
@@ -36,6 +37,8 @@ class TabsAreaThemeData {
             ? IconProvider.path(TabbedViewIcons.menu)
             : menuIcon;
 
+  bool visible;
+
   Color? color;
   Border? border;
   double initialGap;
@@ -44,7 +47,9 @@ class TabsAreaThemeData {
   EqualHeights equalHeights;
 
   double _minimalFinalGap;
+
   double get minimalFinalGap => _minimalFinalGap;
+
   set minimalFinalGap(double value) {
     _minimalFinalGap = value >= 0 ? value : 0;
   }
@@ -70,13 +75,17 @@ class TabsAreaThemeData {
   IconProvider menuIcon;
 
   double _buttonsGap;
+
   double get buttonsGap => _buttonsGap;
+
   set buttonsGap(double value) {
     _buttonsGap = value >= 0 ? value : 0;
   }
 
   double _buttonsOffset;
+
   double get buttonsOffset => _buttonsOffset;
+
   set buttonsOffset(double value) {
     _buttonsOffset = value >= 0 ? value : 0;
   }
@@ -88,6 +97,7 @@ class TabsAreaThemeData {
       identical(this, other) ||
       other is TabsAreaThemeData &&
           runtimeType == other.runtimeType &&
+          visible == other.visible &&
           color == other.color &&
           border == other.border &&
           initialGap == other.initialGap &&
@@ -111,6 +121,7 @@ class TabsAreaThemeData {
 
   @override
   int get hashCode =>
+      visible.hashCode ^
       color.hashCode ^
       border.hashCode ^
       initialGap.hashCode ^
