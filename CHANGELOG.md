@@ -1,6 +1,14 @@
+## 1.15.0
+
+* Adding properties
+  * `TabbedView.tabsAreaVisible`
+  * `ContentAreaThemeData.decorationNoTabsArea`
+* Bugfix
+  * Implementing `hashCode` and `==` of the theme datas. 
+
 ## 1.14.0+1
 
-* Stopping using `hashValues` deprecated method.
+* Stopping using deprecated `hashValues` method.
 
 ## 1.14.0
 

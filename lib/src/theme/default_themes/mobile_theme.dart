@@ -110,11 +110,15 @@ class MobileTheme {
   static ContentAreaThemeData contentAreaTheme(
       {required Color borderColor, required Color backgroundColor}) {
     BorderSide borderSide = BorderSide(width: 1, color: borderColor);
-    BoxBorder border =
-        Border(bottom: borderSide, left: borderSide, right: borderSide);
-    BoxDecoration decoration =
-        BoxDecoration(color: backgroundColor, border: border);
-    return ContentAreaThemeData(decoration: decoration);
+    BoxDecoration decoration = BoxDecoration(
+        color: backgroundColor,
+        border:
+            Border(bottom: borderSide, left: borderSide, right: borderSide));
+    BoxDecoration decorationNoTabsArea = BoxDecoration(
+        color: backgroundColor,
+        border: Border.all(width: 1, color: borderColor));
+    return ContentAreaThemeData(
+        decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
   }
 
   static TabbedViewMenuThemeData menuTheme(

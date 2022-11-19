@@ -63,4 +63,18 @@ class TabbedViewThemeData {
       {MaterialColor colorSet = Colors.grey}) {
     return MinimalistTheme.build(colorSet: colorSet);
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TabbedViewThemeData &&
+          runtimeType == other.runtimeType &&
+          tabsArea == other.tabsArea &&
+          tab == other.tab &&
+          contentArea == other.contentArea &&
+          menu == other.menu;
+
+  @override
+  int get hashCode =>
+      tabsArea.hashCode ^ tab.hashCode ^ contentArea.hashCode ^ menu.hashCode;
 }

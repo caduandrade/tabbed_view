@@ -40,13 +40,11 @@ class TabsAreaThemeData {
   Border? border;
   double initialGap;
   double middleGap;
-  double _minimalFinalGap;
   BorderSide gapBottomBorder;
-
   EqualHeights equalHeights;
 
+  double _minimalFinalGap;
   double get minimalFinalGap => _minimalFinalGap;
-
   set minimalFinalGap(double value) {
     _minimalFinalGap = value >= 0 ? value : 0;
   }
@@ -72,20 +70,65 @@ class TabsAreaThemeData {
   IconProvider menuIcon;
 
   double _buttonsGap;
-
   double get buttonsGap => _buttonsGap;
-
   set buttonsGap(double value) {
     _buttonsGap = value >= 0 ? value : 0;
   }
 
   double _buttonsOffset;
-
   double get buttonsOffset => _buttonsOffset;
-
   set buttonsOffset(double value) {
     _buttonsOffset = value >= 0 ? value : 0;
   }
 
   EdgeInsetsGeometry? buttonPadding;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TabsAreaThemeData &&
+          runtimeType == other.runtimeType &&
+          color == other.color &&
+          border == other.border &&
+          initialGap == other.initialGap &&
+          middleGap == other.middleGap &&
+          gapBottomBorder == other.gapBottomBorder &&
+          equalHeights == other.equalHeights &&
+          _minimalFinalGap == other._minimalFinalGap &&
+          buttonsAreaDecoration == other.buttonsAreaDecoration &&
+          buttonsAreaPadding == other.buttonsAreaPadding &&
+          buttonIconSize == other.buttonIconSize &&
+          normalButtonColor == other.normalButtonColor &&
+          hoverButtonColor == other.hoverButtonColor &&
+          disabledButtonColor == other.disabledButtonColor &&
+          normalButtonBackground == other.normalButtonBackground &&
+          hoverButtonBackground == other.hoverButtonBackground &&
+          disabledButtonBackground == other.disabledButtonBackground &&
+          menuIcon == other.menuIcon &&
+          _buttonsGap == other._buttonsGap &&
+          _buttonsOffset == other._buttonsOffset &&
+          buttonPadding == other.buttonPadding;
+
+  @override
+  int get hashCode =>
+      color.hashCode ^
+      border.hashCode ^
+      initialGap.hashCode ^
+      middleGap.hashCode ^
+      gapBottomBorder.hashCode ^
+      equalHeights.hashCode ^
+      _minimalFinalGap.hashCode ^
+      buttonsAreaDecoration.hashCode ^
+      buttonsAreaPadding.hashCode ^
+      buttonIconSize.hashCode ^
+      normalButtonColor.hashCode ^
+      hoverButtonColor.hashCode ^
+      disabledButtonColor.hashCode ^
+      normalButtonBackground.hashCode ^
+      hoverButtonBackground.hashCode ^
+      disabledButtonBackground.hashCode ^
+      menuIcon.hashCode ^
+      _buttonsGap.hashCode ^
+      _buttonsOffset.hashCode ^
+      buttonPadding.hashCode;
 }

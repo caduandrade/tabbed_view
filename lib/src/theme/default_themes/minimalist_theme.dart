@@ -57,11 +57,15 @@ class MinimalistTheme {
   static ContentAreaThemeData contentAreaTheme(
       {required MaterialColor colorSet}) {
     BorderSide borderSide = BorderSide(width: 1, color: colorSet[900]!);
-    BoxBorder border =
-        Border(bottom: borderSide, left: borderSide, right: borderSide);
-    BoxDecoration decoration =
-        BoxDecoration(color: colorSet[50]!, border: border);
-    return ContentAreaThemeData(decoration: decoration);
+    BoxDecoration decoration = BoxDecoration(
+        color: colorSet[50]!,
+        border:
+            Border(bottom: borderSide, left: borderSide, right: borderSide));
+    BoxDecoration decorationNoTabsArea = BoxDecoration(
+        color: colorSet[50]!,
+        border: Border.all(width: 1, color: colorSet[900]!));
+    return ContentAreaThemeData(
+        decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
   }
 
   static TabbedViewMenuThemeData menuTheme({required MaterialColor colorSet}) {

@@ -81,9 +81,7 @@ class TabThemeData {
   TabStatusThemeData highlightedStatus;
 
   double _buttonsOffset;
-
   double get buttonsOffset => _buttonsOffset;
-
   set buttonsOffset(double value) {
     _buttonsOffset = value >= 0 ? value : 0;
   }
@@ -91,10 +89,59 @@ class TabThemeData {
   EdgeInsetsGeometry? buttonPadding;
 
   double _buttonsGap;
-
   double get buttonsGap => _buttonsGap;
-
   set buttonsGap(double value) {
     _buttonsGap = value >= 0 ? value : 0;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TabThemeData &&
+          runtimeType == other.runtimeType &&
+          padding == other.padding &&
+          paddingWithoutButton == other.paddingWithoutButton &&
+          margin == other.margin &&
+          verticalAlignment == other.verticalAlignment &&
+          decoration == other.decoration &&
+          innerBottomBorder == other.innerBottomBorder &&
+          innerTopBorder == other.innerTopBorder &&
+          textStyle == other.textStyle &&
+          buttonIconSize == other.buttonIconSize &&
+          normalButtonColor == other.normalButtonColor &&
+          hoverButtonColor == other.hoverButtonColor &&
+          disabledButtonColor == other.disabledButtonColor &&
+          normalButtonBackground == other.normalButtonBackground &&
+          hoverButtonBackground == other.hoverButtonBackground &&
+          disabledButtonBackground == other.disabledButtonBackground &&
+          closeIcon == other.closeIcon &&
+          selectedStatus == other.selectedStatus &&
+          highlightedStatus == other.highlightedStatus &&
+          _buttonsOffset == other._buttonsOffset &&
+          buttonPadding == other.buttonPadding &&
+          _buttonsGap == other._buttonsGap;
+
+  @override
+  int get hashCode =>
+      padding.hashCode ^
+      paddingWithoutButton.hashCode ^
+      margin.hashCode ^
+      verticalAlignment.hashCode ^
+      decoration.hashCode ^
+      innerBottomBorder.hashCode ^
+      innerTopBorder.hashCode ^
+      textStyle.hashCode ^
+      buttonIconSize.hashCode ^
+      normalButtonColor.hashCode ^
+      hoverButtonColor.hashCode ^
+      disabledButtonColor.hashCode ^
+      normalButtonBackground.hashCode ^
+      hoverButtonBackground.hashCode ^
+      disabledButtonBackground.hashCode ^
+      closeIcon.hashCode ^
+      selectedStatus.hashCode ^
+      highlightedStatus.hashCode ^
+      _buttonsOffset.hashCode ^
+      buttonPadding.hashCode ^
+      _buttonsGap.hashCode;
 }

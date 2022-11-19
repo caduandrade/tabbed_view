@@ -13,8 +13,9 @@ import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Container widget for the tab content and menu.
 class ContentArea extends StatelessWidget {
-  ContentArea({required this.data});
+  ContentArea({required this.tabsAreaVisible, required this.data});
 
+  final bool tabsAreaVisible;
   final TabbedViewData data;
 
   @override
@@ -71,7 +72,10 @@ class ContentArea extends StatelessWidget {
           child: SizeChangedLayoutNotifier(child: Stack(children: children)),
           onNotification: onSizeNotification);
       return Container(
-          child: listener, decoration: contentAreaTheme.decoration);
+          child: listener,
+          decoration: tabsAreaVisible
+              ? contentAreaTheme.decoration
+              : contentAreaTheme.decorationNoTabsArea);
     });
     if (data.contentClip) {
       return ClipRect(child: layoutBuilder);

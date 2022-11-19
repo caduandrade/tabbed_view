@@ -45,24 +45,53 @@ class TabbedViewMenuThemeData {
   /// Indicates whether to apply a blur effect on the content.
   bool blur;
 
-  double _dividerThickness;
-
   Color? dividerColor;
-
-  double _maxWidth;
 
   /// Use an ellipsis to indicate that the text has overflowed.
   bool ellipsisOverflowText;
 
+  double _dividerThickness;
   double get dividerThickness => _dividerThickness;
-
   set dividerThickness(double value) {
     _dividerThickness = value >= 0 ? value : 0;
   }
 
+  double _maxWidth;
   double get maxWidth => _maxWidth;
-
   set maxWidth(double value) {
     _maxWidth = value >= 0 ? value : 0;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TabbedViewMenuThemeData &&
+          runtimeType == other.runtimeType &&
+          margin == other.margin &&
+          padding == other.padding &&
+          menuItemPadding == other.menuItemPadding &&
+          textStyle == other.textStyle &&
+          border == other.border &&
+          color == other.color &&
+          hoverColor == other.hoverColor &&
+          blur == other.blur &&
+          dividerColor == other.dividerColor &&
+          ellipsisOverflowText == other.ellipsisOverflowText &&
+          _dividerThickness == other._dividerThickness &&
+          _maxWidth == other._maxWidth;
+
+  @override
+  int get hashCode =>
+      margin.hashCode ^
+      padding.hashCode ^
+      menuItemPadding.hashCode ^
+      textStyle.hashCode ^
+      border.hashCode ^
+      color.hashCode ^
+      hoverColor.hashCode ^
+      blur.hashCode ^
+      dividerColor.hashCode ^
+      ellipsisOverflowText.hashCode ^
+      _dividerThickness.hashCode ^
+      _maxWidth.hashCode;
 }
