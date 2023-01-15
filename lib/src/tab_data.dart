@@ -32,10 +32,12 @@ class TabData extends ChangeNotifier {
       required String text,
       List<TabButton>? buttons,
       Widget? content,
+      Widget? leading,
       bool closable = true,
       this.keepAlive = false})
       : _value = value,
         _text = text,
+        _leading = leading,
         _closable = closable,
         _content = content,
         _buttons = buttons;
@@ -60,6 +62,17 @@ class TabData extends ChangeNotifier {
   set buttons(List<TabButton>? buttons) {
     _buttons = buttons;
     notifyListeners();
+  }
+
+  Widget? _leading;
+
+  Widget? get leading => _leading;
+
+  set leading(Widget? leading) {
+    if (_leading != leading) {
+      _leading = leading;
+      notifyListeners();
+    }
   }
 
   Widget? _content;
