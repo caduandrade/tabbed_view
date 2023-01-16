@@ -138,6 +138,13 @@ class TabWidget extends StatelessWidget {
       padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
     }
 
+    if (tab.leading != null) {
+      Widget? leading = tab.leading!(context, status);
+      if (leading != null) {
+        textAndButtons.add(leading);
+      }
+    }
+
     textAndButtons.add(Container(
         child:
             Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis),

@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tab_button.dart';
+import 'package:tabbed_view/src/tab_leading_builder.dart';
 
 /// The tab data.
 ///
@@ -32,10 +33,12 @@ class TabData extends ChangeNotifier {
       required String text,
       List<TabButton>? buttons,
       Widget? content,
+      TabLeadingBuilder? leading,
       bool closable = true,
       this.keepAlive = false})
       : _value = value,
         _text = text,
+        _leading = leading,
         _closable = closable,
         _content = content,
         _buttons = buttons;
@@ -60,6 +63,17 @@ class TabData extends ChangeNotifier {
   set buttons(List<TabButton>? buttons) {
     _buttons = buttons;
     notifyListeners();
+  }
+
+  TabLeadingBuilder? _leading;
+
+  TabLeadingBuilder? get leading => _leading;
+
+  set leading(TabLeadingBuilder? leading) {
+    if (_leading != leading) {
+      _leading = leading;
+      notifyListeners();
+    }
   }
 
   Widget? _content;

@@ -18,3 +18,5 @@ export 'src/tabbed_view_menu_item.dart';
 export 'src/tabbed_view_menu_builder.dart';
 export 'src/tab_button.dart';
 export 'src/icon_provider.dart';
+export 'src/tab_status.dart';
+export 'src/tab_leading_builder.dart';
