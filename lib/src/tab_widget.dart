@@ -29,7 +29,6 @@ class TabWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(index);
     TabData tab = data.controller.tabs[index];
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
     TabThemeData tabTheme = theme.tab;
@@ -140,7 +139,7 @@ class TabWidget extends StatelessWidget {
     }
 
     if (tab.leading != null) {
-      Widget? leading = tab.leading!(context, status, tab.value);
+      Widget? leading = tab.leading!(context, status);
       if (leading != null) {
         textAndButtons.add(leading);
       }

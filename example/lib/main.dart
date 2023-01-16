@@ -28,7 +28,7 @@ class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
 
     tabs.add(TabData(
         text: 'Tab 1',
-        leading: (context, status, value) => Icon(Icons.person),
+        leading: (context, status) => Icon(Icons.star, size: 16),
         content: Padding(child: Text('Hello'), padding: EdgeInsets.all(8))));
     tabs.add(TabData(
         text: 'Tab 2',

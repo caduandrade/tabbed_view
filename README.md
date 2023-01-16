@@ -1,4 +1,8 @@
-[![](https://img.shields.io/pub/v/tabbed_view.svg)](https://pub.dev/packages/tabbed_view) ![](https://github.com/caduandrade/tabbed_view/actions/workflows/test.yml/badge.svg) [![](https://img.shields.io/badge/demo-try%20it%20out-blue)](https://caduandrade.github.io/tabbed_view_demo/) [![](https://img.shields.io/badge/Flutter-%E2%9D%A4-red)](https://flutter.dev/) [![](https://img.shields.io/badge/donate-crypto-green)](#support-this-project) ![](https://img.shields.io/badge/%F0%9F%91%8D%20and%20%E2%AD%90-are%20free-yellow)
+[![](https://img.shields.io/pub/v/tabbed_view.svg)](https://pub.dev/packages/tabbed_view)
+![](https://github.com/caduandrade/tabbed_view/actions/workflows/test.yml/badge.svg)
+[![](https://img.shields.io/badge/demo-try%20it%20out-blue)](https://caduandrade.github.io/tabbed_view_demo/)
+[![](https://img.shields.io/badge/Flutter-%E2%9D%A4-red)](https://flutter.dev/)
+![](https://img.shields.io/badge/%F0%9F%91%8D%20and%20%E2%AD%90-are%20free%20and%20motivate%20me-yellow)
 
 # Tabbed view
 
@@ -25,6 +29,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
   * [Close interceptor](#close-interceptor)
   * [Close listener](#close-listener)
   * [Selection listener](#selection-listener)
+  * [Leading](#tab-leading-widget)
   * [Draggable](#draggable-tab-builder)
   * [Keep alive](#keep-alive)
 * [Tabs area](#tabs-area)
@@ -250,6 +255,21 @@ It allows creating the contents of the tab dynamically during the selection even
         controller: TabbedViewController(tabs),
         onTabSelection: _onTabSelection);
 ```
+
+### Tab leading widget
+
+```dart
+    List<TabData> tabs = [
+      TabData(
+          text: 'Tab 1',
+          leading: (context, status) => Icon(Icons.star, size: 16)),
+      TabData(text: 'Tab 2'),
+      TabData(text: 'Tab 3')
+    ];
+    TabbedView tabbedView = TabbedView(controller: TabbedViewController(tabs));
+```
+
+![](https://caduandrade.github.io/tabbed_view/tab_leading_v1.png)
 
 ### Draggable tab builder
 
