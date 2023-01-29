@@ -1,3 +1,7 @@
+## 1.17.0
+
+* Removing deprecated constructor usage
+
 ## 1.16.0
 
 * Tab leading widget

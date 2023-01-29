@@ -1,4 +1,5 @@
 import 'dart:collection';
+
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 
@@ -102,7 +103,8 @@ class TabbedViewController extends ChangeNotifier {
 
   void _validateIndex(int tabIndex) {
     if (tabIndex < 0 || tabIndex >= _tabs.length) {
-      throw IndexError(tabIndex, _tabs, 'tabIndex');
+      throw IndexError.withLength(tabIndex, _tabs.length,
+          indexable: _tabs, name: 'tabIndex');
     }
   }
 
