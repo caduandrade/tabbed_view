@@ -1,6 +1,6 @@
-## 1.17.0
+## 1.16.0+1
 
-* Removing deprecated constructor usage
+* Removing the use of deprecated constructor.
 
 ## 1.16.0
 
