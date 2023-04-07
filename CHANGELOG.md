@@ -1,3 +1,8 @@
+## 1.17.0
+
+* `TabbedViewController`
+  * Adding `setTabs` method.
+
 ## 1.16.0+1
 
 * Removing the use of deprecated constructor.

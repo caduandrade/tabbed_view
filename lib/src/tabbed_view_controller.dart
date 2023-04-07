@@ -51,6 +51,20 @@ class TabbedViewController extends ChangeNotifier {
     _afterIncTabs();
   }
 
+  /// Replaces all tabs.
+  void setTabs(Iterable<TabData> iterable) {
+    for (TabData tab in _tabs) {
+      tab.removeListener(notifyListeners);
+    }
+    _tabs.clear();
+    _selectedIndex = null;
+    _tabs.addAll(iterable);
+    for (TabData tab in iterable) {
+      tab.addListener(notifyListeners);
+    }
+    _afterIncTabs();
+  }
+
   /// Adds multiple [TabData].
   void addTabs(Iterable<TabData> iterable) {
     _tabs.addAll(iterable);
