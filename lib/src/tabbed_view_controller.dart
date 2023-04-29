@@ -3,6 +3,9 @@ import 'dart:collection';
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 
+/// Event that will be triggered when the tab is reorder.
+typedef OnReorder = void Function(int oldIndex, int newIndex);
+
 /// The [TabbedView] controller.
 ///
 /// Stores tabs and selection tab index.
@@ -11,11 +14,11 @@ import 'package:tabbed_view/src/tab_data.dart';
 ///
 /// Remember to dispose of the [TabbedView] when it is no longer needed. This will ensure we discard any resources used by the object.
 class TabbedViewController extends ChangeNotifier {
-  factory TabbedViewController(List<TabData> tabs) {
-    return TabbedViewController._(tabs);
+  factory TabbedViewController(List<TabData> tabs, {OnReorder? onReorder}) {
+    return TabbedViewController._(tabs, onReorder);
   }
 
-  TabbedViewController._(this._tabs) {
+  TabbedViewController._(this._tabs, this.onReorder) {
     if (_tabs.length > 0) {
       _selectedIndex = 0;
     }
@@ -27,6 +30,8 @@ class TabbedViewController extends ChangeNotifier {
   final List<TabData> _tabs;
 
   int? _selectedIndex;
+
+  final OnReorder? onReorder;
 
   UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
 
@@ -40,6 +45,39 @@ class TabbedViewController extends ChangeNotifier {
     }
     _selectedIndex = tabIndex;
     notifyListeners();
+  }
+
+  /// Gets the selected tab.
+  TabData? get selectedTab =>
+      _selectedIndex != null ? _tabs[_selectedIndex!] : null;
+
+  /// Reorders a tab.
+  void reorderTab(int oldIndex, int newIndex) {
+    if (_tabs.isEmpty) {
+      throw ArgumentError('There are no tabs.');
+    }
+    if (oldIndex < 0 || oldIndex >= _tabs.length) {
+      throw ArgumentError('Index out of range.', 'oldIndex');
+    }
+    if (newIndex < 0 || newIndex >= _tabs.length) {
+      throw ArgumentError('Index out of range.', 'newIndex');
+    }
+    if (oldIndex != newIndex) {
+      TabData? selectedTab;
+      if (_selectedIndex != null) {
+        selectedTab = _tabs[_selectedIndex!];
+      }
+
+      TabData tab = _tabs.removeAt(oldIndex);
+      _tabs.insert(newIndex, tab);
+      if (selectedTab != null) {
+        _selectedIndex = _tabs.indexOf(selectedTab);
+      }
+      notifyListeners();
+      if (onReorder != null) {
+        onReorder!(oldIndex, newIndex);
+      }
+    }
   }
 
   /// Inserts [TabData] at position [index] in the [tabs].
