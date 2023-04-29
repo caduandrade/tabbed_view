@@ -1,7 +1,11 @@
 ## 1.17.0
 
 * `TabbedViewController`
-  * Adding `setTabs` method.
+  * New methods
+    * `setTabs`
+    * `reorderTab`
+    * `selectedTab`
+* New callback: `OnReorder` 
 
 ## 1.16.0+1
 
