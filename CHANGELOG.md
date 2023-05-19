@@ -19,7 +19,7 @@
 * `TabbedView`
   * The `draggableTabBuilder` has been replaced by `onDraggableBuild`
     * Automatic creation of a `Draggable<TabData>`
-* Minimum sdk version required: 2.14.0
+* Minimum sdk version required: 2.19.0
 
 ### Migration custom drag feedback
 
