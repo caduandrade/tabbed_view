@@ -21,7 +21,7 @@
     * Automatic creation of a `Draggable<TabData>`
 * Minimum sdk version required: 2.19.0
 
-### Migration custom drag feedback
+### Migrating custom drag feedback
 
 From:
 ```dart
