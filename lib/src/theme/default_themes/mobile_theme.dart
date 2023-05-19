@@ -97,6 +97,8 @@ class MobileTheme {
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonPadding: const EdgeInsets.all(2),
         decoration: BoxDecoration(border: border),
+        draggingDecoration:
+            BoxDecoration(border: Border.all(color: borderColor, width: 1)),
         innerBottomBorder:
             BorderSide(color: Colors.transparent, width: borderHeight),
         highlightedStatus: TabStatusThemeData(

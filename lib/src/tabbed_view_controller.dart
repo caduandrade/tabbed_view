@@ -14,26 +14,36 @@ typedef OnReorder = void Function(int oldIndex, int newIndex);
 ///
 /// Remember to dispose of the [TabbedView] when it is no longer needed. This will ensure we discard any resources used by the object.
 class TabbedViewController extends ChangeNotifier {
-  factory TabbedViewController(List<TabData> tabs, {OnReorder? onReorder}) {
-    return TabbedViewController._(tabs, onReorder);
+  factory TabbedViewController(List<TabData> tabs,
+      {OnReorder? onReorder, bool reorderEnable = true}) {
+    return TabbedViewController._(tabs, onReorder, reorderEnable);
   }
 
-  TabbedViewController._(this._tabs, this.onReorder) {
+  TabbedViewController._(this._tabs, this.onReorder, this._reorderEnable) {
     if (_tabs.length > 0) {
       _selectedIndex = 0;
     }
     for (TabData tab in _tabs) {
       tab.addListener(notifyListeners);
     }
+    _updateIndexes(false);
   }
 
   final List<TabData> _tabs;
+  UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
 
   int? _selectedIndex;
 
   final OnReorder? onReorder;
 
-  UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
+  bool _reorderEnable;
+  bool get reorderEnable => _reorderEnable;
+  set reorderEnable(bool value) {
+    if (_reorderEnable != value) {
+      _reorderEnable = value;
+      notifyListeners();
+    }
+  }
 
   /// The selected tab index
   int? get selectedIndex => _selectedIndex;
@@ -53,6 +63,9 @@ class TabbedViewController extends ChangeNotifier {
 
   /// Reorders a tab.
   void reorderTab(int oldIndex, int newIndex) {
+    if (!reorderEnable) {
+      return;
+    }
     if (_tabs.isEmpty) {
       throw ArgumentError('There are no tabs.');
     }
@@ -62,21 +75,31 @@ class TabbedViewController extends ChangeNotifier {
     if (newIndex < 0 || newIndex >= _tabs.length) {
       throw ArgumentError('Index out of range.', 'newIndex');
     }
-    if (oldIndex != newIndex) {
-      TabData? selectedTab;
-      if (_selectedIndex != null) {
-        selectedTab = _tabs[_selectedIndex!];
-      }
+    if (oldIndex == newIndex) {
+      return;
+    }
+    if (oldIndex == newIndex - 1) {
+      return;
+    }
 
-      TabData tab = _tabs.removeAt(oldIndex);
-      _tabs.insert(newIndex, tab);
-      if (selectedTab != null) {
-        _selectedIndex = _tabs.indexOf(selectedTab);
-      }
-      notifyListeners();
-      if (onReorder != null) {
-        onReorder!(oldIndex, newIndex);
-      }
+    TabData? selectedTab;
+    if (_selectedIndex != null) {
+      selectedTab = _tabs[_selectedIndex!];
+    }
+
+    TabData tabToReorder = _tabs.removeAt(oldIndex);
+    if (oldIndex > newIndex) {
+      _tabs.insert(newIndex, tabToReorder);
+    } else {
+      _tabs.insert(newIndex - 1, tabToReorder);
+    }
+    _updateIndexes(false);
+    if (selectedTab != null) {
+      _selectedIndex = _tabs.indexOf(selectedTab);
+    }
+    notifyListeners();
+    if (onReorder != null) {
+      onReorder!(oldIndex, newIndex);
     }
   }
 
@@ -86,6 +109,7 @@ class TabbedViewController extends ChangeNotifier {
   void insertTab(int index, TabData tab) {
     _tabs.insert(index, tab);
     tab.addListener(notifyListeners);
+    _updateIndexes(false);
     _afterIncTabs();
   }
 
@@ -94,13 +118,10 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in _tabs) {
       tab.removeListener(notifyListeners);
     }
+    _updateIndexes(true);
     _tabs.clear();
     _selectedIndex = null;
-    _tabs.addAll(iterable);
-    for (TabData tab in iterable) {
-      tab.addListener(notifyListeners);
-    }
-    _afterIncTabs();
+    addTabs(iterable);
   }
 
   /// Adds multiple [TabData].
@@ -109,6 +130,7 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in iterable) {
       tab.addListener(notifyListeners);
     }
+    _updateIndexes(false);
     _afterIncTabs();
   }
 
@@ -116,6 +138,7 @@ class TabbedViewController extends ChangeNotifier {
   void addTab(TabData tab) {
     _tabs.add(tab);
     tab.addListener(notifyListeners);
+    tab._setIndex(_tabs.length - 1);
     _afterIncTabs();
   }
 
@@ -133,6 +156,8 @@ class TabbedViewController extends ChangeNotifier {
     _validateIndex(tabIndex);
     TabData tabData = _tabs.removeAt(tabIndex);
     tabData.removeListener(notifyListeners);
+    tabData._setIndex(-1);
+    _updateIndexes(false);
     if (_tabs.isEmpty) {
       _selectedIndex = null;
     } else if (_selectedIndex != null &&
@@ -148,6 +173,7 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in _tabs) {
       tab.removeListener(notifyListeners);
     }
+    _updateIndexes(true);
     _tabs.clear();
     _selectedIndex = null;
     notifyListeners();
@@ -163,5 +189,23 @@ class TabbedViewController extends ChangeNotifier {
   /// Gets a tab given an index.
   TabData getTabByIndex(int index) {
     return _tabs[index];
+  }
+
+  void _updateIndexes(bool clear) {
+    for (int i = 0; i < _tabs.length; i++) {
+      TabData tab = _tabs[i];
+      tab._setIndex(clear ? -1 : i);
+    }
+  }
+}
+
+mixin TabIndex {
+  int _index = -1;
+
+  /// The current index in the controller.
+  int get index => _index;
+
+  void _setIndex(int newIndex) {
+    _index = newIndex;
   }
 }

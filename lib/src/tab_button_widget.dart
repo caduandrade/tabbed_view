@@ -1,13 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_button.dart';
-import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 
 /// Widget for tab buttons. Used for any tab button such as the close button.
 class TabButtonWidget extends StatefulWidget {
   TabButtonWidget(
-      {required this.data,
+      {required this.provider,
       required this.button,
       required this.enabled,
       required this.iconSize,
@@ -19,7 +19,7 @@ class TabButtonWidget extends StatefulWidget {
       this.hoverBackground,
       this.disabledBackground});
 
-  final TabbedViewData data;
+  final TabbedViewProvider provider;
   final TabButton button;
   final double iconSize;
   final Color normalColor;
@@ -86,14 +86,14 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
     VoidCallback? onPressed = widget.button.onPressed;
     if (widget.button.menuBuilder != null) {
       onPressed = () {
-        if (widget.data.menuItems.isEmpty) {
+        if (widget.provider.menuItems.isEmpty) {
           List<TabbedViewMenuItem> menuItems =
               widget.button.menuBuilder!(context);
           if (menuItems.isNotEmpty) {
-            widget.data.menuItemsUpdater(menuItems);
+            widget.provider.menuItemsUpdater(menuItems);
           }
         } else {
-          widget.data.menuItemsUpdater([]);
+          widget.provider.menuItemsUpdater([]);
         }
       };
     }

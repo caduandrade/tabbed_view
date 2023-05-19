@@ -20,3 +20,4 @@ export 'src/tab_button.dart';
 export 'src/icon_provider.dart';
 export 'src/tab_status.dart';
 export 'src/tab_leading_builder.dart';
+export 'src/draggable_config.dart';

@@ -1,11 +1,59 @@
 ## 1.17.0
 
+* Tab reordering
 * `TabbedViewController`
   * New methods
     * `setTabs`
     * `reorderTab`
     * `selectedTab`
+  * New attribute: `reorderEnable`
 * New callback: `OnReorder` 
+* `TabThemeData`
+  * New attributes
+    * `draggingDecoration`
+    * `draggingOpacity`
+* `TabData`
+  * New attribute: `draggable`
+* New class: `DraggableConfig`
+* New typedef: `OnDraggableBuild`
+* `TabbedView`
+  * The `draggableTabBuilder` has been replaced by `onDraggableBuild`
+    * Automatic creation of a `Draggable<TabData>`
+* Minimum sdk version required: 2.14.0
+
+### Migration custom drag feedback
+
+From:
+```dart
+    TabbedView tabbedView = TabbedView(
+        controller: _controller,
+        draggableTabBuilder: (int tabIndex, TabData tab, Widget tabWidget) {
+          return Draggable<String>(
+              child: tabWidget,
+              feedback: Material(
+                  child: Container(
+                      child: Text(tab.text),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(border: Border.all()))),
+              data: tab.text,
+              dragAnchorStrategy: (Draggable<Object> draggable,
+                  BuildContext context, Offset position) {
+                return Offset.zero;
+              });
+        });
+```
+To:
+```dart
+    TabbedView tabbedView = TabbedView(
+        controller: _controller,
+        onDraggableBuild: (int tabIndex, TabData tabData) {
+          return DraggableConfig(
+              feedback: Container(
+                  child: Text(tabData.text),
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(border: Border.all())));
+        });
+```
 
 ## 1.16.0+1
 

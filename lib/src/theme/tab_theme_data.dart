@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/icon_provider.dart';
+import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
@@ -21,6 +22,8 @@ class TabThemeData {
       this.buttonPadding,
       double buttonsGap = 0,
       this.decoration,
+      this.draggingDecoration,
+      this.draggingOpacity = 0.3,
       this.innerBottomBorder,
       this.innerTopBorder,
       this.textStyle = const TextStyle(fontSize: 13),
@@ -61,6 +64,11 @@ class TabThemeData {
   /// The decoration to paint behind the tab.
   BoxDecoration? decoration;
 
+  /// The decoration to paint behind the dragging tab.
+  BoxDecoration? draggingDecoration;
+
+  double draggingOpacity;
+
   BorderSide? innerBottomBorder;
   BorderSide? innerTopBorder;
 
@@ -98,6 +106,18 @@ class TabThemeData {
     _buttonsGap = value >= 0 ? value : 0;
   }
 
+  /// Gets the theme of a tab according to its status.
+  TabStatusThemeData getTabThemeFor(TabStatus status) {
+    switch (status) {
+      case TabStatus.normal:
+        return TabStatusThemeData.empty;
+      case TabStatus.selected:
+        return selectedStatus;
+      case TabStatus.highlighted:
+        return highlightedStatus;
+    }
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -108,6 +128,8 @@ class TabThemeData {
           margin == other.margin &&
           verticalAlignment == other.verticalAlignment &&
           decoration == other.decoration &&
+          draggingDecoration == other.draggingDecoration &&
+          draggingOpacity == other.draggingOpacity &&
           innerBottomBorder == other.innerBottomBorder &&
           innerTopBorder == other.innerTopBorder &&
           textStyle == other.textStyle &&
@@ -132,6 +154,8 @@ class TabThemeData {
       margin.hashCode ^
       verticalAlignment.hashCode ^
       decoration.hashCode ^
+      draggingDecoration.hashCode ^
+      draggingOpacity.hashCode ^
       innerBottomBorder.hashCode ^
       innerTopBorder.hashCode ^
       textStyle.hashCode ^

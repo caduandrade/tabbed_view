@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:tabbed_view/src/draggable_config.dart';
 import 'package:tabbed_view/src/flow_layout.dart';
+import 'package:tabbed_view/src/internal/tab_drag_feedback_widget.dart';
+import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tab_status.dart';
-import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -19,20 +20,20 @@ class TabWidget extends StatelessWidget {
   const TabWidget(
       {required this.index,
       required this.status,
-      required this.data,
+      required this.provider,
       required this.updateHighlightedIndex});
 
   final int index;
   final TabStatus status;
-  final TabbedViewData data;
+  final TabbedViewProvider provider;
   final UpdateHighlightedIndex updateHighlightedIndex;
 
   @override
   Widget build(BuildContext context) {
-    TabData tab = data.controller.tabs[index];
+    TabData tab = provider.controller.tabs[index];
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
     TabThemeData tabTheme = theme.tab;
-    TabStatusThemeData statusTheme = _getTabThemeFor(tabTheme, status);
+    TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
 
     List<Widget> textAndButtons = _textAndButtons(context, tabTheme);
 
@@ -64,7 +65,7 @@ class TabWidget extends StatelessWidget {
       margin = statusTheme.margin;
     }
 
-    Container tabContainer = Container(
+    Widget tabWidget = Container(
         child: Container(
             child: textAndButtonsContainer,
             padding: padding,
@@ -74,31 +75,94 @@ class TabWidget extends StatelessWidget {
         decoration: decoration,
         margin: margin);
 
-    GestureDetector gestureDetector = GestureDetector(
-        onTap: () => _onSelect(context, index), child: tabContainer);
-
     MouseCursor cursor = MouseCursor.defer;
-    if (status != TabStatus.selected) {
+    if (provider.draggingTabIndex == null && status == TabStatus.selected) {
       cursor = SystemMouseCursors.click;
     }
-    MouseRegion mouseRegion = MouseRegion(
+
+    tabWidget = MouseRegion(
         cursor: cursor,
         onHover: (details) => updateHighlightedIndex(index),
         onExit: (details) => updateHighlightedIndex(null),
-        child: gestureDetector);
+        child: provider.draggingTabIndex == null
+            ? GestureDetector(
+                onTap: () => _onSelect(context, index), child: tabWidget)
+            : tabWidget);
 
-    if (data.draggableTabBuilder != null) {
-      return data.draggableTabBuilder!(index, tab, mouseRegion);
+    if (tab.draggable) {
+      DraggableConfig draggableConfig = DraggableConfig.defaultConfig;
+      if (provider.onDraggableBuild != null) {
+        draggableConfig = provider.onDraggableBuild!(index, tab);
+      }
+
+      Widget feedback = draggableConfig.feedback != null
+          ? draggableConfig.feedback!
+          : TabDragFeedbackWidget(tab: tab, tabTheme: tabTheme);
+
+      tabWidget = Draggable<TabData>(
+          child: tabWidget,
+          feedback: Material(child: feedback),
+          data: tab,
+          feedbackOffset: draggableConfig.feedbackOffset,
+          dragAnchorStrategy: draggableConfig.dragAnchorStrategy,
+          onDragStarted: () {
+            provider.onTabDrag(index);
+            if (draggableConfig.onDragStarted != null) {
+              draggableConfig.onDragStarted!();
+            }
+          },
+          onDragUpdate: (details) {
+            if (draggableConfig.onDragUpdate != null) {
+              draggableConfig.onDragUpdate!(details);
+            }
+          },
+          onDraggableCanceled: (velocity, offset) {
+            if (draggableConfig.onDraggableCanceled != null) {
+              draggableConfig.onDraggableCanceled!(velocity, offset);
+            }
+          },
+          onDragEnd: (details) {
+            provider.onTabDrag(null);
+            if (draggableConfig.onDragEnd != null) {
+              draggableConfig.onDragEnd!(details);
+            }
+          },
+          onDragCompleted: () {
+            if (draggableConfig.onDragCompleted != null) {
+              draggableConfig.onDragCompleted!();
+            }
+          });
+
+      tabWidget = Opacity(
+          child: tabWidget,
+          opacity: provider.draggingTabIndex != index
+              ? 1
+              : tabTheme.draggingOpacity);
     }
-    return mouseRegion;
+
+    if (provider.controller.reorderEnable) {
+      return DragTarget<TabData>(
+        builder: (
+          BuildContext context,
+          List<dynamic> accepted,
+          List<dynamic> rejected,
+        ) {
+          return tabWidget;
+        },
+        onAccept: (TabData tabData) {
+          provider.controller.reorderTab(tabData.index, tab.index);
+        },
+      );
+    }
+    return tabWidget;
   }
 
   /// Builds a list with title text and buttons.
   List<Widget> _textAndButtons(BuildContext context, TabThemeData tabTheme) {
     List<Widget> textAndButtons = [];
 
-    TabData tab = data.controller.tabs[index];
-    TabStatusThemeData statusTheme = _getTabThemeFor(tabTheme, status);
+    TabData tab = provider.controller.tabs[index];
+    TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
 
     Color normalColor = statusTheme.normalButtonColor != null
         ? statusTheme.normalButtonColor!
@@ -130,8 +194,9 @@ class TabWidget extends StatelessWidget {
       }
     }
 
-    bool buttonsEnabled = data.selectToEnableButtons == false ||
-        (data.selectToEnableButtons && status == TabStatus.selected);
+    final bool buttonsEnabled = provider.draggingTabIndex == null &&
+        (provider.selectToEnableButtons == false ||
+            (provider.selectToEnableButtons && status == TabStatus.selected));
     bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
     EdgeInsets? padding;
     if (tab.closable || hasButtons && tabTheme.buttonsOffset > 0) {
@@ -159,7 +224,7 @@ class TabWidget extends StatelessWidget {
         TabButton button = tab.buttons![i];
         textAndButtons.add(Container(
             child: TabButtonWidget(
-                data: data,
+                provider: provider,
                 button: button,
                 enabled: buttonsEnabled,
                 normalColor: normalColor,
@@ -183,11 +248,11 @@ class TabWidget extends StatelessWidget {
       TabButton closeButton = TabButton(
           icon: tabTheme.closeIcon,
           onPressed: () => _onClose(context, index),
-          toolTip: data.closeButtonTooltip);
+          toolTip: provider.closeButtonTooltip);
 
       textAndButtons.add(Container(
           child: TabButtonWidget(
-              data: data,
+              provider: provider,
               button: closeButton,
               enabled: buttonsEnabled,
               normalColor: normalColor,
@@ -205,30 +270,19 @@ class TabWidget extends StatelessWidget {
   }
 
   void _onClose(BuildContext context, int index) {
-    if (data.tabCloseInterceptor == null || data.tabCloseInterceptor!(index)) {
-      TabData tabData = data.controller.removeTab(index);
-      if (data.onTabClose != null) {
-        data.onTabClose!(index, tabData);
+    if (provider.tabCloseInterceptor == null ||
+        provider.tabCloseInterceptor!(index)) {
+      TabData tabData = provider.controller.removeTab(index);
+      if (provider.onTabClose != null) {
+        provider.onTabClose!(index, tabData);
       }
     }
   }
 
   void _onSelect(BuildContext context, int newTabIndex) {
-    if (data.tabSelectInterceptor == null ||
-        data.tabSelectInterceptor!(newTabIndex)) {
-      data.controller.selectedIndex = newTabIndex;
-    }
-  }
-
-  /// Gets the theme of a tab according to its status.
-  TabStatusThemeData _getTabThemeFor(TabThemeData tabTheme, TabStatus status) {
-    switch (status) {
-      case TabStatus.normal:
-        return TabStatusThemeData.empty;
-      case TabStatus.selected:
-        return tabTheme.selectedStatus;
-      case TabStatus.highlighted:
-        return tabTheme.highlightedStatus;
+    if (provider.tabSelectInterceptor == null ||
+        provider.tabSelectInterceptor!(newTabIndex)) {
+      provider.controller.selectedIndex = newTabIndex;
     }
   }
 }

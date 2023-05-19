@@ -2,18 +2,18 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/content_area.dart';
+import 'package:tabbed_view/src/draggable_config.dart';
+import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
-import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/tabs_area.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 
-/// Defines a draggable builder for each tab.
-typedef DraggableTabBuilder = Draggable Function(
-    int tabIndex, TabData tab, Widget tabWidget);
+/// Defines the configuration of a [Draggable] in its construction.
+typedef OnDraggableBuild = DraggableConfig Function(int tabIndex, TabData tab);
 
 /// Tabs area buttons builder
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
@@ -51,8 +51,8 @@ class TabbedView extends StatefulWidget {
       this.contentClip = true,
       this.closeButtonTooltip,
       this.tabsAreaButtonsBuilder,
-      this.draggableTabBuilder,
-      this.tabsAreaVisible});
+      this.tabsAreaVisible,
+      this.onDraggableBuild});
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -64,8 +64,8 @@ class TabbedView extends StatefulWidget {
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
   final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
-  final DraggableTabBuilder? draggableTabBuilder;
   final bool? tabsAreaVisible;
+  final OnDraggableBuild? onDraggableBuild;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewState();
@@ -75,6 +75,7 @@ class TabbedView extends StatefulWidget {
 class _TabbedViewState extends State<TabbedView> {
   int? _lastSelectedIndex;
   List<TabbedViewMenuItem> _menuItems = [];
+  int? _draggingTabIndex;
 
   @override
   void initState() {
@@ -97,7 +98,7 @@ class _TabbedViewState extends State<TabbedView> {
   Widget build(BuildContext context) {
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
 
-    TabbedViewData data = TabbedViewData(
+    TabbedViewProvider provider = TabbedViewProvider(
         controller: widget.controller,
         contentBuilder: widget.contentBuilder,
         onTabClose: widget.onTabClose,
@@ -108,22 +109,30 @@ class _TabbedViewState extends State<TabbedView> {
         selectToEnableButtons: widget.selectToEnableButtons,
         closeButtonTooltip: widget.closeButtonTooltip,
         tabsAreaButtonsBuilder: widget.tabsAreaButtonsBuilder,
-        draggableTabBuilder: widget.draggableTabBuilder,
+        onDraggableBuild: widget.onDraggableBuild,
         menuItemsUpdater: _setMenuItems,
-        menuItems: _menuItems);
+        menuItems: _menuItems,
+        onTabDrag: _onTabDrag,
+        draggingTabIndex: _draggingTabIndex);
 
     final bool tabsAreaVisible =
         widget.tabsAreaVisible ?? theme.tabsArea.visible;
     List<LayoutId> children = [];
     if (tabsAreaVisible) {
-      Widget tabArea = TabsArea(data: data);
+      Widget tabArea = TabsArea(provider: provider);
       children.add(LayoutId(id: 1, child: tabArea));
     }
     ContentArea contentArea =
-        ContentArea(data: data, tabsAreaVisible: tabsAreaVisible);
+        ContentArea(provider: provider, tabsAreaVisible: tabsAreaVisible);
     children.add(LayoutId(id: 2, child: contentArea));
     return CustomMultiChildLayout(
         children: children, delegate: _TabbedViewLayout());
+  }
+
+  void _onTabDrag(int? tabIndex) {
+    setState(() {
+      _draggingTabIndex = tabIndex;
+    });
   }
 
   /// Set a new menu items.

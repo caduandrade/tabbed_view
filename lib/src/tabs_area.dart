@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/flow_layout.dart';
+import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tab_widget.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
-import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/tabs_area_layout.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -16,9 +16,9 @@ import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {
-  const TabsArea({required this.data});
+  const TabsArea({required this.provider});
 
-  final TabbedViewData data;
+  final TabbedViewProvider provider;
 
   @override
   State<StatefulWidget> createState() => _TabsAreaState();
@@ -32,7 +32,7 @@ class _TabsAreaState extends State<TabsArea> {
 
   @override
   Widget build(BuildContext context) {
-    TabbedViewController controller = widget.data.controller;
+    TabbedViewController controller = widget.provider.controller;
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
     TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
     List<Widget> children = [];
@@ -41,7 +41,7 @@ class _TabsAreaState extends State<TabsArea> {
       children.add(TabWidget(
           index: index,
           status: status,
-          data: widget.data,
+          provider: widget.provider,
           updateHighlightedIndex: _updateHighlightedIndex));
     }
     Widget tabsAreaLayout = TabsAreaLayout(
@@ -69,9 +69,9 @@ class _TabsAreaState extends State<TabsArea> {
     Widget buttonsArea;
 
     List<TabButton> buttons = [];
-    if (widget.data.tabsAreaButtonsBuilder != null) {
-      buttons = widget.data.tabsAreaButtonsBuilder!(
-          context, widget.data.controller.tabs.length);
+    if (widget.provider.tabsAreaButtonsBuilder != null) {
+      buttons = widget.provider.tabsAreaButtonsBuilder!(
+          context, widget.provider.controller.tabs.length);
     }
 
     if (hiddenTabs.hasHiddenTabs) {
@@ -90,7 +90,7 @@ class _TabsAreaState extends State<TabsArea> {
         TabButton tabButton = buttons[i];
         children.add(Container(
             child: TabButtonWidget(
-                data: widget.data,
+                provider: widget.provider,
                 button: tabButton,
                 enabled: true,
                 normalColor: tabsAreaTheme.normalButtonColor,
@@ -132,17 +132,17 @@ class _TabsAreaState extends State<TabsArea> {
     List<TabbedViewMenuItem> list = [];
     hiddenTabs.indexes.sort();
     for (int index in hiddenTabs.indexes) {
-      TabData tab = widget.data.controller.tabs[index];
+      TabData tab = widget.provider.controller.tabs[index];
       list.add(TabbedViewMenuItem(
           text: tab.text,
-          onSelection: () => widget.data.controller.selectedIndex = index));
+          onSelection: () => widget.provider.controller.selectedIndex = index));
     }
     return list;
   }
 
   /// Gets the status of the tab for a given index.
   TabStatus _getStatusFor(int tabIndex) {
-    TabbedViewController controller = widget.data.controller;
+    TabbedViewController controller = widget.provider.controller;
     if (controller.tabs.isEmpty || tabIndex >= controller.tabs.length) {
       throw Exception('Invalid tab index: $tabIndex');
     }

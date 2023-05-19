@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tabbed_view/src/tabbed_view_data.dart';
+import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/theme/menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Widget for menu.
 class TabbedViewMenuWidget extends StatefulWidget {
-  const TabbedViewMenuWidget({required this.data});
+  const TabbedViewMenuWidget({required this.provider});
 
-  final TabbedViewData data;
+  final TabbedViewProvider provider;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewMenuWidgetState();
@@ -22,9 +22,9 @@ class _TabbedViewMenuWidgetState extends State<TabbedViewMenuWidget> {
     TabbedViewMenuThemeData menuTheme = theme.menu;
     bool hasDivider =
         menuTheme.dividerThickness > 0 && menuTheme.dividerColor != null;
-    int itemCount = widget.data.menuItems.length;
+    int itemCount = widget.provider.menuItems.length;
     if (hasDivider) {
-      itemCount += widget.data.menuItems.length - 1;
+      itemCount += widget.provider.menuItems.length - 1;
     }
     ListView list = ListView.builder(
         itemCount: itemCount,
@@ -42,15 +42,15 @@ class _TabbedViewMenuWidgetState extends State<TabbedViewMenuWidget> {
           return InkWell(
               child: Container(
                   padding: menuTheme.menuItemPadding,
-                  child: Text(widget.data.menuItems[itemIndex].text,
+                  child: Text(widget.provider.menuItems[itemIndex].text,
                       overflow: menuTheme.ellipsisOverflowText
                           ? TextOverflow.ellipsis
                           : null)),
               hoverColor: menuTheme.hoverColor,
               onTap: () {
-                widget.data.menuItemsUpdater([]);
+                widget.provider.menuItemsUpdater([]);
                 Function? onSelection =
-                    widget.data.menuItems[itemIndex].onSelection;
+                    widget.provider.menuItems[itemIndex].onSelection;
                 if (onSelection != null) {
                   onSelection();
                 }

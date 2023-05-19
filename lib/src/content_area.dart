@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
-import 'package:tabbed_view/src/tabbed_view_data.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_widget.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -13,14 +13,14 @@ import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 /// Container widget for the tab content and menu.
 class ContentArea extends StatelessWidget {
-  ContentArea({required this.tabsAreaVisible, required this.data});
+  ContentArea({required this.tabsAreaVisible, required this.provider});
 
   final bool tabsAreaVisible;
-  final TabbedViewData data;
+  final TabbedViewProvider provider;
 
   @override
   Widget build(BuildContext context) {
-    TabbedViewController controller = data.controller;
+    TabbedViewController controller = provider.controller;
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
     ContentAreaThemeData contentAreaTheme = theme.contentArea;
 
@@ -34,8 +34,8 @@ class ContentArea extends StatelessWidget {
             controller.selectedIndex != null && i == controller.selectedIndex;
         if (tab.keepAlive || selectedTab) {
           Widget? child;
-          if (data.contentBuilder != null) {
-            child = data.contentBuilder!(context, i);
+          if (provider.contentBuilder != null) {
+            child = provider.contentBuilder!(context, i);
           } else {
             child = tab.content;
           }
@@ -52,18 +52,18 @@ class ContentArea extends StatelessWidget {
 
       NotificationListenerCallback<SizeChangedLayoutNotification>?
           onSizeNotification;
-      if (data.menuItems.isNotEmpty) {
-        children.add(Positioned.fill(child: _Glass(theme.menu.blur, data)));
+      if (provider.menuItems.isNotEmpty) {
+        children.add(Positioned.fill(child: _Glass(theme.menu.blur, provider)));
         children.add(Positioned(
             child: LimitedBox(
                 maxWidth: math.min(theme.menu.maxWidth, constraints.maxWidth),
-                child: TabbedViewMenuWidget(data: data)),
+                child: TabbedViewMenuWidget(provider: provider)),
             right: 0,
             top: 0,
             bottom: 0));
         onSizeNotification = (n) {
           scheduleMicrotask(() {
-            data.menuItemsUpdater([]);
+            provider.menuItemsUpdater([]);
           });
           return true;
         };
@@ -77,7 +77,7 @@ class ContentArea extends StatelessWidget {
               ? contentAreaTheme.decoration
               : contentAreaTheme.decorationNoTabsArea);
     });
-    if (data.contentClip) {
+    if (provider.contentClip) {
       return ClipRect(child: layoutBuilder);
     }
     return layoutBuilder;
@@ -85,10 +85,10 @@ class ContentArea extends StatelessWidget {
 }
 
 class _Glass extends StatelessWidget {
-  _Glass(this.blur, this.data);
+  _Glass(this.blur, this.provider);
 
   final bool blur;
-  final TabbedViewData data;
+  final TabbedViewProvider provider;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +100,6 @@ class _Glass extends StatelessWidget {
     }
     return ClipRect(
         child: GestureDetector(
-            child: child, onTap: () => data.menuItemsUpdater([])));
+            child: child, onTap: () => provider.menuItemsUpdater([])));
   }
 }

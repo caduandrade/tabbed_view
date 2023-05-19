@@ -94,6 +94,9 @@ class ClassicTheme {
         decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(color: borderColor, width: 1)),
+        draggingDecoration: BoxDecoration(
+            color: backgroundColor,
+            border: Border.all(color: borderColor, width: 1)),
         highlightedStatus: TabStatusThemeData(
             decoration: BoxDecoration(
                 color: highlightedColor,
