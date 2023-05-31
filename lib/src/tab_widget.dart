@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/draggable_config.dart';
 import 'package:tabbed_view/src/flow_layout.dart';
+import 'package:tabbed_view/src/internal/drop_tab_widget.dart';
 import 'package:tabbed_view/src/internal/tab_drag_feedback_widget.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_button.dart';
@@ -117,17 +118,18 @@ class TabWidget extends StatelessWidget {
             }
           },
           onDraggableCanceled: (velocity, offset) {
+            provider.onTabDrag(null);
             if (draggableConfig.onDraggableCanceled != null) {
               draggableConfig.onDraggableCanceled!(velocity, offset);
             }
           },
           onDragEnd: (details) {
-            provider.onTabDrag(null);
             if (draggableConfig.onDragEnd != null) {
               draggableConfig.onDragEnd!(details);
             }
           },
           onDragCompleted: () {
+            provider.onTabDrag(null);
             if (draggableConfig.onDragCompleted != null) {
               draggableConfig.onDragCompleted!();
             }
@@ -140,19 +142,10 @@ class TabWidget extends StatelessWidget {
               : tabTheme.draggingOpacity);
     }
 
-    if (provider.controller.reorderEnable) {
-      return DragTarget<TabData>(
-        builder: (
-          BuildContext context,
-          List<dynamic> accepted,
-          List<dynamic> rejected,
-        ) {
-          return tabWidget;
-        },
-        onAccept: (TabData tabData) {
-          provider.controller.reorderTab(tabData.index, tab.index);
-        },
-      );
+    if (provider.controller.reorderEnable &&
+        provider.draggingTabIndex != tab.index) {
+      return DropTabWidget(
+          provider: provider, newIndex: tab.index, child: tabWidget);
     }
     return tabWidget;
   }

@@ -1,3 +1,7 @@
+## 1.18.0
+
+* Highlighting the tab's drop position.
+
 ## 1.17.0
 
 * Tab reordering
