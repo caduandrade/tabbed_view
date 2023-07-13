@@ -273,22 +273,41 @@ It allows creating the contents of the tab dynamically during the selection even
       Widget tabContent = Center(child: Text('Content $i'));
       tabs.add(TabData(text: 'Tab $i', content: tabContent));
     }
+    _controller = TabbedViewController(tabs);
+```
+
+```dart
     TabbedView tabbedView = TabbedView(
-        controller: TabbedViewController(tabs),
-        draggableTabBuilder: (int tabIndex, TabData tab, Widget tabWidget) {
-          return Draggable<String>(
-              child: tabWidget,
-              feedback: Material(
-                  child: Container(
-                      child: Text(tab.text),
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(border: Border.all()))),
-              data: tab.text,
-              dragAnchorStrategy: (Draggable<Object> draggable,
-                  BuildContext context, Offset position) {
-                return Offset.zero;
-              });
+        controller: _controller,
+        onDraggableBuild: (int tabIndex, TabData tabData) {
+          return DraggableConfig(
+              feedback: Container(
+                  child: Text(tabData.text),
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(border: Border.all())));
         });
+
+    DragTarget<TabData> dragTarget = DragTarget(
+      builder: (
+        BuildContext context,
+        List<dynamic> accepted,
+        List<dynamic> rejected,
+      ) {
+        return Container(
+          padding: EdgeInsets.all(8),
+          color: Colors.yellow[100],
+          child: Center(
+              child: ListTile(
+                  title: Text('Drop here'),
+                  subtitle: Text('Last dropped tab: ${_acceptedData ?? ''}'))),
+        );
+      },
+      onAccept: (TabData data) {
+        setState(() {
+          _acceptedData = data.text;
+        });
+      },
+    );
 ```
 
 ### Keep alive
