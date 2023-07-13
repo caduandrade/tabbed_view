@@ -1,4 +1,4 @@
-# Tabbed view (1.16.0)
+# Tabbed view (1.17.0)
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
