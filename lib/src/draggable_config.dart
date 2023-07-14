@@ -12,7 +12,8 @@ class DraggableConfig {
       this.onDragUpdate,
       this.onDraggableCanceled,
       this.onDragEnd,
-      this.onDragCompleted});
+      this.onDragCompleted,
+      this.canDrag = true});
 
   static const DraggableConfig defaultConfig = DraggableConfig();
 
@@ -80,4 +81,6 @@ class DraggableConfig {
   /// This function will only be called while this widget is still mounted to
   /// the tree (i.e. [State.mounted] is true).
   final DragEndCallback? onDragEnd;
+
+  final bool canDrag;
 }

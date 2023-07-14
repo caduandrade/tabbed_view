@@ -1,6 +1,15 @@
 ## 1.18.0
 
 * Highlighting the tab's drop position.
+* Allow dragging to reorder tabs to the last position.
+* Allow dragging tabs between different `TabbedView` instances.
+
+### Changes
+
+* `OnDraggableBuild`
+  * From: `(int tabIndex, TabData tabData)`
+  * To: `(TabbedViewController controller, int tabIndex, TabData tabData)`
+* `Draggable` will always be `DraggableData` type: `Draggable<DraggableData>`
 
 ## 1.17.0
 
@@ -23,6 +32,8 @@
 * `TabbedView`
   * The `draggableTabBuilder` has been replaced by `onDraggableBuild`
     * Automatic creation of a `Draggable<TabData>`
+* `TabData`
+  * The `uniqueKey` attribute has been renamed to `key`.
 * Minimum sdk version required: 2.19.0
 
 ### Migrating custom drag feedback

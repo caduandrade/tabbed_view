@@ -44,7 +44,7 @@ class ContentArea extends StatelessWidget {
             child = Offstage(offstage: !selectedTab, child: child);
           }
           children.add(Positioned.fill(
-              key: tab.uniqueKey,
+              key: tab.key,
               child:
                   Container(child: child, padding: contentAreaTheme.padding)));
         }

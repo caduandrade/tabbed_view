@@ -14,12 +14,9 @@ typedef OnReorder = void Function(int oldIndex, int newIndex);
 ///
 /// Remember to dispose of the [TabbedView] when it is no longer needed. This will ensure we discard any resources used by the object.
 class TabbedViewController extends ChangeNotifier {
-  factory TabbedViewController(List<TabData> tabs,
-      {OnReorder? onReorder, bool reorderEnable = true}) {
-    return TabbedViewController._(tabs, onReorder, reorderEnable);
-  }
-
-  TabbedViewController._(this._tabs, this.onReorder, this._reorderEnable) {
+  TabbedViewController(this._tabs,
+      {this.onReorder, this.data, bool reorderEnable = true})
+      : this._reorderEnable = reorderEnable {
     if (_tabs.length > 0) {
       _selectedIndex = 0;
     }
@@ -31,6 +28,8 @@ class TabbedViewController extends ChangeNotifier {
 
   final List<TabData> _tabs;
   UnmodifiableListView<TabData> get tabs => UnmodifiableListView(_tabs);
+
+  final dynamic data;
 
   int? _selectedIndex;
 
@@ -72,9 +71,11 @@ class TabbedViewController extends ChangeNotifier {
     if (oldIndex < 0 || oldIndex >= _tabs.length) {
       throw ArgumentError('Index out of range.', 'oldIndex');
     }
-    if (newIndex < 0 || newIndex >= _tabs.length) {
-      throw ArgumentError('Index out of range.', 'newIndex');
+    if (newIndex < 0) {
+      newIndex = 0;
     }
+    final bool append = newIndex >= _tabs.length;
+
     if (oldIndex == newIndex) {
       return;
     }
@@ -88,7 +89,10 @@ class TabbedViewController extends ChangeNotifier {
     }
 
     TabData tabToReorder = _tabs.removeAt(oldIndex);
-    if (oldIndex > newIndex) {
+    if (append) {
+      _tabs.add(tabToReorder);
+      newIndex = _tabs.length - 1;
+    } else if (oldIndex > newIndex) {
       _tabs.insert(newIndex, tabToReorder);
     } else {
       _tabs.insert(newIndex - 1, tabToReorder);
@@ -102,6 +106,8 @@ class TabbedViewController extends ChangeNotifier {
       onReorder!(oldIndex, newIndex);
     }
   }
+
+  int get length => _tabs.length;
 
   /// Inserts [TabData] at position [index] in the [tabs].
   ///

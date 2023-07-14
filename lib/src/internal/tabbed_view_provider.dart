@@ -3,6 +3,9 @@ import 'package:meta/meta.dart';
 import 'package:tabbed_view/src/tabbed_view.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
+import 'package:tabbed_view/src/typedefs/on_before_drop_accept.dart';
+import 'package:tabbed_view/src/typedefs/on_draggable_build.dart';
+import 'package:tabbed_view/src/typedefs/can_drop.dart';
 
 /// Propagates parameters to internal widgets.
 @internal
@@ -22,7 +25,9 @@ class TabbedViewProvider {
       required this.menuItemsUpdater,
       required this.onTabDrag,
       required this.draggingTabIndex,
-      required this.onDraggableBuild});
+      required this.onDraggableBuild,
+      required this.canDrop,
+      required this.onBeforeDropAccept});
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -39,6 +44,8 @@ class TabbedViewProvider {
   final OnTabDrag onTabDrag;
   final int? draggingTabIndex;
   final OnDraggableBuild? onDraggableBuild;
+  final CanDrop? canDrop;
+  final OnBeforeDropAccept? onBeforeDropAccept;
 }
 
 /// Updater for menu items

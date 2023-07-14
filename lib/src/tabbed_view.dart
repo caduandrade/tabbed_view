@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/content_area.dart';
-import 'package:tabbed_view/src/draggable_config.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_data.dart';
@@ -11,9 +10,9 @@ import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/tabs_area.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
-
-/// Defines the configuration of a [Draggable] in its construction.
-typedef OnDraggableBuild = DraggableConfig Function(int tabIndex, TabData tab);
+import 'package:tabbed_view/src/typedefs/on_before_drop_accept.dart';
+import 'package:tabbed_view/src/typedefs/on_draggable_build.dart';
+import 'package:tabbed_view/src/typedefs/can_drop.dart';
 
 /// Tabs area buttons builder
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
@@ -52,7 +51,9 @@ class TabbedView extends StatefulWidget {
       this.closeButtonTooltip,
       this.tabsAreaButtonsBuilder,
       this.tabsAreaVisible,
-      this.onDraggableBuild});
+      this.onDraggableBuild,
+      this.canDrop,
+      this.onBeforeDropAccept});
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -66,6 +67,8 @@ class TabbedView extends StatefulWidget {
   final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
   final bool? tabsAreaVisible;
   final OnDraggableBuild? onDraggableBuild;
+  final CanDrop? canDrop;
+  final OnBeforeDropAccept? onBeforeDropAccept;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewState();
@@ -113,7 +116,9 @@ class _TabbedViewState extends State<TabbedView> {
         menuItemsUpdater: _setMenuItems,
         menuItems: _menuItems,
         onTabDrag: _onTabDrag,
-        draggingTabIndex: _draggingTabIndex);
+        draggingTabIndex: _draggingTabIndex,
+        canDrop: widget.canDrop,
+        onBeforeDropAccept: widget.onBeforeDropAccept);
 
     final bool tabsAreaVisible =
         widget.tabsAreaVisible ?? theme.tabsArea.visible;
@@ -130,9 +135,11 @@ class _TabbedViewState extends State<TabbedView> {
   }
 
   void _onTabDrag(int? tabIndex) {
-    setState(() {
-      _draggingTabIndex = tabIndex;
-    });
+    if (mounted) {
+      setState(() {
+        _draggingTabIndex = tabIndex;
+      });
+    }
   }
 
   /// Set a new menu items.

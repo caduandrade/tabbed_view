@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/draggable_config.dart';
 import 'package:tabbed_view/src/flow_layout.dart';
-import 'package:tabbed_view/src/internal/drop_tab_widget.dart';
-import 'package:tabbed_view/src/internal/tab_drag_feedback_widget.dart';
+import 'package:tabbed_view/src/draggable_data.dart';
+import 'package:tabbed_view/src/internal/tabs_area/drop_tab_widget.dart';
+import 'package:tabbed_view/src/internal/tabs_area/tab_drag_feedback_widget.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_button_widget.dart';
@@ -93,53 +94,56 @@ class TabWidget extends StatelessWidget {
     if (tab.draggable) {
       DraggableConfig draggableConfig = DraggableConfig.defaultConfig;
       if (provider.onDraggableBuild != null) {
-        draggableConfig = provider.onDraggableBuild!(index, tab);
+        draggableConfig =
+            provider.onDraggableBuild!(provider.controller, index, tab);
       }
 
-      Widget feedback = draggableConfig.feedback != null
-          ? draggableConfig.feedback!
-          : TabDragFeedbackWidget(tab: tab, tabTheme: tabTheme);
+      if (draggableConfig.canDrag) {
+        Widget feedback = draggableConfig.feedback != null
+            ? draggableConfig.feedback!
+            : TabDragFeedbackWidget(tab: tab, tabTheme: tabTheme);
 
-      tabWidget = Draggable<TabData>(
-          child: tabWidget,
-          feedback: Material(child: feedback),
-          data: tab,
-          feedbackOffset: draggableConfig.feedbackOffset,
-          dragAnchorStrategy: draggableConfig.dragAnchorStrategy,
-          onDragStarted: () {
-            provider.onTabDrag(index);
-            if (draggableConfig.onDragStarted != null) {
-              draggableConfig.onDragStarted!();
-            }
-          },
-          onDragUpdate: (details) {
-            if (draggableConfig.onDragUpdate != null) {
-              draggableConfig.onDragUpdate!(details);
-            }
-          },
-          onDraggableCanceled: (velocity, offset) {
-            provider.onTabDrag(null);
-            if (draggableConfig.onDraggableCanceled != null) {
-              draggableConfig.onDraggableCanceled!(velocity, offset);
-            }
-          },
-          onDragEnd: (details) {
-            if (draggableConfig.onDragEnd != null) {
-              draggableConfig.onDragEnd!(details);
-            }
-          },
-          onDragCompleted: () {
-            provider.onTabDrag(null);
-            if (draggableConfig.onDragCompleted != null) {
-              draggableConfig.onDragCompleted!();
-            }
-          });
+        tabWidget = Draggable<DraggableData>(
+            child: tabWidget,
+            feedback: Material(child: feedback),
+            data: DraggableData(provider.controller, tab),
+            feedbackOffset: draggableConfig.feedbackOffset,
+            dragAnchorStrategy: draggableConfig.dragAnchorStrategy,
+            onDragStarted: () {
+              provider.onTabDrag(index);
+              if (draggableConfig.onDragStarted != null) {
+                draggableConfig.onDragStarted!();
+              }
+            },
+            onDragUpdate: (details) {
+              if (draggableConfig.onDragUpdate != null) {
+                draggableConfig.onDragUpdate!(details);
+              }
+            },
+            onDraggableCanceled: (velocity, offset) {
+              provider.onTabDrag(null);
+              if (draggableConfig.onDraggableCanceled != null) {
+                draggableConfig.onDraggableCanceled!(velocity, offset);
+              }
+            },
+            onDragEnd: (details) {
+              if (draggableConfig.onDragEnd != null) {
+                draggableConfig.onDragEnd!(details);
+              }
+            },
+            onDragCompleted: () {
+              provider.onTabDrag(null);
+              if (draggableConfig.onDragCompleted != null) {
+                draggableConfig.onDragCompleted!();
+              }
+            });
 
-      tabWidget = Opacity(
-          child: tabWidget,
-          opacity: provider.draggingTabIndex != index
-              ? 1
-              : tabTheme.draggingOpacity);
+        tabWidget = Opacity(
+            child: tabWidget,
+            opacity: provider.draggingTabIndex != index
+                ? 1
+                : tabTheme.draggingOpacity);
+      }
     }
 
     if (provider.controller.reorderEnable &&
