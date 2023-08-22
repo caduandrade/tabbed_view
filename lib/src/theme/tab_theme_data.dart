@@ -8,43 +8,39 @@ import 'package:tabbed_view/src/theme/vertical_alignment.dart';
 
 /// Theme for tab.
 class TabThemeData {
-  TabThemeData(
-      {IconProvider? closeIcon,
-      this.normalButtonColor = Colors.black,
-      this.hoverButtonColor = Colors.black,
-      this.disabledButtonColor = Colors.black12,
-      this.normalButtonBackground,
-      this.hoverButtonBackground,
-      this.disabledButtonBackground,
-      double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
-      this.verticalAlignment = VerticalAlignment.center,
-      double buttonsOffset = 0,
-      this.buttonPadding,
-      double buttonsGap = 0,
-      this.decoration,
-      this.draggingDecoration,
-      this.draggingOpacity = 0.3,
-      this.innerBottomBorder,
-      this.innerTopBorder,
-      this.textStyle = const TextStyle(fontSize: 13),
-      this.padding,
-      this.paddingWithoutButton,
-      this.margin,
-      TabStatusThemeData? selectedStatus,
-      TabStatusThemeData? highlightedStatus,
-      TabStatusThemeData? disabledStatus})
-      : this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
+  TabThemeData({
+    IconProvider? closeIcon,
+    this.normalButtonColor = Colors.black,
+    this.hoverButtonColor = Colors.black,
+    this.disabledButtonColor = Colors.black12,
+    this.normalButtonBackground,
+    this.hoverButtonBackground,
+    this.disabledButtonBackground,
+    double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
+    this.verticalAlignment = VerticalAlignment.center,
+    double buttonsOffset = 0,
+    this.buttonPadding,
+    double buttonsGap = 0,
+    this.decoration,
+    this.draggingDecoration,
+    this.draggingOpacity = 0.3,
+    this.innerBottomBorder,
+    this.innerTopBorder,
+    this.textStyle = const TextStyle(fontSize: 13),
+    this.padding,
+    this.paddingWithoutButton,
+    this.margin,
+    TabStatusThemeData? selectedStatus,
+    TabStatusThemeData? highlightedStatus,
+    TabStatusThemeData? disabledStatus,
+    this.maxWidth,
+    this.minWidth,
+  })  : this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
-        this.buttonIconSize =
-            TabbedViewThemeConstants.normalize(buttonIconSize),
-        this.closeIcon = closeIcon == null
-            ? IconProvider.path(TabbedViewIcons.close)
-            : closeIcon,
-        this.selectedStatus =
-            selectedStatus != null ? selectedStatus : TabStatusThemeData(),
-        this.highlightedStatus = highlightedStatus != null
-            ? highlightedStatus
-            : TabStatusThemeData();
+        this.buttonIconSize = TabbedViewThemeConstants.normalize(buttonIconSize),
+        this.closeIcon = closeIcon == null ? IconProvider.path(TabbedViewIcons.close) : closeIcon,
+        this.selectedStatus = selectedStatus != null ? selectedStatus : TabStatusThemeData(),
+        this.highlightedStatus = highlightedStatus != null ? highlightedStatus : TabStatusThemeData();
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
   /// placed inside this padding.
@@ -87,6 +83,10 @@ class TabThemeData {
 
   TabStatusThemeData selectedStatus;
   TabStatusThemeData highlightedStatus;
+
+  /// tab max/min width
+  double? maxWidth;
+  double? minWidth;
 
   double _buttonsOffset;
 
@@ -145,7 +145,9 @@ class TabThemeData {
           highlightedStatus == other.highlightedStatus &&
           _buttonsOffset == other._buttonsOffset &&
           buttonPadding == other.buttonPadding &&
-          _buttonsGap == other._buttonsGap;
+          _buttonsGap == other._buttonsGap &&
+          maxWidth == other.maxWidth &&
+          minWidth == other.minWidth;
 
   @override
   int get hashCode =>
@@ -171,5 +173,7 @@ class TabThemeData {
       highlightedStatus.hashCode ^
       _buttonsOffset.hashCode ^
       buttonPadding.hashCode ^
-      _buttonsGap.hashCode;
+      _buttonsGap.hashCode ^
+      maxWidth.hashCode ^
+      minWidth.hashCode;
 }

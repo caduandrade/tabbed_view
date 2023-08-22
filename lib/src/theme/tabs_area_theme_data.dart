@@ -3,6 +3,7 @@ import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
@@ -28,6 +29,7 @@ class TabsAreaThemeData {
     this.hoverButtonBackground,
     this.disabledButtonBackground,
     IconProvider? menuIcon,
+    this.addButton,
     this.dropOverPainter,
   })  : _minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         _buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
@@ -75,6 +77,9 @@ class TabsAreaThemeData {
   /// custom drop over painter
   CustomPainter? dropOverPainter;
 
+  /// Icon for the add tab
+  TabButton? addButton;
+
   double _buttonsGap;
 
   double get buttonsGap => _buttonsGap;
@@ -119,7 +124,8 @@ class TabsAreaThemeData {
           _buttonsGap == other._buttonsGap &&
           _buttonsOffset == other._buttonsOffset &&
           buttonPadding == other.buttonPadding &&
-          dropOverPainter == other.dropOverPainter;
+          dropOverPainter == other.dropOverPainter &&
+          addButton == other.addButton;
 
   @override
   int get hashCode =>
@@ -144,5 +150,6 @@ class TabsAreaThemeData {
       _buttonsGap.hashCode ^
       _buttonsOffset.hashCode ^
       buttonPadding.hashCode ^
-      dropOverPainter.hashCode;
+      dropOverPainter.hashCode ^
+      addButton.hashCode;
 }

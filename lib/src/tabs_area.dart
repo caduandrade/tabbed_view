@@ -15,6 +15,7 @@ import 'package:tabbed_view/src/tabs_area_layout.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {
@@ -37,32 +38,65 @@ class _TabsAreaState extends State<TabsArea> {
     TabbedViewController controller = widget.provider.controller;
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
     TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
+    TabThemeData tabTheme = theme.tab;
+
     List<Widget> children = [];
     for (int index = 0; index < controller.tabs.length; index++) {
       TabStatus status = _getStatusFor(index);
-      children.add(TabWidget(
-          index: index,
-          status: status,
-          provider: widget.provider,
-          updateHighlightedIndex: _updateHighlightedIndex));
+      children.add(TabWidget(index: index, status: status, provider: widget.provider, updateHighlightedIndex: _updateHighlightedIndex));
     }
 
-    children.add(
-        TabsAreaCorner(provider: widget.provider, hiddenTabs: _hiddenTabs));
+    bool isAddButton = false;
+    if (tabsAreaTheme.addButton != null) {
+      isAddButton = true;
+      final TabButton tabButton = tabsAreaTheme.addButton!;
+      Widget addButton = DropTabWidget(
+        provider: widget.provider,
+        newIndex: widget.provider.controller.length,
+        child: Container(
+          padding: const EdgeInsets.only(left: DropTabWidget.dropWidth),
+          child: TabButtonWidget(
+            provider: widget.provider,
+            button: tabButton,
+            enabled: widget.provider.draggingTabIndex == null,
+            normalColor: tabsAreaTheme.normalButtonColor,
+            hoverColor: tabsAreaTheme.hoverButtonColor,
+            disabledColor: tabsAreaTheme.disabledButtonColor,
+            normalBackground: tabsAreaTheme.normalButtonBackground,
+            hoverBackground: tabsAreaTheme.hoverButtonBackground,
+            disabledBackground: tabsAreaTheme.disabledButtonBackground,
+            iconSize: tabButton.iconSize != null ? tabButton.iconSize! : tabsAreaTheme.buttonIconSize,
+            themePadding: tabsAreaTheme.buttonPadding,
+          ),
+        ),
+      );
+      children.add(
+        Container(
+          margin: tabTheme.margin,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [addButton],
+          ),
+        ),
+      );
+    }
+
+    children.add(TabsAreaCorner(provider: widget.provider, hiddenTabs: _hiddenTabs));
 
     Widget tabsAreaLayout = TabsAreaLayout(
-        children: children,
-        theme: theme,
-        hiddenTabs: _hiddenTabs,
-        selectedTabIndex: controller.selectedIndex);
+      theme: theme,
+      hiddenTabs: _hiddenTabs,
+      isAddButton: isAddButton,
+      selectedTabIndex: controller.selectedIndex,
+      children: children,
+    );
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
 
     Decoration? decoration;
     if (tabsAreaTheme.color != null || tabsAreaTheme.border != null) {
-      decoration = BoxDecoration(
-          color: tabsAreaTheme.color, border: tabsAreaTheme.border);
+      decoration = BoxDecoration(color: tabsAreaTheme.color, border: tabsAreaTheme.border);
     }
-    return Container(child: tabsAreaLayout, decoration: decoration);
+    return Container(decoration: decoration, child: tabsAreaLayout);
   }
 
   /// Gets the status of the tab for a given index.
@@ -72,8 +106,7 @@ class _TabsAreaState extends State<TabsArea> {
       throw Exception('Invalid tab index: $tabIndex');
     }
 
-    if (controller.selectedIndex != null &&
-        controller.selectedIndex == tabIndex) {
+    if (controller.selectedIndex != null && controller.selectedIndex == tabIndex) {
       return TabStatus.selected;
     } else if (_highlightedIndex != null && _highlightedIndex == tabIndex) {
       return TabStatus.highlighted;
