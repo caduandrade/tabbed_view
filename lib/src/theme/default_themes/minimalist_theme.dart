@@ -10,11 +10,7 @@ import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 /// Predefined minimalist theme builder.
 class MinimalistTheme {
   static TabbedViewThemeData build({required MaterialColor colorSet}) {
-    return TabbedViewThemeData(
-        tabsArea: tabsAreaTheme(colorSet: colorSet),
-        tab: tabTheme(colorSet: colorSet),
-        contentArea: contentAreaTheme(colorSet: colorSet),
-        menu: menuTheme(colorSet: colorSet));
+    return TabbedViewThemeData(tabsArea: tabsAreaTheme(colorSet: colorSet), tab: tabTheme(colorSet: colorSet), contentArea: contentAreaTheme(colorSet: colorSet), menu: menuTheme(colorSet: colorSet));
   }
 
   static TabsAreaThemeData tabsAreaTheme({required MaterialColor colorSet}) {
@@ -43,8 +39,7 @@ class MinimalistTheme {
       disabledButtonColor: colorSet[400]!,
       buttonPadding: const EdgeInsets.all(2),
       hoverButtonBackground: BoxDecoration(color: colorSet[300]!),
-      highlightedStatus:
-          TabStatusThemeData(decoration: BoxDecoration(color: colorSet[300]!)),
+      highlightedStatus: TabStatusThemeData(decoration: BoxDecoration(color: colorSet[300]!)),
       selectedStatus: TabStatusThemeData(
           normalButtonColor: colorSet[50]!,
           hoverButtonColor: colorSet[50]!,
@@ -55,27 +50,22 @@ class MinimalistTheme {
     );
   }
 
-  static ContentAreaThemeData contentAreaTheme(
-      {required MaterialColor colorSet}) {
+  static ContentAreaThemeData contentAreaTheme({required MaterialColor colorSet}) {
     BorderSide borderSide = BorderSide(width: 1, color: colorSet[900]!);
-    BoxDecoration decoration = BoxDecoration(
-        color: colorSet[50]!,
-        border:
-            Border(bottom: borderSide, left: borderSide, right: borderSide));
-    BoxDecoration decorationNoTabsArea = BoxDecoration(
-        color: colorSet[50]!,
-        border: Border.all(width: 1, color: colorSet[900]!));
-    return ContentAreaThemeData(
-        decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
+    BoxDecoration decoration = BoxDecoration(color: colorSet[50]!, border: Border(bottom: borderSide, left: borderSide, right: borderSide));
+    BoxDecoration decorationNoTabsArea = BoxDecoration(color: colorSet[50]!, border: Border.all(width: 1, color: colorSet[900]!));
+    return ContentAreaThemeData(decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
   }
 
   static TabbedViewMenuThemeData menuTheme({required MaterialColor colorSet}) {
     return TabbedViewMenuThemeData(
-        border: Border.all(width: 1, color: colorSet[900]!),
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: colorSet[900]!),
+          color: colorSet[50]!,
+        ),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),
         textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
-        color: colorSet[50]!,
         hoverColor: colorSet[200]!,
         dividerColor: colorSet[400]!,
         dividerThickness: 1);

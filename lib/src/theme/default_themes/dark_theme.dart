@@ -128,7 +128,9 @@ class DarkTheme {
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         margin: EdgeInsets.all(8),
         menuItemPadding: EdgeInsets.all(8),
-        color: color,
+        decoration: BoxDecoration(
+          color: color,
+        ),
         hoverColor: hoverColor,
         dividerColor: dividerColor,
         dividerThickness: 1);
