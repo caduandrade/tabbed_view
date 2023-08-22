@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:tabbed_view/src/draggable_data.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 @internal
 class DropTabWidget extends StatefulWidget {
-  const DropTabWidget(
-      {super.key,
-      required this.provider,
-      required this.newIndex,
-      required this.child});
+  const DropTabWidget({super.key, required this.provider, required this.newIndex, required this.child});
 
   final TabbedViewProvider provider;
   final Widget child;
@@ -34,6 +30,8 @@ class DropTabWidgetState extends State<DropTabWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final TabbedViewThemeData theme = TabbedViewTheme.of(context);
+    final TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
     return DragTarget<DraggableData>(
       builder: (
         BuildContext context,
@@ -41,8 +39,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
         List<dynamic> rejected,
       ) {
         if (_over) {
-          return CustomPaint(
-              foregroundPainter: _CustomPainter(), child: widget.child);
+          return CustomPaint(foregroundPainter: tabsAreaTheme.dropOverPainter ?? _CustomPainter(), child: widget.child);
         }
         return widget.child;
       },
@@ -68,9 +65,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
       },
       onAccept: (DraggableData data) {
         if (widget.provider.onBeforeDropAccept != null) {
-          if (widget.provider.onBeforeDropAccept!(
-                  data, widget.provider.controller) ==
-              false) {
+          if (widget.provider.onBeforeDropAccept!(data, widget.provider.controller) == false) {
             setState(() {
               _over = false;
             });
@@ -78,8 +73,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
           }
         }
         if (widget.provider.controller == data.controller) {
-          widget.provider.controller
-              .reorderTab(data.tabData.index, widget.newIndex);
+          widget.provider.controller.reorderTab(data.tabData.index, widget.newIndex);
         } else {
           data.controller.removeTab(data.tabData.index);
           widget.provider.controller.insertTab(widget.newIndex, data.tabData);
@@ -102,8 +96,7 @@ class _CustomPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = Colors.black.withOpacity(.7)
       ..style = PaintingStyle.fill;
-    canvas.drawRect(
-        Rect.fromLTWH(0, 0, DropTabWidget.dropWidth, size.height), paint);
+    canvas.drawRect(Rect.fromLTWH(0, 0, DropTabWidget.dropWidth, size.height), paint);
   }
 
   @override

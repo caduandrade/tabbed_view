@@ -6,36 +6,34 @@ import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
-  TabsAreaThemeData(
-      {this.visible = true,
-      this.color,
-      this.border,
-      this.initialGap = 0,
-      this.middleGap = 0,
-      double minimalFinalGap = 0,
-      this.gapBottomBorder = BorderSide.none,
-      this.equalHeights = EqualHeights.none,
-      this.buttonsAreaDecoration,
-      this.buttonsAreaPadding,
-      this.buttonPadding,
-      double buttonsGap = 0,
-      double buttonsOffset = 0,
-      double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
-      this.normalButtonColor = Colors.black,
-      this.hoverButtonColor = Colors.black,
-      this.disabledButtonColor = Colors.black12,
-      this.normalButtonBackground,
-      this.hoverButtonBackground,
-      this.disabledButtonBackground,
-      IconProvider? menuIcon})
-      : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
-        this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
-        this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
-        this.buttonIconSize =
-            TabbedViewThemeConstants.normalize(buttonIconSize),
-        this.menuIcon = menuIcon == null
-            ? IconProvider.path(TabbedViewIcons.menu)
-            : menuIcon;
+  TabsAreaThemeData({
+    this.visible = true,
+    this.color,
+    this.border,
+    this.initialGap = 0,
+    this.middleGap = 0,
+    double minimalFinalGap = 0,
+    this.gapBottomBorder = BorderSide.none,
+    this.equalHeights = EqualHeights.none,
+    this.buttonsAreaDecoration,
+    this.buttonsAreaPadding,
+    this.buttonPadding,
+    double buttonsGap = 0,
+    double buttonsOffset = 0,
+    double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
+    this.normalButtonColor = Colors.black,
+    this.hoverButtonColor = Colors.black,
+    this.disabledButtonColor = Colors.black12,
+    this.normalButtonBackground,
+    this.hoverButtonBackground,
+    this.disabledButtonBackground,
+    IconProvider? menuIcon,
+    this.dropOverPainter,
+  })  : _minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
+        _buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
+        _buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
+        buttonIconSize = TabbedViewThemeConstants.normalize(buttonIconSize),
+        menuIcon = menuIcon ?? IconProvider.path(TabbedViewIcons.menu);
 
   bool visible;
 
@@ -73,6 +71,9 @@ class TabsAreaThemeData {
 
   /// Icon for the hidden tabs menu.
   IconProvider menuIcon;
+
+  /// custom drop over painter
+  CustomPainter? dropOverPainter;
 
   double _buttonsGap;
 
@@ -117,7 +118,8 @@ class TabsAreaThemeData {
           menuIcon == other.menuIcon &&
           _buttonsGap == other._buttonsGap &&
           _buttonsOffset == other._buttonsOffset &&
-          buttonPadding == other.buttonPadding;
+          buttonPadding == other.buttonPadding &&
+          dropOverPainter == other.dropOverPainter;
 
   @override
   int get hashCode =>
@@ -141,5 +143,6 @@ class TabsAreaThemeData {
       menuIcon.hashCode ^
       _buttonsGap.hashCode ^
       _buttonsOffset.hashCode ^
-      buttonPadding.hashCode;
+      buttonPadding.hashCode ^
+      dropOverPainter.hashCode;
 }
