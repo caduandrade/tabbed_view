@@ -36,9 +36,9 @@ class TabWidget extends StatelessWidget {
     List<Widget> textAndButtons = _textAndButtons(context, tabTheme);
 
     Widget textAndButtonsContainer = ClipRect(
-        child: FlowLayout(
-      firstChildFlex: true,
-      verticalAlignment: tabTheme.verticalAlignment,
+        child: Row(
+      // firstChildFlex: true,
+      // verticalAlignment: tabTheme.verticalAlignment,
       children: textAndButtons,
     ));
 
@@ -170,7 +170,7 @@ class TabWidget extends StatelessWidget {
       }
     }
 
-    textAndButtons.add(Container(padding: padding, child: Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis)));
+    textAndButtons.add(Expanded(child: Container(padding: padding, child: Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis))));
 
     if (hasButtons) {
       for (int i = 0; i < tab.buttons!.length; i++) {
