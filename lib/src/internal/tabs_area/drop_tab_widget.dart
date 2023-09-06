@@ -69,7 +69,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
       onAccept: (DraggableData data) {
         if (widget.provider.onBeforeDropAccept != null) {
           if (widget.provider.onBeforeDropAccept!(
-                  data, widget.provider.controller) ==
+                  data, widget.provider.controller, widget.newIndex) ==
               false) {
             setState(() {
               _over = false;
