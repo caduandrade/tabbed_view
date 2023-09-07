@@ -27,7 +27,8 @@ class TabsAreaThemeData {
       this.normalButtonBackground,
       this.hoverButtonBackground,
       this.disabledButtonBackground,
-      IconProvider? menuIcon})
+      IconProvider? menuIcon,
+      this.dropColor = const Color.fromARGB(150, 0, 0, 0)})
       : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
@@ -45,6 +46,8 @@ class TabsAreaThemeData {
   double middleGap;
   BorderSide gapBottomBorder;
   EqualHeights equalHeights;
+
+  Color dropColor;
 
   double _minimalFinalGap;
 
@@ -84,14 +87,6 @@ class TabsAreaThemeData {
 
   double _buttonsOffset;
 
-  double get buttonsOffset => _buttonsOffset;
-
-  set buttonsOffset(double value) {
-    _buttonsOffset = value >= 0 ? value : 0;
-  }
-
-  EdgeInsetsGeometry? buttonPadding;
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -104,6 +99,7 @@ class TabsAreaThemeData {
           middleGap == other.middleGap &&
           gapBottomBorder == other.gapBottomBorder &&
           equalHeights == other.equalHeights &&
+          dropColor == other.dropColor &&
           _minimalFinalGap == other._minimalFinalGap &&
           buttonsAreaDecoration == other.buttonsAreaDecoration &&
           buttonsAreaPadding == other.buttonsAreaPadding &&
@@ -128,6 +124,7 @@ class TabsAreaThemeData {
       middleGap.hashCode ^
       gapBottomBorder.hashCode ^
       equalHeights.hashCode ^
+      dropColor.hashCode ^
       _minimalFinalGap.hashCode ^
       buttonsAreaDecoration.hashCode ^
       buttonsAreaPadding.hashCode ^
@@ -142,4 +139,12 @@ class TabsAreaThemeData {
       _buttonsGap.hashCode ^
       _buttonsOffset.hashCode ^
       buttonPadding.hashCode;
+
+  double get buttonsOffset => _buttonsOffset;
+
+  set buttonsOffset(double value) {
+    _buttonsOffset = value >= 0 ? value : 0;
+  }
+
+  EdgeInsetsGeometry? buttonPadding;
 }

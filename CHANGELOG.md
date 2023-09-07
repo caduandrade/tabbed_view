@@ -6,10 +6,12 @@
 
 ### Changes
 
-* `OnDraggableBuild`
+* Change in the signature of `OnDraggableBuild`.
   * From: `(int tabIndex, TabData tabData)`
   * To: `(TabbedViewController controller, int tabIndex, TabData tabData)`
 * `Draggable` will always be `DraggableData` type: `Draggable<DraggableData>`
+* `TabsAreaThemeData`
+  * New attribute: `dropColor`.
 
 ## 1.17.0
 
