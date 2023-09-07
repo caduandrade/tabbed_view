@@ -154,9 +154,11 @@ void main() {
       helper = Helper();
       expect(() => helper.controller.reorderTab(-1, 1), indexOutOfRangeError());
       expect(
-          () => helper.controller.reorderTab(1, 100), indexOutOfRangeError());
-      expect(
           () => helper.controller.reorderTab(-1, 100), indexOutOfRangeError());
+
+      helper = Helper();
+      helper.controller.reorderTab(0, 100);
+      helper.test(p0: 'b', p1: 'c', p2: 'd', p3: 'a', selected: 'a');
 
       TabbedViewController controller = TabbedViewController([]);
       expect(() => controller.reorderTab(1, 2), emptyError());
