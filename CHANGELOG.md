@@ -3,6 +3,8 @@
 * Highlighting the tab's drop position.
 * Allow dragging to reorder tabs to the last position.
 * Allow dragging tabs between different `TabbedView` instances.
+* Bugfix
+  * Incorrect state for the index of the highlighted tab after being closed.
 
 ### Changes
 

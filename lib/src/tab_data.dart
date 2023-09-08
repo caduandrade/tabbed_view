@@ -107,4 +107,6 @@ class TabData extends ChangeNotifier with TabIndex {
     _text = value;
     notifyListeners();
   }
+
+  final UniqueKey uniqueKey = UniqueKey();
 }

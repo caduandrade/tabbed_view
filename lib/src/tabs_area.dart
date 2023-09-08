@@ -35,10 +35,12 @@ class _TabsAreaState extends State<TabsArea> {
     for (int index = 0; index < controller.tabs.length; index++) {
       TabStatus status = _getStatusFor(index);
       children.add(TabWidget(
+          key: controller.tabs[index].uniqueKey,
           index: index,
           status: status,
           provider: widget.provider,
-          updateHighlightedIndex: _updateHighlightedIndex));
+          updateHighlightedIndex: _updateHighlightedIndex,
+          onClose: _onTabClose));
     }
 
     children.add(
@@ -81,5 +83,11 @@ class _TabsAreaState extends State<TabsArea> {
         _highlightedIndex = tabIndex;
       });
     }
+  }
+
+  void _onTabClose() {
+    setState(() {
+      _highlightedIndex = null;
+    });
   }
 }
