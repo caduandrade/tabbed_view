@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:tabbed_view/src/flow_layout.dart';
-import 'package:tabbed_view/src/internal/tabs_area/drop_tab_widget.dart';
-import 'package:tabbed_view/src/internal/tabs_area/hidden_tabs.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
+import 'package:tabbed_view/src/internal/tabs_area/hidden_tabs.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tabs_area_corner.dart';
-import 'package:tabbed_view/src/tab_button.dart';
-import 'package:tabbed_view/src/tab_button_widget.dart';
-import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tab_widget.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
-import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/tabs_area_layout.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
-import 'package:tabbed_view/tabbed_view.dart';
+import 'package:tabbed_view/src/theme/tab_theme_data.dart';
+import 'package:tabbed_view/src/tab_button.dart';
+import 'package:tabbed_view/src/tab_button_widget.dart';
+import 'package:tabbed_view/src/internal/tabs_area/drop_tab_widget.dart';
 
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {
@@ -43,7 +40,13 @@ class _TabsAreaState extends State<TabsArea> {
     List<Widget> children = [];
     for (int index = 0; index < controller.tabs.length; index++) {
       TabStatus status = _getStatusFor(index);
-      children.add(TabWidget(index: index, status: status, provider: widget.provider, updateHighlightedIndex: _updateHighlightedIndex));
+      children.add(TabWidget(
+          key: controller.tabs[index].uniqueKey,
+          index: index,
+          status: status,
+          provider: widget.provider,
+          updateHighlightedIndex: _updateHighlightedIndex,
+          onClose: _onTabClose));
     }
 
     bool isAddButton = false;
@@ -120,5 +123,11 @@ class _TabsAreaState extends State<TabsArea> {
         _highlightedIndex = tabIndex;
       });
     }
+  }
+
+  void _onTabClose() {
+    setState(() {
+      _highlightedIndex = null;
+    });
   }
 }

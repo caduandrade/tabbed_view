@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/draggable_config.dart';
-import 'package:tabbed_view/src/flow_layout.dart';
 import 'package:tabbed_view/src/draggable_data.dart';
+import 'package:tabbed_view/src/flow_layout.dart';
+import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/internal/tabs_area/drop_tab_widget.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tab_drag_feedback_widget.dart';
-import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_button_widget.dart';
 import 'package:tabbed_view/src/tab_data.dart';
@@ -19,12 +19,20 @@ typedef UpdateHighlightedIndex = void Function(int? tabIndex);
 
 /// The tab widget. Displays the tab text and its buttons.
 class TabWidget extends StatelessWidget {
-  const TabWidget({super.key, required this.index, required this.status, required this.provider, required this.updateHighlightedIndex});
+  const TabWidget(
+      {required UniqueKey key,
+      required this.index,
+      required this.status,
+      required this.provider,
+      required this.updateHighlightedIndex,
+      required this.onClose})
+      : super(key: key);
 
   final int index;
   final TabStatus status;
   final TabbedViewProvider provider;
   final UpdateHighlightedIndex updateHighlightedIndex;
+  final Function onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +234,9 @@ class TabWidget extends StatelessWidget {
   }
 
   void _onClose(BuildContext context, int index) {
-    if (provider.tabCloseInterceptor == null || provider.tabCloseInterceptor!(index)) {
+    if (provider.tabCloseInterceptor == null ||
+        provider.tabCloseInterceptor!(index)) {
+      onClose();
       TabData tabData = provider.controller.removeTab(index);
       if (provider.onTabClose != null) {
         provider.onTabClose!(index, tabData);

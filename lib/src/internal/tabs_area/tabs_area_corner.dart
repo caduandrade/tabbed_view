@@ -33,13 +33,16 @@ class TabsAreaCorner extends StatelessWidget {
     if (tabsAreaTheme.addButton != null) {
       return areaButtons;
     }
-    return DropTabWidget(
-      provider: provider,
-      newIndex: provider.controller.length,
-      child: Container(
-        padding: const EdgeInsets.only(left: DropTabWidget.dropWidth),
-        child: areaButtons,
-      ),
-    );
+    if(provider.controller.reorderEnable) {
+      return DropTabWidget(
+        provider: provider,
+        newIndex: provider.controller.length,
+        child: Container(
+          padding: const EdgeInsets.only(left: DropTabWidget.dropWidth),
+          child: areaButtons,
+        ),
+      );
+    }
+    return areaButtons;
   }
 }

@@ -29,13 +29,14 @@ class TabsAreaThemeData {
     this.hoverButtonBackground,
     this.disabledButtonBackground,
     IconProvider? menuIcon,
+    this.dropColor = const Color.fromARGB(150, 0, 0, 0),
     this.addButton,
     this.dropOverPainter,
-  })  : _minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
-        _buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
-        _buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
-        buttonIconSize = TabbedViewThemeConstants.normalize(buttonIconSize),
-        menuIcon = menuIcon ?? IconProvider.path(TabbedViewIcons.menu);
+  })  : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
+        this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
+        this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
+        this.buttonIconSize = TabbedViewThemeConstants.normalize(buttonIconSize),
+        this.menuIcon = menuIcon == null ? IconProvider.path(TabbedViewIcons.menu) : menuIcon;
 
   bool visible;
 
@@ -45,6 +46,8 @@ class TabsAreaThemeData {
   double middleGap;
   BorderSide gapBottomBorder;
   EqualHeights equalHeights;
+
+  Color dropColor;
 
   double _minimalFinalGap;
 
@@ -110,6 +113,7 @@ class TabsAreaThemeData {
           middleGap == other.middleGap &&
           gapBottomBorder == other.gapBottomBorder &&
           equalHeights == other.equalHeights &&
+          dropColor == other.dropColor &&
           _minimalFinalGap == other._minimalFinalGap &&
           buttonsAreaDecoration == other.buttonsAreaDecoration &&
           buttonsAreaPadding == other.buttonsAreaPadding &&
@@ -136,6 +140,7 @@ class TabsAreaThemeData {
       middleGap.hashCode ^
       gapBottomBorder.hashCode ^
       equalHeights.hashCode ^
+      dropColor.hashCode ^
       _minimalFinalGap.hashCode ^
       buttonsAreaDecoration.hashCode ^
       buttonsAreaPadding.hashCode ^
@@ -151,5 +156,6 @@ class TabsAreaThemeData {
       _buttonsOffset.hashCode ^
       buttonPadding.hashCode ^
       dropOverPainter.hashCode ^
-      addButton.hashCode;
+      addButton.hashCode ^
+      buttonPadding.hashCode;
 }

@@ -73,7 +73,8 @@ class DarkTheme {
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
         normalButtonColor: normalButtonColor,
         hoverButtonColor: hoverButtonColor,
-        disabledButtonColor: disabledButtonColor);
+        disabledButtonColor: disabledButtonColor,
+        dropColor: Color.fromARGB(150, 255, 255, 255));
   }
 
   static TabThemeData tabTheme(

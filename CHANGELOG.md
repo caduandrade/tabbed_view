@@ -3,13 +3,17 @@
 * Highlighting the tab's drop position.
 * Allow dragging to reorder tabs to the last position.
 * Allow dragging tabs between different `TabbedView` instances.
+* Bugfix
+  * Incorrect state for the index of the highlighted tab after being closed.
 
 ### Changes
 
-* `OnDraggableBuild`
+* Change in the signature of `OnDraggableBuild`.
   * From: `(int tabIndex, TabData tabData)`
   * To: `(TabbedViewController controller, int tabIndex, TabData tabData)`
 * `Draggable` will always be `DraggableData` type: `Draggable<DraggableData>`
+* `TabsAreaThemeData`
+  * New attribute: `dropColor`.
 
 ## 1.17.0
 

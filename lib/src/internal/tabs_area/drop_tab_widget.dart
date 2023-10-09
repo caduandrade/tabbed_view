@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/tabbed_view.dart';
+import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
+import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 @internal
 class DropTabWidget extends StatefulWidget {
@@ -19,6 +21,7 @@ class DropTabWidget extends StatefulWidget {
 
 class DropTabWidgetState extends State<DropTabWidget> {
   bool _over = false;
+  bool _canDrop = false;
 
   @override
   void didUpdateWidget(covariant DropTabWidget oldWidget) {
@@ -30,71 +33,74 @@ class DropTabWidgetState extends State<DropTabWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final TabbedViewThemeData theme = TabbedViewTheme.of(context);
-    final TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
-    return DragTarget<DraggableData>(
-      builder: (
-        BuildContext context,
-        List<dynamic> accepted,
-        List<dynamic> rejected,
-      ) {
-        if (_over) {
-          return CustomPaint(foregroundPainter: tabsAreaTheme.dropOverPainter ?? _CustomPainter(), child: widget.child);
-        }
-        return widget.child;
-      },
-      onMove: (details) {
-        if (_over == false && _canDrop(details.data)) {
-          setState(() {
-            _over = true;
-          });
-        }
-      },
-      onLeave: (data) {
-        if (_over) {
-          setState(() {
-            _over = false;
-          });
-        }
-      },
-      onWillAccept: (data) {
-        if (data != null) {
-          return _canDrop(data);
-        }
-        return false;
-      },
-      onAccept: (DraggableData data) {
-        if (widget.provider.onBeforeDropAccept != null) {
-          if (widget.provider.onBeforeDropAccept!(data, widget.provider.controller) == false) {
+    return MouseRegion(
+        onExit: (e) {
+          if (_over) {
             setState(() {
               _over = false;
+              _canDrop = false;
             });
-            return;
           }
-        }
-        if (widget.provider.controller == data.controller) {
-          widget.provider.controller.reorderTab(data.tabData.index, widget.newIndex);
-        } else {
-          data.controller.removeTab(data.tabData.index);
-          widget.provider.controller.insertTab(widget.newIndex, data.tabData);
-        }
-      },
-    );
-  }
-
-  bool _canDrop(DraggableData source) {
-    if (widget.provider.canDrop == null) {
-      return true;
-    }
-    return widget.provider.canDrop!(source, widget.provider.controller);
+        },
+        child: DragTarget<DraggableData>(
+          builder: (
+            BuildContext context,
+            List<dynamic> accepted,
+            List<dynamic> rejected,
+          ) {
+            if (_over) {
+              TabbedViewThemeData theme = TabbedViewTheme.of(context);
+              return CustomPaint(foregroundPainter: theme.tabsArea.dropOverPainter ?? _CustomPainter(dropColor: theme.tabsArea.dropColor), child: widget.child);
+            }
+            return widget.child;
+          },
+          onMove: (details) {
+            if (_canDrop && _over == false) {
+              setState(() {
+                _over = true;
+              });
+            }
+          },
+          onWillAccept: (data) {
+            if (widget.provider.canDrop == null) {
+              _canDrop = true;
+            } else if (data != null) {
+              _canDrop = widget.provider.canDrop!(data, widget.provider.controller);
+            } else {
+              _canDrop = false;
+            }
+            return _canDrop;
+          },
+          onAccept: (DraggableData data) {
+            if (widget.provider.onBeforeDropAccept != null) {
+              if (widget.provider.onBeforeDropAccept!(data, widget.provider.controller, widget.newIndex) == false) {
+                setState(() {
+                  _over = false;
+                  _canDrop = false;
+                });
+                return;
+              }
+            }
+            if (widget.provider.controller == data.controller) {
+              widget.provider.controller.reorderTab(data.tabData.index, widget.newIndex);
+            } else {
+              data.controller.removeTab(data.tabData.index);
+              widget.provider.controller.insertTab(widget.newIndex, data.tabData);
+            }
+          },
+        ));
   }
 }
 
 class _CustomPainter extends CustomPainter {
+  _CustomPainter({required this.dropColor});
+
+  final Color dropColor;
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Colors.black.withOpacity(.7)
+      ..color = dropColor
       ..style = PaintingStyle.fill;
     canvas.drawRect(Rect.fromLTWH(0, 0, DropTabWidget.dropWidth, size.height), paint);
   }
