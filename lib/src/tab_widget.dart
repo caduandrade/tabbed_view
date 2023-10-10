@@ -19,14 +19,7 @@ typedef UpdateHighlightedIndex = void Function(int? tabIndex);
 
 /// The tab widget. Displays the tab text and its buttons.
 class TabWidget extends StatelessWidget {
-  const TabWidget(
-      {required UniqueKey key,
-      required this.index,
-      required this.status,
-      required this.provider,
-      required this.updateHighlightedIndex,
-      required this.onClose})
-      : super(key: key);
+  const TabWidget({required UniqueKey key, required this.index, required this.status, required this.provider, required this.updateHighlightedIndex, required this.onClose}) : super(key: key);
 
   final int index;
   final TabStatus status;
@@ -41,14 +34,20 @@ class TabWidget extends StatelessWidget {
     TabThemeData tabTheme = theme.tab;
     TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
 
-    List<Widget> textAndButtons = _textAndButtons(context, tabTheme);
+    bool isMinWidthOrMaxWidth = tabTheme.minWidth != null || tabTheme.maxWidth != null;
+
+    List<Widget> textAndButtons = _textAndButtons(context, tabTheme, isMinWidthOrMaxWidth);
 
     Widget textAndButtonsContainer = ClipRect(
-        child: Row(
-      // firstChildFlex: true,
-      // verticalAlignment: tabTheme.verticalAlignment,
-      children: textAndButtons,
-    ));
+        child: isMinWidthOrMaxWidth
+            ? Row(
+                children: textAndButtons,
+              )
+            : FlowLayout(
+                firstChildFlex: true,
+                verticalAlignment: tabTheme.verticalAlignment,
+                children: textAndButtons,
+              ));
 
     BorderSide innerBottomBorder = statusTheme.innerBottomBorder ?? tabTheme.innerBottomBorder ?? BorderSide.none;
     BorderSide innerTopBorder = statusTheme.innerTopBorder ?? tabTheme.innerTopBorder ?? BorderSide.none;
@@ -66,10 +65,12 @@ class TabWidget extends StatelessWidget {
     }
 
     Widget tabWidget = Container(
-      constraints: BoxConstraints(
-        maxWidth: tabTheme.maxWidth ?? double.infinity,
-        minWidth: tabTheme.minWidth ?? 0,
-      ),
+      constraints: tabTheme.minWidth != null || tabTheme.maxWidth != null
+          ? BoxConstraints(
+              maxWidth: tabTheme.maxWidth ?? tabTheme.minWidth ?? double.infinity,
+              minWidth: tabTheme.minWidth ?? 0,
+            )
+          : null,
       decoration: decoration,
       margin: margin,
       child: Container(padding: padding, decoration: BoxDecoration(border: Border(top: innerTopBorder, bottom: innerBottomBorder)), child: textAndButtonsContainer),
@@ -141,7 +142,7 @@ class TabWidget extends StatelessWidget {
   }
 
   /// Builds a list with title text and buttons.
-  List<Widget> _textAndButtons(BuildContext context, TabThemeData tabTheme) {
+  List<Widget> _textAndButtons(BuildContext context, TabThemeData tabTheme, bool isMinWidthOrMaxWidth) {
     List<Widget> textAndButtons = [];
 
     TabData tab = provider.controller.tabs[index];
@@ -178,7 +179,8 @@ class TabWidget extends StatelessWidget {
       }
     }
 
-    textAndButtons.add(Expanded(child: Container(padding: padding, child: Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis))));
+    Widget text = Container(padding: padding, child: Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis));
+    textAndButtons.add(isMinWidthOrMaxWidth ? Expanded(child: text) : text);
 
     if (hasButtons) {
       for (int i = 0; i < tab.buttons!.length; i++) {
@@ -234,8 +236,7 @@ class TabWidget extends StatelessWidget {
   }
 
   void _onClose(BuildContext context, int index) {
-    if (provider.tabCloseInterceptor == null ||
-        provider.tabCloseInterceptor!(index)) {
+    if (provider.tabCloseInterceptor == null || provider.tabCloseInterceptor!(index)) {
       onClose();
       TabData tabData = provider.controller.removeTab(index);
       if (provider.onTabClose != null) {
