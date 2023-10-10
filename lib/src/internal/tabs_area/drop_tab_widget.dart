@@ -7,11 +7,7 @@ import 'package:tabbed_view/src/theme/theme_widget.dart';
 
 @internal
 class DropTabWidget extends StatefulWidget {
-  const DropTabWidget(
-      {super.key,
-      required this.provider,
-      required this.newIndex,
-      required this.child});
+  const DropTabWidget({super.key, required this.provider, required this.newIndex, required this.child});
 
   final TabbedViewProvider provider;
   final Widget child;
@@ -54,10 +50,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
           ) {
             if (_over) {
               TabbedViewThemeData theme = TabbedViewTheme.of(context);
-              return CustomPaint(
-                  foregroundPainter:
-                      _CustomPainter(dropColor: theme.tabsArea.dropColor),
-                  child: widget.child);
+              return CustomPaint(foregroundPainter: theme.tabsArea.dropOverPainter ?? _CustomPainter(dropColor: theme.tabsArea.dropColor), child: widget.child);
             }
             return widget.child;
           },
@@ -72,8 +65,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
             if (widget.provider.canDrop == null) {
               _canDrop = true;
             } else if (data != null) {
-              _canDrop =
-                  widget.provider.canDrop!(data, widget.provider.controller);
+              _canDrop = widget.provider.canDrop!(data, widget.provider.controller);
             } else {
               _canDrop = false;
             }
@@ -81,9 +73,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
           },
           onAccept: (DraggableData data) {
             if (widget.provider.onBeforeDropAccept != null) {
-              if (widget.provider.onBeforeDropAccept!(
-                      data, widget.provider.controller, widget.newIndex) ==
-                  false) {
+              if (widget.provider.onBeforeDropAccept!(data, widget.provider.controller, widget.newIndex) == false) {
                 setState(() {
                   _over = false;
                   _canDrop = false;
@@ -92,12 +82,10 @@ class DropTabWidgetState extends State<DropTabWidget> {
               }
             }
             if (widget.provider.controller == data.controller) {
-              widget.provider.controller
-                  .reorderTab(data.tabData.index, widget.newIndex);
+              widget.provider.controller.reorderTab(data.tabData.index, widget.newIndex);
             } else {
               data.controller.removeTab(data.tabData.index);
-              widget.provider.controller
-                  .insertTab(widget.newIndex, data.tabData);
+              widget.provider.controller.insertTab(widget.newIndex, data.tabData);
             }
           },
         ));
@@ -114,8 +102,7 @@ class _CustomPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = dropColor
       ..style = PaintingStyle.fill;
-    canvas.drawRect(
-        Rect.fromLTWH(0, 0, DropTabWidget.dropWidth, size.height), paint);
+    canvas.drawRect(Rect.fromLTWH(0, 0, DropTabWidget.dropWidth, size.height), paint);
   }
 
   @override

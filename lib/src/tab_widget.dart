@@ -41,30 +41,30 @@ class TabWidget extends StatelessWidget {
     TabThemeData tabTheme = theme.tab;
     TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
 
-    List<Widget> textAndButtons = _textAndButtons(context, tabTheme);
+    bool isMinWidthOrMaxWidth = tabTheme.minWidth != null || tabTheme.maxWidth != null;
+
+    List<Widget> textAndButtons = _textAndButtons(context, tabTheme, isMinWidthOrMaxWidth);
 
     Widget textAndButtonsContainer = ClipRect(
-        child: FlowLayout(
-            children: textAndButtons,
-            firstChildFlex: true,
-            verticalAlignment: tabTheme.verticalAlignment));
+        child: isMinWidthOrMaxWidth
+            ? Row(
+                children: textAndButtons,
+              )
+            : FlowLayout(
+                firstChildFlex: true,
+                verticalAlignment: tabTheme.verticalAlignment,
+                children: textAndButtons,
+              ));
 
-    BorderSide innerBottomBorder = statusTheme.innerBottomBorder ??
-        tabTheme.innerBottomBorder ??
-        BorderSide.none;
-    BorderSide innerTopBorder = statusTheme.innerTopBorder ??
-        tabTheme.innerTopBorder ??
-        BorderSide.none;
+    BorderSide innerBottomBorder = statusTheme.innerBottomBorder ?? tabTheme.innerBottomBorder ?? BorderSide.none;
+    BorderSide innerTopBorder = statusTheme.innerTopBorder ?? tabTheme.innerTopBorder ?? BorderSide.none;
     BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
 
     EdgeInsetsGeometry? padding;
     if (textAndButtons.length == 1) {
-      padding =
-          statusTheme.paddingWithoutButton ?? tabTheme.paddingWithoutButton;
+      padding = statusTheme.paddingWithoutButton ?? tabTheme.paddingWithoutButton;
     }
-    if (padding == null) {
-      padding = statusTheme.padding ?? tabTheme.padding;
-    }
+    padding ??= statusTheme.padding ?? tabTheme.padding;
 
     EdgeInsetsGeometry? margin = tabTheme.margin;
     if (statusTheme.margin != null) {
@@ -72,14 +72,16 @@ class TabWidget extends StatelessWidget {
     }
 
     Widget tabWidget = Container(
-        child: Container(
-            child: textAndButtonsContainer,
-            padding: padding,
-            decoration: BoxDecoration(
-                border:
-                    Border(top: innerTopBorder, bottom: innerBottomBorder))),
-        decoration: decoration,
-        margin: margin);
+      constraints: tabTheme.minWidth != null || tabTheme.maxWidth != null
+          ? BoxConstraints(
+              maxWidth: tabTheme.maxWidth ?? tabTheme.minWidth ?? double.infinity,
+              minWidth: tabTheme.minWidth ?? 0,
+            )
+          : null,
+      decoration: decoration,
+      margin: margin,
+      child: Container(padding: padding, decoration: BoxDecoration(border: Border(top: innerTopBorder, bottom: innerBottomBorder)), child: textAndButtonsContainer),
+    );
 
     MouseCursor cursor = MouseCursor.defer;
     if (provider.draggingTabIndex == null && status == TabStatus.selected) {
@@ -98,17 +100,13 @@ class TabWidget extends StatelessWidget {
     if (tab.draggable) {
       DraggableConfig draggableConfig = DraggableConfig.defaultConfig;
       if (provider.onDraggableBuild != null) {
-        draggableConfig =
-            provider.onDraggableBuild!(provider.controller, index, tab);
+        draggableConfig = provider.onDraggableBuild!(provider.controller, index, tab);
       }
 
       if (draggableConfig.canDrag) {
-        Widget feedback = draggableConfig.feedback != null
-            ? draggableConfig.feedback!
-            : TabDragFeedbackWidget(tab: tab, tabTheme: tabTheme);
+        Widget feedback = draggableConfig.feedback != null ? draggableConfig.feedback! : TabDragFeedbackWidget(tab: tab, tabTheme: tabTheme);
 
         tabWidget = Draggable<DraggableData>(
-            child: tabWidget,
             feedback: Material(child: feedback),
             data: DraggableData(provider.controller, tab),
             feedbackOffset: draggableConfig.feedbackOffset,
@@ -140,51 +138,33 @@ class TabWidget extends StatelessWidget {
               if (draggableConfig.onDragCompleted != null) {
                 draggableConfig.onDragCompleted!();
               }
-            });
+            },
+            child: tabWidget);
 
-        tabWidget = Opacity(
-            child: tabWidget,
-            opacity: provider.draggingTabIndex != index
-                ? 1
-                : tabTheme.draggingOpacity);
+        tabWidget = Opacity(opacity: provider.draggingTabIndex != index ? 1 : tabTheme.draggingOpacity, child: tabWidget);
       }
     }
 
-    if (provider.controller.reorderEnable &&
-        provider.draggingTabIndex != tab.index) {
-      return DropTabWidget(
-          provider: provider, newIndex: tab.index, child: tabWidget);
+    if (provider.controller.reorderEnable && provider.draggingTabIndex != tab.index) {
+      return DropTabWidget(provider: provider, newIndex: tab.index, child: tabWidget);
     }
     return tabWidget;
   }
 
   /// Builds a list with title text and buttons.
-  List<Widget> _textAndButtons(BuildContext context, TabThemeData tabTheme) {
+  List<Widget> _textAndButtons(BuildContext context, TabThemeData tabTheme, bool isMinWidthOrMaxWidth) {
     List<Widget> textAndButtons = [];
 
     TabData tab = provider.controller.tabs[index];
     TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
 
-    Color normalColor = statusTheme.normalButtonColor != null
-        ? statusTheme.normalButtonColor!
-        : tabTheme.normalButtonColor;
-    Color hoverColor = statusTheme.hoverButtonColor != null
-        ? statusTheme.hoverButtonColor!
-        : tabTheme.hoverButtonColor;
-    Color disabledColor = statusTheme.disabledButtonColor != null
-        ? statusTheme.disabledButtonColor!
-        : tabTheme.disabledButtonColor;
+    Color normalColor = statusTheme.normalButtonColor != null ? statusTheme.normalButtonColor! : tabTheme.normalButtonColor;
+    Color hoverColor = statusTheme.hoverButtonColor != null ? statusTheme.hoverButtonColor! : tabTheme.hoverButtonColor;
+    Color disabledColor = statusTheme.disabledButtonColor != null ? statusTheme.disabledButtonColor! : tabTheme.disabledButtonColor;
 
-    BoxDecoration? normalBackground = statusTheme.normalButtonBackground != null
-        ? statusTheme.normalButtonBackground
-        : tabTheme.normalButtonBackground;
-    BoxDecoration? hoverBackground = statusTheme.hoverButtonBackground != null
-        ? statusTheme.hoverButtonBackground
-        : tabTheme.hoverButtonBackground;
-    BoxDecoration? disabledBackground =
-        statusTheme.disabledButtonBackground != null
-            ? statusTheme.disabledButtonBackground
-            : tabTheme.disabledButtonBackground;
+    BoxDecoration? normalBackground = statusTheme.normalButtonBackground ?? tabTheme.normalButtonBackground;
+    BoxDecoration? hoverBackground = statusTheme.hoverButtonBackground ?? tabTheme.hoverButtonBackground;
+    BoxDecoration? disabledBackground = statusTheme.disabledButtonBackground ?? tabTheme.disabledButtonBackground;
 
     TextStyle? textStyle = tabTheme.textStyle;
     if (statusTheme.fontColor != null) {
@@ -195,10 +175,8 @@ class TabWidget extends StatelessWidget {
       }
     }
 
-    final bool buttonsEnabled = provider.draggingTabIndex == null &&
-        (provider.selectToEnableButtons == false ||
-            (provider.selectToEnableButtons && status == TabStatus.selected));
-    bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
+    final bool buttonsEnabled = provider.draggingTabIndex == null && (provider.selectToEnableButtons == false || (provider.selectToEnableButtons && status == TabStatus.selected));
+    bool hasButtons = tab.buttons != null && tab.buttons!.isNotEmpty;
     EdgeInsets? padding;
     if (tab.closable || hasButtons && tabTheme.buttonsOffset > 0) {
       padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
@@ -211,10 +189,8 @@ class TabWidget extends StatelessWidget {
       }
     }
 
-    textAndButtons.add(Container(
-        child:
-            Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis),
-        padding: padding));
+    Widget text = Container(padding: padding, child: Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis));
+    textAndButtons.add(isMinWidthOrMaxWidth ? Expanded(child: text) : text);
 
     if (hasButtons) {
       for (int i = 0; i < tab.buttons!.length; i++) {
@@ -224,6 +200,7 @@ class TabWidget extends StatelessWidget {
         }
         TabButton button = tab.buttons![i];
         textAndButtons.add(Container(
+            padding: padding,
             child: TabButtonWidget(
                 provider: provider,
                 button: button,
@@ -234,11 +211,8 @@ class TabWidget extends StatelessWidget {
                 normalBackground: normalBackground,
                 hoverBackground: hoverBackground,
                 disabledBackground: disabledBackground,
-                iconSize: button.iconSize != null
-                    ? button.iconSize!
-                    : tabTheme.buttonIconSize,
-                themePadding: tabTheme.buttonPadding),
-            padding: padding));
+                iconSize: button.iconSize != null ? button.iconSize! : tabTheme.buttonIconSize,
+                themePadding: tabTheme.buttonPadding)));
       }
     }
     if (tab.closable) {
@@ -246,33 +220,33 @@ class TabWidget extends StatelessWidget {
       if (hasButtons && tabTheme.buttonsGap > 0) {
         padding = EdgeInsets.only(left: tabTheme.buttonsGap);
       }
-      TabButton closeButton = TabButton(
-          icon: tabTheme.closeIcon,
-          onPressed: () => _onClose(context, index),
-          toolTip: provider.closeButtonTooltip);
+      TabButton closeButton = TabButton(icon: tabTheme.closeIcon, onPressed: () => _onClose(context, index), toolTip: provider.closeButtonTooltip);
 
-      textAndButtons.add(Container(
+      textAndButtons.add(
+        Container(
+          padding: padding,
           child: TabButtonWidget(
-              provider: provider,
-              button: closeButton,
-              enabled: buttonsEnabled,
-              normalColor: normalColor,
-              hoverColor: hoverColor,
-              disabledColor: disabledColor,
-              normalBackground: normalBackground,
-              hoverBackground: hoverBackground,
-              disabledBackground: disabledBackground,
-              iconSize: tabTheme.buttonIconSize,
-              themePadding: tabTheme.buttonPadding),
-          padding: padding));
+            provider: provider,
+            button: closeButton,
+            enabled: buttonsEnabled,
+            normalColor: normalColor,
+            hoverColor: hoverColor,
+            disabledColor: disabledColor,
+            normalBackground: normalBackground,
+            hoverBackground: hoverBackground,
+            disabledBackground: disabledBackground,
+            iconSize: tabTheme.buttonIconSize,
+            themePadding: tabTheme.buttonPadding,
+          ),
+        ),
+      );
     }
 
     return textAndButtons;
   }
 
   void _onClose(BuildContext context, int index) {
-    if (provider.tabCloseInterceptor == null ||
-        provider.tabCloseInterceptor!(index)) {
+    if (provider.tabCloseInterceptor == null || provider.tabCloseInterceptor!(index)) {
       onClose();
       TabData tabData = provider.controller.removeTab(index);
       if (provider.onTabClose != null) {
@@ -282,8 +256,7 @@ class TabWidget extends StatelessWidget {
   }
 
   void _onSelect(BuildContext context, int newTabIndex) {
-    if (provider.tabSelectInterceptor == null ||
-        provider.tabSelectInterceptor!(newTabIndex)) {
+    if (provider.tabSelectInterceptor == null || provider.tabSelectInterceptor!(newTabIndex)) {
       provider.controller.selectedIndex = newTabIndex;
     }
   }
