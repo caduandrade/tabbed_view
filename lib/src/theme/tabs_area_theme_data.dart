@@ -7,32 +7,30 @@ import 'package:tabbed_view/tabbed_view.dart';
 
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
-  TabsAreaThemeData({
-    this.visible = true,
-    this.color,
-    this.border,
-    this.initialGap = 0,
-    this.middleGap = 0,
-    double minimalFinalGap = 0,
-    this.gapBottomBorder = BorderSide.none,
-    this.equalHeights = EqualHeights.none,
-    this.buttonsAreaDecoration,
-    this.buttonsAreaPadding,
-    this.buttonPadding,
-    double buttonsGap = 0,
-    double buttonsOffset = 0,
-    double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
-    this.normalButtonColor = Colors.black,
-    this.hoverButtonColor = Colors.black,
-    this.disabledButtonColor = Colors.black12,
-    this.normalButtonBackground,
-    this.hoverButtonBackground,
-    this.disabledButtonBackground,
-    IconProvider? menuIcon,
-    this.dropColor = const Color.fromARGB(150, 0, 0, 0),
-    this.addButton,
-    this.dropOverPainter,
-  })  : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
+  TabsAreaThemeData(
+      {this.visible = true,
+      this.color,
+      this.border,
+      this.initialGap = 0,
+      this.middleGap = 0,
+      double minimalFinalGap = 0,
+      this.gapBottomBorder = BorderSide.none,
+      this.equalHeights = EqualHeights.none,
+      this.buttonsAreaDecoration,
+      this.buttonsAreaPadding,
+      this.buttonPadding,
+      double buttonsGap = 0,
+      double buttonsOffset = 0,
+      double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
+      this.normalButtonColor = Colors.black,
+      this.hoverButtonColor = Colors.black,
+      this.disabledButtonColor = Colors.black12,
+      this.normalButtonBackground,
+      this.hoverButtonBackground,
+      this.disabledButtonBackground,
+      IconProvider? menuIcon,
+      this.dropColor = const Color.fromARGB(150, 0, 0, 0)})
+      : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize = TabbedViewThemeConstants.normalize(buttonIconSize),
@@ -93,14 +91,6 @@ class TabsAreaThemeData {
 
   double _buttonsOffset;
 
-  double get buttonsOffset => _buttonsOffset;
-
-  set buttonsOffset(double value) {
-    _buttonsOffset = value >= 0 ? value : 0;
-  }
-
-  EdgeInsetsGeometry? buttonPadding;
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -158,4 +148,12 @@ class TabsAreaThemeData {
       dropOverPainter.hashCode ^
       addButton.hashCode ^
       buttonPadding.hashCode;
+
+  double get buttonsOffset => _buttonsOffset;
+
+  set buttonsOffset(double value) {
+    _buttonsOffset = value >= 0 ? value : 0;
+  }
+
+  EdgeInsetsGeometry? buttonPadding;
 }

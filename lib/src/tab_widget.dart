@@ -19,7 +19,14 @@ typedef UpdateHighlightedIndex = void Function(int? tabIndex);
 
 /// The tab widget. Displays the tab text and its buttons.
 class TabWidget extends StatelessWidget {
-  const TabWidget({required UniqueKey key, required this.index, required this.status, required this.provider, required this.updateHighlightedIndex, required this.onClose}) : super(key: key);
+  const TabWidget(
+      {required UniqueKey key,
+      required this.index,
+      required this.status,
+      required this.provider,
+      required this.updateHighlightedIndex,
+      required this.onClose})
+      : super(key: key);
 
   final int index;
   final TabStatus status;
@@ -83,9 +90,12 @@ class TabWidget extends StatelessWidget {
 
     tabWidget = MouseRegion(
         cursor: cursor,
-        onHover: (details) => updateHighlightedIndex(index),
-        onExit: (details) => updateHighlightedIndex(null),
-        child: provider.draggingTabIndex == null ? GestureDetector(onTap: () => _onSelect(context, index), child: tabWidget) : tabWidget);
+        onEnter: (event) => updateHighlightedIndex(index),
+        onExit: (event) => updateHighlightedIndex(null),
+        child: provider.draggingTabIndex == null
+            ? GestureDetector(
+                onTap: () => _onSelect(context, index), child: tabWidget)
+            : tabWidget);
 
     if (tab.draggable) {
       DraggableConfig draggableConfig = DraggableConfig.defaultConfig;

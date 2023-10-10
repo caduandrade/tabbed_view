@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:tabbed_view/src/draggable_data.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
-import 'package:tabbed_view/tabbed_view.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 
