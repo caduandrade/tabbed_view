@@ -39,7 +39,9 @@ class ContentArea extends StatelessWidget {
           } else {
             child = tab.content;
           }
-
+          if (child != null) {
+            child = ExcludeFocus(excluding: !selectedTab, child: child);
+          }
           if (tab.keepAlive) {
             child = Offstage(offstage: !selectedTab, child: child);
           }
