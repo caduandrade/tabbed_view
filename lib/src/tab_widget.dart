@@ -198,7 +198,7 @@ class TabWidget extends StatelessWidget {
     final bool buttonsEnabled = provider.draggingTabIndex == null &&
         (provider.selectToEnableButtons == false ||
             (provider.selectToEnableButtons && status == TabStatus.selected));
-    bool hasButtons = tab.buttons != null && tab.buttons!.length > 0;
+    bool hasButtons = tab.buttons != null && tab.buttons!.isNotEmpty;
     EdgeInsets? padding;
     if (tab.closable || hasButtons && tabTheme.buttonsOffset > 0) {
       padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
@@ -212,8 +212,10 @@ class TabWidget extends StatelessWidget {
     }
 
     textAndButtons.add(Container(
-        child:
-            Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis),
+        child: SizedBox(
+            width: tab.textSize,
+            child: Text(tab.text,
+                style: textStyle, overflow: TextOverflow.ellipsis)),
         padding: padding));
 
     if (hasButtons) {

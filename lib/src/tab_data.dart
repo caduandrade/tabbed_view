@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_leading_builder.dart';
@@ -36,6 +38,7 @@ class TabData extends ChangeNotifier with TabIndex {
       Widget? content,
       TabLeadingBuilder? leading,
       bool closable = true,
+      double? textSize,
       this.draggable = true,
       this.keepAlive = false})
       : _value = value,
@@ -44,6 +47,7 @@ class TabData extends ChangeNotifier with TabIndex {
         _closable = closable,
         _content = content,
         _buttons = buttons,
+        _textSize = textSize != null ? math.max(0, textSize) : null,
         key = keepAlive ? GlobalKey() : UniqueKey();
 
   /// Identifies the content of the tab in the tree
@@ -57,8 +61,10 @@ class TabData extends ChangeNotifier with TabIndex {
   dynamic get value => _value;
 
   set value(dynamic value) {
-    _value = value;
-    notifyListeners();
+    if (_value != value) {
+      _value = value;
+      notifyListeners();
+    }
   }
 
   List<TabButton>? _buttons;
@@ -86,8 +92,10 @@ class TabData extends ChangeNotifier with TabIndex {
   Widget? get content => _content;
 
   set content(Widget? content) {
-    _content = content;
-    notifyListeners();
+    if (_content != content) {
+      _content = content;
+      notifyListeners();
+    }
   }
 
   bool _closable;
@@ -95,8 +103,10 @@ class TabData extends ChangeNotifier with TabIndex {
   bool get closable => _closable;
 
   set closable(bool value) {
-    _closable = value;
-    notifyListeners();
+    if (_closable != value) {
+      _closable = value;
+      notifyListeners();
+    }
   }
 
   String _text;
@@ -104,8 +114,24 @@ class TabData extends ChangeNotifier with TabIndex {
   String get text => _text;
 
   set text(String value) {
-    _text = value;
-    notifyListeners();
+    if (_text != value) {
+      _text = value;
+      notifyListeners();
+    }
+  }
+
+  double? _textSize;
+
+  double? get textSize => _textSize;
+
+  set textSize(double? value) {
+    if (value != null) {
+      value = math.max(value, 0);
+    }
+    if (_text != value) {
+      _textSize = value;
+      notifyListeners();
+    }
   }
 
   final UniqueKey uniqueKey = UniqueKey();

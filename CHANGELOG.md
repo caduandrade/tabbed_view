@@ -1,3 +1,7 @@
+## 1.19.0
+
+* Allows you to define a maximum width for the tab text.
+
 ## 1.18.1
 
 * Bugfix

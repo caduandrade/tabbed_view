@@ -98,7 +98,7 @@ class VisibleTabs {
 
   /// Removes the first tab.
   void removeFirst() {
-    if (_tabs.length > 0) {
+    if (_tabs.isNotEmpty) {
       _tabs.removeAt(0);
     }
   }
