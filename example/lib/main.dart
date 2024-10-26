@@ -6,6 +6,8 @@ void main() {
 }
 
 class TabbedViewExample extends StatelessWidget {
+  const TabbedViewExample({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,11 +16,13 @@ class TabbedViewExample extends StatelessWidget {
 }
 
 class TabbedViewExamplePage extends StatefulWidget {
+  const TabbedViewExamplePage({Key? key}) : super(key: key);
+
   @override
-  _TabbedViewExamplePageState createState() => _TabbedViewExamplePageState();
+  TabbedViewExamplePageState createState() => TabbedViewExamplePageState();
 }
 
-class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
+class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
   late TabbedViewController _controller;
 
   @override
@@ -29,19 +33,19 @@ class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
     tabs.add(TabData(
         text: 'Tab 1',
         leading: (context, status) => Icon(Icons.star, size: 16),
-        content: Padding(child: Text('Hello'), padding: EdgeInsets.all(8))));
+        content: Padding(padding: EdgeInsets.all(8), child: Text('Hello'))));
     tabs.add(TabData(
         text: 'Tab 2',
         content:
-            Padding(child: Text('Hello again'), padding: EdgeInsets.all(8))));
+            Padding(padding: EdgeInsets.all(8), child: Text('Hello again'))));
     tabs.add(TabData(
         closable: false,
         text: 'TextField',
         content: Padding(
+            padding: EdgeInsets.all(8),
             child: TextField(
                 decoration: InputDecoration(
-                    isDense: true, border: OutlineInputBorder())),
-            padding: EdgeInsets.all(8)),
+                    isDense: true, border: OutlineInputBorder()))),
         keepAlive: true));
 
     _controller = TabbedViewController(tabs);
@@ -51,7 +55,7 @@ class _TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
   Widget build(BuildContext context) {
     TabbedView tabbedView = TabbedView(controller: _controller);
     Widget w =
-        TabbedViewTheme(child: tabbedView, data: TabbedViewThemeData.mobile());
-    return Scaffold(body: Container(child: w, padding: EdgeInsets.all(32)));
+        TabbedViewTheme(data: TabbedViewThemeData.mobile(), child: tabbedView);
+    return Scaffold(body: Container(padding: EdgeInsets.all(32), child: w));
   }
 }

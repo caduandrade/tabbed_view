@@ -1,3 +1,8 @@
+## 1.18.1
+
+* Bugfix
+  * Fields in hidden tabs continue to receive focus when pressing TAB.
+
 ## 1.18.0
 
 * Highlighting the tab's drop position.

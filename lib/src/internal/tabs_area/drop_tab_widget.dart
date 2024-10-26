@@ -68,18 +68,17 @@ class DropTabWidgetState extends State<DropTabWidget> {
               });
             }
           },
-          onWillAccept: (data) {
+          onWillAcceptWithDetails: (details) {
             if (widget.provider.canDrop == null) {
               _canDrop = true;
-            } else if (data != null) {
-              _canDrop =
-                  widget.provider.canDrop!(data, widget.provider.controller);
             } else {
-              _canDrop = false;
+              _canDrop = widget.provider.canDrop!(
+                  details.data, widget.provider.controller);
             }
             return _canDrop;
           },
-          onAccept: (DraggableData data) {
+          onAcceptWithDetails: (details) {
+            final DraggableData data = details.data;
             if (widget.provider.onBeforeDropAccept != null) {
               if (widget.provider.onBeforeDropAccept!(
                       data, widget.provider.controller, widget.newIndex) ==
