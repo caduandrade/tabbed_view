@@ -128,7 +128,7 @@ class TabData extends ChangeNotifier with TabIndex {
     if (value != null) {
       value = math.max(value, 0);
     }
-    if (_text != value) {
+    if (_textSize != value) {
       _textSize = value;
       notifyListeners();
     }
