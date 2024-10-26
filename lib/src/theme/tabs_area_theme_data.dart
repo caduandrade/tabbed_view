@@ -3,6 +3,7 @@ import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 ///Theme for tabs and buttons area.
 class TabsAreaThemeData {
@@ -32,11 +33,8 @@ class TabsAreaThemeData {
       : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
-        this.buttonIconSize =
-            TabbedViewThemeConstants.normalize(buttonIconSize),
-        this.menuIcon = menuIcon == null
-            ? IconProvider.path(TabbedViewIcons.menu)
-            : menuIcon;
+        this.buttonIconSize = TabbedViewThemeConstants.normalize(buttonIconSize),
+        this.menuIcon = menuIcon == null ? IconProvider.path(TabbedViewIcons.menu) : menuIcon;
 
   bool visible;
 
@@ -77,6 +75,12 @@ class TabsAreaThemeData {
   /// Icon for the hidden tabs menu.
   IconProvider menuIcon;
 
+  /// custom drop over painter
+  CustomPainter? dropOverPainter;
+
+  /// Icon for the add tab
+  TabButton? addButton;
+
   double _buttonsGap;
 
   double get buttonsGap => _buttonsGap;
@@ -113,7 +117,9 @@ class TabsAreaThemeData {
           menuIcon == other.menuIcon &&
           _buttonsGap == other._buttonsGap &&
           _buttonsOffset == other._buttonsOffset &&
-          buttonPadding == other.buttonPadding;
+          buttonPadding == other.buttonPadding &&
+          dropOverPainter == other.dropOverPainter &&
+          addButton == other.addButton;
 
   @override
   int get hashCode =>
@@ -138,6 +144,9 @@ class TabsAreaThemeData {
       menuIcon.hashCode ^
       _buttonsGap.hashCode ^
       _buttonsOffset.hashCode ^
+      buttonPadding.hashCode ^
+      dropOverPainter.hashCode ^
+      addButton.hashCode ^
       buttonPadding.hashCode;
 
   double get buttonsOffset => _buttonsOffset;
