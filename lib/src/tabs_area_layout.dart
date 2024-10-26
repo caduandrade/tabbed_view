@@ -344,7 +344,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     // fill last gap
     if (gapBorderPaint != null) {
       double lastX;
-      if (visibleTabs.length > 0) {
+      if (visibleTabs.isNotEmpty) {
         RenderBox lastTab = visibleTabs.last;
         TabsAreaLayoutParentData tabParentData =
             lastTab.tabsAreaLayoutParentData();
