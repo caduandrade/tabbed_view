@@ -14,31 +14,29 @@ import 'package:tabbed_view/src/typedefs/on_before_drop_accept.dart';
 import 'package:tabbed_view/src/typedefs/on_draggable_build.dart';
 import 'package:tabbed_view/src/typedefs/can_drop.dart';
 
-/// Tabs area buttons builder
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
     BuildContext context, int tabsCount);
 
-/// The event that will be triggered after the tab close.
 typedef OnTabClose = void Function(int tabIndex, TabData tabData);
 
-/// Intercepts a close event to indicates whether the tab can be closed.
 typedef TabCloseInterceptor = bool Function(int tabIndex);
 
-/// Intercepts a select event to indicate whether the tab can be selected.
+typedef TabCloseConfirmationDialogBuilder = Widget Function(
+    BuildContext context, int tabIndex, TabData tabData);
+
 typedef TabSelectInterceptor = bool Function(int newTabIndex);
 
-/// Event that will be triggered when the tab selection is changed.
 typedef OnTabSelection = Function(int? newTabIndex);
 
-/// Widget inspired by the classic Desktop-style tab component.
-///
-/// Supports customizable themes.
-///
-/// Parameters:
-/// * [selectToEnableButtons]: allows buttons to be clicked only if the tab is
-///   selected. The default value is [TRUE].
-/// * [closeButtonTooltip]: optional tooltip for the close button.
 class TabbedView extends StatefulWidget {
+  /// Widget inspired by the classic Desktop-style tab component.
+  ///
+  /// Supports customizable themes.
+  ///
+  /// Parameters:
+  /// * [selectToEnableButtons]: allows buttons to be clicked only if the tab is
+  ///   selected. The default value is [TRUE].
+  /// * [closeButtonTooltip]: optional tooltip for the close button.
   TabbedView(
       {required this.controller,
       this.contentBuilder,
@@ -46,6 +44,7 @@ class TabbedView extends StatefulWidget {
       this.tabCloseInterceptor,
       this.onTabSelection,
       this.tabSelectInterceptor,
+      this.tabCloseConfirmationDialogBuilder,
       this.selectToEnableButtons = true,
       this.contentClip = true,
       this.closeButtonTooltip,
@@ -58,12 +57,31 @@ class TabbedView extends StatefulWidget {
   final TabbedViewController controller;
   final bool contentClip;
   final IndexedWidgetBuilder? contentBuilder;
+
+  /// The event that will be triggered after the tab close.
   final OnTabClose? onTabClose;
+
+  /// Intercepts a close event to indicates whether the tab can be closed.
+  ///
+  /// if [tabCloseConfirmationDialogBuilder] is not null, then thisfunction iscalled after the dialog is dismissed.
   final TabCloseInterceptor? tabCloseInterceptor;
+
+  /// a function that returns a widget that will be displayed as a non-dismissable dialog when attempting to close a tab.
+  ///
+  /// the dialog widget should call `navigator.of(context).pop<bool>()` at some point to exit the dialog and return a response to the tab widget, returning `false` will dissmiss the close action.
+  ///
+  /// asynchrenous workflows can be used inside the dialog widget, but ensure that they are awaited before navigating back.
+  final TabCloseConfirmationDialogBuilder? tabCloseConfirmationDialogBuilder;
+
+  /// Event that will be triggered when the tab selection is changed.
   final OnTabSelection? onTabSelection;
+
+  /// Intercepts a select event to indicate whether the tab can be selected.
   final TabSelectInterceptor? tabSelectInterceptor;
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
+
+  /// Tabs area buttons builder
   final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
   final bool? tabsAreaVisible;
   final OnDraggableBuild? onDraggableBuild;
@@ -74,7 +92,6 @@ class TabbedView extends StatefulWidget {
   State<StatefulWidget> createState() => _TabbedViewState();
 }
 
-/// The [TabbedView] state.
 class _TabbedViewState extends State<TabbedView> {
   int? _lastSelectedIndex;
   List<TabbedViewMenuItem> _menuItems = [];
@@ -106,6 +123,8 @@ class _TabbedViewState extends State<TabbedView> {
         contentBuilder: widget.contentBuilder,
         onTabClose: widget.onTabClose,
         tabCloseInterceptor: widget.tabCloseInterceptor,
+        tabCloseConfirmationDialogBuilder:
+            widget.tabCloseConfirmationDialogBuilder,
         onTabSelection: widget.onTabSelection,
         contentClip: widget.contentClip,
         tabSelectInterceptor: widget.tabSelectInterceptor,

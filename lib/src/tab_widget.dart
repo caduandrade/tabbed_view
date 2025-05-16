@@ -14,11 +14,10 @@ import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 
-/// Listener for the tabs with the mouse over.
 typedef UpdateHighlightedIndex = void Function(int? tabIndex);
 
-/// The tab widget. Displays the tab text and its buttons.
 class TabWidget extends StatelessWidget {
+  /// The tab widget. Displays the tab text and its buttons.
   const TabWidget(
       {required UniqueKey key,
       required this.index,
@@ -31,6 +30,8 @@ class TabWidget extends StatelessWidget {
   final int index;
   final TabStatus status;
   final TabbedViewProvider provider;
+
+  /// Listener for the tabs with the mouse over.
   final UpdateHighlightedIndex updateHighlightedIndex;
   final Function onClose;
 
@@ -250,7 +251,7 @@ class TabWidget extends StatelessWidget {
       }
       TabButton closeButton = TabButton(
           icon: tabTheme.closeIcon,
-          onPressed: () => _onClose(context, index),
+          onPressed: () async => await _onClose(context, index),
           toolTip: provider.closeButtonTooltip);
 
       textAndButtons.add(Container(
@@ -272,9 +273,19 @@ class TabWidget extends StatelessWidget {
     return textAndButtons;
   }
 
-  void _onClose(BuildContext context, int index) {
-    if (provider.tabCloseInterceptor == null ||
-        provider.tabCloseInterceptor!(index)) {
+  Future<void> _onClose(BuildContext context, int index) async {
+    bool? DialogReturnedPositive;
+    if (provider.tabCloseConfirmationDialogBuilder != null) {
+      DialogReturnedPositive = (await showDialog<bool>(
+              barrierDismissible: false,
+              context: context,
+              builder: (context) => provider.tabCloseConfirmationDialogBuilder!(
+                  context, index, provider.controller.getTabByIndex(index)))) ??
+          false;
+    }
+    if ((DialogReturnedPositive ?? true) &&
+        (provider.tabCloseInterceptor == null ||
+            provider.tabCloseInterceptor!(index))) {
       onClose();
       TabData tabData = provider.controller.removeTab(index);
       if (provider.onTabClose != null) {
