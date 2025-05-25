@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ typedef TabsAreaButtonsBuilder = List<TabButton> Function(
 typedef OnTabClose = void Function(int tabIndex, TabData tabData);
 
 /// Intercepts a close event to indicates whether the tab can be closed.
-typedef TabCloseInterceptor = bool Function(int tabIndex);
+typedef TabCloseInterceptor = FutureOr<bool> Function(int tabIndex);
 
 /// Intercepts a select event to indicate whether the tab can be selected.
 typedef TabSelectInterceptor = bool Function(int newTabIndex);

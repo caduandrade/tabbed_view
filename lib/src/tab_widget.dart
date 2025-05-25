@@ -250,7 +250,7 @@ class TabWidget extends StatelessWidget {
       }
       TabButton closeButton = TabButton(
           icon: tabTheme.closeIcon,
-          onPressed: () => _onClose(context, index),
+          onPressed: () async => await _onClose(context, index),
           toolTip: provider.closeButtonTooltip);
 
       textAndButtons.add(Container(
@@ -272,12 +272,14 @@ class TabWidget extends StatelessWidget {
     return textAndButtons;
   }
 
-  void _onClose(BuildContext context, int index) {
+  Future<void> _onClose(BuildContext context, int index) async {
+    TabData tabData = provider.controller.getTabByIndex(index);
     if (provider.tabCloseInterceptor == null ||
-        provider.tabCloseInterceptor!(index)) {
+        (await provider.tabCloseInterceptor!(index))) {
       onClose();
-      TabData tabData = provider.controller.removeTab(index);
-      if (provider.onTabClose != null) {
+      index = provider.controller.tabs.indexOf(tabData);
+      index != -1 ? provider.controller.removeTab(index) : null;
+      if (provider.onTabClose != null && index != -1) {
         provider.onTabClose!(index, tabData);
       }
     }
