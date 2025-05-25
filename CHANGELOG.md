@@ -1,3 +1,7 @@
+## 1.20.0
+
+* Added support for asynchronous tab close interception in `TabCloseInterceptor.
+
 ## 1.19.1
 
 * Bugfix
