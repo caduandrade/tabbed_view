@@ -23,7 +23,8 @@ typedef TabsAreaButtonsBuilder = List<TabButton> Function(
 typedef OnTabClose = void Function(int tabIndex, TabData tabData);
 
 /// Intercepts a close event to indicates whether the tab can be closed.
-typedef TabCloseInterceptor = FutureOr<bool> Function(int tabIndex);
+typedef TabCloseInterceptor = FutureOr<bool> Function(
+    int tabIndex, TabData tabData);
 
 /// Intercepts a select event to indicate whether the tab can be selected.
 typedef TabSelectInterceptor = bool Function(int newTabIndex);
