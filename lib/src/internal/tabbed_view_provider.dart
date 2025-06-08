@@ -28,7 +28,7 @@ class TabbedViewProvider {
       required this.onDraggableBuild,
       required this.canDrop,
       required this.onBeforeDropAccept,
-      required this.group});
+      required this.dragScope});
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -47,7 +47,7 @@ class TabbedViewProvider {
   final OnDraggableBuild? onDraggableBuild;
   final CanDrop? canDrop;
   final OnBeforeDropAccept? onBeforeDropAccept;
-  final String? group;
+  final String? dragScope;
 }
 
 /// Updater for menu items

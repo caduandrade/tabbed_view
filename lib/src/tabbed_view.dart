@@ -55,7 +55,7 @@ class TabbedView extends StatefulWidget {
       this.onDraggableBuild,
       this.canDrop,
       this.onBeforeDropAccept,
-      this.group});
+      this.dragScope});
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -71,7 +71,7 @@ class TabbedView extends StatefulWidget {
   final OnDraggableBuild? onDraggableBuild;
   final CanDrop? canDrop;
   final OnBeforeDropAccept? onBeforeDropAccept;
-  final String? group;
+  final String? dragScope;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewState();
@@ -122,7 +122,7 @@ class _TabbedViewState extends State<TabbedView> {
         draggingTabIndex: _draggingTabIndex,
         canDrop: widget.canDrop,
         onBeforeDropAccept: widget.onBeforeDropAccept,
-	group: widget.group);
+	dragScope: widget.dragScope);
 
     final bool tabsAreaVisible =
         widget.tabsAreaVisible ?? theme.tabsArea.visible;
