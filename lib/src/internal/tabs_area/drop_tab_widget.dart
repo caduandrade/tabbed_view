@@ -69,7 +69,8 @@ class DropTabWidgetState extends State<DropTabWidget> {
             }
           },
           onWillAcceptWithDetails: (details) {
-            if (widget.provider.dragScope != null && details.data.dragScope != null &&
+            if (widget.provider.dragScope != null &&
+                details.data.dragScope != null &&
                 widget.provider.dragScope != details.data.dragScope) {
               _canDrop = false; // Reject if drag scopes don't match
             } else if (widget.provider.canDrop == null) {
