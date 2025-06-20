@@ -110,7 +110,7 @@ class TabWidget extends StatelessWidget {
         tabWidget = Draggable<DraggableData>(
             child: tabWidget,
             feedback: Material(child: feedback),
-            data: DraggableData(provider.controller, tab),
+            data: DraggableData(provider.controller, tab, provider.dragScope),
             feedbackOffset: draggableConfig.feedbackOffset,
             dragAnchorStrategy: draggableConfig.dragAnchorStrategy,
             onDragStarted: () {

@@ -24,3 +24,4 @@ export 'src/draggable_config.dart';
 export 'src/draggable_data.dart';
 export 'src/typedefs/on_draggable_build.dart';
 export 'src/typedefs/can_drop.dart';
+export 'src/typedefs/on_before_drop_accept.dart';
