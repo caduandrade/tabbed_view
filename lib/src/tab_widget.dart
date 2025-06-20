@@ -275,7 +275,7 @@ class TabWidget extends StatelessWidget {
   Future<void> _onClose(BuildContext context, int index) async {
     TabData tabData = provider.controller.getTabByIndex(index);
     if (provider.tabCloseInterceptor == null ||
-        (await provider.tabCloseInterceptor!(index))) {
+        (await provider.tabCloseInterceptor!(index, tabData))) {
       onClose();
       index = provider.controller.tabs.indexOf(tabData);
       index != -1 ? provider.controller.removeTab(index) : null;
