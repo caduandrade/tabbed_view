@@ -1,3 +1,9 @@
+## 1.21.0
+
+* `TabbedView`
+  * Providing `TabData` in `tabCloseInterceptor`.
+  * Adding `dragScope` for drag rejection.
+
 ## 1.20.0
 
 * Added support for asynchronous tab close interception in `TabCloseInterceptor.
