@@ -123,7 +123,7 @@ class _TabbedViewState extends State<TabbedView> {
         draggingTabIndex: _draggingTabIndex,
         canDrop: widget.canDrop,
         onBeforeDropAccept: widget.onBeforeDropAccept,
-	dragScope: widget.dragScope);
+        dragScope: widget.dragScope);
 
     final bool tabsAreaVisible =
         widget.tabsAreaVisible ?? theme.tabsArea.visible;
