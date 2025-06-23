@@ -19,9 +19,11 @@ import 'package:tabbed_view/src/typedefs/can_drop.dart';
 enum TabBarPosition {
   /// Positions the tab bar above the content.
   top,
+
   /// Positions the tab bar below the content.
   bottom
 }
+
 /// Tabs area buttons builder
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
     BuildContext context, int tabsCount);
@@ -48,23 +50,24 @@ typedef OnTabSelection = Function(int? newTabIndex);
 ///   selected. The default value is [TRUE].
 /// * [closeButtonTooltip]: optional tooltip for the close button.
 class TabbedView extends StatefulWidget {
-  TabbedView(
-      {required this.controller,
-      this.contentBuilder,
-      this.onTabClose,
-      this.tabCloseInterceptor,
-      this.onTabSelection,
-      this.tabSelectInterceptor,
-      this.selectToEnableButtons = true,
-      this.contentClip = true,
-      this.closeButtonTooltip,
-      this.tabsAreaButtonsBuilder,
-      this.tabsAreaVisible,
-      this.onDraggableBuild,
-      this.canDrop,
-      this.onBeforeDropAccept,
-      this.dragScope,
-      this.tabBarPosition = TabBarPosition.top});
+  TabbedView({
+    required this.controller,
+    this.contentBuilder,
+    this.onTabClose,
+    this.tabCloseInterceptor,
+    this.onTabSelection,
+    this.tabSelectInterceptor,
+    this.selectToEnableButtons = true,
+    this.contentClip = true,
+    this.closeButtonTooltip,
+    this.tabsAreaButtonsBuilder,
+    this.tabsAreaVisible,
+    this.onDraggableBuild,
+    this.canDrop,
+    this.onBeforeDropAccept,
+    this.dragScope,
+    this.tabBarPosition = TabBarPosition.top,
+  });
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -148,8 +151,7 @@ class _TabbedViewState extends State<TabbedView> {
     children.add(LayoutId(id: 2, child: contentArea));
     return CustomMultiChildLayout(
         children: children,
-        delegate: _TabbedViewLayout(
-            tabBarPosition: widget.tabBarPosition));
+        delegate: _TabbedViewLayout(tabBarPosition: widget.tabBarPosition));
   }
 
   void _onTabDrag(int? tabIndex) {
@@ -218,19 +220,17 @@ class _TabbedViewLayout extends MultiChildLayoutDelegate {
     final double contentAreaHeight = math.max(0, size.height - tabsAreaHeight);
 
     // Layout ContentArea
-    layoutChild(
-        2,
-        BoxConstraints.tightFor(
-            width: size.width, height: contentAreaHeight));
+    layoutChild(2,
+        BoxConstraints.tightFor(width: size.width, height: contentAreaHeight));
 
     // Position children based on tabBarPosition
     if (tabBarPosition == TabBarPosition.top) {
       if (hasChild(1)) {
         positionChild(1, Offset.zero); // TabsArea at the top
       }
-      positionChild(
-          2, Offset(0, tabsAreaHeight)); // ContentArea below TabsArea
-    } else { // TabBarPosition.bottom
+      positionChild(2, Offset(0, tabsAreaHeight)); // ContentArea below TabsArea
+    } else {
+      // TabBarPosition.bottom
       positionChild(2, Offset.zero); // ContentArea at the top
       if (hasChild(1)) {
         // TabsArea at the bottom, below ContentArea
