@@ -15,6 +15,13 @@ import 'package:tabbed_view/src/typedefs/on_before_drop_accept.dart';
 import 'package:tabbed_view/src/typedefs/on_draggable_build.dart';
 import 'package:tabbed_view/src/typedefs/can_drop.dart';
 
+/// Defines the position of the tab bar.
+enum TabBarPosition {
+  /// Positions the tab bar above the content.
+  top,
+  /// Positions the tab bar below the content.
+  bottom
+}
 /// Tabs area buttons builder
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
     BuildContext context, int tabsCount);
@@ -56,7 +63,8 @@ class TabbedView extends StatefulWidget {
       this.onDraggableBuild,
       this.canDrop,
       this.onBeforeDropAccept,
-      this.dragScope});
+      this.dragScope,
+      this.tabBarPosition = TabBarPosition.top});
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -73,6 +81,9 @@ class TabbedView extends StatefulWidget {
   final CanDrop? canDrop;
   final OnBeforeDropAccept? onBeforeDropAccept;
   final String? dragScope;
+
+  /// Defines the position of the tab bar. Defaults to [TabBarPosition.top].
+  final TabBarPosition tabBarPosition;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewState();
@@ -136,7 +147,9 @@ class _TabbedViewState extends State<TabbedView> {
         ContentArea(provider: provider, tabsAreaVisible: tabsAreaVisible);
     children.add(LayoutId(id: 2, child: contentArea));
     return CustomMultiChildLayout(
-        children: children, delegate: _TabbedViewLayout());
+        children: children,
+        delegate: _TabbedViewLayout(
+            tabBarPosition: widget.tabBarPosition));
   }
 
   void _onTabDrag(int? tabIndex) {
@@ -180,26 +193,54 @@ class _TabbedViewState extends State<TabbedView> {
 
 // Layout delegate for [TabbedView]
 class _TabbedViewLayout extends MultiChildLayoutDelegate {
+  _TabbedViewLayout({required this.tabBarPosition});
+
+  final TabBarPosition tabBarPosition;
+
   @override
   void performLayout(Size size) {
-    Size childSize = Size.zero;
+    double tabsAreaHeight = 0.0;
+    Size tabsAreaSize = Size.zero;
+
+    // Layout TabsArea (id: 1) if it exists, to get its height
     if (hasChild(1)) {
-      childSize = layoutChild(
+      tabsAreaSize = layoutChild(
           1,
           BoxConstraints(
               minWidth: size.width,
               maxWidth: size.width,
               minHeight: 0,
               maxHeight: size.height));
-      positionChild(1, Offset.zero);
+      tabsAreaHeight = tabsAreaSize.height;
     }
-    double height = math.max(0, size.height - childSize.height);
-    layoutChild(2, BoxConstraints.tightFor(width: size.width, height: height));
-    positionChild(2, Offset(0, childSize.height));
+
+    // Calculate ContentArea (id: 2) height
+    final double contentAreaHeight = math.max(0, size.height - tabsAreaHeight);
+
+    // Layout ContentArea
+    layoutChild(
+        2,
+        BoxConstraints.tightFor(
+            width: size.width, height: contentAreaHeight));
+
+    // Position children based on tabBarPosition
+    if (tabBarPosition == TabBarPosition.top) {
+      if (hasChild(1)) {
+        positionChild(1, Offset.zero); // TabsArea at the top
+      }
+      positionChild(
+          2, Offset(0, tabsAreaHeight)); // ContentArea below TabsArea
+    } else { // TabBarPosition.bottom
+      positionChild(2, Offset.zero); // ContentArea at the top
+      if (hasChild(1)) {
+        // TabsArea at the bottom, below ContentArea
+        positionChild(1, Offset(0, contentAreaHeight));
+      }
+    }
   }
 
   @override
-  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
-    return false;
+  bool shouldRelayout(covariant _TabbedViewLayout oldDelegate) {
+    return oldDelegate.tabBarPosition != tabBarPosition;
   }
 }
