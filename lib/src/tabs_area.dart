@@ -50,15 +50,16 @@ class _TabsAreaState extends State<TabsArea> {
         children: children,
         theme: theme,
         hiddenTabs: _hiddenTabs,
-        selectedTabIndex: controller.selectedIndex);
+        selectedTabIndex: controller.selectedIndex,
+        tabBarPosition: widget.provider.tabBarPosition);
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
 
-    Decoration? decoration;
-    if (tabsAreaTheme.color != null || tabsAreaTheme.border != null) {
-      decoration = BoxDecoration(
-          color: tabsAreaTheme.color, border: tabsAreaTheme.border);
-    }
-    return Container(child: tabsAreaLayout, decoration: decoration);
+    // Apply the theme's color and border directly.
+    return Container(
+      child: tabsAreaLayout,
+      decoration: BoxDecoration(
+          color: tabsAreaTheme.color, border: tabsAreaTheme.border),
+    );
   }
 
   /// Gets the status of the tab for a given index.

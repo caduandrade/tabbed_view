@@ -73,11 +73,48 @@ class ContentArea extends StatelessWidget {
       Widget listener = NotificationListener<SizeChangedLayoutNotification>(
           child: SizeChangedLayoutNotifier(child: Stack(children: children)),
           onNotification: onSizeNotification);
-      return Container(
-          child: listener,
-          decoration: tabsAreaVisible
-              ? contentAreaTheme.decoration
-              : contentAreaTheme.decorationNoTabsArea);
+
+      Decoration? decoration = tabsAreaVisible
+          ? contentAreaTheme.decoration
+          : contentAreaTheme.decorationNoTabsArea;
+
+      if (decoration is BoxDecoration) {
+        Border currentBorder;
+        if (decoration.border is Border) {
+          currentBorder = decoration.border as Border;
+        } else if (decoration.border is BorderDirectional) {
+          final bd = decoration.border as BorderDirectional;
+          currentBorder = Border(
+              top: bd.top, bottom: bd.bottom, left: bd.start, right: bd.end);
+        } else {
+          currentBorder = Border();
+        }
+
+        BorderSide top = currentBorder.top;
+        BorderSide bottom = currentBorder.bottom;
+        BorderSide left = currentBorder.left;
+        BorderSide right = currentBorder.right;
+
+        BorderSide frameBorderSide = currentBorder.top;
+        if (frameBorderSide == BorderSide.none)
+          frameBorderSide = currentBorder.bottom;
+        if (frameBorderSide == BorderSide.none)
+          frameBorderSide = currentBorder.left;
+        if (frameBorderSide == BorderSide.none)
+          frameBorderSide = currentBorder.right;
+
+        if (top == BorderSide.none && frameBorderSide != BorderSide.none)
+          top = frameBorderSide;
+        if (bottom == BorderSide.none && frameBorderSide != BorderSide.none)
+          bottom = frameBorderSide;
+        if (left == BorderSide.none && frameBorderSide != BorderSide.none)
+          left = frameBorderSide;
+        if (right == BorderSide.none && frameBorderSide != BorderSide.none)
+          right = frameBorderSide;
+        decoration = decoration.copyWith(
+            border: Border(top: top, bottom: bottom, left: left, right: right));
+      }
+      return Container(child: listener, decoration: decoration);
     });
     if (provider.contentClip) {
       return ClipRect(child: layoutBuilder);

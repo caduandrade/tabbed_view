@@ -21,7 +21,13 @@ enum TabBarPosition {
   top,
 
   /// Positions the tab bar below the content.
-  bottom
+  bottom,
+
+  /// Positions the tab bar on the left of the content.
+  left,
+
+  /// Positions the tab bar on the right of the content.
+  right
 }
 
 /// Tabs area buttons builder
@@ -137,7 +143,8 @@ class _TabbedViewState extends State<TabbedView> {
         draggingTabIndex: _draggingTabIndex,
         canDrop: widget.canDrop,
         onBeforeDropAccept: widget.onBeforeDropAccept,
-        dragScope: widget.dragScope);
+        dragScope: widget.dragScope,
+        tabBarPosition: widget.tabBarPosition);
 
     final bool tabsAreaVisible =
         widget.tabsAreaVisible ?? theme.tabsArea.visible;
@@ -201,41 +208,63 @@ class _TabbedViewLayout extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    double tabsAreaHeight = 0.0;
-    Size tabsAreaSize = Size.zero;
+    if (tabBarPosition == TabBarPosition.top ||
+        tabBarPosition == TabBarPosition.bottom) {
+      _performHorizontalLayout(size);
+    } else {
+      _performVerticalLayout(size);
+    }
+  }
 
-    // Layout TabsArea (id: 1) if it exists, to get its height
+  void _performHorizontalLayout(Size size) {
+    double tabsAreaHeight = 0;
     if (hasChild(1)) {
-      tabsAreaSize = layoutChild(
-          1,
-          BoxConstraints(
-              minWidth: size.width,
-              maxWidth: size.width,
-              minHeight: 0,
-              maxHeight: size.height));
+      final tabsAreaSize = layoutChild(
+          1, BoxConstraints(maxWidth: size.width, maxHeight: size.height));
       tabsAreaHeight = tabsAreaSize.height;
     }
 
-    // Calculate ContentArea (id: 2) height
     final double contentAreaHeight = math.max(0, size.height - tabsAreaHeight);
+    final contentAreaSize = Size(size.width, contentAreaHeight);
+    layoutChild(2, BoxConstraints.tight(contentAreaSize));
 
-    // Layout ContentArea
-    layoutChild(2,
-        BoxConstraints.tightFor(width: size.width, height: contentAreaHeight));
-
-    // Position children based on tabBarPosition
-    if (tabBarPosition == TabBarPosition.top) {
+    if (tabBarPosition == TabBarPosition.bottom) {
+      positionChild(2, Offset.zero);
       if (hasChild(1)) {
-        positionChild(1, Offset.zero); // TabsArea at the top
-      }
-      positionChild(2, Offset(0, tabsAreaHeight)); // ContentArea below TabsArea
-    } else {
-      // TabBarPosition.bottom
-      positionChild(2, Offset.zero); // ContentArea at the top
-      if (hasChild(1)) {
-        // TabsArea at the bottom, below ContentArea
         positionChild(1, Offset(0, contentAreaHeight));
       }
+    } else {
+      // top
+      if (hasChild(1)) {
+        positionChild(1, Offset.zero);
+      }
+      positionChild(2, Offset(0, tabsAreaHeight));
+    }
+  }
+
+  void _performVerticalLayout(Size size) {
+    double tabsAreaWidth = 0;
+    if (hasChild(1)) {
+      final tabsAreaSize = layoutChild(
+          1, BoxConstraints(maxWidth: size.width, maxHeight: size.height));
+      tabsAreaWidth = tabsAreaSize.width;
+    }
+
+    final double contentAreaWidth = math.max(0, size.width - tabsAreaWidth);
+    final contentAreaSize = Size(contentAreaWidth, size.height);
+    layoutChild(2, BoxConstraints.tight(contentAreaSize));
+
+    if (tabBarPosition == TabBarPosition.right) {
+      positionChild(2, Offset.zero);
+      if (hasChild(1)) {
+        positionChild(1, Offset(contentAreaWidth, 0));
+      }
+    } else {
+      // left
+      if (hasChild(1)) {
+        positionChild(1, Offset.zero);
+      }
+      positionChild(2, Offset(tabsAreaWidth, 0));
     }
   }
 

@@ -62,8 +62,8 @@ class MobileTheme {
       required Color backgroundColor}) {
     return TabsAreaThemeData(
         equalHeights: EqualHeights.all,
-        initialGap: -1,
-        middleGap: -1,
+        initialGap: 0,
+        middleGap: 0,
         normalButtonColor: normalButtonColor,
         hoverButtonColor: hoverButtonColor,
         disabledButtonColor: disabledButtonColor,
@@ -102,9 +102,13 @@ class MobileTheme {
         innerBottomBorder:
             BorderSide(color: Colors.transparent, width: borderHeight),
         highlightedStatus: TabStatusThemeData(
+            decoration:
+                BoxDecoration(border: Border.all(color: borderColor, width: 1)),
             innerBottomBorder:
                 BorderSide(color: borderColor, width: borderHeight)),
         selectedStatus: TabStatusThemeData(
+            decoration:
+                BoxDecoration(border: Border.all(color: borderColor, width: 1)),
             innerBottomBorder:
                 BorderSide(color: accentColor, width: borderHeight)));
   }

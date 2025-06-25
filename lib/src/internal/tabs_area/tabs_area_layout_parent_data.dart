@@ -19,3 +19,11 @@ class TabsAreaLayoutParentData extends ContainerBoxParentData<RenderBox> {
     rightBorderHeight = 0;
   }
 }
+
+/// Utility extension to facilitate obtaining parent data.
+@internal
+extension TabsAreaLayoutParentDataGetter on RenderObject {
+  TabsAreaLayoutParentData tabsAreaLayoutParentData() {
+    return parentData as TabsAreaLayoutParentData;
+  }
+}

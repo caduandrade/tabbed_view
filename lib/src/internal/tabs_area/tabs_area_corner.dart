@@ -4,6 +4,7 @@ import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/internal/tabs_area/drop_tab_widget.dart';
 import 'package:tabbed_view/src/internal/tabs_area/hidden_tabs.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tabs_area_buttons_widget.dart';
+import 'package:tabbed_view/src/tabbed_view.dart' show TabBarPosition;
 
 @internal
 class TabsAreaCorner extends StatelessWidget {
@@ -19,14 +20,34 @@ class TabsAreaCorner extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, Widget? child) {
-    Widget corner = Container(
-        padding: EdgeInsets.only(left: DropTabWidget.dropWidth),
-        child: Row(
-            children: [
-              TabsAreaButtonsWidget(provider: provider, hiddenTabs: hiddenTabs)
-            ],
+    final bool isHorizontal = provider.tabBarPosition == TabBarPosition.top ||
+        provider.tabBarPosition == TabBarPosition.bottom;
+
+    Widget buttonsWidget =
+        TabsAreaButtonsWidget(provider: provider, hiddenTabs: hiddenTabs);
+
+    Widget cornerContent = isHorizontal
+        ? Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end));
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [buttonsWidget])
+        : Column(
+            // For vertical tab bar, buttons are arranged vertically
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [buttonsWidget]);
+
+    Widget corner = Container(
+        padding: isHorizontal
+            ? EdgeInsets.only(left: DropTabWidget.dropWidth)
+            : EdgeInsets.only(
+                top: DropTabWidget.dropWidth), // Adjust padding for vertical
+        child: IntrinsicWidth(
+            // Force content to its intrinsic width
+            child: IntrinsicHeight(
+                // Force content to its intrinsic height
+                child: cornerContent)));
+
     if (provider.controller.reorderEnable) {
       return DropTabWidget(
           provider: provider,
