@@ -71,7 +71,7 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
     // Configuring the [TabbedView] with all available properties.
     TabbedView tabbedView = TabbedView(
       controller: _controller,
-      tabBarPosition: TabBarPosition.top,
+      tabBarPosition: TabBarPosition.left,
       contentBuilder: null,
       onTabSelection: (newIndex) {},
       onTabClose: (index, tabData) {},

@@ -60,8 +60,8 @@ class MobileTheme {
       required Color backgroundColor}) {
     return TabsAreaThemeData(
         equalHeights: EqualHeights.all,
-        initialGap: 0,
-        middleGap: 0,
+        initialGap: -1,
+        middleGap: -1,
         normalButtonColor: normalButtonColor,
         hoverButtonColor: hoverButtonColor,
         disabledButtonColor: disabledButtonColor,
