@@ -192,8 +192,8 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
         colorDark: Colors.grey[800],
         hoverColor: Colors.grey[200],
         hoverColorDark: Colors.grey[700],
-        highlightColor: Colors.black.withOpacity(0.1),
-        highlightColorDark: Colors.white.withOpacity(0.1),
+        highlightColor: Colors.black.withValues(alpha:0.1),
+        highlightColorDark: Colors.white.withValues(alpha:0.1),
         boxShadow: [
           BoxShadow(
               color: Colors.black.withAlpha(128),
