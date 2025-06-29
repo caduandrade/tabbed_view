@@ -26,33 +26,28 @@ class MinimalistTheme {
         buttonsAreaPadding: EdgeInsets.all(2),
         buttonPadding: const EdgeInsets.all(2),
         hoverButtonBackground: BoxDecoration(color: colorSet[300]!),
-        equalHeights: EqualHeights.all,
-        border: Border(bottom: BorderSide(color: colorSet[700]!, width: 1)));
+        equalHeights: EqualHeights.all);
   }
 
   static TabThemeData tabTheme({required MaterialColor colorSet}) {
     return TabThemeData(
-      buttonsOffset: 4,
-      textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
-      padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
-      paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
-      decoration: BoxDecoration(color: colorSet[50]!),
-      draggingDecoration: BoxDecoration(color: colorSet[50]!),
-      normalButtonColor: colorSet[900]!,
-      hoverButtonColor: colorSet[900]!,
-      disabledButtonColor: colorSet[400]!,
-      buttonPadding: const EdgeInsets.all(2),
-      hoverButtonBackground: BoxDecoration(color: colorSet[300]!),
-      highlightedStatus:
-          TabStatusThemeData(decoration: BoxDecoration(color: colorSet[300]!)),
-      selectedStatus: TabStatusThemeData(
-          normalButtonColor: colorSet[50]!,
-          hoverButtonColor: colorSet[50]!,
-          disabledButtonColor: colorSet[500]!,
-          hoverButtonBackground: BoxDecoration(color: colorSet[600]!),
-          fontColor: colorSet[50]!,
-          decoration: BoxDecoration(color: colorSet[700]!)),
-    );
+        innerBottomBorder:
+            const BorderSide(color: Colors.transparent, width: 1),
+        buttonsOffset: 4,
+        textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
+        padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
+        paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
+        decoration: BoxDecoration(color: colorSet[50]!),
+        draggingDecoration: BoxDecoration(color: colorSet[50]!),
+        normalButtonColor: colorSet[900]!,
+        hoverButtonColor: colorSet[900]!,
+        disabledButtonColor: colorSet[400]!,
+        buttonPadding: const EdgeInsets.all(2),
+        hoverButtonBackground: BoxDecoration(color: colorSet[300]!),
+        highlightedStatus: TabStatusThemeData(
+            innerBottomBorder: BorderSide(color: colorSet[300]!, width: 1)),
+        selectedStatus: TabStatusThemeData(
+            innerBottomBorder: BorderSide(color: colorSet[700]!, width: 1)));
   }
 
   static ContentAreaThemeData contentAreaTheme(

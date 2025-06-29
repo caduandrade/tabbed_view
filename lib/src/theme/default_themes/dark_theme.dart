@@ -87,23 +87,23 @@ class DarkTheme {
     double bottomWidth = 3;
     return TabThemeData(
         buttonsOffset: 4,
+        innerBottomBorder:
+            BorderSide(color: Colors.transparent, width: bottomWidth),
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         decoration: BoxDecoration(color: tabColor),
         draggingDecoration: BoxDecoration(color: tabColor),
-        margin: EdgeInsets.only(bottom: bottomWidth),
         padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
         paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonPadding: const EdgeInsets.all(2),
         selectedStatus: TabStatusThemeData(
-            decoration: BoxDecoration(
-                color: selectedTabColor,
-                border: Border(
-                    bottom: BorderSide(
-                        width: bottomWidth, color: selectedTabColor))),
-            margin: EdgeInsets.zero),
+            decoration: BoxDecoration(color: selectedTabColor),
+            innerBottomBorder:
+                BorderSide(width: bottomWidth, color: selectedTabColor)),
         highlightedStatus: TabStatusThemeData(
-            decoration: BoxDecoration(color: highlightedColor)),
+            decoration: BoxDecoration(color: highlightedColor),
+            innerBottomBorder:
+                BorderSide(width: bottomWidth, color: highlightedColor)),
         normalButtonColor: normalButtonColor,
         hoverButtonColor: hoverButtonColor,
         disabledButtonColor: disabledButtonColor);

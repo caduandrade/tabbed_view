@@ -80,6 +80,8 @@ class ClassicTheme {
       required Color hoverButtonColor,
       required Color disabledButtonColor}) {
     return TabThemeData(
+        innerBottomBorder:
+            const BorderSide(color: Colors.transparent, width: 2),
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         normalButtonColor: normalButtonColor,
         hoverButtonColor: hoverButtonColor,

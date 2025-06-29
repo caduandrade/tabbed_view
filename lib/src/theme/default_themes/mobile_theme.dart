@@ -100,13 +100,9 @@ class MobileTheme {
         innerBottomBorder:
             BorderSide(color: Colors.transparent, width: borderHeight),
         highlightedStatus: TabStatusThemeData(
-            decoration:
-                BoxDecoration(border: Border.all(color: borderColor, width: 1)),
             innerBottomBorder:
                 BorderSide(color: borderColor, width: borderHeight)),
         selectedStatus: TabStatusThemeData(
-            decoration:
-                BoxDecoration(border: Border.all(color: borderColor, width: 1)),
             innerBottomBorder:
                 BorderSide(color: accentColor, width: borderHeight)));
   }

@@ -224,12 +224,12 @@ class TabWidget extends StatelessWidget {
         effectiveInnerBottomBorder = themeInnerTopBorder;
         break;
       case TabBarPosition.left:
-        effectiveInnerRightBorder = themeInnerBottomBorder;
-        effectiveInnerLeftBorder = themeInnerTopBorder;
-        break;
       case TabBarPosition.right:
-        effectiveInnerLeftBorder = themeInnerBottomBorder;
-        effectiveInnerRightBorder = themeInnerTopBorder;
+        // For vertical tab bars, the inner borders are applied to the top/bottom
+        // of the widget before it's rotated. The 'bottom' border is the one
+        // adjacent to the content area after rotation for both left and right.
+        effectiveInnerBottomBorder = themeInnerBottomBorder;
+        effectiveInnerTopBorder = themeInnerTopBorder;
         break;
     }
 
