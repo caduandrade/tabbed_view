@@ -32,7 +32,8 @@ class TabsAreaCorner extends StatelessWidget {
       return DropTabWidget(
           provider: provider,
           newIndex: provider.controller.length,
-          child: corner);
+          child: corner,
+          halfWidthDrop: false);
     }
     return corner;
   }

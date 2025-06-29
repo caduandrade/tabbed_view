@@ -12,11 +12,13 @@ class DropTabWidget extends StatefulWidget {
       {super.key,
       required this.provider,
       required this.newIndex,
-      required this.child});
+      required this.child,
+      this.halfWidthDrop = true});
 
   final TabbedViewProvider provider;
   final Widget child;
   final int newIndex;
+  final bool halfWidthDrop;
 
   static const double dropWidth = 8;
 
@@ -24,9 +26,12 @@ class DropTabWidget extends StatefulWidget {
   State<StatefulWidget> createState() => DropTabWidgetState();
 }
 
+enum _DropPosition { before, after }
+
 class DropTabWidgetState extends State<DropTabWidget> {
   bool _over = false;
   bool _canDrop = false;
+  _DropPosition _dropPosition = _DropPosition.before;
 
   @override
   void didUpdateWidget(covariant DropTabWidget oldWidget) {
@@ -40,6 +45,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
   Widget build(BuildContext context) {
     return MouseRegion(
         onExit: (e) {
+          if (!mounted) return;
           if (_over) {
             setState(() {
               _over = false;
@@ -57,6 +63,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
               TabbedViewThemeData theme = TabbedViewTheme.of(context);
               return CustomPaint(
                   foregroundPainter: _CustomPainter(
+                      dropPosition: _dropPosition,
                       tabBarPosition: widget.provider.tabBarPosition,
                       dropColor: theme.tabsArea.dropColor),
                   child: widget.child);
@@ -64,6 +71,39 @@ class DropTabWidgetState extends State<DropTabWidget> {
             return widget.child;
           },
           onMove: (details) {
+            if (!mounted) return;
+            if (widget.halfWidthDrop) {
+              final renderBox = context.findRenderObject() as RenderBox;
+
+              // Dynamically adjust the drop zone based on drag direction.
+              double ratio = 0.5;
+              int? fromIndex = widget.provider.draggingTabIndex;
+              // Checking if the drag is happening inside the same tabbed_view.
+              if (fromIndex != null) {
+                int toIndex = widget.newIndex;
+                if (fromIndex > toIndex) {
+                  // Dragging from right to left, make "before" zone larger.
+                  ratio = 0.75;
+                } else if (fromIndex < toIndex) {
+                  // Dragging from left to right, make "after" zone larger.
+                  ratio = 0.25;
+                }
+              }
+
+              final newDropPosition =
+                  widget.provider.tabBarPosition.isHorizontal
+                      ? (details.offset.dx < renderBox.size.width * ratio
+                          ? _DropPosition.before
+                          : _DropPosition.after)
+                      : (details.offset.dy < renderBox.size.height * ratio
+                          ? _DropPosition.before
+                          : _DropPosition.after);
+              if (_dropPosition != newDropPosition) {
+                setState(() {
+                  _dropPosition = newDropPosition;
+                });
+              }
+            }
             if (_canDrop && _over == false) {
               setState(() {
                 _over = true;
@@ -85,9 +125,14 @@ class DropTabWidgetState extends State<DropTabWidget> {
           },
           onAcceptWithDetails: (details) {
             final DraggableData data = details.data;
+            int finalNewIndex = widget.newIndex;
+            final int oldIndex = data.tabData.index;
+            if (widget.halfWidthDrop && _dropPosition == _DropPosition.after) {
+              finalNewIndex++;
+            }
             if (widget.provider.onBeforeDropAccept != null) {
               if (widget.provider.onBeforeDropAccept!(
-                      data, widget.provider.controller, widget.newIndex) ==
+                      data, widget.provider.controller, finalNewIndex) ==
                   false) {
                 setState(() {
                   _over = false;
@@ -97,15 +142,16 @@ class DropTabWidgetState extends State<DropTabWidget> {
               }
             }
             if (widget.provider.controller == data.controller) {
-              widget.provider.controller.reorderTab(
-                  data.tabData.index,
-                  widget.newIndex == widget.provider.controller.length
-                      ? widget.newIndex
-                      : widget.newIndex);
+              // When moving a tab from a lower index to a higher one, the
+              // underlying list length is reduced by one, which requires
+              // adjusting the target index.
+              if (oldIndex < finalNewIndex) {
+                // finalNewIndex--;
+              }
+              widget.provider.controller.reorderTab(oldIndex, finalNewIndex);
             } else {
               data.controller.removeTab(data.tabData.index);
-              widget.provider.controller
-                  .insertTab(widget.newIndex, data.tabData);
+              widget.provider.controller.insertTab(finalNewIndex, data.tabData);
             }
           },
         ));
@@ -113,8 +159,12 @@ class DropTabWidgetState extends State<DropTabWidget> {
 }
 
 class _CustomPainter extends CustomPainter {
-  _CustomPainter({required this.tabBarPosition, required this.dropColor});
+  _CustomPainter(
+      {required this.dropPosition,
+      required this.tabBarPosition,
+      required this.dropColor});
 
+  final _DropPosition dropPosition;
   final TabBarPosition tabBarPosition;
   final Color dropColor;
 
@@ -124,11 +174,19 @@ class _CustomPainter extends CustomPainter {
       ..color = dropColor
       ..style = PaintingStyle.fill;
     if (tabBarPosition.isHorizontal) {
+      double x = 0;
+      if (dropPosition == _DropPosition.after) {
+        x = size.width - DropTabWidget.dropWidth;
+      }
       canvas.drawRect(
-          Rect.fromLTWH(0, 0, DropTabWidget.dropWidth, size.height), paint);
+          Rect.fromLTWH(x, 0, DropTabWidget.dropWidth, size.height), paint);
     } else {
+      double y = 0;
+      if (dropPosition == _DropPosition.after) {
+        y = size.height - DropTabWidget.dropWidth;
+      }
       canvas.drawRect(
-          Rect.fromLTWH(0, 0, size.width, DropTabWidget.dropWidth), paint);
+          Rect.fromLTWH(0, y, size.width, DropTabWidget.dropWidth), paint);
     }
   }
 

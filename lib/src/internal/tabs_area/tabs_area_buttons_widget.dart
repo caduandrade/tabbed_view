@@ -26,7 +26,8 @@ class _TabsAreaButtonsWidgetState extends State<TabsAreaButtonsWidget> {
 
   @override
   void dispose() {
-    _hideMenu();
+    _overlayEntry?.remove();
+    _overlayEntry = null;
     super.dispose();
   }
 
@@ -106,9 +107,11 @@ class _TabsAreaButtonsWidgetState extends State<TabsAreaButtonsWidget> {
   }
 
   void _hideMenu() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-    setState(() {});
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+      _overlayEntry = null;
+      if (mounted) setState(() {});
+    }
   }
 
   bool isHorizontal() =>
