@@ -97,8 +97,11 @@ class DropTabWidgetState extends State<DropTabWidget> {
               }
             }
             if (widget.provider.controller == data.controller) {
-              widget.provider.controller
-                  .reorderTab(data.tabData.index, widget.newIndex);
+              widget.provider.controller.reorderTab(
+                  data.tabData.index,
+                  widget.newIndex == widget.provider.controller.length
+                      ? widget.newIndex
+                      : widget.newIndex);
             } else {
               data.controller.removeTab(data.tabData.index);
               widget.provider.controller

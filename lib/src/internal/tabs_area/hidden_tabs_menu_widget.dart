@@ -24,17 +24,31 @@ class HiddenTabsMenuWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
+    final menuTheme = theme.menu;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final Color? color = isDark ? menuTheme.colorDark : menuTheme.color;
+    final Color? hoverColor =
+        isDark ? menuTheme.hoverColorDark : menuTheme.hoverColor;
+    final Color? highlightColor =
+        isDark ? menuTheme.highlightColorDark : menuTheme.highlightColor;
+    final TextStyle? textStyle =
+        isDark ? menuTheme.textStyleDark : menuTheme.textStyle;
+
     final List<TabData> tabs = provider.controller.tabs;
 
-    return Material(
-      type: MaterialType.transparency,
-      child: Container(
-        constraints: BoxConstraints(maxWidth: theme.menu.maxWidth),
-        decoration: BoxDecoration(
-          color: theme.menu.color ?? theme.tabsArea.color,
-          borderRadius: theme.menu.borderRadius,
-          boxShadow: theme.menu.boxShadow,
-        ),
+    return Container(
+      constraints: BoxConstraints(maxWidth: menuTheme.maxWidth),
+      decoration: BoxDecoration(
+        color: color ?? theme.tabsArea.color,
+        borderRadius: menuTheme.borderRadius,
+        boxShadow: menuTheme.boxShadow,
+      ),
+      // The clipBehavior is necessary to avoid having the InkWell effects
+      // spill outside the rounded corners.
+      clipBehavior: Clip.antiAlias,
+      child: Material(
+        type: MaterialType.transparency,
         child: ListView.builder(
           shrinkWrap: true,
           reverse: reverse,
@@ -44,12 +58,14 @@ class HiddenTabsMenuWidget extends StatelessWidget {
             final TabData tab = tabs[tabIndex];
             return InkWell(
               onTap: () => onSelection(tabIndex),
+              hoverColor: hoverColor,
+              highlightColor: highlightColor,
               child: Padding(
-                padding: theme.menu.menuItemPadding,
+                padding: menuTheme.menuItemPadding,
                 child: Text(
                   tab.text,
-                  style: theme.menu.textStyle,
-                  overflow: theme.menu.ellipsisOverflowText
+                  style: textStyle,
+                  overflow: menuTheme.ellipsisOverflowText
                       ? TextOverflow.ellipsis
                       : null,
                 ),

@@ -71,7 +71,7 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
     // Configuring the [TabbedView] with all available properties.
     TabbedView tabbedView = TabbedView(
       controller: _controller,
-      tabBarPosition: TabBarPosition.right,
+      tabBarPosition: TabBarPosition.left,
       contentBuilder: null,
       onTabSelection: (newIndex) {},
       onTabClose: (index, tabData) {},
@@ -188,7 +188,12 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
       ),
       menu: HiddenTabsMenuThemeData(
         // Demonstrating the new menu theme properties
-        color: Colors.grey[800],
+        color: Colors.white,
+        colorDark: Colors.grey[800],
+        hoverColor: Colors.grey[200],
+        hoverColorDark: Colors.grey[700],
+        highlightColor: Colors.black.withOpacity(0.1),
+        highlightColorDark: Colors.white.withOpacity(0.1),
         boxShadow: [
           BoxShadow(
               color: Colors.black.withAlpha(128),
