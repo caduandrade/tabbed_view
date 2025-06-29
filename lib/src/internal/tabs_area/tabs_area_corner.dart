@@ -19,19 +19,21 @@ class TabsAreaCorner extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, Widget? child) {
+    Widget cornerContent =
+        TabsAreaButtonsWidget(provider: provider, hiddenTabs: hiddenTabs);
+
     Widget corner = Container(
-        padding: EdgeInsets.only(left: DropTabWidget.dropWidth),
-        child: Row(
-            children: [
-              TabsAreaButtonsWidget(provider: provider, hiddenTabs: hiddenTabs)
-            ],
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end));
+        padding: provider.tabBarPosition.isHorizontal
+            ? EdgeInsets.only(left: DropTabWidget.dropWidth)
+            : EdgeInsets.only(top: DropTabWidget.dropWidth),
+        child: cornerContent);
+
     if (provider.controller.reorderEnable) {
       return DropTabWidget(
           provider: provider,
           newIndex: provider.controller.length,
-          child: corner);
+          child: corner,
+          halfWidthDrop: false);
     }
     return corner;
   }

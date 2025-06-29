@@ -27,4 +27,31 @@ class TabbedViewIcons {
     path.close();
     return path;
   }
+
+  static Path menuUp(Size size) {
+    Path path = Path();
+    path.moveTo(size.width * 0.15, size.height * 0.7);
+    path.lineTo(size.width * 0.85, size.height * 0.7);
+    path.lineTo(size.width * 0.5, size.height * 0.35);
+    path.close();
+    return path;
+  }
+
+  static Path menuLeft(Size size) {
+    Path path = Path();
+    path.moveTo(size.width * 0.70, size.height * 0.15);
+    path.lineTo(size.width * 0.70, size.height * 0.85);
+    path.lineTo(size.width * 0.35, size.height * 0.50);
+    path.close();
+    return path;
+  }
+
+  static Path menuRight(Size size) {
+    Path path = Path();
+    path.moveTo(size.width * 0.35, size.height * 0.15);
+    path.lineTo(size.width * 0.35, size.height * 0.85);
+    path.lineTo(size.width * 0.70, size.height * 0.50);
+    path.close();
+    return path;
+  }
 }

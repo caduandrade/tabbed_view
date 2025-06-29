@@ -1,12 +1,7 @@
-import 'dart:async';
-import 'dart:math' as math;
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
-import 'package:tabbed_view/src/tabbed_view_menu_widget.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
@@ -52,56 +47,54 @@ class ContentArea extends StatelessWidget {
         }
       }
 
-      NotificationListenerCallback<SizeChangedLayoutNotification>?
-          onSizeNotification;
-      if (provider.menuItems.isNotEmpty) {
-        children.add(Positioned.fill(child: _Glass(theme.menu.blur, provider)));
-        children.add(Positioned(
-            child: LimitedBox(
-                maxWidth: math.min(theme.menu.maxWidth, constraints.maxWidth),
-                child: TabbedViewMenuWidget(provider: provider)),
-            right: 0,
-            top: 0,
-            bottom: 0));
-        onSizeNotification = (n) {
-          scheduleMicrotask(() {
-            provider.menuItemsUpdater([]);
-          });
-          return true;
-        };
-      }
       Widget listener = NotificationListener<SizeChangedLayoutNotification>(
-          child: SizeChangedLayoutNotifier(child: Stack(children: children)),
-          onNotification: onSizeNotification);
-      return Container(
-          child: listener,
-          decoration: tabsAreaVisible
-              ? contentAreaTheme.decoration
-              : contentAreaTheme.decorationNoTabsArea);
+          child: SizeChangedLayoutNotifier(child: Stack(children: children)));
+
+      Decoration? decoration = tabsAreaVisible
+          ? contentAreaTheme.decoration
+          : contentAreaTheme.decorationNoTabsArea;
+
+      if (decoration is BoxDecoration) {
+        Border currentBorder;
+        if (decoration.border is Border) {
+          currentBorder = decoration.border as Border;
+        } else if (decoration.border is BorderDirectional) {
+          final bd = decoration.border as BorderDirectional;
+          currentBorder = Border(
+              top: bd.top, bottom: bd.bottom, left: bd.start, right: bd.end);
+        } else {
+          currentBorder = Border();
+        }
+
+        BorderSide top = currentBorder.top;
+        BorderSide bottom = currentBorder.bottom;
+        BorderSide left = currentBorder.left;
+        BorderSide right = currentBorder.right;
+
+        BorderSide frameBorderSide = currentBorder.top;
+        if (frameBorderSide == BorderSide.none)
+          frameBorderSide = currentBorder.bottom;
+        if (frameBorderSide == BorderSide.none)
+          frameBorderSide = currentBorder.left;
+        if (frameBorderSide == BorderSide.none)
+          frameBorderSide = currentBorder.right;
+
+        if (top == BorderSide.none && frameBorderSide != BorderSide.none)
+          top = frameBorderSide;
+        if (bottom == BorderSide.none && frameBorderSide != BorderSide.none)
+          bottom = frameBorderSide;
+        if (left == BorderSide.none && frameBorderSide != BorderSide.none)
+          left = frameBorderSide;
+        if (right == BorderSide.none && frameBorderSide != BorderSide.none)
+          right = frameBorderSide;
+        decoration = decoration.copyWith(
+            border: Border(top: top, bottom: bottom, left: left, right: right));
+      }
+      return Container(child: listener, decoration: decoration);
     });
     if (provider.contentClip) {
       return ClipRect(child: layoutBuilder);
     }
     return layoutBuilder;
-  }
-}
-
-class _Glass extends StatelessWidget {
-  _Glass(this.blur, this.provider);
-
-  final bool blur;
-  final TabbedViewProvider provider;
-
-  @override
-  Widget build(BuildContext context) {
-    Widget? child;
-    if (blur) {
-      child = BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-          child: Container(color: Colors.transparent));
-    }
-    return ClipRect(
-        child: GestureDetector(
-            child: child, onTap: () => provider.menuItemsUpdater([])));
   }
 }

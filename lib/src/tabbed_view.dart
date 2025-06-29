@@ -15,6 +15,27 @@ import 'package:tabbed_view/src/typedefs/on_before_drop_accept.dart';
 import 'package:tabbed_view/src/typedefs/on_draggable_build.dart';
 import 'package:tabbed_view/src/typedefs/can_drop.dart';
 
+/// Defines the position of the tab bar.
+enum TabBarPosition {
+  /// Positions the tab bar above the content.
+  top(true),
+
+  /// Positions the tab bar below the content.
+  bottom(true),
+
+  /// Positions the tab bar on the left of the content.
+  left(false),
+
+  /// Positions the tab bar on the right of the content.
+  right(false);
+
+  const TabBarPosition(this.isHorizontal);
+
+  final bool isHorizontal;
+
+  bool get isVertical => !isHorizontal;
+}
+
 /// Tabs area buttons builder
 typedef TabsAreaButtonsBuilder = List<TabButton> Function(
     BuildContext context, int tabsCount);
@@ -41,22 +62,24 @@ typedef OnTabSelection = Function(int? newTabIndex);
 ///   selected. The default value is [TRUE].
 /// * [closeButtonTooltip]: optional tooltip for the close button.
 class TabbedView extends StatefulWidget {
-  TabbedView(
-      {required this.controller,
-      this.contentBuilder,
-      this.onTabClose,
-      this.tabCloseInterceptor,
-      this.onTabSelection,
-      this.tabSelectInterceptor,
-      this.selectToEnableButtons = true,
-      this.contentClip = true,
-      this.closeButtonTooltip,
-      this.tabsAreaButtonsBuilder,
-      this.tabsAreaVisible,
-      this.onDraggableBuild,
-      this.canDrop,
-      this.onBeforeDropAccept,
-      this.dragScope});
+  TabbedView({
+    required this.controller,
+    this.contentBuilder,
+    this.onTabClose,
+    this.tabCloseInterceptor,
+    this.onTabSelection,
+    this.tabSelectInterceptor,
+    this.selectToEnableButtons = true,
+    this.contentClip = true,
+    this.closeButtonTooltip,
+    this.tabsAreaButtonsBuilder,
+    this.tabsAreaVisible,
+    this.onDraggableBuild,
+    this.canDrop,
+    this.onBeforeDropAccept,
+    this.dragScope,
+    this.tabBarPosition = TabBarPosition.top,
+  });
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -73,6 +96,9 @@ class TabbedView extends StatefulWidget {
   final CanDrop? canDrop;
   final OnBeforeDropAccept? onBeforeDropAccept;
   final String? dragScope;
+
+  /// Defines the position of the tab bar. Defaults to [TabBarPosition.top].
+  final TabBarPosition tabBarPosition;
 
   @override
   State<StatefulWidget> createState() => _TabbedViewState();
@@ -123,7 +149,8 @@ class _TabbedViewState extends State<TabbedView> {
         draggingTabIndex: _draggingTabIndex,
         canDrop: widget.canDrop,
         onBeforeDropAccept: widget.onBeforeDropAccept,
-        dragScope: widget.dragScope);
+        dragScope: widget.dragScope,
+        tabBarPosition: widget.tabBarPosition);
 
     final bool tabsAreaVisible =
         widget.tabsAreaVisible ?? theme.tabsArea.visible;
@@ -136,7 +163,8 @@ class _TabbedViewState extends State<TabbedView> {
         ContentArea(provider: provider, tabsAreaVisible: tabsAreaVisible);
     children.add(LayoutId(id: 2, child: contentArea));
     return CustomMultiChildLayout(
-        children: children, delegate: _TabbedViewLayout());
+        children: children,
+        delegate: _TabbedViewLayout(tabBarPosition: widget.tabBarPosition));
   }
 
   void _onTabDrag(int? tabIndex) {
@@ -180,26 +208,74 @@ class _TabbedViewState extends State<TabbedView> {
 
 // Layout delegate for [TabbedView]
 class _TabbedViewLayout extends MultiChildLayoutDelegate {
+  _TabbedViewLayout({required this.tabBarPosition});
+
+  final TabBarPosition tabBarPosition;
+
   @override
   void performLayout(Size size) {
-    Size childSize = Size.zero;
-    if (hasChild(1)) {
-      childSize = layoutChild(
-          1,
-          BoxConstraints(
-              minWidth: size.width,
-              maxWidth: size.width,
-              minHeight: 0,
-              maxHeight: size.height));
-      positionChild(1, Offset.zero);
+    if (tabBarPosition == TabBarPosition.top ||
+        tabBarPosition == TabBarPosition.bottom) {
+      _performHorizontalLayout(size);
+    } else {
+      _performVerticalLayout(size);
     }
-    double height = math.max(0, size.height - childSize.height);
-    layoutChild(2, BoxConstraints.tightFor(width: size.width, height: height));
-    positionChild(2, Offset(0, childSize.height));
+  }
+
+  void _performHorizontalLayout(Size size) {
+    double tabsAreaHeight = 0;
+    if (hasChild(1)) {
+      final tabsAreaSize = layoutChild(
+          1, BoxConstraints(maxWidth: size.width, maxHeight: size.height));
+      tabsAreaHeight = tabsAreaSize.height;
+    }
+
+    final double contentAreaHeight = math.max(0, size.height - tabsAreaHeight);
+    final contentAreaSize = Size(size.width, contentAreaHeight);
+    layoutChild(2, BoxConstraints.tight(contentAreaSize));
+
+    if (tabBarPosition == TabBarPosition.bottom) {
+      positionChild(2, Offset.zero);
+      if (hasChild(1)) {
+        positionChild(1, Offset(0, contentAreaHeight));
+      }
+    } else {
+      // top
+      if (hasChild(1)) {
+        positionChild(1, Offset.zero);
+      }
+      positionChild(2, Offset(0, tabsAreaHeight));
+    }
+  }
+
+  void _performVerticalLayout(Size size) {
+    double tabsAreaWidth = 0;
+    if (hasChild(1)) {
+      final tabsAreaSize = layoutChild(
+          1, BoxConstraints(maxWidth: size.width, maxHeight: size.height));
+      tabsAreaWidth = tabsAreaSize.width;
+    }
+
+    final double contentAreaWidth = math.max(0, size.width - tabsAreaWidth);
+    final contentAreaSize = Size(contentAreaWidth, size.height);
+    layoutChild(2, BoxConstraints.tight(contentAreaSize));
+
+    if (tabBarPosition == TabBarPosition.right) {
+      positionChild(2, Offset.zero);
+      if (hasChild(1)) {
+        positionChild(1, Offset(contentAreaWidth, 0));
+      }
+    } else {
+      // left
+      if (hasChild(1)) {
+        positionChild(1, Offset.zero);
+      }
+      positionChild(2, Offset(tabsAreaWidth, 0));
+    }
   }
 
   @override
-  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
-    return false;
+  bool shouldRelayout(covariant _TabbedViewLayout oldDelegate) {
+    return oldDelegate.tabBarPosition != tabBarPosition;
   }
 }

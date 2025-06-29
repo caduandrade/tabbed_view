@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tabs_area_layout_parent_data.dart';
+import 'package:tabbed_view/src/tabbed_view.dart'; // Import TabBarPosition
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 
 /// Utility class to find out which tabs may be visible.
 /// Calculates the required width and sets the offset value.
 @internal
 class VisibleTabs {
-  VisibleTabs(this.tabsAreaTheme);
+  VisibleTabs(this.tabsAreaTheme, this.tabBarPosition);
 
   final TabsAreaThemeData tabsAreaTheme;
+  final TabBarPosition tabBarPosition;
+
+  bool get _isHorizontal =>
+      tabBarPosition == TabBarPosition.top ||
+      tabBarPosition == TabBarPosition.bottom;
 
   List<RenderBox> _tabs = [];
 
@@ -25,59 +31,74 @@ class VisibleTabs {
 
   /// Layouts the single selected tab.
   void layoutSingleTab(
-      double maxWidth, double maxHeight, double reservedWidth) {
+      double maxPrimarySize, double maxSecondarySize, bool isHorizontal) {
     if (_tabs.length == 1) {
-      double availableWidth = maxWidth -
-          reservedWidth -
+      double availablePrimarySize = maxPrimarySize -
           tabsAreaTheme.initialGap -
           tabsAreaTheme.minimalFinalGap;
 
-      if (availableWidth > 0) {
+      if (availablePrimarySize > 0) {
         RenderBox tab = _tabs.first;
-        if (tab.size.width > availableWidth) {
-          final BoxConstraints childConstraints =
-              BoxConstraints.loose(Size(availableWidth, maxHeight));
+        if ((_isHorizontal ? tab.size.width : tab.size.height) >
+            availablePrimarySize) {
+          final BoxConstraints childConstraints = isHorizontal
+              ? BoxConstraints.loose(
+                  Size(availablePrimarySize, maxSecondarySize))
+              : BoxConstraints.loose(
+                  Size(maxSecondarySize, availablePrimarySize));
           tab.layout(childConstraints, parentUsesSize: true);
         }
       }
     }
   }
 
-  /// Updates the offset given the tab width, initial offset and gap values.
+  /// Updates the offset given the tab size, initial offset and gap values.
   void updateOffsets() {
-    double offset = tabsAreaTheme.initialGap;
+    double offset =
+        tabsAreaTheme.initialGap; // This is initial gap in primary axis
     for (int i = 0; i < _tabs.length; i++) {
       RenderBox tab = _tabs[i];
       final TabsAreaLayoutParentData tabParentData =
-          tab.parentData as TabsAreaLayoutParentData;
+          tab.tabsAreaLayoutParentData();
+// Capture original for debug
 
-      tabParentData.offset = Offset(offset, tabParentData.offset.dy);
+      if (_isHorizontal) {
+        // For horizontal, primary axis is X, secondary is Y.
+        tabParentData.offset = Offset(offset, tabParentData.offset.dy);
+      } else {
+        // For vertical, primary axis is Y, secondary is X.
+        tabParentData.offset = Offset(tabParentData.offset.dx, offset);
+      }
+
+      double tabPrimarySize = _isHorizontal ? tab.size.width : tab.size.height;
 
       if (i < _tabs.length - 1) {
-        offset += tab.size.width + tabsAreaTheme.middleGap;
+        // Not the last tab
+        offset += tabPrimarySize + tabsAreaTheme.middleGap;
       } else {
-        offset += tab.size.width + tabsAreaTheme.minimalFinalGap;
+        offset += tabPrimarySize + tabsAreaTheme.minimalFinalGap;
       }
     }
   }
 
-  /// Calculates the required width for the tab. Includes the gap values
-  /// on the right.
-  double requiredTabWidth(int index) {
+  /// Calculates the required size for the tab in the primary axis. Includes the gap values.
+  double requiredTabPrimarySize(int index) {
     RenderBox tab = _tabs[index];
+    double tabSize = _isHorizontal ? tab.size.width : tab.size.height;
     if (index < _tabs.length - 1) {
-      return tab.size.width + tabsAreaTheme.middleGap;
+      // Not the last tab
+      return tabSize + tabsAreaTheme.middleGap;
     }
-    return tab.size.width + tabsAreaTheme.minimalFinalGap;
+    return tabSize + tabsAreaTheme.minimalFinalGap;
   }
 
-  /// Calculates the required width for all tabs.
-  double requiredTotalWidth() {
-    double width = 0;
+  /// Calculates the required total size for all tabs in the primary axis.
+  double requiredTotalSize() {
+    double totalSize = 0;
     for (int i = 0; i < _tabs.length; i++) {
-      width += requiredTabWidth(i);
+      totalSize += requiredTabPrimarySize(i);
     }
-    return width;
+    return totalSize;
   }
 
   /// Removes the last non-selected tab. Returns the removed tab index.
@@ -85,8 +106,7 @@ class VisibleTabs {
     int index = _tabs.length - 1;
     while (index >= 0) {
       RenderBox tab = _tabs[index];
-      TabsAreaLayoutParentData parentData =
-          tab.parentData as TabsAreaLayoutParentData;
+      TabsAreaLayoutParentData parentData = tab.tabsAreaLayoutParentData();
       if (parentData.selected == false) {
         _tabs.removeAt(index);
         return index;

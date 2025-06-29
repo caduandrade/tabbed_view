@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/default_themes/classic_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/dark_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/minimalist_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/mobile_theme.dart';
-import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 
@@ -16,23 +15,16 @@ class TabbedViewThemeData {
       {TabsAreaThemeData? tabsArea,
       TabThemeData? tab,
       ContentAreaThemeData? contentArea,
-      TabbedViewMenuThemeData? menu})
-      : this.tab = tab != null ? tab : TabThemeData(),
-        this.tabsArea = tabsArea != null ? tabsArea : TabsAreaThemeData(),
-        this.contentArea =
-            contentArea != null ? contentArea : ContentAreaThemeData(),
-        this.menu = menu != null ? menu : TabbedViewMenuThemeData();
+      HiddenTabsMenuThemeData? menu})
+      : tab = tab ?? TabThemeData(),
+        tabsArea = tabsArea ?? TabsAreaThemeData(),
+        contentArea = contentArea ?? ContentAreaThemeData(),
+        menu = menu ?? HiddenTabsMenuThemeData();
 
-  TabsAreaThemeData tabsArea;
-  TabThemeData tab;
-  ContentAreaThemeData contentArea;
-  TabbedViewMenuThemeData menu;
-
-  /// Sets the Material Design icons.
-  void materialDesignIcons() {
-    this.tabsArea.menuIcon = IconProvider.data(Icons.arrow_drop_down);
-    this.tab.closeIcon = IconProvider.data(Icons.close);
-  }
+  final TabsAreaThemeData tabsArea;
+  final TabThemeData tab;
+  final ContentAreaThemeData contentArea;
+  final HiddenTabsMenuThemeData menu;
 
   /// Builds the predefined dark theme.
   factory TabbedViewThemeData.dark(
@@ -77,4 +69,18 @@ class TabbedViewThemeData {
   @override
   int get hashCode =>
       tabsArea.hashCode ^ tab.hashCode ^ contentArea.hashCode ^ menu.hashCode;
+
+  TabbedViewThemeData copyWith({
+    TabsAreaThemeData? tabsArea,
+    TabThemeData? tab,
+    ContentAreaThemeData? contentArea,
+    HiddenTabsMenuThemeData? menu,
+  }) {
+    return TabbedViewThemeData(
+      tabsArea: tabsArea ?? this.tabsArea,
+      tab: tab ?? this.tab,
+      contentArea: contentArea ?? this.contentArea,
+      menu: menu ?? this.menu,
+    );
+  }
 }

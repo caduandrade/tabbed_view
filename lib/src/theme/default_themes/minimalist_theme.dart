@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
-import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -26,33 +26,28 @@ class MinimalistTheme {
         buttonsAreaPadding: EdgeInsets.all(2),
         buttonPadding: const EdgeInsets.all(2),
         hoverButtonBackground: BoxDecoration(color: colorSet[300]!),
-        equalHeights: EqualHeights.all,
-        border: Border(bottom: BorderSide(color: colorSet[700]!, width: 1)));
+        equalHeights: EqualHeights.all);
   }
 
   static TabThemeData tabTheme({required MaterialColor colorSet}) {
     return TabThemeData(
-      buttonsOffset: 4,
-      textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
-      padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
-      paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
-      decoration: BoxDecoration(color: colorSet[50]!),
-      draggingDecoration: BoxDecoration(color: colorSet[50]!),
-      normalButtonColor: colorSet[900]!,
-      hoverButtonColor: colorSet[900]!,
-      disabledButtonColor: colorSet[400]!,
-      buttonPadding: const EdgeInsets.all(2),
-      hoverButtonBackground: BoxDecoration(color: colorSet[300]!),
-      highlightedStatus:
-          TabStatusThemeData(decoration: BoxDecoration(color: colorSet[300]!)),
-      selectedStatus: TabStatusThemeData(
-          normalButtonColor: colorSet[50]!,
-          hoverButtonColor: colorSet[50]!,
-          disabledButtonColor: colorSet[500]!,
-          hoverButtonBackground: BoxDecoration(color: colorSet[600]!),
-          fontColor: colorSet[50]!,
-          decoration: BoxDecoration(color: colorSet[700]!)),
-    );
+        innerBottomBorder:
+            const BorderSide(color: Colors.transparent, width: 1),
+        buttonsOffset: 4,
+        textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
+        padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
+        paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
+        decoration: BoxDecoration(color: colorSet[50]!),
+        draggingDecoration: BoxDecoration(color: colorSet[50]!),
+        normalButtonColor: colorSet[900]!,
+        hoverButtonColor: colorSet[900]!,
+        disabledButtonColor: colorSet[400]!,
+        buttonPadding: const EdgeInsets.all(2),
+        hoverButtonBackground: BoxDecoration(color: colorSet[300]!),
+        highlightedStatus: TabStatusThemeData(
+            innerBottomBorder: BorderSide(color: colorSet[300]!, width: 1)),
+        selectedStatus: TabStatusThemeData(
+            innerBottomBorder: BorderSide(color: colorSet[700]!, width: 1)));
   }
 
   static ContentAreaThemeData contentAreaTheme(
@@ -69,15 +64,18 @@ class MinimalistTheme {
         decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
   }
 
-  static TabbedViewMenuThemeData menuTheme({required MaterialColor colorSet}) {
-    return TabbedViewMenuThemeData(
-        border: Border.all(width: 1, color: colorSet[900]!),
-        margin: EdgeInsets.all(8),
-        menuItemPadding: EdgeInsets.all(8),
+  static HiddenTabsMenuThemeData menuTheme({required MaterialColor colorSet}) {
+    return HiddenTabsMenuThemeData(
         textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
         color: colorSet[50]!,
-        hoverColor: colorSet[200]!,
-        dividerColor: colorSet[400]!,
-        dividerThickness: 1);
+        menuItemPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        boxShadow: [
+          BoxShadow(
+              color: colorSet[900]!.withAlpha(100),
+              blurRadius: 4,
+              offset: const Offset(0, 2))
+        ],
+        borderRadius: BorderRadius.circular(4));
   }
 }
