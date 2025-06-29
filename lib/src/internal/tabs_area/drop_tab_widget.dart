@@ -145,12 +145,10 @@ class DropTabWidgetState extends State<DropTabWidget> {
               // When moving a tab from a lower index to a higher one, the
               // underlying list length is reduced by one, which requires
               // adjusting the target index.
-              widget.provider.controller
-                  .reorderTab(oldIndex, finalNewIndex);
+              widget.provider.controller.reorderTab(oldIndex, finalNewIndex);
             } else {
               data.controller.removeTab(data.tabData.index);
-              widget.provider.controller
-                  .insertTab(finalNewIndex, data.tabData);
+              widget.provider.controller.insertTab(finalNewIndex, data.tabData);
             }
           },
         ));
