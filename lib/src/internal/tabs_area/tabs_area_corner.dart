@@ -20,14 +20,11 @@ class TabsAreaCorner extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, Widget? child) {
-    final bool isHorizontal = provider.tabBarPosition == TabBarPosition.top ||
-        provider.tabBarPosition == TabBarPosition.bottom;
-
     Widget cornerContent =
         TabsAreaButtonsWidget(provider: provider, hiddenTabs: hiddenTabs);
 
     Widget corner = Container(
-        padding: isHorizontal
+        padding: provider.tabBarPosition.isHorizontal
             ? EdgeInsets.only(left: DropTabWidget.dropWidth)
             : EdgeInsets.only(top: DropTabWidget.dropWidth),
         child: cornerContent);

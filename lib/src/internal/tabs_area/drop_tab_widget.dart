@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:tabbed_view/src/draggable_data.dart';
+import 'package:tabbed_view/src/tabbed_view.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
@@ -55,8 +56,9 @@ class DropTabWidgetState extends State<DropTabWidget> {
             if (_over) {
               TabbedViewThemeData theme = TabbedViewTheme.of(context);
               return CustomPaint(
-                  foregroundPainter:
-                      _CustomPainter(dropColor: theme.tabsArea.dropColor),
+                  foregroundPainter: _CustomPainter(
+                      tabBarPosition: widget.provider.tabBarPosition,
+                      dropColor: theme.tabsArea.dropColor),
                   child: widget.child);
             }
             return widget.child;
@@ -108,8 +110,9 @@ class DropTabWidgetState extends State<DropTabWidget> {
 }
 
 class _CustomPainter extends CustomPainter {
-  _CustomPainter({required this.dropColor});
+  _CustomPainter({required this.tabBarPosition, required this.dropColor});
 
+  final TabBarPosition tabBarPosition;
   final Color dropColor;
 
   @override
@@ -117,8 +120,13 @@ class _CustomPainter extends CustomPainter {
     Paint paint = Paint()
       ..color = dropColor
       ..style = PaintingStyle.fill;
-    canvas.drawRect(
-        Rect.fromLTWH(0, 0, DropTabWidget.dropWidth, size.height), paint);
+    if (tabBarPosition.isHorizontal) {
+      canvas.drawRect(
+          Rect.fromLTWH(0, 0, DropTabWidget.dropWidth, size.height), paint);
+    } else {
+      canvas.drawRect(
+          Rect.fromLTWH(0, 0, size.width, DropTabWidget.dropWidth), paint);
+    }
   }
 
   @override

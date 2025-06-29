@@ -18,16 +18,22 @@ import 'package:tabbed_view/src/typedefs/can_drop.dart';
 /// Defines the position of the tab bar.
 enum TabBarPosition {
   /// Positions the tab bar above the content.
-  top,
+  top(true),
 
   /// Positions the tab bar below the content.
-  bottom,
+  bottom(true),
 
   /// Positions the tab bar on the left of the content.
-  left,
+  left(false),
 
   /// Positions the tab bar on the right of the content.
-  right
+  right(false);
+
+  const TabBarPosition(this.isHorizontal);
+
+  final bool isHorizontal;
+
+  bool get isVertical => !isHorizontal;
 }
 
 /// Tabs area buttons builder
