@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
-import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -17,7 +17,6 @@ class MobileTheme {
     Color foregroundColor = colorSet[900]!;
     Color backgroundColor = colorSet[50]!;
     Color menuColor = colorSet[100]!;
-    Color menuHoverColor = colorSet[300]!;
     Color normalButtonColor = colorSet[700]!;
     Color disabledButtonColor = colorSet[300]!;
     Color hoverButtonColor = colorSet[900]!;
@@ -44,7 +43,6 @@ class MobileTheme {
         contentArea: contentAreaTheme(
             backgroundColor: backgroundColor, borderColor: borderColor),
         menu: menuTheme(
-            hoverColor: menuHoverColor,
             foregroundColor: foregroundColor,
             borderColor: borderColor,
             fontSize: fontSize,
@@ -127,20 +125,24 @@ class MobileTheme {
         decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
   }
 
-  static TabbedViewMenuThemeData menuTheme(
-      {required Color backgroundColor,
-      required double fontSize,
-      required Color borderColor,
-      required Color foregroundColor,
-      required Color hoverColor}) {
-    return TabbedViewMenuThemeData(
-        textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
-        border: Border.all(width: 1, color: borderColor),
-        margin: EdgeInsets.all(8),
-        menuItemPadding: EdgeInsets.all(8),
+  static HiddenTabsMenuThemeData menuTheme({
+    required Color backgroundColor,
+    required double fontSize,
+    required Color borderColor,
+    required Color foregroundColor,
+    /* Color? hoverColor - not used */
+  }) {
+    return HiddenTabsMenuThemeData(
         color: backgroundColor,
-        hoverColor: hoverColor,
-        dividerColor: borderColor,
-        dividerThickness: 1);
+        textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
+        menuItemPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        boxShadow: [
+          BoxShadow(
+              color: borderColor.withAlpha(100),
+              blurRadius: 4,
+              offset: const Offset(0, 2))
+        ],
+        borderRadius: BorderRadius.circular(4));
   }
 }

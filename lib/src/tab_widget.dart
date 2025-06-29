@@ -3,6 +3,7 @@ import 'package:tabbed_view/src/draggable_config.dart';
 import 'package:tabbed_view/src/draggable_data.dart';
 import 'package:tabbed_view/src/flow_layout.dart';
 import 'package:tabbed_view/src/tabbed_view.dart' show TabBarPosition;
+import 'package:tabbed_view/src/theme/vertical_tab_layout_style.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/internal/tabs_area/drop_tab_widget.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tab_drag_feedback_widget.dart';
@@ -43,16 +44,27 @@ class TabWidget extends StatelessWidget {
     TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
     final bool isHorizontal = provider.tabBarPosition == TabBarPosition.top ||
         provider.tabBarPosition == TabBarPosition.bottom;
+    final bool isVertical = !isHorizontal;
+    final bool isStacked = isVertical &&
+        tabTheme.verticalLayoutStyle == VerticalTabLayoutStyle.stacked;
 
-    List<Widget> textAndButtons = _textAndButtons(context, tabTheme);
+    List<Widget> textAndButtons = _textAndButtons(context, tabTheme, isStacked);
 
+    FlowDirection flowDirection;
+    if (isVertical) {
+      // For vertical tabs, the layout is counter-intuitive due to RotatedBox.
+      // The 'inline' style uses a vertical flow and 'stacked' uses a horizontal
+      // flow to achieve the desired row/column effect after rotation.
+      flowDirection =
+          isStacked ? FlowDirection.horizontal : FlowDirection.vertical;
+    } else {
+      flowDirection = FlowDirection.horizontal;
+    }
     Widget textAndButtonsContainer = ClipRect(
         child: FlowLayout(
             children: textAndButtons,
             firstChildFlex: true,
-            direction: isHorizontal
-                ? FlowDirection.horizontal
-                : FlowDirection.vertical, // Pass the direction
+            direction: flowDirection,
             verticalAlignment: tabTheme.verticalAlignment));
 
     var themeInnerBottomBorder = statusTheme.innerBottomBorder ??
@@ -336,7 +348,8 @@ class TabWidget extends StatelessWidget {
   }
 
   /// Builds a list with title text and buttons.
-  List<Widget> _textAndButtons(BuildContext context, TabThemeData tabTheme) {
+  List<Widget> _textAndButtons(
+      BuildContext context, TabThemeData tabTheme, bool isStacked) {
     List<Widget> textAndButtons = [];
 
     TabData tab = provider.controller.tabs[index];
@@ -393,7 +406,7 @@ class TabWidget extends StatelessWidget {
         provider.tabBarPosition == TabBarPosition.right;
 
     Widget textWidget;
-    if (isVertical) {
+    if (isVertical && !isStacked) {
       if (tabTheme.rotateCharactersInVerticalTabs) {
         textWidget =
             Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis);
@@ -407,6 +420,7 @@ class TabWidget extends StatelessWidget {
         textWidget = RotatedBox(quarterTurns: quarterTurns, child: textWidget);
       }
     } else {
+      // For horizontal tabs or stacked vertical tabs, display text normally.
       textWidget =
           Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis);
     }

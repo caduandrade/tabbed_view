@@ -23,30 +23,14 @@ class TabsAreaCorner extends StatelessWidget {
     final bool isHorizontal = provider.tabBarPosition == TabBarPosition.top ||
         provider.tabBarPosition == TabBarPosition.bottom;
 
-    Widget buttonsWidget =
+    Widget cornerContent =
         TabsAreaButtonsWidget(provider: provider, hiddenTabs: hiddenTabs);
-
-    Widget cornerContent = isHorizontal
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [buttonsWidget])
-        : Column(
-            // For vertical tab bar, buttons are arranged vertically
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [buttonsWidget]);
 
     Widget corner = Container(
         padding: isHorizontal
             ? EdgeInsets.only(left: DropTabWidget.dropWidth)
-            : EdgeInsets.only(
-                top: DropTabWidget.dropWidth), // Adjust padding for vertical
-        child: IntrinsicWidth(
-            // Force content to its intrinsic width
-            child: IntrinsicHeight(
-                // Force content to its intrinsic height
-                child: cornerContent)));
+            : EdgeInsets.only(top: DropTabWidget.dropWidth),
+        child: cornerContent);
 
     if (provider.controller.reorderEnable) {
       return DropTabWidget(

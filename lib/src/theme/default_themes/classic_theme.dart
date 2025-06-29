@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
-import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -15,7 +15,6 @@ class ClassicTheme {
     Color backgroundColor = colorSet[50]!;
     Color highlightedColor = colorSet[300]!;
     Color fontColor = colorSet[900]!;
-    Color menuHoverColor = colorSet[200]!;
     Color normalButtonColor = colorSet[900]!;
     Color disabledButtonColor = colorSet[400]!;
     Color hoverButtonColor = colorSet[900]!;
@@ -42,7 +41,6 @@ class ClassicTheme {
         contentArea: contentAreaTheme(
             borderColor: borderColor, backgroundColor: backgroundColor),
         menu: menuTheme(
-            hoverColor: menuHoverColor,
             color: backgroundColor,
             borderColor: borderColor,
             fontSize: fontSize,
@@ -126,20 +124,24 @@ class ClassicTheme {
         decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
   }
 
-  static TabbedViewMenuThemeData menuTheme(
-      {required Color fontColor,
-      required double fontSize,
-      required Color color,
-      required hoverColor,
-      required borderColor}) {
-    return TabbedViewMenuThemeData(
-        textStyle: TextStyle(fontSize: fontSize, color: fontColor),
-        border: Border.all(width: 1, color: borderColor),
-        margin: EdgeInsets.all(8),
-        menuItemPadding: EdgeInsets.all(8),
+  static HiddenTabsMenuThemeData menuTheme({
+    required Color fontColor,
+    required double fontSize,
+    required Color color, // background color
+    required Color borderColor,
+    /* Color? hoverColor - not used */
+  }) {
+    return HiddenTabsMenuThemeData(
         color: color,
-        hoverColor: hoverColor,
-        dividerColor: borderColor,
-        dividerThickness: 1);
+        textStyle: TextStyle(fontSize: fontSize, color: fontColor),
+        menuItemPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        boxShadow: [
+          BoxShadow(
+              color: borderColor.withAlpha(100),
+              blurRadius: 4,
+              offset: const Offset(0, 2))
+        ],
+        borderRadius: BorderRadius.circular(4));
   }
 }

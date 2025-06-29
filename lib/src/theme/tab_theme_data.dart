@@ -5,6 +5,7 @@ import 'package:tabbed_view/src/tabbed_view_icons.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 import 'package:tabbed_view/src/theme/vertical_alignment.dart';
+import 'package:tabbed_view/src/theme/vertical_tab_layout_style.dart';
 
 /// Theme for tab.
 class TabThemeData {
@@ -32,6 +33,7 @@ class TabThemeData {
       this.paddingWithoutButton,
       this.margin,
       TabStatusThemeData? selectedStatus,
+      this.verticalLayoutStyle = VerticalTabLayoutStyle.inline,
       this.rotateCharactersInVerticalTabs = false,
       TabStatusThemeData? highlightedStatus,
       TabStatusThemeData? disabledStatus})
@@ -67,6 +69,7 @@ class TabThemeData {
     EdgeInsetsGeometry? paddingWithoutButton,
     EdgeInsetsGeometry? margin,
     TabStatusThemeData? selectedStatus,
+    VerticalTabLayoutStyle? verticalLayoutStyle,
     bool? rotateCharactersInVerticalTabs,
     TabStatusThemeData? highlightedStatus,
     TabStatusThemeData? disabledStatus,
@@ -97,6 +100,7 @@ class TabThemeData {
       paddingWithoutButton: paddingWithoutButton ?? this.paddingWithoutButton,
       margin: margin ?? this.margin,
       selectedStatus: selectedStatus ?? this.selectedStatus,
+      verticalLayoutStyle: verticalLayoutStyle ?? this.verticalLayoutStyle,
       rotateCharactersInVerticalTabs:
           rotateCharactersInVerticalTabs ?? this.rotateCharactersInVerticalTabs,
       highlightedStatus: highlightedStatus ?? this.highlightedStatus,
@@ -104,10 +108,22 @@ class TabThemeData {
     );
   }
 
-  /// If [true], characters within vertical tab text will also be rotated
-  /// along with the tab. If [false] (default), characters will remain upright
+  /// If `true`, characters within vertical tab text will also be rotated
+  /// along with the tab. If `false` (default), characters will remain upright
   /// while the text flows vertically.
+  ///
+  /// This property is only effective when [verticalLayoutStyle] is
+  /// [VerticalTabLayoutStyle.inline].
   final bool rotateCharactersInVerticalTabs;
+
+  /// Defines the layout style for a tab in a vertical [TabBar].
+  ///
+  /// [VerticalTabLayoutStyle.inline] will arrange the tab's internal components
+  /// (leading, text, and buttons) in a row.
+  ///
+  /// [VerticalTabLayoutStyle.stacked] will arrange the tab's internal components
+  /// in a column.
+  final VerticalTabLayoutStyle verticalLayoutStyle;
   final TabStatusThemeData selectedStatus;
   final TabStatusThemeData highlightedStatus;
   final TabStatusThemeData disabledStatus;
@@ -192,7 +208,8 @@ class TabThemeData {
           buttonPadding == other.buttonPadding &&
           buttonsGap == other.buttonsGap &&
           rotateCharactersInVerticalTabs ==
-              other.rotateCharactersInVerticalTabs;
+              other.rotateCharactersInVerticalTabs &&
+          verticalLayoutStyle == other.verticalLayoutStyle;
 
   @override
   int get hashCode =>
@@ -220,5 +237,6 @@ class TabThemeData {
       buttonsOffset.hashCode ^
       buttonPadding.hashCode ^
       buttonsGap.hashCode ^
-      rotateCharactersInVerticalTabs.hashCode;
+      rotateCharactersInVerticalTabs.hashCode ^
+      verticalLayoutStyle.hashCode;
 }

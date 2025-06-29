@@ -71,7 +71,7 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
     // Configuring the [TabbedView] with all available properties.
     TabbedView tabbedView = TabbedView(
       controller: _controller,
-      tabBarPosition: TabBarPosition.left,
+      tabBarPosition: TabBarPosition.top,
       contentBuilder: null,
       onTabSelection: (newIndex) {},
       onTabClose: (index, tabData) {},
@@ -152,6 +152,8 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
         padding: originalTheme.tab.padding,
         paddingWithoutButton: originalTheme.tab.paddingWithoutButton,
         margin: originalTheme.tab.margin,
+        verticalLayoutStyle:
+            VerticalTabLayoutStyle.stacked, // Using the new stacked layout
         rotateCharactersInVerticalTabs:
             originalTheme.tab.rotateCharactersInVerticalTabs,
         selectedStatus: TabStatusThemeData(
@@ -184,11 +186,17 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
         decorationNoTabsArea: originalTheme.contentArea.decorationNoTabsArea,
         padding: originalTheme.contentArea.padding,
       ),
-      menu: TabbedViewMenuThemeData(
-        // Properties for the hidden tabs menu.
-        blur: originalTheme.menu.blur,
-        maxWidth: originalTheme.menu.maxWidth,
-        ellipsisOverflowText: originalTheme.menu.ellipsisOverflowText,
+      menu: HiddenTabsMenuThemeData(
+        // Demonstrating the new menu theme properties
+        color: Colors.grey[800],
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withAlpha(128),
+              blurRadius: 8,
+              offset: Offset(0, 2))
+        ],
+        borderRadius: BorderRadius.circular(4),
+        maxHeight: 300,
       ),
     );
 

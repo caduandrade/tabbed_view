@@ -28,15 +28,22 @@ class TabsAreaThemeData {
       this.hoverButtonBackground,
       this.disabledButtonBackground,
       IconProvider? menuIcon,
+      IconProvider? menuIconOpen,
+      IconProvider? menuIconLeft,
+      IconProvider? menuIconRight,
       this.dropColor = const Color.fromARGB(150, 0, 0, 0)})
       : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
             TabbedViewThemeConstants.normalize(buttonIconSize),
-        this.menuIcon = menuIcon == null
-            ? IconProvider.path(TabbedViewIcons.menu)
-            : menuIcon;
+        this.menuIcon = menuIcon ?? IconProvider.path(TabbedViewIcons.menu),
+        this.menuIconOpen =
+            menuIconOpen ?? IconProvider.path(TabbedViewIcons.menuUp),
+        this.menuIconLeft =
+            menuIconLeft ?? IconProvider.path(TabbedViewIcons.menuLeft),
+        this.menuIconRight =
+            menuIconRight ?? IconProvider.path(TabbedViewIcons.menuRight);
 
   bool visible;
 
@@ -46,6 +53,15 @@ class TabsAreaThemeData {
   double middleGap;
   BorderSide gapBottomBorder;
   EqualHeights equalHeights;
+
+  /// Icon for the hidden tabs menu when it is open.
+  final IconProvider menuIconOpen;
+
+  /// Icon for the hidden tabs menu for a left tab bar.
+  final IconProvider menuIconLeft;
+
+  /// Icon for the hidden tabs menu for a right tab bar.
+  final IconProvider menuIconRight;
 
   Color dropColor;
 
@@ -76,6 +92,64 @@ class TabsAreaThemeData {
 
   /// Icon for the hidden tabs menu.
   IconProvider menuIcon;
+
+  TabsAreaThemeData copyWith(
+      {bool? visible,
+      Color? color,
+      Border? border,
+      double? initialGap,
+      double? middleGap,
+      double? minimalFinalGap,
+      BorderSide? gapBottomBorder,
+      EqualHeights? equalHeights,
+      BoxDecoration? buttonsAreaDecoration,
+      EdgeInsetsGeometry? buttonsAreaPadding,
+      EdgeInsetsGeometry? buttonPadding,
+      double? buttonsGap,
+      double? buttonsOffset,
+      double? buttonIconSize,
+      Color? normalButtonColor,
+      Color? hoverButtonColor,
+      Color? disabledButtonColor,
+      BoxDecoration? normalButtonBackground,
+      BoxDecoration? hoverButtonBackground,
+      BoxDecoration? disabledButtonBackground,
+      IconProvider? menuIcon,
+      IconProvider? menuIconOpen,
+      IconProvider? menuIconLeft,
+      IconProvider? menuIconRight,
+      Color? dropColor}) {
+    return TabsAreaThemeData(
+        visible: visible ?? this.visible,
+        color: color ?? this.color,
+        border: border ?? this.border,
+        initialGap: initialGap ?? this.initialGap,
+        middleGap: middleGap ?? this.middleGap,
+        minimalFinalGap: minimalFinalGap ?? this.minimalFinalGap,
+        gapBottomBorder: gapBottomBorder ?? this.gapBottomBorder,
+        equalHeights: equalHeights ?? this.equalHeights,
+        buttonsAreaDecoration:
+            buttonsAreaDecoration ?? this.buttonsAreaDecoration,
+        buttonsAreaPadding: buttonsAreaPadding ?? this.buttonsAreaPadding,
+        buttonPadding: buttonPadding ?? this.buttonPadding,
+        buttonsGap: buttonsGap ?? this.buttonsGap,
+        buttonsOffset: buttonsOffset ?? this.buttonsOffset,
+        buttonIconSize: buttonIconSize ?? this.buttonIconSize,
+        normalButtonColor: normalButtonColor ?? this.normalButtonColor,
+        hoverButtonColor: hoverButtonColor ?? this.hoverButtonColor,
+        disabledButtonColor: disabledButtonColor ?? this.disabledButtonColor,
+        normalButtonBackground:
+            normalButtonBackground ?? this.normalButtonBackground,
+        hoverButtonBackground:
+            hoverButtonBackground ?? this.hoverButtonBackground,
+        disabledButtonBackground:
+            disabledButtonBackground ?? this.disabledButtonBackground,
+        menuIcon: menuIcon ?? this.menuIcon,
+        menuIconOpen: menuIconOpen ?? this.menuIconOpen,
+        menuIconLeft: menuIconLeft ?? this.menuIconLeft,
+        menuIconRight: menuIconRight ?? this.menuIconRight,
+        dropColor: dropColor ?? this.dropColor);
+  }
 
   double _buttonsGap;
 
@@ -111,6 +185,9 @@ class TabsAreaThemeData {
           hoverButtonBackground == other.hoverButtonBackground &&
           disabledButtonBackground == other.disabledButtonBackground &&
           menuIcon == other.menuIcon &&
+          menuIconOpen == other.menuIconOpen &&
+          menuIconLeft == other.menuIconLeft &&
+          menuIconRight == other.menuIconRight &&
           _buttonsGap == other._buttonsGap &&
           _buttonsOffset == other._buttonsOffset &&
           buttonPadding == other.buttonPadding;
@@ -136,6 +213,9 @@ class TabsAreaThemeData {
       hoverButtonBackground.hashCode ^
       disabledButtonBackground.hashCode ^
       menuIcon.hashCode ^
+      menuIconOpen.hashCode ^
+      menuIconLeft.hashCode ^
+      menuIconRight.hashCode ^
       _buttonsGap.hashCode ^
       _buttonsOffset.hashCode ^
       buttonPadding.hashCode;

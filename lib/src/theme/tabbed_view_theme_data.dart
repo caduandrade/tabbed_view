@@ -4,7 +4,7 @@ import 'package:tabbed_view/src/theme/default_themes/classic_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/dark_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/minimalist_theme.dart';
 import 'package:tabbed_view/src/theme/default_themes/mobile_theme.dart';
-import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 
@@ -15,16 +15,16 @@ class TabbedViewThemeData {
       {TabsAreaThemeData? tabsArea,
       TabThemeData? tab,
       ContentAreaThemeData? contentArea,
-      TabbedViewMenuThemeData? menu})
+      HiddenTabsMenuThemeData? menu})
       : tab = tab ?? TabThemeData(),
         tabsArea = tabsArea ?? TabsAreaThemeData(),
         contentArea = contentArea ?? ContentAreaThemeData(),
-        menu = menu ?? TabbedViewMenuThemeData();
+        menu = menu ?? HiddenTabsMenuThemeData();
 
   final TabsAreaThemeData tabsArea;
   final TabThemeData tab;
   final ContentAreaThemeData contentArea;
-  final TabbedViewMenuThemeData menu;
+  final HiddenTabsMenuThemeData menu;
 
   /// Builds the predefined dark theme.
   factory TabbedViewThemeData.dark(
@@ -74,7 +74,7 @@ class TabbedViewThemeData {
     TabsAreaThemeData? tabsArea,
     TabThemeData? tab,
     ContentAreaThemeData? contentArea,
-    TabbedViewMenuThemeData? menu,
+    HiddenTabsMenuThemeData? menu,
   }) {
     return TabbedViewThemeData(
       tabsArea: tabsArea ?? this.tabsArea,

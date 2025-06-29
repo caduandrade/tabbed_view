@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/equal_heights.dart';
-import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -69,15 +69,18 @@ class MinimalistTheme {
         decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
   }
 
-  static TabbedViewMenuThemeData menuTheme({required MaterialColor colorSet}) {
-    return TabbedViewMenuThemeData(
-        border: Border.all(width: 1, color: colorSet[900]!),
-        margin: EdgeInsets.all(8),
-        menuItemPadding: EdgeInsets.all(8),
+  static HiddenTabsMenuThemeData menuTheme({required MaterialColor colorSet}) {
+    return HiddenTabsMenuThemeData(
         textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
         color: colorSet[50]!,
-        hoverColor: colorSet[200]!,
-        dividerColor: colorSet[400]!,
-        dividerThickness: 1);
+        menuItemPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        boxShadow: [
+          BoxShadow(
+              color: colorSet[900]!.withAlpha(100),
+              blurRadius: 4,
+              offset: const Offset(0, 2))
+        ],
+        borderRadius: BorderRadius.circular(4));
   }
 }
