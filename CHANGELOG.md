@@ -1,3 +1,8 @@
+## 1.22.0
+
+* `TabData`
+  * Added the ability to override tab themes.
+
 ## 1.21.0
 
 * `TabbedView`

@@ -40,6 +40,7 @@ class TabWidget extends StatelessWidget {
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
     TabThemeData tabTheme = theme.tab;
     TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
+    TabStatusThemeData? tabOverrideTheme = tab.getTabThemeFor(status);
 
     List<Widget> textAndButtons = _textAndButtons(context, tabTheme);
 
@@ -49,27 +50,31 @@ class TabWidget extends StatelessWidget {
             firstChildFlex: true,
             verticalAlignment: tabTheme.verticalAlignment));
 
-    BorderSide innerBottomBorder = statusTheme.innerBottomBorder ??
+    BorderSide innerBottomBorder = tabOverrideTheme?.innerBottomBorder ??
+        statusTheme.innerBottomBorder ??
         tabTheme.innerBottomBorder ??
         BorderSide.none;
-    BorderSide innerTopBorder = statusTheme.innerTopBorder ??
+    BorderSide innerTopBorder = tabOverrideTheme?.innerTopBorder ??
+        statusTheme.innerTopBorder ??
         tabTheme.innerTopBorder ??
         BorderSide.none;
-    BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
+    BoxDecoration? decoration = tabOverrideTheme?.decoration ??
+        statusTheme.decoration ??
+        tabTheme.decoration;
 
     EdgeInsetsGeometry? padding;
     if (textAndButtons.length == 1) {
-      padding =
-          statusTheme.paddingWithoutButton ?? tabTheme.paddingWithoutButton;
+      padding = tabOverrideTheme?.paddingWithoutButton ??
+          statusTheme.paddingWithoutButton ??
+          tabTheme.paddingWithoutButton;
     }
     if (padding == null) {
-      padding = statusTheme.padding ?? tabTheme.padding;
+      padding =
+          tabOverrideTheme?.padding ?? statusTheme.padding ?? tabTheme.padding;
     }
 
-    EdgeInsetsGeometry? margin = tabTheme.margin;
-    if (statusTheme.margin != null) {
-      margin = statusTheme.margin;
-    }
+    EdgeInsetsGeometry? margin =
+        tabOverrideTheme?.margin ?? statusTheme.margin ?? tabTheme.margin;
 
     Widget tabWidget = Container(
         child: Container(
@@ -164,30 +169,38 @@ class TabWidget extends StatelessWidget {
 
     TabData tab = provider.controller.tabs[index];
     TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
+    TabStatusThemeData? tabOverrideTheme = tab.getTabThemeFor(status);
 
-    Color normalColor = statusTheme.normalButtonColor != null
-        ? statusTheme.normalButtonColor!
-        : tabTheme.normalButtonColor;
-    Color hoverColor = statusTheme.hoverButtonColor != null
-        ? statusTheme.hoverButtonColor!
-        : tabTheme.hoverButtonColor;
-    Color disabledColor = statusTheme.disabledButtonColor != null
-        ? statusTheme.disabledButtonColor!
-        : tabTheme.disabledButtonColor;
+    Color normalColor = tabOverrideTheme?.normalButtonColor ??
+        statusTheme.normalButtonColor ??
+        tabTheme.normalButtonColor;
+    Color hoverColor = tabOverrideTheme?.hoverButtonColor ??
+        statusTheme.hoverButtonColor ??
+        tabTheme.hoverButtonColor;
+    Color disabledColor = tabOverrideTheme?.disabledButtonColor ??
+        statusTheme.disabledButtonColor ??
+        tabTheme.disabledButtonColor;
 
-    BoxDecoration? normalBackground = statusTheme.normalButtonBackground != null
-        ? statusTheme.normalButtonBackground
-        : tabTheme.normalButtonBackground;
-    BoxDecoration? hoverBackground = statusTheme.hoverButtonBackground != null
-        ? statusTheme.hoverButtonBackground
-        : tabTheme.hoverButtonBackground;
+    BoxDecoration? normalBackground =
+        tabOverrideTheme?.normalButtonBackground ??
+            statusTheme.normalButtonBackground ??
+            tabTheme.normalButtonBackground;
+    BoxDecoration? hoverBackground = tabOverrideTheme?.hoverButtonBackground ??
+        statusTheme.hoverButtonBackground ??
+        tabTheme.hoverButtonBackground;
     BoxDecoration? disabledBackground =
-        statusTheme.disabledButtonBackground != null
-            ? statusTheme.disabledButtonBackground
-            : tabTheme.disabledButtonBackground;
+        tabOverrideTheme?.disabledButtonBackground ??
+            statusTheme.disabledButtonBackground ??
+            tabTheme.disabledButtonBackground;
 
     TextStyle? textStyle = tabTheme.textStyle;
-    if (statusTheme.fontColor != null) {
+    if (tabOverrideTheme != null && tabOverrideTheme.fontColor != null) {
+      if (textStyle != null) {
+        textStyle = textStyle.copyWith(color: tabOverrideTheme.fontColor);
+      } else {
+        textStyle = TextStyle(color: tabOverrideTheme.fontColor);
+      }
+    } else if (statusTheme.fontColor != null) {
       if (textStyle != null) {
         textStyle = textStyle.copyWith(color: statusTheme.fontColor);
       } else {

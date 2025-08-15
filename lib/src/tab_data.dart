@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/tab_button.dart';
 import 'package:tabbed_view/src/tab_leading_builder.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 /// The tab data.
 ///
@@ -27,6 +28,15 @@ import 'package:tabbed_view/src/tabbed_view_controller.dart';
 /// parameter as long as the [TabbedViewController] is being kept in the
 /// state of its class.
 ///
+/// The [normalStatusTheme] overrides the default theme for the tab
+/// when it's in its regular state.
+///
+/// The [selectedStatusTheme] overrides the default theme to customize the
+/// appearance of the tab when it is currently selected.
+///
+/// The [highlightedStatusTheme] overrides the default theme to change
+/// the visual look of the tab when it's in a highlighted state.
+///
 /// See also:
 ///
 /// * [TabbedView.contentBuilder]
@@ -40,7 +50,10 @@ class TabData extends ChangeNotifier with TabIndex {
       bool closable = true,
       double? textSize,
       this.draggable = true,
-      this.keepAlive = false})
+      this.keepAlive = false,
+      this.normalStatusTheme,
+      this.highlightedStatusTheme,
+      this.selectedStatusTheme})
       : _value = value,
         _text = text,
         _leading = leading,
@@ -131,6 +144,22 @@ class TabData extends ChangeNotifier with TabIndex {
     if (_textSize != value) {
       _textSize = value;
       notifyListeners();
+    }
+  }
+
+  final TabStatusThemeData? normalStatusTheme;
+  final TabStatusThemeData? selectedStatusTheme;
+  final TabStatusThemeData? highlightedStatusTheme;
+
+  /// Gets the theme of a tab according to its status.
+  TabStatusThemeData? getTabThemeFor(TabStatus status) {
+    switch (status) {
+      case TabStatus.normal:
+        return normalStatusTheme;
+      case TabStatus.selected:
+        return selectedStatusTheme;
+      case TabStatus.highlighted:
+        return highlightedStatusTheme;
     }
   }
 
