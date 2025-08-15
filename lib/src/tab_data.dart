@@ -1,9 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
-import 'package:tabbed_view/src/tab_button.dart';
-import 'package:tabbed_view/src/tab_leading_builder.dart';
-import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
 /// The tab data.
