@@ -42,7 +42,7 @@ class TabsAreaLayout extends MultiChildRenderObjectWidget {
     renderObject..hiddenTabs = hiddenTabs;
     renderObject..selectedTabIndex = selectedTabIndex;
 
-    //renderObject.markNeedsLayoutForSizedByParentChange()
+    renderObject.markNeedsLayoutForSizedByParentChange();
   }
 }
 

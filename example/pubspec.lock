@@ -174,7 +174,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "1.21.0"
+    version: "1.22.1"
   term_glyph:
     dependency: transitive
     description:

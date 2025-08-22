@@ -1,3 +1,8 @@
+## 1.22.1
+
+* Bugfix
+  * Tab width doesn't grow to fit the new title set by `TabData.text`.
+
 ## 1.22.0
 
 * `TabData`

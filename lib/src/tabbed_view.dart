@@ -200,6 +200,6 @@ class _TabbedViewLayout extends MultiChildLayoutDelegate {
 
   @override
   bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
-    return false;
+    return true;
   }
 }
