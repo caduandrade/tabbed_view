@@ -294,8 +294,9 @@ class TabbedViewController extends ChangeNotifier {
         _selectedIndex = newIndex;
       } else if (originalSelectedIndex != null) {
         // Selected tab was closed.
-        final int removedBeforeCount =
-            tabsToRemove.where((entry) => entry.key < originalSelectedIndex).length;
+        final int removedBeforeCount = tabsToRemove
+            .where((entry) => entry.key < originalSelectedIndex)
+            .length;
         int newSelectedIndex = originalSelectedIndex - removedBeforeCount;
         if (newSelectedIndex >= _tabs.length) {
           newSelectedIndex = _tabs.length - 1;

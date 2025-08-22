@@ -43,7 +43,8 @@ class TabsAreaCorner extends StatelessWidget {
     if (provider.tabBarPosition.isHorizontal) {
       cornerContent = Row(mainAxisSize: MainAxisSize.min, children: children);
     } else {
-      cornerContent = Column(mainAxisSize: MainAxisSize.min, children: children);
+      cornerContent =
+          Column(mainAxisSize: MainAxisSize.min, children: children);
     }
 
     Widget corner = Container(

@@ -1,7 +1,6 @@
 library tabbed_view;
 
-export 'src/tabbed_view.dart'
-    hide OnTabClose, TabCloseInterceptor;
+export 'src/tabbed_view.dart' hide OnTabClose, TabCloseInterceptor;
 export 'src/tabbed_view_icons.dart';
 export 'src/tab_data.dart';
 export 'src/tabbed_view_controller.dart';

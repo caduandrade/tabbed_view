@@ -81,10 +81,8 @@ class ClassicTheme {
       required Color hoverButtonColor,
       required Color disabledButtonColor}) {
     return TabThemeData(
-        innerLeftBorder:
-            const BorderSide(color: Colors.transparent, width: 2),
-        innerRightBorder:
-            const BorderSide(color: Colors.transparent, width: 2),
+        innerLeftBorder: const BorderSide(color: Colors.transparent, width: 2),
+        innerRightBorder: const BorderSide(color: Colors.transparent, width: 2),
         innerBottomBorder:
             const BorderSide(color: Colors.transparent, width: 2),
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
@@ -124,7 +122,10 @@ class ClassicTheme {
     BoxDecoration decorationNoTabsArea = BoxDecoration(
         color: backgroundColor,
         border: Border.all(width: 1, color: borderColor));
-    return ContentAreaThemeData(decoration: decoration, decorationNoTabsArea: decorationNoTabsArea, border: borderSide);
+    return ContentAreaThemeData(
+        decoration: decoration,
+        decorationNoTabsArea: decorationNoTabsArea,
+        border: borderSide);
   }
 
   static HiddenTabsMenuThemeData menuTheme({

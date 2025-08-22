@@ -1,7 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 import 'package:tabbed_view/src/tabbed_view.dart'
-    show OnTabSelection,
+    show
+        OnTabSelection,
         TabBarPosition,
         TabSelectInterceptor,
         TabsAreaButtonsBuilder;

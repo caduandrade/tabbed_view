@@ -86,8 +86,9 @@ class TabWidget extends StatelessWidget {
     }
 
     // Builds inner borders for indicators.
-    BorderSide innerTop =
-        statusTheme.innerTopBorder ?? tabTheme.innerTopBorder ?? BorderSide.none;
+    BorderSide innerTop = statusTheme.innerTopBorder ??
+        tabTheme.innerTopBorder ??
+        BorderSide.none;
     BorderSide innerBottom = statusTheme.innerBottomBorder ??
         tabTheme.innerBottomBorder ??
         BorderSide.none;
@@ -136,8 +137,7 @@ class TabWidget extends StatelessWidget {
               left: frameBorderSide,
               right: frameBorderSide);
         }
-      } else if (decoration.border != null &&
-          decoration.border is Border) {
+      } else if (decoration.border != null && decoration.border is Border) {
         // Unselected tab with a full border (e.g. 'classic')
         Border currentBorder = decoration.border as Border;
         if (index > 0) {
@@ -302,7 +302,7 @@ class TabWidget extends StatelessWidget {
     return tabWidget;
   }
 
- /// Builds a list with title text and buttons.
+  /// Builds a list with title text and buttons.
   List<Widget> _textAndButtons(
       BuildContext context, TabThemeData tabTheme, bool isStacked) {
     List<Widget> textAndButtons = [];
@@ -310,13 +310,19 @@ class TabWidget extends StatelessWidget {
     TabData tab = provider.controller.tabs[index];
     TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
 
-    Color normalColor = statusTheme.normalButtonColor ?? tabTheme.normalButtonColor;
-    Color hoverColor = statusTheme.hoverButtonColor ?? tabTheme.hoverButtonColor;
-    Color disabledColor = statusTheme.disabledButtonColor ?? tabTheme.disabledButtonColor;
+    Color normalColor =
+        statusTheme.normalButtonColor ?? tabTheme.normalButtonColor;
+    Color hoverColor =
+        statusTheme.hoverButtonColor ?? tabTheme.hoverButtonColor;
+    Color disabledColor =
+        statusTheme.disabledButtonColor ?? tabTheme.disabledButtonColor;
 
-    BoxDecoration? normalBackground = statusTheme.normalButtonBackground ?? tabTheme.normalButtonBackground;
-    BoxDecoration? hoverBackground = statusTheme.hoverButtonBackground ?? tabTheme.hoverButtonBackground;
-    BoxDecoration? disabledBackground = statusTheme.disabledButtonBackground ?? tabTheme.disabledButtonBackground;
+    BoxDecoration? normalBackground =
+        statusTheme.normalButtonBackground ?? tabTheme.normalButtonBackground;
+    BoxDecoration? hoverBackground =
+        statusTheme.hoverButtonBackground ?? tabTheme.hoverButtonBackground;
+    BoxDecoration? disabledBackground = statusTheme.disabledButtonBackground ??
+        tabTheme.disabledButtonBackground;
 
     TextStyle? textStyle = tabTheme.textStyle;
     if (statusTheme.fontColor != null) {

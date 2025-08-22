@@ -13,7 +13,7 @@ import 'package:tabbed_view/src/theme/theme_widget.dart';
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {
   const TabsArea({required this.provider});
-  
+
   final TabbedViewProvider provider;
 
   @override

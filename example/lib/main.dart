@@ -84,8 +84,7 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
       controller: _controller,
       onTabSecondaryTap: (index, tabData, details) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content:
-                Text('Right-clicked on tab #$index: "${tabData.text}"')));
+            content: Text('Right-clicked on tab #$index: "${tabData.text}"')));
       },
       tabBarPosition: TabBarPosition.top,
       contentBuilder: null,
@@ -139,10 +138,8 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
               Icon(Icons.tab, size: 16, color: textStyle?.color),
               SizedBox(width: 8),
               Expanded(
-                child: Text(
-                  '${tabData.text} (index $tabIndex)',
-                  style: textStyle,
-                  overflow: TextOverflow.ellipsis),
+                child: Text('${tabData.text} (index $tabIndex)',
+                    style: textStyle, overflow: TextOverflow.ellipsis),
               ),
             ],
           ),
