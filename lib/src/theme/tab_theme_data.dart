@@ -37,7 +37,7 @@ class TabThemeData {
       this.margin,
       TabStatusThemeData? selectedStatus,
       this.verticalLayoutStyle = VerticalTabLayoutStyle.inline,
-      this.rotateCharactersInVerticalTabs = false,
+      this.rotateCaptionsInVerticalTabs = false,
       this.showCloseIconWhenNotFocused = false,
       TabStatusThemeData? highlightedStatus,
       TabStatusThemeData? disabledStatus})
@@ -78,7 +78,7 @@ class TabThemeData {
     EdgeInsetsGeometry? margin,
     TabStatusThemeData? selectedStatus,
     VerticalTabLayoutStyle? verticalLayoutStyle,
-    bool? rotateCharactersInVerticalTabs,
+    bool? rotateCaptionsInVerticalTabs,
     bool? showCloseIconWhenNotFocused,
     TabStatusThemeData? highlightedStatus,
     TabStatusThemeData? disabledStatus,
@@ -114,8 +114,8 @@ class TabThemeData {
       margin: margin ?? this.margin,
       selectedStatus: selectedStatus ?? this.selectedStatus,
       verticalLayoutStyle: verticalLayoutStyle ?? this.verticalLayoutStyle,
-      rotateCharactersInVerticalTabs:
-          rotateCharactersInVerticalTabs ?? this.rotateCharactersInVerticalTabs,
+      rotateCaptionsInVerticalTabs:
+          rotateCaptionsInVerticalTabs ?? this.rotateCaptionsInVerticalTabs,
       showCloseIconWhenNotFocused:
           showCloseIconWhenNotFocused ?? this.showCloseIconWhenNotFocused,
       highlightedStatus: highlightedStatus ?? this.highlightedStatus,
@@ -137,7 +137,7 @@ class TabThemeData {
   ///
   /// This property is only effective when [verticalLayoutStyle] is
   /// [VerticalTabLayoutStyle.inline].
-  final bool rotateCharactersInVerticalTabs;
+  final bool rotateCaptionsInVerticalTabs;
 
   final bool showCloseIconWhenNotFocused;
 
@@ -239,8 +239,8 @@ class TabThemeData {
           buttonPadding == other.buttonPadding &&
           buttonsGap == other.buttonsGap &&
           showCloseIconWhenNotFocused == other.showCloseIconWhenNotFocused &&
-          rotateCharactersInVerticalTabs ==
-              other.rotateCharactersInVerticalTabs &&
+          rotateCaptionsInVerticalTabs ==
+              other.rotateCaptionsInVerticalTabs &&
           verticalLayoutStyle == other.verticalLayoutStyle;
 
   @override
@@ -274,6 +274,6 @@ class TabThemeData {
       buttonPadding.hashCode ^
       buttonsGap.hashCode ^
       showCloseIconWhenNotFocused.hashCode ^
-      rotateCharactersInVerticalTabs.hashCode ^
+      rotateCaptionsInVerticalTabs.hashCode ^
       verticalLayoutStyle.hashCode;
 }

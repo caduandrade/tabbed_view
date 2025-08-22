@@ -92,8 +92,13 @@ class TabWidget extends StatelessWidget {
     BorderSide innerBottom = statusTheme.innerBottomBorder ??
         tabTheme.innerBottomBorder ??
         BorderSide.none;
-    BorderSide innerLeft = tabTheme.innerLeftBorder ?? BorderSide.none;
-    BorderSide innerRight = tabTheme.innerRightBorder ?? BorderSide.none;
+    BorderSide innerLeft = BorderSide.none;
+    BorderSide innerRight = BorderSide.none;
+
+    if (isHorizontal) {
+      innerLeft = tabTheme.innerLeftBorder ?? BorderSide.none;
+      innerRight = tabTheme.innerRightBorder ?? BorderSide.none;
+    }
 
     if (indicatorBorder != null) {
       // Theme with an indicator border like 'dark' or 'mobile'.
@@ -355,7 +360,7 @@ class TabWidget extends StatelessWidget {
 
     Widget textWidget;
     if (isVertical && !isStacked) {
-      if (tabTheme.rotateCharactersInVerticalTabs) {
+      if (tabTheme.rotateCaptionsInVerticalTabs) {
         textWidget =
             Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis);
       } else {

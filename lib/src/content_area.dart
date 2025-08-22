@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
+import 'package:tabbed_view/src/tabbed_view.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
@@ -40,57 +41,44 @@ class ContentArea extends StatelessWidget {
           if (tab.keepAlive) {
             child = Offstage(offstage: !selectedTab, child: child);
           }
-          children.add(Positioned.fill(
-              key: tab.key,
-              child:
-                  Container(child: child, padding: contentAreaTheme.padding)));
+          // Padding will be applied once on the parent container.
+          children.add(Positioned.fill(key: tab.key, child: Container(child: child)));
         }
       }
 
       Widget listener = NotificationListener<SizeChangedLayoutNotification>(
           child: SizeChangedLayoutNotifier(child: Stack(children: children)));
 
-      Decoration? decoration = tabsAreaVisible
-          ? contentAreaTheme.decoration
-          : contentAreaTheme.decorationNoTabsArea;
-
-      if (decoration is BoxDecoration) {
-        Border currentBorder;
-        if (decoration.border is Border) {
-          currentBorder = decoration.border as Border;
-        } else if (decoration.border is BorderDirectional) {
-          final bd = decoration.border as BorderDirectional;
-          currentBorder = Border(
-              top: bd.top, bottom: bd.bottom, left: bd.start, right: bd.end);
-        } else {
-          currentBorder = Border();
+      BoxDecoration? decoration;
+      if (tabsAreaVisible) {
+        decoration = contentAreaTheme.decoration;
+        final borderSide = contentAreaTheme.border;
+        if (borderSide != null) {
+          final position = provider.tabBarPosition;
+          Border border;
+          if (position == TabBarPosition.top) {
+            border =
+                Border(bottom: borderSide, left: borderSide, right: borderSide);
+          } else if (position == TabBarPosition.bottom) {
+            border = Border(top: borderSide, left: borderSide, right: borderSide);
+          } else if (position == TabBarPosition.left) {
+            border =
+                Border(bottom: borderSide, top: borderSide, right: borderSide);
+          } else {
+            // right
+            border =
+                Border(bottom: borderSide, top: borderSide, left: borderSide);
+          }
+          decoration = decoration?.copyWith(border: border) ??
+              BoxDecoration(border: border);
         }
-
-        BorderSide top = currentBorder.top;
-        BorderSide bottom = currentBorder.bottom;
-        BorderSide left = currentBorder.left;
-        BorderSide right = currentBorder.right;
-
-        BorderSide frameBorderSide = currentBorder.top;
-        if (frameBorderSide == BorderSide.none)
-          frameBorderSide = currentBorder.bottom;
-        if (frameBorderSide == BorderSide.none)
-          frameBorderSide = currentBorder.left;
-        if (frameBorderSide == BorderSide.none)
-          frameBorderSide = currentBorder.right;
-
-        if (top == BorderSide.none && frameBorderSide != BorderSide.none)
-          top = frameBorderSide;
-        if (bottom == BorderSide.none && frameBorderSide != BorderSide.none)
-          bottom = frameBorderSide;
-        if (left == BorderSide.none && frameBorderSide != BorderSide.none)
-          left = frameBorderSide;
-        if (right == BorderSide.none && frameBorderSide != BorderSide.none)
-          right = frameBorderSide;
-        decoration = decoration.copyWith(
-            border: Border(top: top, bottom: bottom, left: left, right: right));
+      } else {
+        decoration = contentAreaTheme.decorationNoTabsArea;
       }
-      return Container(child: listener, decoration: decoration);
+      return Container(
+          child: listener,
+          decoration: decoration,
+          padding: contentAreaTheme.padding);
     });
     if (provider.contentClip) {
       return ClipRect(child: layoutBuilder);

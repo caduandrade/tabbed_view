@@ -26,7 +26,7 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
   late TabbedViewController _controller;
   TabBarPosition _position = TabBarPosition.top;
   String _themeName = 'mobile';
-  bool _showRotateIcon = false;
+  bool _useStackedLayout = true;
 
   @override
   void initState() {
@@ -175,8 +175,10 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
     // The `copyWith` method allows you to customize the theme from a predefined one.
     themeData = themeData.copyWith(
         tab: themeData.tab.copyWith(
-            verticalLayoutStyle: VerticalTabLayoutStyle.stacked,
-            rotateCharactersInVerticalTabs: true,
+            verticalLayoutStyle: _useStackedLayout
+                ? VerticalTabLayoutStyle.stacked
+                : VerticalTabLayoutStyle.inline,
+            rotateCaptionsInVerticalTabs: _useStackedLayout,
             showCloseIconWhenNotFocused: true,
             maxWidth: 200,
             maxTextWidth: 100,
@@ -193,50 +195,59 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
 
     Widget example = Column(children: [
       _buildButtons(),
-      Expanded(
-          child: Container(
-              child: TabbedViewTheme(data: themeData, child: tabbedView),
-              margin: EdgeInsets.all(10)))
+      SizedBox(height: 10),
+      Expanded(child: TabbedViewTheme(data: themeData, child: tabbedView))
     ]);
 
     return Scaffold(
         appBar: AppBar(title: Text('TabbedView Example (All properties)')),
-        body: example);
+        body: Container(padding: EdgeInsets.all(10), child: example));
   }
 
   Widget _buildButtons() {
-    return Padding(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [_buildPositionButtons(), _buildThemeButtons()]));
+    return Column(children: [
+      Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [_buildPositionButtons(), _buildThemeButtons()]),
+      _buildOptionCheckboxes()
+    ]);
+  }
+
+  Widget _buildOptionCheckboxes() {
+    return Row(children: [
+      Checkbox(
+          value: _useStackedLayout,
+          onChanged: (value) => setState(() => _useStackedLayout = value!)),
+      Text('Use stacked layout for vertical tabs')
+    ]);
   }
 
   Widget _buildPositionButtons() {
-    return Row(children: [
-      Radio<TabBarPosition>(
-          value: TabBarPosition.top,
-          groupValue: _position,
-          onChanged: (value) => setState(() => _position = value!)),
-      Text('Top'),
-      SizedBox(width: 10),
-      Radio<TabBarPosition>(
-          value: TabBarPosition.bottom,
-          groupValue: _position,
-          onChanged: (value) => setState(() => _position = value!)),
-      Text('Bottom'),
-      SizedBox(width: 10),
-      Radio<TabBarPosition>(
-          value: TabBarPosition.left,
-          groupValue: _position,
-          onChanged: (value) => setState(() => _position = value!)),
-      Text('Left'),
-      SizedBox(width: 10),
-      Radio<TabBarPosition>(
-          value: TabBarPosition.right,
-          groupValue: _position,
-          onChanged: (value) => setState(() => _position = value!)),
-      Text('Right')
+    return Wrap(spacing: 8, runSpacing: 4, children: [
+      ChoiceChip(
+        label: Text('Top'),
+        selected: _position == TabBarPosition.top,
+        onSelected: (selected) =>
+            setState(() => _position = TabBarPosition.top),
+      ),
+      ChoiceChip(
+        label: Text('Bottom'),
+        selected: _position == TabBarPosition.bottom,
+        onSelected: (selected) =>
+            setState(() => _position = TabBarPosition.bottom),
+      ),
+      ChoiceChip(
+        label: Text('Left'),
+        selected: _position == TabBarPosition.left,
+        onSelected: (selected) =>
+            setState(() => _position = TabBarPosition.left),
+      ),
+      ChoiceChip(
+        label: Text('Right'),
+        selected: _position == TabBarPosition.right,
+        onSelected: (selected) =>
+            setState(() => _position = TabBarPosition.right),
+      )
     ]);
   }
 
@@ -244,10 +255,10 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
     return DropdownButton<String>(
         value: _themeName,
         items: [
-          DropdownMenuItem(child: Text('Mobile'), value: 'mobile'),
-          DropdownMenuItem(child: Text('Classic'), value: 'classic'),
-          DropdownMenuItem(child: Text('Dark'), value: 'dark'),
-          DropdownMenuItem(child: Text('Minimalist'), value: 'minimalist')
+          DropdownMenuItem(value: 'mobile', child: Text('Mobile')),
+          DropdownMenuItem(value: 'classic', child: Text('Classic')),
+          DropdownMenuItem(value: 'dark', child: Text('Dark')),
+          DropdownMenuItem(value: 'minimalist', child: Text('Minimalist'))
         ],
         onChanged: (value) => setState(() => _themeName = value!));
   }

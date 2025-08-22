@@ -30,7 +30,7 @@ class TabsAreaCorner extends StatelessWidget {
       Widget trailing = provider.trailing!;
       if (provider.tabBarPosition.isVertical) {
         final TabThemeData tabTheme = TabbedViewTheme.of(context).tab;
-        if (tabTheme.rotateCharactersInVerticalTabs) {
+        if (tabTheme.rotateCaptionsInVerticalTabs) {
           final int quarterTurns =
               provider.tabBarPosition == TabBarPosition.left ? -1 : 1;
           trailing = RotatedBox(quarterTurns: quarterTurns, child: trailing);
