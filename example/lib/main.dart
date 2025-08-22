@@ -24,6 +24,9 @@ class TabbedViewExamplePage extends StatefulWidget {
 
 class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
   late TabbedViewController _controller;
+  TabBarPosition _position = TabBarPosition.top;
+  String _themeName = 'mobile';
+  bool _showRotateIcon = false;
 
   @override
   void initState() {
@@ -71,11 +74,27 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
     _controller = TabbedViewController(tabs);
   }
 
+  TabbedViewThemeData _getTheme() {
+    switch (_themeName) {
+      case 'classic':
+        return TabbedViewThemeData.classic(
+            colorSet: Colors.blueGrey, borderColor: Colors.black);
+      case 'dark':
+        return TabbedViewThemeData.dark(colorSet: Colors.grey, fontSize: 13);
+      case 'minimalist':
+        return TabbedViewThemeData.minimalist(colorSet: Colors.blueGrey);
+      case 'mobile':
+      default:
+        return TabbedViewThemeData.mobile(
+            colorSet: Colors.blueGrey, accentColor: Colors.blue);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget trailingWidget = Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-      child: Text('My trailing text ppppppp'),
+      child: Text('Trailing text'),
     );
 
     // Configuring the [TabbedView] with all available properties.
@@ -86,9 +105,9 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Right-clicked on tab #$index: "${tabData.text}"')));
       },
-      tabBarPosition: TabBarPosition.top,
+      tabBarPosition: _position,
       contentBuilder: null,
-      onTabSelection: (newIndex) {},
+      onTabSelection: (tabData) {},
       onTabClose: (index, tabData) {},
       tabCloseInterceptor: (index, tabData) {
         if (tabData.text == 'Tab 1') {
@@ -151,11 +170,9 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
       dragScope: null,
     );
 
-    // Building a theme from the mobile theme.
-    TabbedViewThemeData themeData = TabbedViewThemeData.mobile(
-        colorSet: Colors.blueGrey, accentColor: Colors.blue);
-
+    TabbedViewThemeData themeData = _getTheme();
     // Customizing the theme.
+    // The `copyWith` method allows you to customize the theme from a predefined one.
     themeData = themeData.copyWith(
         tab: themeData.tab.copyWith(
             verticalLayoutStyle: VerticalTabLayoutStyle.stacked,
@@ -174,9 +191,64 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
                 (themeData.tab.selectedStatus.fontColor ?? Colors.black)
                     .withAlpha(200)));
 
-    Widget w = TabbedViewTheme(data: themeData, child: tabbedView);
+    Widget example = Column(children: [
+      _buildButtons(),
+      Expanded(
+          child: Container(
+              child: TabbedViewTheme(data: themeData, child: tabbedView),
+              margin: EdgeInsets.all(10)))
+    ]);
+
     return Scaffold(
         appBar: AppBar(title: Text('TabbedView Example (All properties)')),
-        body: Container(padding: EdgeInsets.all(32), child: w));
+        body: example);
+  }
+
+  Widget _buildButtons() {
+    return Padding(
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [_buildPositionButtons(), _buildThemeButtons()]));
+  }
+
+  Widget _buildPositionButtons() {
+    return Row(children: [
+      Radio<TabBarPosition>(
+          value: TabBarPosition.top,
+          groupValue: _position,
+          onChanged: (value) => setState(() => _position = value!)),
+      Text('Top'),
+      SizedBox(width: 10),
+      Radio<TabBarPosition>(
+          value: TabBarPosition.bottom,
+          groupValue: _position,
+          onChanged: (value) => setState(() => _position = value!)),
+      Text('Bottom'),
+      SizedBox(width: 10),
+      Radio<TabBarPosition>(
+          value: TabBarPosition.left,
+          groupValue: _position,
+          onChanged: (value) => setState(() => _position = value!)),
+      Text('Left'),
+      SizedBox(width: 10),
+      Radio<TabBarPosition>(
+          value: TabBarPosition.right,
+          groupValue: _position,
+          onChanged: (value) => setState(() => _position = value!)),
+      Text('Right')
+    ]);
+  }
+
+  Widget _buildThemeButtons() {
+    return DropdownButton<String>(
+        value: _themeName,
+        items: [
+          DropdownMenuItem(child: Text('Mobile'), value: 'mobile'),
+          DropdownMenuItem(child: Text('Classic'), value: 'classic'),
+          DropdownMenuItem(child: Text('Dark'), value: 'dark'),
+          DropdownMenuItem(child: Text('Minimalist'), value: 'minimalist')
+        ],
+        onChanged: (value) => setState(() => _themeName = value!));
   }
 }

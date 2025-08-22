@@ -23,8 +23,17 @@ class TabsArea extends StatefulWidget {
 /// The [TabsArea] state.
 class _TabsAreaState extends State<TabsArea> {
   int? _highlightedIndex;
+  Key? _tabsAreaLayoutKey;
+  late bool _lastIsHorizontal;
 
   final HiddenTabs _hiddenTabs = HiddenTabs();
+
+  @override
+  void initState() {
+    super.initState();
+    _lastIsHorizontal = widget.provider.tabBarPosition.isHorizontal;
+    _tabsAreaLayoutKey = UniqueKey();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,15 @@ class _TabsAreaState extends State<TabsArea> {
     children.add(
         TabsAreaCorner(provider: widget.provider, hiddenTabs: _hiddenTabs));
 
+    bool isHorizontal = widget.provider.tabBarPosition.isHorizontal;
+    if (isHorizontal != _lastIsHorizontal) {
+      _lastIsHorizontal = isHorizontal;
+      // Changing the key to force the layout to be rebuilt.
+      _tabsAreaLayoutKey = UniqueKey();
+    }
+
     Widget tabsAreaLayout = TabsAreaLayout(
+        key: _tabsAreaLayoutKey,
         children: children,
         theme: theme,
         hiddenTabs: _hiddenTabs,
