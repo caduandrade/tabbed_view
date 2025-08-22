@@ -79,22 +79,23 @@ void main() {
         expect(border.right, isNot(equals(BorderSide.none)));
       });
 
-      testWidgets('Selected TabWidget has correct border for TabBarPosition.top',
+      testWidgets(
+          'Selected TabWidget has correct border for TabBarPosition.top',
           (WidgetTester tester) async {
         controller.selectedIndex = 0;
         await tester.pumpWidget(
             _buildTestApp(theme: theme, position: TabBarPosition.top));
 
-        final selectedTab = find.byWidgetPredicate(
-            (widget) => widget is TabWidget && widget.status == TabStatus.selected);
+        final selectedTab = find.byWidgetPredicate((widget) =>
+            widget is TabWidget && widget.status == TabStatus.selected);
         expect(selectedTab, findsOneWidget);
 
         // Find the outer container of the TabWidget which has the frame border
         final container = find
             .descendant(
                 of: selectedTab,
-                matching: find
-                    .byWidgetPredicate((w) => w is Container && w.margin != null))
+                matching: find.byWidgetPredicate(
+                    (w) => w is Container && w.margin != null))
             .first;
 
         final widget = tester.widget<Container>(container);
@@ -115,15 +116,15 @@ void main() {
         await tester.pumpWidget(
             _buildTestApp(theme: theme, position: TabBarPosition.left));
 
-        final selectedTab = find.byWidgetPredicate(
-            (widget) => widget is TabWidget && widget.status == TabStatus.selected);
+        final selectedTab = find.byWidgetPredicate((widget) =>
+            widget is TabWidget && widget.status == TabStatus.selected);
         expect(selectedTab, findsOneWidget);
 
         final container = find
             .descendant(
                 of: selectedTab,
-                matching: find
-                    .byWidgetPredicate((w) => w is Container && w.margin != null))
+                matching: find.byWidgetPredicate(
+                    (w) => w is Container && w.margin != null))
             .first;
 
         final widget = tester.widget<Container>(container);
@@ -145,15 +146,15 @@ void main() {
         await tester.pumpWidget(
             _buildTestApp(theme: theme, position: TabBarPosition.right));
 
-        final selectedTab = find.byWidgetPredicate(
-            (widget) => widget is TabWidget && widget.status == TabStatus.selected);
+        final selectedTab = find.byWidgetPredicate((widget) =>
+            widget is TabWidget && widget.status == TabStatus.selected);
         expect(selectedTab, findsOneWidget);
 
         final container = find
             .descendant(
                 of: selectedTab,
-                matching: find
-                    .byWidgetPredicate((w) => w is Container && w.margin != null))
+                matching: find.byWidgetPredicate(
+                    (w) => w is Container && w.margin != null))
             .first;
 
         final widget = tester.widget<Container>(container);
@@ -178,8 +179,8 @@ void main() {
         await tester.pumpWidget(
             _buildTestApp(theme: theme, position: TabBarPosition.left));
 
-        final selectedTab = find.byWidgetPredicate(
-            (widget) => widget is TabWidget && widget.status == TabStatus.selected);
+        final selectedTab = find.byWidgetPredicate((widget) =>
+            widget is TabWidget && widget.status == TabStatus.selected);
         expect(selectedTab, findsOneWidget);
 
         // Find the inner container that holds the indicator border
@@ -209,8 +210,8 @@ void main() {
         await tester.pumpWidget(
             _buildTestApp(theme: theme, position: TabBarPosition.right));
 
-        final selectedTab = find.byWidgetPredicate(
-            (widget) => widget is TabWidget && widget.status == TabStatus.selected);
+        final selectedTab = find.byWidgetPredicate((widget) =>
+            widget is TabWidget && widget.status == TabStatus.selected);
         expect(selectedTab, findsOneWidget);
 
         // Find the inner container that holds the indicator border
@@ -235,7 +236,8 @@ void main() {
     });
 
     group('Trailing Widget', () {
-      testWidgets('is present and not rotated when TabBarPosition is left by default',
+      testWidgets(
+          'is present and not rotated when TabBarPosition is left by default',
           (WidgetTester tester) async {
         await tester.pumpWidget(MaterialApp(
           home: Scaffold(
@@ -250,16 +252,16 @@ void main() {
         final trailingFinder = find.text('Trailing');
         expect(trailingFinder, findsOneWidget);
 
-        final rotatedBoxFinder =
-            find.ancestor(of: trailingFinder, matching: find.byType(RotatedBox));
+        final rotatedBoxFinder = find.ancestor(
+            of: trailingFinder, matching: find.byType(RotatedBox));
         expect(rotatedBoxFinder, findsNothing);
       });
 
       testWidgets(
           'is present and rotated when TabBarPosition is left and theme enables it',
           (WidgetTester tester) async {
-        final theme = TabbedViewThemeData.classic().copyWith(
-            tab: TabThemeData(rotateCaptionsInVerticalTabs: true));
+        final theme = TabbedViewThemeData.classic()
+            .copyWith(tab: TabThemeData(rotateCaptionsInVerticalTabs: true));
 
         await tester.pumpWidget(MaterialApp(
           home: Scaffold(
@@ -277,8 +279,8 @@ void main() {
         final trailingFinder = find.text('Trailing');
         expect(trailingFinder, findsOneWidget);
 
-        final rotatedBoxFinder =
-            find.ancestor(of: trailingFinder, matching: find.byType(RotatedBox));
+        final rotatedBoxFinder = find.ancestor(
+            of: trailingFinder, matching: find.byType(RotatedBox));
         expect(rotatedBoxFinder, findsOneWidget);
       });
     });

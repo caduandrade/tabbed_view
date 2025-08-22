@@ -239,8 +239,7 @@ class TabThemeData {
           buttonPadding == other.buttonPadding &&
           buttonsGap == other.buttonsGap &&
           showCloseIconWhenNotFocused == other.showCloseIconWhenNotFocused &&
-          rotateCaptionsInVerticalTabs ==
-              other.rotateCaptionsInVerticalTabs &&
+          rotateCaptionsInVerticalTabs == other.rotateCaptionsInVerticalTabs &&
           verticalLayoutStyle == other.verticalLayoutStyle;
 
   @override

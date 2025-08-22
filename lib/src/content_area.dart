@@ -42,7 +42,8 @@ class ContentArea extends StatelessWidget {
             child = Offstage(offstage: !selectedTab, child: child);
           }
           // Padding will be applied once on the parent container.
-          children.add(Positioned.fill(key: tab.key, child: Container(child: child)));
+          children.add(
+              Positioned.fill(key: tab.key, child: Container(child: child)));
         }
       }
 
@@ -60,7 +61,8 @@ class ContentArea extends StatelessWidget {
             border =
                 Border(bottom: borderSide, left: borderSide, right: borderSide);
           } else if (position == TabBarPosition.bottom) {
-            border = Border(top: borderSide, left: borderSide, right: borderSide);
+            border =
+                Border(top: borderSide, left: borderSide, right: borderSide);
           } else if (position == TabBarPosition.left) {
             border =
                 Border(bottom: borderSide, top: borderSide, right: borderSide);

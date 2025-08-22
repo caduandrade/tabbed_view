@@ -48,10 +48,13 @@ void main() {
       controller.selectedIndex = 1; // Select 'Tab 2'
       controller.removeTab(1);
       expect(controller.length, 3);
-      expect(controller.selectedIndex, 1); // Should select the next tab ('Tab 3')
+      expect(
+          controller.selectedIndex, 1); // Should select the next tab ('Tab 3')
     });
 
-    test('removeTab updates selectedIndex correctly when closing tab before selected', () {
+    test(
+        'removeTab updates selectedIndex correctly when closing tab before selected',
+        () {
       controller.selectedIndex = 1; // Select 'Tab 2'
       controller.removeTab(0); // Close 'Tab 1'
       expect(controller.selectedIndex, 0); // Selection should shift left
@@ -68,7 +71,8 @@ void main() {
 
     test('closeTabsToTheRight closes correct tabs', () async {
       expect(controller.length, 4);
-      await controller.closeTabsToTheRight(0); // Close all tabs to the right of 'Tab 1'
+      await controller
+          .closeTabsToTheRight(0); // Close all tabs to the right of 'Tab 1'
       // Tab 1 and the non-closable Tab 3 should remain.
       expect(controller.length, 2);
       expect(controller.tabs[0].text, 'Tab 1');
