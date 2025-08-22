@@ -17,6 +17,11 @@
     * `closeTabsToTheRight(int tabIndex)`
   * Refactored `closeAllClosableTabs` to be more robust and reusable.
 
+## 1.22.0
+
+* `TabData`
+  * Added the ability to override tab themes.
+
 ## 1.21.0
 
 * `TabbedView`
