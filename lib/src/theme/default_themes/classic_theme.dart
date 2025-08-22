@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
+import 'package:tabbed_view/src/theme/equal_heights.dart';
 import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
@@ -67,6 +68,7 @@ class ClassicTheme {
             border: Border.all(color: borderColor, width: 1)),
         buttonsAreaPadding: EdgeInsets.all(2),
         middleGap: -1,
+        equalHeights: EqualHeights.all,
         gapBottomBorder: BorderSide(color: borderColor, width: 1),
         gapSideBorder: BorderSide(color: borderColor, width: 1));
   }
