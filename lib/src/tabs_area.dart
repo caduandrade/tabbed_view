@@ -13,7 +13,7 @@ import 'package:tabbed_view/src/theme/theme_widget.dart';
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {
   const TabsArea({required this.provider});
-
+  
   final TabbedViewProvider provider;
 
   @override
@@ -54,9 +54,11 @@ class _TabsAreaState extends State<TabsArea> {
         tabBarPosition: widget.provider.tabBarPosition);
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
 
+    Widget content = tabsAreaLayout;
+
     // Apply the theme's color and border directly.
     return Container(
-      child: tabsAreaLayout,
+      child: content,
       decoration: BoxDecoration(
           color: tabsAreaTheme.color, border: tabsAreaTheme.border),
     );

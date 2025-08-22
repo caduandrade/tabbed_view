@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Theme for the hidden tabs menu.
 class HiddenTabsMenuThemeData {
   HiddenTabsMenuThemeData(
-      {this.color,
+      {this.color = Colors.white,
       this.boxShadow,
       this.borderRadius,
       this.border,
@@ -20,7 +20,7 @@ class HiddenTabsMenuThemeData {
       this.dividerColor,
       this.hoverColor,
       this.highlightColor,
-      this.colorDark,
+      this.colorDark = const Color(0xFF424242), // Colors.grey[800]
       this.textStyleDark,
       this.dividerColorDark,
       this.hoverColorDark,

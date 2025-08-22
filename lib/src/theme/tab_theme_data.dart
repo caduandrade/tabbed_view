@@ -10,7 +10,6 @@ import 'package:tabbed_view/src/theme/vertical_tab_layout_style.dart';
 /// Theme for tab.
 class TabThemeData {
   TabThemeData(
-      // Removed const keyword
       {IconProvider? closeIcon,
       this.normalButtonColor = Colors.black,
       this.hoverButtonColor = Colors.black,
@@ -28,13 +27,18 @@ class TabThemeData {
       this.draggingOpacity = 0.3,
       this.innerBottomBorder,
       this.innerTopBorder,
+      this.innerLeftBorder,
+      this.innerRightBorder,
       this.textStyle = const TextStyle(fontSize: 13),
+      this.maxTextWidth,
+      this.maxWidth,
       this.padding,
       this.paddingWithoutButton,
       this.margin,
       TabStatusThemeData? selectedStatus,
       this.verticalLayoutStyle = VerticalTabLayoutStyle.inline,
       this.rotateCharactersInVerticalTabs = false,
+      this.showCloseIconWhenNotFocused = false,
       TabStatusThemeData? highlightedStatus,
       TabStatusThemeData? disabledStatus})
       : this.buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
@@ -64,13 +68,18 @@ class TabThemeData {
     double? draggingOpacity,
     BorderSide? innerBottomBorder,
     BorderSide? innerTopBorder,
+    BorderSide? innerLeftBorder,
+    BorderSide? innerRightBorder,
     TextStyle? textStyle,
+    double? maxTextWidth,
+    double? maxWidth,
     EdgeInsetsGeometry? padding,
     EdgeInsetsGeometry? paddingWithoutButton,
     EdgeInsetsGeometry? margin,
     TabStatusThemeData? selectedStatus,
     VerticalTabLayoutStyle? verticalLayoutStyle,
     bool? rotateCharactersInVerticalTabs,
+    bool? showCloseIconWhenNotFocused,
     TabStatusThemeData? highlightedStatus,
     TabStatusThemeData? disabledStatus,
   }) {
@@ -95,7 +104,11 @@ class TabThemeData {
       draggingOpacity: draggingOpacity ?? this.draggingOpacity,
       innerBottomBorder: innerBottomBorder ?? this.innerBottomBorder,
       innerTopBorder: innerTopBorder ?? this.innerTopBorder,
+      innerLeftBorder: innerLeftBorder ?? this.innerLeftBorder,
+      innerRightBorder: innerRightBorder ?? this.innerRightBorder,
       textStyle: textStyle ?? this.textStyle,
+      maxTextWidth: maxTextWidth ?? this.maxTextWidth,
+      maxWidth: maxWidth ?? this.maxWidth,
       padding: padding ?? this.padding,
       paddingWithoutButton: paddingWithoutButton ?? this.paddingWithoutButton,
       margin: margin ?? this.margin,
@@ -103,10 +116,20 @@ class TabThemeData {
       verticalLayoutStyle: verticalLayoutStyle ?? this.verticalLayoutStyle,
       rotateCharactersInVerticalTabs:
           rotateCharactersInVerticalTabs ?? this.rotateCharactersInVerticalTabs,
+      showCloseIconWhenNotFocused:
+          showCloseIconWhenNotFocused ?? this.showCloseIconWhenNotFocused,
       highlightedStatus: highlightedStatus ?? this.highlightedStatus,
       disabledStatus: disabledStatus ?? this.disabledStatus,
     );
   }
+
+  /// The maximum width for the tab text. If the text exceeds this width, it
+  /// will be truncated with an ellipsis.
+  final double? maxTextWidth;
+
+  /// The maximum width for the tab. For vertical tabs, this will be the maximum
+  /// height.
+  final double? maxWidth;
 
   /// If `true`, characters within vertical tab text will also be rotated
   /// along with the tab. If `false` (default), characters will remain upright
@@ -115,6 +138,8 @@ class TabThemeData {
   /// This property is only effective when [verticalLayoutStyle] is
   /// [VerticalTabLayoutStyle.inline].
   final bool rotateCharactersInVerticalTabs;
+
+  final bool showCloseIconWhenNotFocused;
 
   /// Defines the layout style for a tab in a vertical [TabBar].
   ///
@@ -148,6 +173,8 @@ class TabThemeData {
   final double draggingOpacity;
   final BorderSide? innerBottomBorder;
   final BorderSide? innerTopBorder;
+  final BorderSide? innerLeftBorder;
+  final BorderSide? innerRightBorder;
 
   final TextStyle? textStyle;
 
@@ -192,7 +219,11 @@ class TabThemeData {
           draggingOpacity == other.draggingOpacity &&
           innerBottomBorder == other.innerBottomBorder &&
           innerTopBorder == other.innerTopBorder &&
+          innerLeftBorder == other.innerLeftBorder &&
+          innerRightBorder == other.innerRightBorder &&
           textStyle == other.textStyle &&
+          maxTextWidth == other.maxTextWidth &&
+          maxWidth == other.maxWidth &&
           buttonIconSize == other.buttonIconSize &&
           normalButtonColor == other.normalButtonColor &&
           hoverButtonColor == other.hoverButtonColor &&
@@ -207,6 +238,7 @@ class TabThemeData {
           buttonsOffset == other.buttonsOffset &&
           buttonPadding == other.buttonPadding &&
           buttonsGap == other.buttonsGap &&
+          showCloseIconWhenNotFocused == other.showCloseIconWhenNotFocused &&
           rotateCharactersInVerticalTabs ==
               other.rotateCharactersInVerticalTabs &&
           verticalLayoutStyle == other.verticalLayoutStyle;
@@ -222,7 +254,11 @@ class TabThemeData {
       draggingOpacity.hashCode ^
       innerBottomBorder.hashCode ^
       innerTopBorder.hashCode ^
+      innerLeftBorder.hashCode ^
+      innerRightBorder.hashCode ^
       textStyle.hashCode ^
+      maxTextWidth.hashCode ^
+      maxWidth.hashCode ^
       buttonIconSize.hashCode ^
       normalButtonColor.hashCode ^
       hoverButtonColor.hashCode ^
@@ -237,6 +273,7 @@ class TabThemeData {
       buttonsOffset.hashCode ^
       buttonPadding.hashCode ^
       buttonsGap.hashCode ^
+      showCloseIconWhenNotFocused.hashCode ^
       rotateCharactersInVerticalTabs.hashCode ^
       verticalLayoutStyle.hashCode;
 }

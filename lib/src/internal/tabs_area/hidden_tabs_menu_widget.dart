@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/tab_data.dart';
+import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 
@@ -36,6 +37,8 @@ class HiddenTabsMenuWidget extends StatelessWidget {
         isDark ? menuTheme.textStyleDark : menuTheme.textStyle;
 
     final List<TabData> tabs = provider.controller.tabs;
+    final HiddenTabsMenuItemBuilder? menuItemBuilder =
+        provider.hiddenTabsMenuItemBuilder;
 
     return Container(
       constraints: BoxConstraints(maxWidth: menuTheme.maxWidth),
@@ -56,11 +59,11 @@ class HiddenTabsMenuWidget extends StatelessWidget {
           itemBuilder: (context, i) {
             final int tabIndex = hiddenTabs[i];
             final TabData tab = tabs[tabIndex];
-            return InkWell(
-              onTap: () => onSelection(tabIndex),
-              hoverColor: hoverColor,
-              highlightColor: highlightColor,
-              child: Padding(
+            final Widget child;
+            if (menuItemBuilder != null) {
+              child = menuItemBuilder(context, tabIndex, tab);
+            } else {
+              child = Padding(
                 padding: menuTheme.menuItemPadding,
                 child: Text(
                   tab.text,
@@ -69,7 +72,13 @@ class HiddenTabsMenuWidget extends StatelessWidget {
                       ? TextOverflow.ellipsis
                       : null,
                 ),
-              ),
+              );
+            }
+            return InkWell(
+              onTap: () => onSelection(tabIndex),
+              hoverColor: hoverColor,
+              highlightColor: highlightColor,
+              child: child,
             );
           },
         ),

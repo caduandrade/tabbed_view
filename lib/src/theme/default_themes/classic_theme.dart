@@ -67,7 +67,8 @@ class ClassicTheme {
             border: Border.all(color: borderColor, width: 1)),
         buttonsAreaPadding: EdgeInsets.all(2),
         middleGap: -1,
-        gapBottomBorder: BorderSide(color: borderColor, width: 1));
+        gapBottomBorder: BorderSide(color: borderColor, width: 1),
+        gapSideBorder: BorderSide(color: borderColor, width: 1));
   }
 
   static TabThemeData tabTheme(
@@ -80,6 +81,10 @@ class ClassicTheme {
       required Color hoverButtonColor,
       required Color disabledButtonColor}) {
     return TabThemeData(
+        innerLeftBorder:
+            const BorderSide(color: Colors.transparent, width: 2),
+        innerRightBorder:
+            const BorderSide(color: Colors.transparent, width: 2),
         innerBottomBorder:
             const BorderSide(color: Colors.transparent, width: 2),
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
@@ -101,29 +106,25 @@ class ClassicTheme {
             decoration: BoxDecoration(
                 color: highlightedColor,
                 border: Border.all(color: borderColor, width: 1))),
+        // The border is now defined by a single BorderSide, allowing the
+        // TabWidget to build the correct border for any TabBarPosition.
         selectedStatus: TabStatusThemeData(
-          decoration: BoxDecoration(
-              color: backgroundColor,
-              border: Border(
-                  left: BorderSide(color: borderColor, width: 1),
-                  top: BorderSide(color: borderColor, width: 1),
-                  right: BorderSide(color: borderColor, width: 1))),
+          decoration: BoxDecoration(color: backgroundColor),
+          border: BorderSide(color: borderColor, width: 1),
           padding: EdgeInsets.fromLTRB(6, 3, 3, 8),
         ));
   }
 
   static ContentAreaThemeData contentAreaTheme(
       {required Color borderColor, required Color backgroundColor}) {
+    // The border is now defined by a single BorderSide, allowing the
+    // ContentArea to build the correct border for any TabBarPosition.
     BorderSide borderSide = BorderSide(width: 1, color: borderColor);
-    BoxDecoration decoration = BoxDecoration(
-        color: backgroundColor,
-        border:
-            Border(bottom: borderSide, left: borderSide, right: borderSide));
+    BoxDecoration decoration = BoxDecoration(color: backgroundColor);
     BoxDecoration decorationNoTabsArea = BoxDecoration(
         color: backgroundColor,
         border: Border.all(width: 1, color: borderColor));
-    return ContentAreaThemeData(
-        decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
+    return ContentAreaThemeData(decoration: decoration, decorationNoTabsArea: decorationNoTabsArea, border: borderSide);
   }
 
   static HiddenTabsMenuThemeData menuTheme({

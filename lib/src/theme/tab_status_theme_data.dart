@@ -16,7 +16,8 @@ class TabStatusThemeData {
       this.disabledButtonColor,
       this.normalButtonBackground,
       this.hoverButtonBackground,
-      this.disabledButtonBackground});
+      this.disabledButtonBackground,
+      this.border});
 
   static const TabStatusThemeData empty = TabStatusThemeData();
 
@@ -45,6 +46,47 @@ class TabStatusThemeData {
   final BoxDecoration? hoverButtonBackground;
   final BoxDecoration? disabledButtonBackground;
 
+  /// The border of the tab. If not NULL, the border of the
+  /// [decoration] property will be ignored.
+  final BorderSide? border;
+
+  TabStatusThemeData copyWith({
+    BoxDecoration? decoration,
+    BorderSide? innerTopBorder,
+    BorderSide? innerBottomBorder,
+    Color? fontColor,
+    EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? paddingWithoutButton,
+    EdgeInsetsGeometry? margin,
+    Color? normalButtonColor,
+    Color? hoverButtonColor,
+    Color? disabledButtonColor,
+    BoxDecoration? normalButtonBackground,
+    BoxDecoration? hoverButtonBackground,
+    BoxDecoration? disabledButtonBackground,
+    BorderSide? border,
+  }) {
+    return TabStatusThemeData(
+      decoration: decoration ?? this.decoration,
+      innerTopBorder: innerTopBorder ?? this.innerTopBorder,
+      innerBottomBorder: innerBottomBorder ?? this.innerBottomBorder,
+      fontColor: fontColor ?? this.fontColor,
+      padding: padding ?? this.padding,
+      paddingWithoutButton: paddingWithoutButton ?? this.paddingWithoutButton,
+      margin: margin ?? this.margin,
+      normalButtonColor: normalButtonColor ?? this.normalButtonColor,
+      hoverButtonColor: hoverButtonColor ?? this.hoverButtonColor,
+      disabledButtonColor: disabledButtonColor ?? this.disabledButtonColor,
+      normalButtonBackground:
+          normalButtonBackground ?? this.normalButtonBackground,
+      hoverButtonBackground:
+          hoverButtonBackground ?? this.hoverButtonBackground,
+      disabledButtonBackground:
+          disabledButtonBackground ?? this.disabledButtonBackground,
+      border: border ?? this.border,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -62,7 +104,8 @@ class TabStatusThemeData {
           disabledButtonColor == other.disabledButtonColor &&
           normalButtonBackground == other.normalButtonBackground &&
           hoverButtonBackground == other.hoverButtonBackground &&
-          disabledButtonBackground == other.disabledButtonBackground;
+          disabledButtonBackground == other.disabledButtonBackground &&
+          border == other.border;
 
   @override
   int get hashCode =>
@@ -78,5 +121,6 @@ class TabStatusThemeData {
       disabledButtonColor.hashCode ^
       normalButtonBackground.hashCode ^
       hoverButtonBackground.hashCode ^
-      disabledButtonBackground.hashCode;
+      disabledButtonBackground.hashCode ^
+      border.hashCode;
 }

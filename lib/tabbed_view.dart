@@ -1,6 +1,7 @@
 library tabbed_view;
 
-export 'src/tabbed_view.dart';
+export 'src/tabbed_view.dart'
+    hide OnTabClose, TabCloseInterceptor;
 export 'src/tabbed_view_icons.dart';
 export 'src/tab_data.dart';
 export 'src/tabbed_view_controller.dart';
@@ -26,3 +27,4 @@ export 'src/typedefs/on_draggable_build.dart';
 export 'src/typedefs/can_drop.dart';
 export 'src/typedefs/on_before_drop_accept.dart';
 export 'src/theme/vertical_tab_layout_style.dart';
+export 'src/typedefs/on_tab_secondary_tap.dart';

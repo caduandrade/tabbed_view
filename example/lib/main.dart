@@ -62,16 +62,32 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
                 decoration: InputDecoration(
                     isDense: true, border: OutlineInputBorder()))),
         keepAlive: true));
+    tabs.add(TabData(
+        text: 'This is a very long tab title that should be truncated',
+        content: Padding(
+            padding: EdgeInsets.all(8),
+            child: Text('Content for the long tab'))));
 
     _controller = TabbedViewController(tabs);
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget trailingWidget = Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+      child: Text('My trailing text ppppppp'),
+    );
+
     // Configuring the [TabbedView] with all available properties.
     TabbedView tabbedView = TabbedView(
+      trailing: trailingWidget,
       controller: _controller,
-      tabBarPosition: TabBarPosition.left,
+      onTabSecondaryTap: (index, tabData, details) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text('Right-clicked on tab #$index: "${tabData.text}"')));
+      },
+      tabBarPosition: TabBarPosition.top,
       contentBuilder: null,
       onTabSelection: (newIndex) {},
       onTabClose: (index, tabData) {},
@@ -108,102 +124,58 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
           onDragCompleted: null,
         );
       },
+      hiddenTabsMenuItemBuilder: (context, tabIndex, tabData) {
+        // Example of a custom menu item.
+        // The default menu item is in:
+        // lib/src/internal/tabs_area/hidden_tabs_menu_widget.dart
+        final theme = TabbedViewTheme.of(context);
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final textStyle =
+            isDark ? theme.menu.textStyleDark : theme.menu.textStyle;
+        return Padding(
+          padding: theme.menu.menuItemPadding,
+          child: Row(
+            children: [
+              Icon(Icons.tab, size: 16, color: textStyle?.color),
+              SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  '${tabData.text} (index $tabIndex)',
+                  style: textStyle,
+                  overflow: TextOverflow.ellipsis),
+              ),
+            ],
+          ),
+        );
+      },
       closeButtonTooltip: 'Close this tab',
       tabsAreaVisible: true,
       contentClip: true,
       dragScope: null,
     );
 
-    TabbedViewThemeData originalTheme = TabbedViewThemeData.mobile();
-    originalTheme = originalTheme.copyWith(
-        tab: originalTheme.tab.copyWith(rotateCharactersInVerticalTabs: true));
-    TabbedViewThemeData themeData = TabbedViewThemeData(
-      tabsArea: TabsAreaThemeData(
-        color: originalTheme.tabsArea.color,
-        border: originalTheme.tabsArea.border,
-        initialGap: originalTheme.tabsArea.initialGap,
-        middleGap: originalTheme.tabsArea.middleGap,
-        minimalFinalGap: originalTheme.tabsArea.minimalFinalGap,
-        menuIcon: originalTheme.tabsArea.menuIcon,
-        visible: originalTheme.tabsArea.visible,
-        dropColor: originalTheme.tabsArea.dropColor,
-        equalHeights: originalTheme.tabsArea.equalHeights,
-      ),
-      tab: TabThemeData(
-        // Properties for individual tabs.
-        closeIcon: originalTheme.tab.closeIcon,
-        normalButtonColor: originalTheme.tab.normalButtonColor,
-        hoverButtonColor: originalTheme.tab.hoverButtonColor,
-        disabledButtonColor: originalTheme.tab.disabledButtonColor,
-        normalButtonBackground: originalTheme.tab.normalButtonBackground,
-        hoverButtonBackground: originalTheme.tab.hoverButtonBackground,
-        disabledButtonBackground: originalTheme.tab.disabledButtonBackground,
-        buttonIconSize: originalTheme.tab.buttonIconSize,
-        verticalAlignment: originalTheme.tab.verticalAlignment,
-        buttonsOffset: originalTheme.tab.buttonsOffset,
-        buttonPadding: originalTheme.tab.buttonPadding,
-        buttonsGap: originalTheme.tab.buttonsGap,
-        decoration: originalTheme.tab.decoration,
-        draggingDecoration: originalTheme.tab.draggingDecoration,
-        draggingOpacity: originalTheme.tab.draggingOpacity,
-        innerBottomBorder: originalTheme.tab.innerBottomBorder,
-        innerTopBorder: originalTheme.tab.innerTopBorder,
-        textStyle: originalTheme.tab.textStyle,
-        padding: originalTheme.tab.padding,
-        paddingWithoutButton: originalTheme.tab.paddingWithoutButton,
-        margin: originalTheme.tab.margin,
-        verticalLayoutStyle:
-            VerticalTabLayoutStyle.stacked, // Using the new stacked layout
-        rotateCharactersInVerticalTabs:
-            originalTheme.tab.rotateCharactersInVerticalTabs,
-        selectedStatus: TabStatusThemeData(
-          decoration: originalTheme.tab.selectedStatus.decoration,
-          innerTopBorder: originalTheme.tab.selectedStatus.innerTopBorder,
-          innerBottomBorder: originalTheme.tab.selectedStatus.innerBottomBorder,
-          fontColor: originalTheme.tab.selectedStatus.fontColor,
-          padding: originalTheme.tab.selectedStatus.padding,
-          paddingWithoutButton:
-              originalTheme.tab.selectedStatus.paddingWithoutButton,
-          margin: originalTheme.tab.selectedStatus.margin,
-          normalButtonColor: originalTheme.tab.selectedStatus.normalButtonColor,
-          hoverButtonColor: originalTheme.tab.selectedStatus.hoverButtonColor,
-          disabledButtonColor:
-              originalTheme.tab.selectedStatus.disabledButtonColor,
-          normalButtonBackground:
-              originalTheme.tab.selectedStatus.normalButtonBackground,
-          hoverButtonBackground:
-              originalTheme.tab.selectedStatus.hoverButtonBackground,
-          disabledButtonBackground:
-              originalTheme.tab.selectedStatus.disabledButtonBackground,
-        ),
-        highlightedStatus: originalTheme.tab.highlightedStatus,
-        disabledStatus: originalTheme.tab.disabledStatus,
-      ),
-      contentArea: ContentAreaThemeData(
-        // Properties for the content area respective to the tabs.
-        // Defaults are inferred from `content_area.dart`.
-        decoration: originalTheme.contentArea.decoration,
-        decorationNoTabsArea: originalTheme.contentArea.decorationNoTabsArea,
-        padding: originalTheme.contentArea.padding,
-      ),
-      menu: HiddenTabsMenuThemeData(
-        // Demonstrating the new menu theme properties
-        color: Colors.white,
-        colorDark: Colors.grey[800],
-        hoverColor: Colors.grey[200],
-        hoverColorDark: Colors.grey[700],
-        highlightColor: Colors.black.withValues(alpha: 0.1),
-        highlightColorDark: Colors.white.withValues(alpha: 0.1),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withAlpha(128),
-              blurRadius: 8,
-              offset: Offset(0, 2))
-        ],
-        borderRadius: BorderRadius.circular(4),
-        maxHeight: 300,
-      ),
-    );
+    // Building a theme from the mobile theme.
+    TabbedViewThemeData themeData = TabbedViewThemeData.mobile(
+        colorSet: Colors.blueGrey, accentColor: Colors.blue);
+
+    // Customizing the theme.
+    themeData = themeData.copyWith(
+        tab: themeData.tab.copyWith(
+            verticalLayoutStyle: VerticalTabLayoutStyle.stacked,
+            rotateCharactersInVerticalTabs: true,
+            showCloseIconWhenNotFocused: true,
+            maxWidth: 200,
+            maxTextWidth: 100,
+            // Making the close button visible on unfocused tabs by using the
+            // same colors as the selected tab's buttons.
+            // The button color is derived from the selected tab's font color,
+            // which acts as an accent. Use a default color if fontColor is null.
+            normalButtonColor:
+                themeData.tab.selectedStatus.fontColor ?? Colors.black,
+            // Use a slightly modified color for the hover state for visual feedback.
+            hoverButtonColor:
+                (themeData.tab.selectedStatus.fontColor ?? Colors.black)
+                    .withAlpha(200)));
 
     Widget w = TabbedViewTheme(data: themeData, child: tabbedView);
     return Scaffold(

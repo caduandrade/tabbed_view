@@ -97,13 +97,13 @@ class DarkTheme {
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonPadding: const EdgeInsets.all(2),
         selectedStatus: TabStatusThemeData(
-            decoration: BoxDecoration(color: selectedTabColor),
-            innerBottomBorder:
-                BorderSide(width: bottomWidth, color: selectedTabColor)),
+          decoration: BoxDecoration(color: selectedTabColor),
+          border: BorderSide(width: bottomWidth, color: selectedTabColor),
+        ),
         highlightedStatus: TabStatusThemeData(
-            decoration: BoxDecoration(color: highlightedColor),
-            innerBottomBorder:
-                BorderSide(width: bottomWidth, color: highlightedColor)),
+          decoration: BoxDecoration(color: highlightedColor),
+          border: BorderSide(width: bottomWidth, color: highlightedColor),
+        ),
         normalButtonColor: normalButtonColor,
         hoverButtonColor: hoverButtonColor,
         disabledButtonColor: disabledButtonColor);

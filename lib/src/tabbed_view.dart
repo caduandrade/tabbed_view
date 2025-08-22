@@ -9,6 +9,7 @@ import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/tabs_area.dart';
+import 'package:tabbed_view/src/typedefs/on_tab_secondary_tap.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
 import 'package:tabbed_view/src/typedefs/on_before_drop_accept.dart';
@@ -51,7 +52,7 @@ typedef TabCloseInterceptor = FutureOr<bool> Function(
 typedef TabSelectInterceptor = bool Function(int newTabIndex);
 
 /// Event that will be triggered when the tab selection is changed.
-typedef OnTabSelection = Function(int? newTabIndex);
+typedef OnTabSelection = void Function(TabData? tabData);
 
 /// Widget inspired by the classic Desktop-style tab component.
 ///
@@ -69,6 +70,7 @@ class TabbedView extends StatefulWidget {
     this.tabCloseInterceptor,
     this.onTabSelection,
     this.tabSelectInterceptor,
+    this.onTabSecondaryTap,
     this.selectToEnableButtons = true,
     this.contentClip = true,
     this.closeButtonTooltip,
@@ -79,6 +81,8 @@ class TabbedView extends StatefulWidget {
     this.onBeforeDropAccept,
     this.dragScope,
     this.tabBarPosition = TabBarPosition.top,
+    this.hiddenTabsMenuItemBuilder,
+    this.trailing,
   });
 
   final TabbedViewController controller;
@@ -88,6 +92,7 @@ class TabbedView extends StatefulWidget {
   final TabCloseInterceptor? tabCloseInterceptor;
   final OnTabSelection? onTabSelection;
   final TabSelectInterceptor? tabSelectInterceptor;
+  final OnTabSecondaryTap? onTabSecondaryTap;
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
   final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
@@ -96,6 +101,9 @@ class TabbedView extends StatefulWidget {
   final CanDrop? canDrop;
   final OnBeforeDropAccept? onBeforeDropAccept;
   final String? dragScope;
+
+  final HiddenTabsMenuItemBuilder? hiddenTabsMenuItemBuilder;
+  final Widget? trailing;
 
   /// Defines the position of the tab bar. Defaults to [TabBarPosition.top].
   final TabBarPosition tabBarPosition;
@@ -139,6 +147,7 @@ class _TabbedViewState extends State<TabbedView> {
         onTabSelection: widget.onTabSelection,
         contentClip: widget.contentClip,
         tabSelectInterceptor: widget.tabSelectInterceptor,
+        onTabSecondaryTap: widget.onTabSecondaryTap,
         selectToEnableButtons: widget.selectToEnableButtons,
         closeButtonTooltip: widget.closeButtonTooltip,
         tabsAreaButtonsBuilder: widget.tabsAreaButtonsBuilder,
@@ -150,8 +159,9 @@ class _TabbedViewState extends State<TabbedView> {
         canDrop: widget.canDrop,
         onBeforeDropAccept: widget.onBeforeDropAccept,
         dragScope: widget.dragScope,
-        tabBarPosition: widget.tabBarPosition);
-
+        tabBarPosition: widget.tabBarPosition,
+        hiddenTabsMenuItemBuilder: widget.hiddenTabsMenuItemBuilder,
+        trailing: widget.trailing);
     final bool tabsAreaVisible =
         widget.tabsAreaVisible ?? theme.tabsArea.visible;
     List<LayoutId> children = [];
@@ -159,7 +169,7 @@ class _TabbedViewState extends State<TabbedView> {
       Widget tabArea = TabsArea(provider: provider);
       children.add(LayoutId(id: 1, child: tabArea));
     }
-    ContentArea contentArea =
+    Widget contentArea =
         ContentArea(provider: provider, tabsAreaVisible: tabsAreaVisible);
     children.add(LayoutId(id: 2, child: contentArea));
     return CustomMultiChildLayout(
@@ -188,7 +198,7 @@ class _TabbedViewState extends State<TabbedView> {
     if (_lastSelectedIndex != newTabIndex) {
       _lastSelectedIndex = newTabIndex;
       if (widget.onTabSelection != null) {
-        widget.onTabSelection!(newTabIndex);
+        widget.onTabSelection!(widget.controller.selectedTab);
       }
     }
 

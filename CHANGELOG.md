@@ -1,3 +1,22 @@
+## 2.0.0
+
+* **Breaking change**: Theming system refactored to fully support all tab bar positions (`top`, `bottom`, `left`, `right`).
+  * Themes now use a single `border` property (`BorderSide`) on `TabStatusThemeData` and `ContentAreaThemeData` to define borders that dynamically adapt to the `TabBarPosition`.
+  * Previously, themes used hardcoded `Border` objects or position-specific properties like `innerBottomBorder`.
+  * **Action required**: If you have a custom theme, you will need to update it to use the new `border` properties to ensure correct visual appearance. See the default themes (`classic`, `dark`, `mobile`, `minimalist`) for examples.
+* **Breaking change**: `OnTabSelection` callback now provides the `TabData` object instead of the tab index.
+  * From: `void Function(int? tabIndex)`
+  * To: `void Function(TabData? tabData)`
+* **New feature**: Added support for `bottom`,  `left`, and `right` `TabBarPosition`.
+* `TabbedViewController`
+  * New methods:
+    * `selectTab(TabData tab)`
+    * `getTabByValue(dynamic value)`
+    * `selectTabByValue(dynamic value)`
+    * `closeOtherTabs(int tabIndex)`
+    * `closeTabsToTheRight(int tabIndex)`
+  * Refactored `closeAllClosableTabs` to be more robust and reusable.
+
 ## 1.21.0
 
 * `TabbedView`

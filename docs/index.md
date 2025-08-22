@@ -1,4 +1,4 @@
-# Tabbed view (1.17.0)
+# Tabbed view (2.0.0)
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
@@ -236,14 +236,19 @@ It allows creating the contents of the tab dynamically during the selection even
 ### Selection listener
 
 ```dart
-    _onTabSelection(int? newTabIndex) {
-      print('The new selected tab is $newTabIndex.');
+    _onTabSelection(TabData? newTab) {
+      if (newTab != null) {
+        print('The new selected tab is ${newTab.text} at index ${newTab.index}.');
+        // You can use newTab.value for routing
+      } else {
+        print('No tab selected.');
+      }
     }
 
     List<TabData> tabs = [
-      TabData(text: 'Tab 1'),
-      TabData(text: 'Tab 2'),
-      TabData(text: 'Tab 3')
+      TabData(text: 'Tab 1', value: 'tab1'),
+      TabData(text: 'Tab 2', value: 'tab2'),
+      TabData(text: 'Tab 3', value: 'tab3')
     ];
     TabbedView tabbedView = TabbedView(
         controller: TabbedViewController(tabs),
@@ -473,6 +478,36 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
 ```
 
 ![](menu_ellipsis.png)
+
+### Hidden tabs menu item builder
+
+It allows you to customize the menu item for hidden tabs.
+
+```dart
+    TabbedView tabbedView = TabbedView(
+        controller: controller,
+        hiddenTabsMenuItemBuilder: (context, tabIndex, tabData) {
+          final theme = TabbedViewTheme.of(context);
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+          final textStyle = isDark ? theme.menu.textStyleDark : theme.menu.textStyle;
+          return Padding(
+            padding: theme.menu.menuItemPadding,
+            child: Row(
+              children: [
+                Icon(Icons.tab, size: 16, color: textStyle?.color),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '${tabData.text} (index $tabIndex)',
+                    style: textStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+```
 
 ### Default themes
 

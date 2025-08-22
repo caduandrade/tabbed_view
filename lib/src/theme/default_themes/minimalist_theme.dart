@@ -31,8 +31,6 @@ class MinimalistTheme {
 
   static TabThemeData tabTheme({required MaterialColor colorSet}) {
     return TabThemeData(
-        innerBottomBorder:
-            const BorderSide(color: Colors.transparent, width: 1),
         buttonsOffset: 4,
         textStyle: TextStyle(color: colorSet[900]!, fontSize: 13),
         padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
@@ -45,23 +43,22 @@ class MinimalistTheme {
         buttonPadding: const EdgeInsets.all(2),
         hoverButtonBackground: BoxDecoration(color: colorSet[300]!),
         highlightedStatus: TabStatusThemeData(
-            innerBottomBorder: BorderSide(color: colorSet[300]!, width: 1)),
+            border: BorderSide(color: colorSet[300]!, width: 1)),
         selectedStatus: TabStatusThemeData(
-            innerBottomBorder: BorderSide(color: colorSet[700]!, width: 1)));
+            border: BorderSide(color: colorSet[700]!, width: 1)));
   }
 
   static ContentAreaThemeData contentAreaTheme(
       {required MaterialColor colorSet}) {
     BorderSide borderSide = BorderSide(width: 1, color: colorSet[900]!);
-    BoxDecoration decoration = BoxDecoration(
-        color: colorSet[50]!,
-        border:
-            Border(bottom: borderSide, left: borderSide, right: borderSide));
+    BoxDecoration decoration = BoxDecoration(color: colorSet[50]!);
     BoxDecoration decorationNoTabsArea = BoxDecoration(
         color: colorSet[50]!,
         border: Border.all(width: 1, color: colorSet[900]!));
     return ContentAreaThemeData(
-        decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
+        decoration: decoration,
+        decorationNoTabsArea: decorationNoTabsArea,
+        border: borderSide);
   }
 
   static HiddenTabsMenuThemeData menuTheme({required MaterialColor colorSet}) {

@@ -51,14 +51,14 @@ class TabWidget extends StatelessWidget {
     List<Widget> textAndButtons = _textAndButtons(context, tabTheme, isStacked);
 
     FlowDirection flowDirection;
-    if (isVertical) {
+    if (isHorizontal) {
+      flowDirection = FlowDirection.horizontal;
+    } else {
       // For vertical tabs, the layout is counter-intuitive due to RotatedBox.
-      // The 'inline' style uses a vertical flow and 'stacked' uses a horizontal
-      // flow to achieve the desired row/column effect after rotation.
+      // 'stacked' uses a horizontal flow and 'inline' uses a vertical
+      // flow to achieve the desired column/row effect after rotation.
       flowDirection =
           isStacked ? FlowDirection.horizontal : FlowDirection.vertical;
-    } else {
-      flowDirection = FlowDirection.horizontal;
     }
     Widget textAndButtonsContainer = ClipRect(
         child: FlowLayout(
@@ -67,170 +67,98 @@ class TabWidget extends StatelessWidget {
             direction: flowDirection,
             verticalAlignment: tabTheme.verticalAlignment));
 
-    var themeInnerBottomBorder = statusTheme.innerBottomBorder ??
-        tabTheme.innerBottomBorder ??
-        BorderSide.none;
-    var themeInnerTopBorder = statusTheme.innerTopBorder ??
-        tabTheme.innerTopBorder ??
-        BorderSide.none;
-
     BoxDecoration? decoration = statusTheme.decoration ?? tabTheme.decoration;
 
-    // Adjust decoration for tab bar position.
-    if (decoration != null) {
-      // Start with the border from the current decoration. If null, use a default Border.
-      Border currentBorder;
-      if (decoration.border is Border) {
-        currentBorder = decoration.border as Border;
-      } else if (decoration.border is BorderDirectional) {
-        final bd = decoration.border as BorderDirectional;
-        currentBorder = Border(
-            top: bd.top, bottom: bd.bottom, left: bd.start, right: bd.end);
+    BorderSide? indicatorBorder;
+    BorderSide? frameBorderSide;
+
+    // Decide if statusTheme.border is for an indicator or a frame.
+    if (statusTheme.border != null) {
+      // A border is defined for the current status.
+      // If the base tab theme's decoration has a border, we assume this is a
+      // "frame" theme like 'classic'. Otherwise, it's an "indicator" theme
+      // like 'dark' or 'mobile'.
+      if (tabTheme.decoration?.border != null) {
+        frameBorderSide = statusTheme.border;
       } else {
-        currentBorder = Border(); // Default to no border if not specified
-      }
-
-      // Frame-filling. If any side is defined, fill the others.
-      // This ensures that a theme defining e.g. only a bottom border gets a full frame.
-      BorderSide frameSide = currentBorder.top;
-      if (frameSide == BorderSide.none) frameSide = currentBorder.bottom;
-      if (frameSide == BorderSide.none) frameSide = currentBorder.left;
-      if (frameSide == BorderSide.none) frameSide = currentBorder.right;
-
-      if (frameSide != BorderSide.none) {
-        currentBorder = Border(
-          top: currentBorder.top == BorderSide.none
-              ? frameSide
-              : currentBorder.top,
-          bottom: currentBorder.bottom == BorderSide.none
-              ? frameSide
-              : currentBorder.bottom,
-          left: currentBorder.left == BorderSide.none
-              ? frameSide
-              : currentBorder.left,
-          right: currentBorder.right == BorderSide.none
-              ? frameSide
-              : currentBorder.right,
-        );
-      }
-
-      // Collapse border with adjacent tab to prevent double borders.
-      if (index > 0) {
-        if (isHorizontal) {
-          currentBorder = Border(
-              top: currentBorder.top,
-              bottom: currentBorder.bottom,
-              left: BorderSide.none,
-              right: currentBorder.right);
-        } else {
-          // For vertical tabs, collapse top border for subsequent tabs
-          currentBorder = Border(
-              top: BorderSide.none,
-              bottom: currentBorder.bottom,
-              left: currentBorder.left,
-              right: currentBorder.right);
-        }
-      }
-
-      // Remove border adjacent to content area for the selected tab to merge them.
-      if (status == TabStatus.selected) {
-        switch (provider.tabBarPosition) {
-          case TabBarPosition.top:
-            currentBorder = Border(
-                top: currentBorder.top,
-                bottom: BorderSide.none,
-                left: currentBorder.left,
-                right: currentBorder.right);
-            break;
-          case TabBarPosition.bottom:
-            currentBorder = Border(
-                top: BorderSide.none,
-                bottom: currentBorder.bottom,
-                left: currentBorder.left,
-                right: currentBorder.right);
-            break;
-          case TabBarPosition.left:
-            // For left tab bar, selected tab's right border should be removed
-            currentBorder = Border(
-                top: currentBorder.top,
-                bottom: currentBorder.bottom,
-                left: currentBorder.left,
-                right: BorderSide.none);
-            break;
-          case TabBarPosition.right:
-            // For right tab bar, selected tab's left border should be removed
-            currentBorder = Border(
-                top: currentBorder.top,
-                bottom: currentBorder.bottom,
-                left: BorderSide.none,
-                right: currentBorder.right);
-            break;
-        }
-      }
-      // Apply the calculated border to the decoration.
-      decoration = decoration.copyWith(border: currentBorder);
-
-      // BorderRadius
-      if (decoration.borderRadius is BorderRadius) {
-        final r = decoration.borderRadius as BorderRadius;
-        BorderRadius? effectiveBorderRadius;
-        switch (provider.tabBarPosition) {
-          case TabBarPosition.top:
-            effectiveBorderRadius = r; // Use original radius
-            break;
-          case TabBarPosition.bottom:
-            // Round the top corners (flip top to bottom)
-            effectiveBorderRadius = BorderRadius.only(
-              topLeft: r.bottomLeft,
-              topRight: r.bottomRight,
-              bottomLeft: r.topLeft,
-              bottomRight: r.topRight,
-            );
-            break;
-          case TabBarPosition.left:
-            // Rotate 90 deg clockwise
-            effectiveBorderRadius = BorderRadius.only(
-              topLeft: r.bottomLeft,
-              topRight: r.topLeft,
-              bottomLeft: r.bottomRight,
-              bottomRight: r.topRight,
-            );
-            break;
-          case TabBarPosition.right:
-            // Rotate 90 deg counter-clockwise
-            effectiveBorderRadius = BorderRadius.only(
-              topLeft: r.topRight,
-              topRight: r.bottomRight,
-              bottomLeft: r.topLeft,
-              bottomRight: r.bottomLeft,
-            );
-            break;
-        }
-        decoration = decoration.copyWith(borderRadius: effectiveBorderRadius);
+        indicatorBorder = statusTheme.border;
       }
     }
 
-    BorderSide effectiveInnerTopBorder = BorderSide.none;
-    BorderSide effectiveInnerBottomBorder = BorderSide.none;
-    BorderSide effectiveInnerLeftBorder = BorderSide.none;
-    BorderSide effectiveInnerRightBorder = BorderSide.none;
-    switch (provider.tabBarPosition) {
-      case TabBarPosition.top:
-        effectiveInnerBottomBorder = themeInnerBottomBorder;
-        effectiveInnerTopBorder = themeInnerTopBorder;
-        break;
-      case TabBarPosition.bottom:
-        effectiveInnerTopBorder = themeInnerBottomBorder;
-        effectiveInnerBottomBorder = themeInnerTopBorder;
-        break;
-      case TabBarPosition.left:
-      case TabBarPosition.right:
-        // For vertical tab bars, the inner borders are applied to the top/bottom
-        // of the widget before it's rotated. The 'bottom' border is the one
-        // adjacent to the content area after rotation for both left and right.
-        effectiveInnerBottomBorder = themeInnerBottomBorder;
-        effectiveInnerTopBorder = themeInnerTopBorder;
-        break;
+    // Builds inner borders for indicators.
+    BorderSide innerTop =
+        statusTheme.innerTopBorder ?? tabTheme.innerTopBorder ?? BorderSide.none;
+    BorderSide innerBottom = statusTheme.innerBottomBorder ??
+        tabTheme.innerBottomBorder ??
+        BorderSide.none;
+    BorderSide innerLeft = tabTheme.innerLeftBorder ?? BorderSide.none;
+    BorderSide innerRight = tabTheme.innerRightBorder ?? BorderSide.none;
+
+    if (indicatorBorder != null) {
+      // Theme with an indicator border like 'dark' or 'mobile'.
+      switch (provider.tabBarPosition) {
+        case TabBarPosition.top:
+          innerBottom = indicatorBorder;
+          break;
+        case TabBarPosition.bottom:
+          innerTop = indicatorBorder;
+          break;
+        case TabBarPosition.left:
+          // For a left tab bar, the content area is on the right. After a -1
+          // quarter turn rotation, the original 'bottom' of the tab becomes
+          // the right side.
+          innerBottom = indicatorBorder;
+          break;
+        case TabBarPosition.right:
+          // For a right tab bar, the content area is on the left. After a +1
+          // quarter turn rotation, the original 'bottom' of the tab becomes
+          // the left side.
+          innerBottom = indicatorBorder;
+          break;
+      }
+    }
+
+    // Builds outer frame border.
+    if (decoration != null) {
+      Border? border;
+      if (status == TabStatus.selected && frameBorderSide != null) {
+        // Selected tab for a theme that merges with content area (e.g. 'classic')
+        if (provider.tabBarPosition == TabBarPosition.bottom) {
+          border = Border(
+              bottom: frameBorderSide,
+              left: frameBorderSide,
+              right: frameBorderSide);
+        } else {
+          // For top, left, and right positions, the border should be open
+          // on the bottom of the un-rotated widget.
+          border = Border(
+              top: frameBorderSide,
+              left: frameBorderSide,
+              right: frameBorderSide);
+        }
+      } else if (decoration.border != null &&
+          decoration.border is Border) {
+        // Unselected tab with a full border (e.g. 'classic')
+        Border currentBorder = decoration.border as Border;
+        if (index > 0) {
+          // Collapse border with previous tab to avoid double thickness.
+          if (isHorizontal) {
+            currentBorder = Border(
+                top: currentBorder.top,
+                right: currentBorder.right,
+                bottom: currentBorder.bottom,
+                left: BorderSide.none);
+          } else {
+            currentBorder = Border(
+                top: BorderSide.none,
+                right: currentBorder.right,
+                bottom: currentBorder.bottom,
+                left: currentBorder.left);
+          }
+        }
+        border = currentBorder;
+      }
+      decoration = decoration.copyWith(border: border);
     }
 
     EdgeInsetsGeometry? padding;
@@ -254,10 +182,10 @@ class TabWidget extends StatelessWidget {
           padding: padding,
           decoration: BoxDecoration(
               border: Border(
-                  top: effectiveInnerTopBorder,
-                  bottom: effectiveInnerBottomBorder,
-                  left: effectiveInnerLeftBorder,
-                  right: effectiveInnerRightBorder))),
+                  top: innerTop,
+                  bottom: innerBottom,
+                  left: innerLeft,
+                  right: innerRight))),
     );
 
     // Rotate the tab content if tab bar is vertical
@@ -270,10 +198,27 @@ class TabWidget extends StatelessWidget {
     Widget tabWidget =
         Container(child: tabContent, decoration: decoration, margin: margin);
 
+    final maxWidth = tabTheme.maxWidth;
+    if (maxWidth != null) {
+      BoxConstraints constraints;
+      if (isHorizontal) {
+        constraints = BoxConstraints(maxWidth: maxWidth);
+      } else {
+        // left or right
+        constraints = BoxConstraints(maxHeight: maxWidth);
+      }
+      tabWidget = ConstrainedBox(
+        constraints: constraints,
+        child: tabWidget,
+      );
+    }
+
     MouseCursor cursor = MouseCursor.defer;
     if (provider.draggingTabIndex == null && status == TabStatus.selected) {
       cursor = SystemMouseCursors.click;
     }
+
+    Widget interactiveTab = tabWidget;
 
     tabWidget = MouseRegion(
         cursor: cursor,
@@ -281,8 +226,15 @@ class TabWidget extends StatelessWidget {
         onExit: (event) => updateHighlightedIndex(null),
         child: provider.draggingTabIndex == null
             ? GestureDetector(
-                onTap: () => _onSelect(context, index), child: tabWidget)
-            : tabWidget);
+                onTap: () => _onSelect(context, index),
+                onSecondaryTapDown: (details) {
+                  if (provider.onTabSecondaryTap != null) {
+                    TabData tab = provider.controller.tabs[index];
+                    provider.onTabSecondaryTap!(index, tab, details);
+                  }
+                },
+                child: interactiveTab)
+            : interactiveTab);
 
     if (tab.draggable) {
       DraggableConfig draggableConfig = DraggableConfig.defaultConfig;
@@ -350,7 +302,7 @@ class TabWidget extends StatelessWidget {
     return tabWidget;
   }
 
-  /// Builds a list with title text and buttons.
+ /// Builds a list with title text and buttons.
   List<Widget> _textAndButtons(
       BuildContext context, TabThemeData tabTheme, bool isStacked) {
     List<Widget> textAndButtons = [];
@@ -358,26 +310,13 @@ class TabWidget extends StatelessWidget {
     TabData tab = provider.controller.tabs[index];
     TabStatusThemeData statusTheme = tabTheme.getTabThemeFor(status);
 
-    Color normalColor = statusTheme.normalButtonColor != null
-        ? statusTheme.normalButtonColor!
-        : tabTheme.normalButtonColor;
-    Color hoverColor = statusTheme.hoverButtonColor != null
-        ? statusTheme.hoverButtonColor!
-        : tabTheme.hoverButtonColor;
-    Color disabledColor = statusTheme.disabledButtonColor != null
-        ? statusTheme.disabledButtonColor!
-        : tabTheme.disabledButtonColor;
+    Color normalColor = statusTheme.normalButtonColor ?? tabTheme.normalButtonColor;
+    Color hoverColor = statusTheme.hoverButtonColor ?? tabTheme.hoverButtonColor;
+    Color disabledColor = statusTheme.disabledButtonColor ?? tabTheme.disabledButtonColor;
 
-    BoxDecoration? normalBackground = statusTheme.normalButtonBackground != null
-        ? statusTheme.normalButtonBackground
-        : tabTheme.normalButtonBackground;
-    BoxDecoration? hoverBackground = statusTheme.hoverButtonBackground != null
-        ? statusTheme.hoverButtonBackground
-        : tabTheme.hoverButtonBackground;
-    BoxDecoration? disabledBackground =
-        statusTheme.disabledButtonBackground != null
-            ? statusTheme.disabledButtonBackground
-            : tabTheme.disabledButtonBackground;
+    BoxDecoration? normalBackground = statusTheme.normalButtonBackground ?? tabTheme.normalButtonBackground;
+    BoxDecoration? hoverBackground = statusTheme.hoverButtonBackground ?? tabTheme.hoverButtonBackground;
+    BoxDecoration? disabledBackground = statusTheme.disabledButtonBackground ?? tabTheme.disabledButtonBackground;
 
     TextStyle? textStyle = tabTheme.textStyle;
     if (statusTheme.fontColor != null) {
@@ -414,7 +353,7 @@ class TabWidget extends StatelessWidget {
         textWidget =
             Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis);
       } else {
-        String verticalText = tab.text.split('').join('\n');
+        String verticalText = tab.text.split('').join('');
         textWidget =
             Text(verticalText, style: textStyle, textAlign: TextAlign.center);
         // Counter-rotate the text to keep it upright within the rotated tab.
@@ -468,11 +407,16 @@ class TabWidget extends StatelessWidget {
           onPressed: () async => await _onClose(context, index),
           toolTip: provider.closeButtonTooltip);
 
+      bool enabled = buttonsEnabled;
+      if (tabTheme.showCloseIconWhenNotFocused) {
+        enabled = provider.draggingTabIndex == null;
+      }
+
       textAndButtons.add(Container(
           child: TabButtonWidget(
               provider: provider,
               button: closeButton,
-              enabled: buttonsEnabled,
+              enabled: enabled,
               normalColor: normalColor,
               hoverColor: hoverColor,
               disabledColor: disabledColor,

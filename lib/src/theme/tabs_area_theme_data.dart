@@ -14,6 +14,7 @@ class TabsAreaThemeData {
       this.middleGap = 0,
       double minimalFinalGap = 0,
       this.gapBottomBorder = BorderSide.none,
+      this.gapSideBorder = BorderSide.none,
       this.equalHeights = EqualHeights.none,
       this.buttonsAreaDecoration,
       this.buttonsAreaPadding,
@@ -52,6 +53,7 @@ class TabsAreaThemeData {
   double initialGap;
   double middleGap;
   BorderSide gapBottomBorder;
+  BorderSide gapSideBorder;
   EqualHeights equalHeights;
 
   /// Icon for the hidden tabs menu when it is open.
@@ -101,6 +103,7 @@ class TabsAreaThemeData {
       double? middleGap,
       double? minimalFinalGap,
       BorderSide? gapBottomBorder,
+      BorderSide? gapSideBorder,
       EqualHeights? equalHeights,
       BoxDecoration? buttonsAreaDecoration,
       EdgeInsetsGeometry? buttonsAreaPadding,
@@ -127,6 +130,7 @@ class TabsAreaThemeData {
         middleGap: middleGap ?? this.middleGap,
         minimalFinalGap: minimalFinalGap ?? this.minimalFinalGap,
         gapBottomBorder: gapBottomBorder ?? this.gapBottomBorder,
+        gapSideBorder: gapSideBorder ?? this.gapSideBorder,
         equalHeights: equalHeights ?? this.equalHeights,
         buttonsAreaDecoration:
             buttonsAreaDecoration ?? this.buttonsAreaDecoration,
@@ -172,6 +176,7 @@ class TabsAreaThemeData {
           initialGap == other.initialGap &&
           middleGap == other.middleGap &&
           gapBottomBorder == other.gapBottomBorder &&
+          gapSideBorder == other.gapSideBorder &&
           equalHeights == other.equalHeights &&
           dropColor == other.dropColor &&
           _minimalFinalGap == other._minimalFinalGap &&
@@ -200,6 +205,7 @@ class TabsAreaThemeData {
       initialGap.hashCode ^
       middleGap.hashCode ^
       gapBottomBorder.hashCode ^
+      gapSideBorder.hashCode ^
       equalHeights.hashCode ^
       dropColor.hashCode ^
       _minimalFinalGap.hashCode ^

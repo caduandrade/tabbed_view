@@ -82,9 +82,10 @@ class MobileTheme {
       required Color accentColor,
       required Color foregroundColor}) {
     BorderSide verticalBorderSide = BorderSide(color: borderColor, width: 1);
-    Border border = Border(left: verticalBorderSide, right: verticalBorderSide);
     double borderHeight = 4;
     return TabThemeData(
+        innerLeftBorder: verticalBorderSide,
+        innerRightBorder: verticalBorderSide,
         normalButtonColor: normalButtonColor,
         hoverButtonColor: hoverButtonColor,
         disabledButtonColor: disabledButtonColor,
@@ -94,31 +95,24 @@ class MobileTheme {
         paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonPadding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(border: border),
         draggingDecoration:
             BoxDecoration(border: Border.all(color: borderColor, width: 1)),
-        innerBottomBorder:
-            BorderSide(color: Colors.transparent, width: borderHeight),
         highlightedStatus: TabStatusThemeData(
-            innerBottomBorder:
-                BorderSide(color: borderColor, width: borderHeight)),
+            border: BorderSide(color: borderColor, width: borderHeight)),
         selectedStatus: TabStatusThemeData(
-            innerBottomBorder:
-                BorderSide(color: accentColor, width: borderHeight)));
+            border: BorderSide(color: accentColor, width: borderHeight)));
   }
 
   static ContentAreaThemeData contentAreaTheme(
       {required Color borderColor, required Color backgroundColor}) {
-    BorderSide borderSide = BorderSide(width: 1, color: borderColor);
+    // For the mobile theme, the content area is a distinct, bordered box
+    // that does not try to connect its border with the tabs area. A full
+    // border works for any TabBarPosition.
     BoxDecoration decoration = BoxDecoration(
-        color: backgroundColor,
-        border:
-            Border(bottom: borderSide, left: borderSide, right: borderSide));
-    BoxDecoration decorationNoTabsArea = BoxDecoration(
         color: backgroundColor,
         border: Border.all(width: 1, color: borderColor));
     return ContentAreaThemeData(
-        decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
+        decoration: decoration, decorationNoTabsArea: decoration);
   }
 
   static HiddenTabsMenuThemeData menuTheme({
