@@ -13,7 +13,7 @@ class ContentAreaThemeData {
   /// while a larger value creates more rounded corners.
   final double borderRadius;
 
-  /// The  border around the outer side of the tab content area,
+  /// The border around the outer side of the tab content area,
   /// excluding the side adjacent to the tabs.
   /// If the tabs area is hidden, this border also covers the side where
   /// the tabs would normally be.

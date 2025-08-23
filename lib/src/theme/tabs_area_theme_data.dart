@@ -10,6 +10,7 @@ class TabsAreaThemeData {
       {this.visible = true,
       this.color,
       this.border,
+      this.borderRadius = 0,
       this.initialGap = 0,
       this.middleGap = 0,
       double minimalFinalGap = 0,
@@ -48,11 +49,23 @@ class TabsAreaThemeData {
 
   bool visible;
 
+  /// The background color.
   Color? color;
-  Border? border;
+
+  /// The radius used to round the corners of a border.
+  /// A value of zero represents a completely rectangular border,
+  /// while a larger value creates more rounded corners.
+  final double borderRadius;
+
+  /// The border around the outer edges of the entire area,
+  /// excluding the side adjacent to the tab content.
+  BorderSide? border;
+
   double initialGap;
   double middleGap;
+  @deprecated
   BorderSide gapBottomBorder;
+  @deprecated
   BorderSide gapSideBorder;
   EqualHeights equalHeights;
 
@@ -98,7 +111,8 @@ class TabsAreaThemeData {
   TabsAreaThemeData copyWith(
       {bool? visible,
       Color? color,
-      Border? border,
+      BorderSide? border,
+      double? borderRadius,
       double? initialGap,
       double? middleGap,
       double? minimalFinalGap,
@@ -126,6 +140,7 @@ class TabsAreaThemeData {
         visible: visible ?? this.visible,
         color: color ?? this.color,
         border: border ?? this.border,
+        borderRadius: borderRadius ?? this.borderRadius,
         initialGap: initialGap ?? this.initialGap,
         middleGap: middleGap ?? this.middleGap,
         minimalFinalGap: minimalFinalGap ?? this.minimalFinalGap,
@@ -173,6 +188,7 @@ class TabsAreaThemeData {
           visible == other.visible &&
           color == other.color &&
           border == other.border &&
+          borderRadius == other.borderRadius &&
           initialGap == other.initialGap &&
           middleGap == other.middleGap &&
           gapBottomBorder == other.gapBottomBorder &&
@@ -202,6 +218,7 @@ class TabsAreaThemeData {
       visible.hashCode ^
       color.hashCode ^
       border.hashCode ^
+      borderRadius.hashCode ^
       initialGap.hashCode ^
       middleGap.hashCode ^
       gapBottomBorder.hashCode ^

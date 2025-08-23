@@ -9,6 +9,7 @@ import 'package:tabbed_view/src/tabs_area_layout.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {
@@ -75,9 +76,44 @@ class _TabsAreaState extends State<TabsArea> {
 
     // Apply the theme's color and border directly.
     return Container(
-      child: content,
-      decoration: BoxDecoration(
-          color: tabsAreaTheme.color, border: tabsAreaTheme.border),
+        child: content,
+        decoration: BoxDecoration(
+            color: tabsAreaTheme.color,
+            borderRadius: _buildBorderRadius(theme: tabsAreaTheme),
+            border: _buildBorder(theme: tabsAreaTheme)));
+  }
+
+  BorderRadius _buildBorderRadius({required TabsAreaThemeData theme}) {
+    final Radius radius = Radius.circular(theme.borderRadius);
+    final TabBarPosition position = widget.provider.tabBarPosition;
+
+    bool top = position != TabBarPosition.bottom;
+    bool bottom = position != TabBarPosition.top;
+    bool left = position != TabBarPosition.right;
+    bool right = position != TabBarPosition.left;
+
+    return BorderRadius.only(
+      topLeft: (left && top) ? radius : Radius.zero,
+      topRight: (right && top) ? radius : Radius.zero,
+      bottomLeft: (left && bottom) ? radius : Radius.zero,
+      bottomRight: (right && bottom) ? radius : Radius.zero,
+    );
+  }
+
+  Border _buildBorder({required TabsAreaThemeData theme}) {
+    final BorderSide borderSide = theme.border ?? BorderSide.none;
+    final TabBarPosition position = widget.provider.tabBarPosition;
+
+    bool top = position != TabBarPosition.bottom;
+    bool bottom = position != TabBarPosition.top;
+    bool left = position != TabBarPosition.right;
+    bool right = position != TabBarPosition.left;
+
+    return Border(
+      top: top ? borderSide : BorderSide.none,
+      bottom: bottom ? borderSide : BorderSide.none,
+      left: left ? borderSide : BorderSide.none,
+      right: right ? borderSide : BorderSide.none,
     );
   }
 
