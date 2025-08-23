@@ -50,40 +50,13 @@ class ContentArea extends StatelessWidget {
       Widget listener = NotificationListener<SizeChangedLayoutNotification>(
           child: SizeChangedLayoutNotifier(child: Stack(children: children)));
 
-      Border border = Border();
-      final borderSide = contentAreaTheme.border;
-      if (borderSide != null) {
-        final position = provider.tabBarPosition;
-        if (position == TabBarPosition.top) {
-          border = Border(
-              top: tabsAreaVisible ? BorderSide.none : borderSide,
-              bottom: borderSide,
-              left: borderSide,
-              right: borderSide);
-        } else if (position == TabBarPosition.bottom) {
-          border = Border(
-              top: borderSide,
-              bottom: tabsAreaVisible ? BorderSide.none : borderSide,
-              left: borderSide,
-              right: borderSide);
-        } else if (position == TabBarPosition.left) {
-          border = Border(
-              bottom: borderSide,
-              top: borderSide,
-              left: tabsAreaVisible ? BorderSide.none : borderSide,
-              right: borderSide);
-        } else {
-          // right
-          border = Border(
-              bottom: borderSide,
-              top: borderSide,
-              left: borderSide,
-              right: tabsAreaVisible ? BorderSide.none : borderSide);
-        }
-      }
+      final Border border = _buildBorder(theme: contentAreaTheme);
+      final BorderRadius borderRadius =
+          _buildBorderRadius(theme: contentAreaTheme);
+
       BoxDecoration decoration = BoxDecoration(
           color: contentAreaTheme.color,
-          borderRadius: contentAreaTheme.borderRadius,
+          borderRadius: borderRadius,
           border: border);
       return Container(
           child: listener,
@@ -93,6 +66,41 @@ class ContentArea extends StatelessWidget {
     if (provider.contentClip) {
       return ClipRect(child: layoutBuilder);
     }
+
     return layoutBuilder;
+  }
+
+  BorderRadius _buildBorderRadius({required ContentAreaThemeData theme}) {
+    final Radius radius = Radius.circular(theme.borderRadius);
+    final TabBarPosition position = provider.tabBarPosition;
+
+    bool top = position != TabBarPosition.top;
+    bool bottom = position != TabBarPosition.bottom;
+    bool left = position != TabBarPosition.left;
+    bool right = position != TabBarPosition.right;
+
+    return BorderRadius.only(
+      topLeft: (left && top) ? radius : Radius.zero,
+      topRight: (right && top) ? radius : Radius.zero,
+      bottomLeft: (left && bottom) ? radius : Radius.zero,
+      bottomRight: (right && bottom) ? radius : Radius.zero,
+    );
+  }
+
+  Border _buildBorder({required ContentAreaThemeData theme}) {
+    final BorderSide borderSide = theme.border ?? BorderSide.none;
+    final TabBarPosition position = provider.tabBarPosition;
+
+    bool top = position != TabBarPosition.top;
+    bool bottom = position != TabBarPosition.bottom;
+    bool left = position != TabBarPosition.left;
+    bool right = position != TabBarPosition.right;
+
+    return Border(
+      top: top ? borderSide : BorderSide.none,
+      bottom: bottom ? borderSide : BorderSide.none,
+      left: left ? borderSide : BorderSide.none,
+      right: right ? borderSide : BorderSide.none,
+    );
   }
 }

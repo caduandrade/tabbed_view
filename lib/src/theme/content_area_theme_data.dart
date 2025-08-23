@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 
 class ContentAreaThemeData {
   ContentAreaThemeData(
-      {this.color, this.padding, this.borderRadius, this.border});
+      {this.color, this.padding, this.borderRadius = 0, this.border});
 
   final Color? color;
 
-  final BorderRadiusGeometry? borderRadius;
+  final double borderRadius;
 
   /// The border of the content area. If not NULL, the border of the
   /// [decoration] property will be ignored.
