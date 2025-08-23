@@ -5,12 +5,18 @@ class ContentAreaThemeData {
   ContentAreaThemeData(
       {this.color, this.padding, this.borderRadius = 0, this.border});
 
+  /// The background color.
   final Color? color;
 
+  /// The radius used to round the corners of a border.
+  /// A value of zero represents a completely rectangular border,
+  /// while a larger value creates more rounded corners.
   final double borderRadius;
 
-  /// The border of the content area. If not NULL, the border of the
-  /// [decoration] property will be ignored.
+  /// The  border around the outer side of the tab content area,
+  /// excluding the side adjacent to the tabs.
+  /// If the tabs area is hidden, this border also covers the side where
+  /// the tabs would normally be.
   BorderSide? border;
 
   /// Empty space to inscribe inside the [decoration]. The content child, if any, is
