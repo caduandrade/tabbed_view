@@ -47,7 +47,7 @@ class TabsAreaLayout extends MultiChildRenderObjectWidget {
     renderObject..selectedTabIndex = selectedTabIndex;
     renderObject..tabBarPosition = tabBarPosition;
 
-    //renderObject.markNeedsLayoutForSizedByParentChange()
+    renderObject.markNeedsLayoutForSizedByParentChange();
   }
 }
 

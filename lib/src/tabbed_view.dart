@@ -286,6 +286,6 @@ class _TabbedViewLayout extends MultiChildLayoutDelegate {
 
   @override
   bool shouldRelayout(covariant _TabbedViewLayout oldDelegate) {
-    return oldDelegate.tabBarPosition != tabBarPosition;
+    return true;
   }
 }
