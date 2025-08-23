@@ -51,14 +51,7 @@ class MinimalistTheme {
   static ContentAreaThemeData contentAreaTheme(
       {required MaterialColor colorSet}) {
     BorderSide borderSide = BorderSide(width: 1, color: colorSet[900]!);
-    BoxDecoration decoration = BoxDecoration(color: colorSet[50]!);
-    BoxDecoration decorationNoTabsArea = BoxDecoration(
-        color: colorSet[50]!,
-        border: Border.all(width: 1, color: colorSet[900]!));
-    return ContentAreaThemeData(
-        decoration: decoration,
-        decorationNoTabsArea: decorationNoTabsArea,
-        border: borderSide);
+    return ContentAreaThemeData(color: colorSet[50]!, border: borderSide);
   }
 
   static HiddenTabsMenuThemeData menuTheme({required MaterialColor colorSet}) {

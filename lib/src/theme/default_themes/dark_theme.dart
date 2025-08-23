@@ -112,9 +112,7 @@ class DarkTheme {
   static ContentAreaThemeData contentAreaTheme(
       {required Color selectedTabColor}) {
     return ContentAreaThemeData(
-        decoration: BoxDecoration(color: selectedTabColor),
-        decorationNoTabsArea: BoxDecoration(color: selectedTabColor),
-        padding: EdgeInsets.all(8));
+        color: selectedTabColor, padding: EdgeInsets.all(8));
   }
 
   static HiddenTabsMenuThemeData menuTheme(

@@ -108,11 +108,9 @@ class MobileTheme {
     // For the mobile theme, the content area is a distinct, bordered box
     // that does not try to connect its border with the tabs area. A full
     // border works for any TabBarPosition.
-    BoxDecoration decoration = BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(width: 1, color: borderColor));
     return ContentAreaThemeData(
-        decoration: decoration, decorationNoTabsArea: decoration);
+        color: backgroundColor,
+        border: BorderSide(width: 1, color: borderColor));
   }
 
   static HiddenTabsMenuThemeData menuTheme({

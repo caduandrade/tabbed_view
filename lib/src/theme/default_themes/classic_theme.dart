@@ -121,14 +121,7 @@ class ClassicTheme {
     // The border is now defined by a single BorderSide, allowing the
     // ContentArea to build the correct border for any TabBarPosition.
     BorderSide borderSide = BorderSide(width: 1, color: borderColor);
-    BoxDecoration decoration = BoxDecoration(color: backgroundColor);
-    BoxDecoration decorationNoTabsArea = BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(width: 1, color: borderColor));
-    return ContentAreaThemeData(
-        decoration: decoration,
-        decorationNoTabsArea: decorationNoTabsArea,
-        border: borderSide);
+    return ContentAreaThemeData(color: backgroundColor, border: borderSide);
   }
 
   static HiddenTabsMenuThemeData menuTheme({

@@ -50,33 +50,41 @@ class ContentArea extends StatelessWidget {
       Widget listener = NotificationListener<SizeChangedLayoutNotification>(
           child: SizeChangedLayoutNotifier(child: Stack(children: children)));
 
-      BoxDecoration? decoration;
-      if (tabsAreaVisible) {
-        decoration = contentAreaTheme.decoration;
-        final borderSide = contentAreaTheme.border;
-        if (borderSide != null) {
-          final position = provider.tabBarPosition;
-          Border border;
-          if (position == TabBarPosition.top) {
-            border =
-                Border(bottom: borderSide, left: borderSide, right: borderSide);
-          } else if (position == TabBarPosition.bottom) {
-            border =
-                Border(top: borderSide, left: borderSide, right: borderSide);
-          } else if (position == TabBarPosition.left) {
-            border =
-                Border(bottom: borderSide, top: borderSide, right: borderSide);
-          } else {
-            // right
-            border =
-                Border(bottom: borderSide, top: borderSide, left: borderSide);
-          }
-          decoration = decoration?.copyWith(border: border) ??
-              BoxDecoration(border: border);
+      Border border = Border();
+      final borderSide = contentAreaTheme.border;
+      if (borderSide != null) {
+        final position = provider.tabBarPosition;
+        if (position == TabBarPosition.top) {
+          border = Border(
+              top: tabsAreaVisible ? BorderSide.none : borderSide,
+              bottom: borderSide,
+              left: borderSide,
+              right: borderSide);
+        } else if (position == TabBarPosition.bottom) {
+          border = Border(
+              top: borderSide,
+              bottom: tabsAreaVisible ? BorderSide.none : borderSide,
+              left: borderSide,
+              right: borderSide);
+        } else if (position == TabBarPosition.left) {
+          border = Border(
+              bottom: borderSide,
+              top: borderSide,
+              left: tabsAreaVisible ? BorderSide.none : borderSide,
+              right: borderSide);
+        } else {
+          // right
+          border = Border(
+              bottom: borderSide,
+              top: borderSide,
+              left: borderSide,
+              right: tabsAreaVisible ? BorderSide.none : borderSide);
         }
-      } else {
-        decoration = contentAreaTheme.decorationNoTabsArea;
       }
+      BoxDecoration decoration = BoxDecoration(
+          color: contentAreaTheme.color,
+          borderRadius: contentAreaTheme.borderRadius,
+          border: border);
       return Container(
           child: listener,
           decoration: decoration,
