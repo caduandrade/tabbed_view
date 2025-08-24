@@ -317,22 +317,19 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    RenderBox? selectedTab;
-    TabsAreaLayoutParentData? selectedTabParentData;
+    List<RenderBox> children = [];
     _visitVisibleChildren((RenderObject child) {
+      children.add(child as RenderBox);
+    });
+
+    for (RenderBox child in children.reversed) {
+      // Painting in reverse order to ensure the drop area is visible
+      // when the middle gap is negative
       final TabsAreaLayoutParentData childParentData =
           child.tabsAreaLayoutParentData();
-      if (childParentData.selected) {
-        // If it's the selected tab, save it to paint last
-        selectedTab = child as RenderBox;
-        selectedTabParentData = childParentData;
-      } else {
-        // Otherwise, paint it now
-        context.paintChild(child, childParentData.offset + offset);
-      }
-    });
-    if (selectedTab != null) {
-      context.paintChild(selectedTab!, selectedTabParentData!.offset + offset);
+      context.paintChild(child, childParentData.offset + offset);
+      //TODO Evaluate whether it is necessary to paint the selected tab last,
+      // otherwise remove the bool selected from the parentData
     }
 
     Paint paint = Paint();
@@ -345,13 +342,10 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     //TODO need all tab positions
     double x = 0;
     double y = size.height - _tabsAreaTheme.contentBorderThickness;
-    _visitVisibleChildren((RenderObject child) {
+    for (RenderBox child in children) {
       final TabsAreaLayoutParentData parentData =
           child.tabsAreaLayoutParentData();
-      RenderBox renderBox = child as RenderBox;
-
       final bool isCorner = child == _corner;
-
       Rect rect = Rect.fromLTRB(
           offset.dx + x,
           offset.dy + y,
@@ -360,8 +354,9 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       if (rect.width > 0 && rect.height > 0) {
         context.canvas.drawRect(rect, paint);
       }
-      x = parentData.offset.dx + renderBox.size.width;
-    });
+      x = parentData.offset.dx + child.size.width;
+    }
+    ;
   }
 
   @override

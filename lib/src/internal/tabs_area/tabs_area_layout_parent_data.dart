@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 @internal
 class TabsAreaLayoutParentData extends ContainerBoxParentData<RenderBox> {
 
-
   bool visible = false;
   bool selected = false;
 
