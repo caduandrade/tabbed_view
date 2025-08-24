@@ -64,11 +64,11 @@ class TabsAreaThemeData {
   final BorderSide? border;
 
   /// The thickness of the border along the edge where the tab area meets
-  /// the content, independent of the tab position.
+  /// the main content, independent of the tab position.
   final double contentBorderThickness;
 
-  /// The border color in the gaps between tabs and in the remaining
-  /// area after the last tab.
+  /// The color of the border along the edge where the tab area meets
+  /// the main content, independent of the tab position.
   final Color? contentBorderColor;
 
   double initialGap;

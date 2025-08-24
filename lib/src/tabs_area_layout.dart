@@ -178,7 +178,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
           math.max(maxChildSecondaryAxis, _corner.size.width);
     }
 
-    double tabsAreaSecondaryDimension = maxChildSecondaryAxis;
+    final double tabsAreaSecondaryDimension = maxChildSecondaryAxis;
 
     if (tabsAreaTheme.equalHeights != EqualHeights.none) {
       for (RenderBox child in tabs) {
@@ -271,12 +271,11 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     }
 
     if (isHorizontal) {
-      size = constraints.constrain(Size(constraints.maxWidth,
-          tabsAreaSecondaryDimension + _tabsAreaTheme.contentBorderThickness));
+      size = constraints
+          .constrain(Size(constraints.maxWidth, tabsAreaSecondaryDimension));
     } else {
-      size = constraints.constrain(Size(
-          tabsAreaSecondaryDimension + _tabsAreaTheme.contentBorderThickness,
-          constraints.maxHeight));
+      size = constraints
+          .constrain(Size(tabsAreaSecondaryDimension, constraints.maxHeight));
     }
     if (tabsAreaTheme.equalHeights == EqualHeights.none) {
       for (RenderBox tab in tabs) {
@@ -318,57 +317,6 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    Paint paint = Paint();
-    paint.style = PaintingStyle.fill;
-
-    //TODO Experimental: drawing the border between the tab area
-    // and content (top position only). Missing to use the
-    // thickness of the main tab border.
-
-    //TODO Decide whether the border will be drawn independently or would
-    // be part of the tab (affect the layout).
-    double x = 0;
-    _visitVisibleChildren((RenderObject child) {
-      paint.color = _tabsAreaTheme.contentBorderColor ?? Colors.transparent;
-
-      final TabsAreaLayoutParentData parentData =
-          child.tabsAreaLayoutParentData();
-      RenderBox renderBox = child as RenderBox;
-
-      Rect rect = Rect.fromLTRB(
-          offset.dx + x,
-          offset.dy + parentData.offset.dy + renderBox.size.height,
-          offset.dx + x + parentData.offset.dx,
-          offset.dy +
-              parentData.offset.dy +
-              renderBox.size.height +
-              _tabsAreaTheme.contentBorderThickness);
-      if (rect.width > 0) {
-        context.canvas.drawRect(rect, paint);
-      }
-
-      x = parentData.offset.dx;
-      if (child != _corner) {
-        // Use color tab contentBorderColor, otherwise keep
-        // tabsAreaTheme.contentBorderColor as the last child will always
-        // be the corner
-        paint.color = parentData.contentBorderColor ?? Colors.transparent;
-      }
-      rect = Rect.fromLTRB(
-          offset.dx + x,
-          offset.dy + parentData.offset.dy + renderBox.size.height,
-          offset.dx + x + parentData.offset.dx + child.size.width,
-          offset.dy +
-              parentData.offset.dy +
-              renderBox.size.height +
-              _tabsAreaTheme.contentBorderThickness);
-      if (rect.width > 0) {
-        context.canvas.drawRect(rect, paint);
-      }
-
-      x = parentData.offset.dx + child.size.width;
-    });
-
     RenderBox? selectedTab;
     TabsAreaLayoutParentData? selectedTabParentData;
     _visitVisibleChildren((RenderObject child) {
@@ -386,6 +334,34 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     if (selectedTab != null) {
       context.paintChild(selectedTab!, selectedTabParentData!.offset + offset);
     }
+
+    Paint paint = Paint();
+    paint.style = PaintingStyle.fill;
+    paint.color = _tabsAreaTheme.contentBorderColor ?? Colors.transparent;
+
+    //TODO Experimental: drawing the border between the tab area
+    // and content (top position only).
+
+    //TODO need all tab positions
+    double x = 0;
+    double y = size.height - _tabsAreaTheme.contentBorderThickness;
+    _visitVisibleChildren((RenderObject child) {
+      final TabsAreaLayoutParentData parentData =
+          child.tabsAreaLayoutParentData();
+      RenderBox renderBox = child as RenderBox;
+
+      final bool isCorner = child == _corner;
+
+      Rect rect = Rect.fromLTRB(
+          offset.dx + x,
+          offset.dy + y,
+          offset.dx + (isCorner ? size.width : parentData.offset.dx),
+          offset.dy + size.height);
+      if (rect.width > 0 && rect.height > 0) {
+        context.canvas.drawRect(rect, paint);
+      }
+      x = parentData.offset.dx + renderBox.size.width;
+    });
   }
 
   @override
@@ -425,26 +401,17 @@ class _TabsAreaLayoutRenderBox extends RenderBox
   }
 }
 
+//TODO remove?
 class TabsAreaLayoutChild extends ParentDataWidget<TabsAreaLayoutParentData> {
   const TabsAreaLayoutChild({
     super.key,
-    required this.contentBorderColor,
     required Widget child,
   }) : super(child: child);
-
-  final Color? contentBorderColor;
 
   @override
   void applyParentData(RenderObject renderObject) {
     final TabsAreaLayoutParentData parentData =
         renderObject.parentData as TabsAreaLayoutParentData;
-    if (parentData.contentBorderColor != contentBorderColor) {
-      parentData.contentBorderColor = contentBorderColor;
-      final targetParent = renderObject.parent;
-      if (targetParent is RenderObject) {
-        targetParent.markNeedsPaint();
-      }
-    }
   }
 
   @override

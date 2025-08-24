@@ -121,14 +121,4 @@ class VisibleTabs {
       _tabs.removeAt(0);
     }
   }
-
-  double maxX() {
-    if (_tabs.isEmpty) {
-      return 0;
-    }
-    RenderBox tab = _tabs.last;
-    TabsAreaLayoutParentData parentData =
-        tab.parentData as TabsAreaLayoutParentData;
-    return parentData.offset.dx + tab.size.width;
-  }
 }

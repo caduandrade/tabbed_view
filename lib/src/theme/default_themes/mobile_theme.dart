@@ -68,7 +68,7 @@ class MobileTheme {
         buttonsAreaPadding: EdgeInsets.all(2),
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonPadding: const EdgeInsets.all(2),
-        border: BorderSide(color: borderColor, width: 1),
+        border: BorderSide(color: borderColor, width: 5),
         color: backgroundColor);
   }
 

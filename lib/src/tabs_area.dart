@@ -41,9 +41,7 @@ class _TabsAreaState extends State<TabsArea> {
       TabStatus status = _getStatusFor(index);
       TabStatusThemeData tabStatusTheme = theme.tab.getTabThemeFor(status);
       //TODO use tabStatusTheme
-      Color? contentBorderColor = theme.tab.borders.contentBorderColor;
       children.add(TabsAreaLayoutChild(
-          contentBorderColor: contentBorderColor,
           child: TabWidget(
               key: controller.tabs[index].uniqueKey,
               index: index,

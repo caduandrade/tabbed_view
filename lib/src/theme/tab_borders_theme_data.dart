@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 /// Defines the border theme for a single tab,
 /// oriented around the content area in the center.
 class TabBordersThemeData {
-  const TabBordersThemeData({
-    this.nearContent = const NearContentBorders(),
-    this.farContent = const FarContentBorders(),
-    this.borderColor = Colors.transparent,
-    this.borderWidth = 0,
-    this.borderRadius=0,
-    this.contentBorderColor = Colors.transparent
-  });
+  const TabBordersThemeData(
+      {this.nearContent = const NearContentBorders(),
+      this.farContent = const FarContentBorders(),
+      this.borderColor = Colors.transparent,
+      this.borderWidth = 0,
+      this.borderRadius = 0});
 
   /// Borders located between the tab label and the content area.
   final NearContentBorders nearContent;
@@ -36,10 +34,6 @@ class TabBordersThemeData {
       ? BorderSide(color: borderColor, width: borderWidth)
       : BorderSide.none;
 
-
-  /// The border color along the edge separating the tab from the content area.
-  final Color contentBorderColor;
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -49,8 +43,7 @@ class TabBordersThemeData {
           farContent == other.farContent &&
           borderColor == other.borderColor &&
           borderWidth == other.borderWidth &&
-          borderRadius == other.borderRadius &&
-          contentBorderColor == other.contentBorderColor;
+          borderRadius == other.borderRadius;
 
   @override
   int get hashCode =>
@@ -58,16 +51,13 @@ class TabBordersThemeData {
       farContent.hashCode ^
       borderColor.hashCode ^
       borderWidth.hashCode ^
-      borderRadius.hashCode ^
-      contentBorderColor.hashCode;
+      borderRadius.hashCode;
 }
 
 /// Borders on the side facing the main content.
 class NearContentBorders {
-  const NearContentBorders({
-    this.label = BorderSide.none,
-    this.middle=BorderSide.none
-  });
+  const NearContentBorders(
+      {this.label = BorderSide.none, this.middle = BorderSide.none});
 
   /// Border adjacent to the tab label.
   final BorderSide label;

@@ -26,12 +26,16 @@ class TabThemeData {
       this.decoration,
       this.draggingDecoration,
       this.draggingOpacity = 0.3,
-      this.borders = const TabBordersThemeData(borderColor: Colors.pink, borderWidth: 5, borderRadius: 0,
-          contentBorderColor: Colors.green,
-          nearContent: NearContentBorders(label: BorderSide(color: Colors.indigo, width: 5), middle: BorderSide(color: Colors.orange, width: 5)),
-          farContent: FarContentBorders(label: BorderSide(color: Colors.blue, width: 5), outer: BorderSide(color: Colors.brown, width: 5))
-
-      ),
+      this.borders = const TabBordersThemeData(
+          borderColor: Colors.pink,
+          borderWidth: 5,
+          borderRadius: 0,
+          nearContent: NearContentBorders(
+              label: BorderSide(color: Colors.indigo, width: 5),
+              middle: BorderSide(color: Colors.orange, width: 5)),
+          farContent: FarContentBorders(
+              label: BorderSide(color: Colors.blue, width: 5),
+              outer: BorderSide(color: Colors.brown, width: 5))),
       this.innerBottomBorder,
       this.innerTopBorder,
       this.innerLeftBorder,
@@ -186,8 +190,6 @@ class TabThemeData {
   final BorderSide? innerTopBorder;
   final BorderSide? innerLeftBorder;
   final BorderSide? innerRightBorder;
-
-
 
   final TextStyle? textStyle;
 
