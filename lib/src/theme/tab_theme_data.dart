@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
+import 'package:tabbed_view/src/theme/tab_borders_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 import 'package:tabbed_view/src/theme/vertical_alignment.dart';
@@ -25,6 +26,12 @@ class TabThemeData {
       this.decoration,
       this.draggingDecoration,
       this.draggingOpacity = 0.3,
+      this.borders = const TabBordersThemeData(borderColor: Colors.pink, borderWidth: 5, borderRadius: 0,
+          contentBorderColor: Colors.green,
+          nearContent: NearContentBorders(label: BorderSide(color: Colors.indigo, width: 5), middle: BorderSide(color: Colors.orange, width: 5)),
+          farContent: FarContentBorders(label: BorderSide(color: Colors.blue, width: 5), outer: BorderSide(color: Colors.brown, width: 5))
+
+      ),
       this.innerBottomBorder,
       this.innerTopBorder,
       this.innerLeftBorder,
@@ -63,6 +70,7 @@ class TabThemeData {
     double? buttonsOffset,
     EdgeInsetsGeometry? buttonPadding,
     double? buttonsGap,
+    Color? contentBorderColor,
     BoxDecoration? decoration,
     BoxDecoration? draggingDecoration,
     double? draggingOpacity,
@@ -171,10 +179,15 @@ class TabThemeData {
   final BoxDecoration? decoration;
   final BoxDecoration? draggingDecoration;
   final double draggingOpacity;
+
+  final TabBordersThemeData borders;
+
   final BorderSide? innerBottomBorder;
   final BorderSide? innerTopBorder;
   final BorderSide? innerLeftBorder;
   final BorderSide? innerRightBorder;
+
+
 
   final TextStyle? textStyle;
 
@@ -217,6 +230,7 @@ class TabThemeData {
           decoration == other.decoration &&
           draggingDecoration == other.draggingDecoration &&
           draggingOpacity == other.draggingOpacity &&
+          borders == other.borders &&
           innerBottomBorder == other.innerBottomBorder &&
           innerTopBorder == other.innerTopBorder &&
           innerLeftBorder == other.innerLeftBorder &&
@@ -251,6 +265,7 @@ class TabThemeData {
       decoration.hashCode ^
       draggingDecoration.hashCode ^
       draggingOpacity.hashCode ^
+      borders.hashCode ^
       innerBottomBorder.hashCode ^
       innerTopBorder.hashCode ^
       innerLeftBorder.hashCode ^

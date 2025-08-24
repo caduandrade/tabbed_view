@@ -60,7 +60,6 @@ class VisibleTabs {
       RenderBox tab = _tabs[i];
       final TabsAreaLayoutParentData tabParentData =
           tab.tabsAreaLayoutParentData();
-// Capture original for debug
 
       if (_isHorizontal) {
         // For horizontal, primary axis is X, secondary is Y.

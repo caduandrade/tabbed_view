@@ -4,6 +4,9 @@ import 'package:meta/meta.dart';
 /// Parent data for [_TabsAreaLayoutRenderBox] class.
 @internal
 class TabsAreaLayoutParentData extends ContainerBoxParentData<RenderBox> {
+
+  Color? contentBorderColor;
+
   bool visible = false;
   bool selected = false;
 

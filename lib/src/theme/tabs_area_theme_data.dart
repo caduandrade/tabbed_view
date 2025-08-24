@@ -13,6 +13,7 @@ class TabsAreaThemeData {
       this.borderRadius = 0,
       this.initialGap = 0,
       this.middleGap = 0,
+      this.contentBorderThickness = 10,
       double minimalFinalGap = 0,
       this.gapBottomBorder = BorderSide.none,
       this.gapSideBorder = BorderSide.none,
@@ -23,6 +24,7 @@ class TabsAreaThemeData {
       double buttonsGap = 0,
       double buttonsOffset = 0,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
+      this.contentBorderColor = Colors.yellow,
       this.normalButtonColor = Colors.black,
       this.hoverButtonColor = Colors.black,
       this.disabledButtonColor = Colors.black12,
@@ -50,7 +52,7 @@ class TabsAreaThemeData {
   bool visible;
 
   /// The background color.
-  Color? color;
+  final Color? color;
 
   /// The radius used to round the corners of a border.
   /// A value of zero represents a completely rectangular border,
@@ -59,13 +61,19 @@ class TabsAreaThemeData {
 
   /// The border around the outer edges of the entire area,
   /// excluding the side adjacent to the tab content.
-  BorderSide? border;
+  final BorderSide? border;
+
+  /// The thickness of the border along the edge where the tab area meets
+  /// the content, independent of the tab position.
+  final double contentBorderThickness;
+
+  /// The border color in the gaps between tabs and in the remaining
+  /// area after the last tab.
+  final Color? contentBorderColor;
 
   double initialGap;
   double middleGap;
-  @deprecated
   BorderSide gapBottomBorder;
-  @deprecated
   BorderSide gapSideBorder;
   EqualHeights equalHeights;
 
@@ -115,6 +123,8 @@ class TabsAreaThemeData {
       double? borderRadius,
       double? initialGap,
       double? middleGap,
+      double? contentBorderThickness,
+      Color? contentBorderColor,
       double? minimalFinalGap,
       BorderSide? gapBottomBorder,
       BorderSide? gapSideBorder,
@@ -143,6 +153,9 @@ class TabsAreaThemeData {
         borderRadius: borderRadius ?? this.borderRadius,
         initialGap: initialGap ?? this.initialGap,
         middleGap: middleGap ?? this.middleGap,
+        contentBorderThickness:
+            contentBorderThickness ?? this.contentBorderThickness,
+        contentBorderColor: contentBorderColor ?? this.contentBorderColor,
         minimalFinalGap: minimalFinalGap ?? this.minimalFinalGap,
         gapBottomBorder: gapBottomBorder ?? this.gapBottomBorder,
         gapSideBorder: gapSideBorder ?? this.gapSideBorder,
@@ -191,6 +204,8 @@ class TabsAreaThemeData {
           borderRadius == other.borderRadius &&
           initialGap == other.initialGap &&
           middleGap == other.middleGap &&
+          contentBorderThickness == other.contentBorderThickness &&
+          contentBorderColor == other.contentBorderColor &&
           gapBottomBorder == other.gapBottomBorder &&
           gapSideBorder == other.gapSideBorder &&
           equalHeights == other.equalHeights &&
@@ -221,6 +236,8 @@ class TabsAreaThemeData {
       borderRadius.hashCode ^
       initialGap.hashCode ^
       middleGap.hashCode ^
+      contentBorderThickness.hashCode ^
+      contentBorderColor.hashCode ^
       gapBottomBorder.hashCode ^
       gapSideBorder.hashCode ^
       equalHeights.hashCode ^

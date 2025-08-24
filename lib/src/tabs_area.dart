@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/internal/tabs_area/hidden_tabs.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tabs_area_corner.dart';
-import 'package:tabbed_view/src/tab_widget.dart';
+import 'package:tabbed_view/src/tab_widget_experimental.dart';
 import 'package:tabbed_view/src/tabs_area_layout.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
@@ -39,13 +39,18 @@ class _TabsAreaState extends State<TabsArea> {
     List<Widget> children = [];
     for (int index = 0; index < controller.tabs.length; index++) {
       TabStatus status = _getStatusFor(index);
-      children.add(TabWidget(
-          key: controller.tabs[index].uniqueKey,
-          index: index,
-          status: status,
-          provider: widget.provider,
-          updateHighlightedIndex: _updateHighlightedIndex,
-          onClose: _onTabClose));
+      TabStatusThemeData tabStatusTheme = theme.tab.getTabThemeFor(status);
+      //TODO use tabStatusTheme
+      Color? contentBorderColor = theme.tab.borders.contentBorderColor;
+      children.add(TabsAreaLayoutChild(
+          contentBorderColor: contentBorderColor,
+          child: TabWidget(
+              key: controller.tabs[index].uniqueKey,
+              index: index,
+              status: status,
+              provider: widget.provider,
+              updateHighlightedIndex: _updateHighlightedIndex,
+              onClose: _onTabClose)));
     }
 
     children.add(
