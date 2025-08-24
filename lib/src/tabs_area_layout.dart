@@ -10,6 +10,8 @@ import 'package:tabbed_view/src/theme/equal_heights.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 
+//TODO fix corner position in all tab positions using the _tabsAreaTheme.contentBorderThickness
+
 /// Inner widget for [TabsArea] layout.
 /// Displays the popup menu button for tabs hidden due to lack of space.
 /// The selected [TabWidget] will always be visible.
@@ -336,27 +338,49 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     paint.style = PaintingStyle.fill;
     paint.color = _tabsAreaTheme.contentBorderColor ?? Colors.transparent;
 
-    //TODO Experimental: drawing the border between the tab area
-    // and content (top position only).
-
-    //TODO need all tab positions
-    double x = 0;
-    double y = size.height - _tabsAreaTheme.contentBorderThickness;
-    for (RenderBox child in children) {
-      final TabsAreaLayoutParentData parentData =
-          child.tabsAreaLayoutParentData();
-      final bool isCorner = child == _corner;
-      Rect rect = Rect.fromLTRB(
-          offset.dx + x,
-          offset.dy + y,
-          offset.dx + (isCorner ? size.width : parentData.offset.dx),
-          offset.dy + size.height);
-      if (rect.width > 0 && rect.height > 0) {
-        context.canvas.drawRect(rect, paint);
+    if (tabBarPosition.isHorizontal) {
+      double x = 0;
+      double y1 = tabBarPosition == TabBarPosition.top
+          ? size.height - _tabsAreaTheme.contentBorderThickness
+          : 0;
+      double y2 = tabBarPosition == TabBarPosition.top
+          ? size.height
+          : _tabsAreaTheme.contentBorderThickness;
+      for (RenderBox child in children) {
+        final TabsAreaLayoutParentData parentData =
+            child.tabsAreaLayoutParentData();
+        final bool isCorner = child == _corner;
+        Rect rect = Rect.fromLTRB(
+            offset.dx + x,
+            offset.dy + y1,
+            offset.dx + (isCorner ? size.width : parentData.offset.dx),
+            offset.dy + y2);
+        if (rect.width > 0 && rect.height > 0) {
+          context.canvas.drawRect(rect, paint);
+        }
+        x = parentData.offset.dx + child.size.width;
       }
-      x = parentData.offset.dx + child.size.width;
+    } else {
+      // vertical
+      double y = 0;
+      double x1 = tabBarPosition == TabBarPosition.left
+          ? size.width - _tabsAreaTheme.contentBorderThickness
+          : 0;
+      double x2 = tabBarPosition == TabBarPosition.left
+          ? size.width
+          : _tabsAreaTheme.contentBorderThickness;
+      for (RenderBox child in children) {
+        final TabsAreaLayoutParentData parentData =
+            child.tabsAreaLayoutParentData();
+        final bool isCorner = child == _corner;
+        Rect rect = Rect.fromLTRB(offset.dx + x1, offset.dy + y, offset.dx + x2,
+            offset.dy + (isCorner ? size.height : parentData.offset.dy));
+        if (rect.width > 0 && rect.height > 0) {
+          context.canvas.drawRect(rect, paint);
+        }
+        y = parentData.offset.dy + child.size.height;
+      }
     }
-    ;
   }
 
   @override
