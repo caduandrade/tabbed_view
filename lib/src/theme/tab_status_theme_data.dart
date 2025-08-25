@@ -5,8 +5,6 @@ import 'package:flutter/widgets.dart';
 class TabStatusThemeData {
   const TabStatusThemeData(
       {this.decoration,
-      this.innerTopBorder,
-      this.innerBottomBorder,
       this.fontColor,
       this.padding,
       this.paddingWithoutButton,
@@ -36,8 +34,7 @@ class TabStatusThemeData {
 
   /// The decoration to paint behind the tab.
   final BoxDecoration? decoration;
-  final BorderSide? innerBottomBorder;
-  final BorderSide? innerTopBorder;
+
   final Color? fontColor;
   final Color? normalButtonColor;
   final Color? hoverButtonColor;
@@ -59,8 +56,6 @@ class TabStatusThemeData {
           paddingWithoutButton == other.paddingWithoutButton &&
           margin == other.margin &&
           decoration == other.decoration &&
-          innerBottomBorder == other.innerBottomBorder &&
-          innerTopBorder == other.innerTopBorder &&
           fontColor == other.fontColor &&
           normalButtonColor == other.normalButtonColor &&
           hoverButtonColor == other.hoverButtonColor &&
@@ -76,8 +71,6 @@ class TabStatusThemeData {
       paddingWithoutButton.hashCode ^
       margin.hashCode ^
       decoration.hashCode ^
-      innerBottomBorder.hashCode ^
-      innerTopBorder.hashCode ^
       fontColor.hashCode ^
       normalButtonColor.hashCode ^
       hoverButtonColor.hashCode ^
