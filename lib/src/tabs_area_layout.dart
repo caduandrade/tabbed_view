@@ -6,7 +6,7 @@ import 'package:tabbed_view/src/internal/tabs_area/hidden_tabs.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tabs_area_layout_parent_data.dart';
 import 'package:tabbed_view/src/internal/tabs_area/visible_tabs.dart';
 import 'package:tabbed_view/src/tabbed_view.dart';
-import 'package:tabbed_view/src/theme/equal_heights.dart';
+import 'package:tabbed_view/src/theme/tabs_area_cross_axis_fit.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
 
@@ -189,7 +189,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
     final double tabsAreaSecondaryDimension = maxChildSecondaryAxis;
 
-    if (tabsAreaTheme.equalHeights != EqualHeights.none) {
+    if (tabsAreaTheme.crossAxisFit != TabsAreaCrossAxisFit.none) {
       for (RenderBox child in tabs) {
         child.layout(
             BoxConstraints.tightFor(
@@ -277,7 +277,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
           (tabsAreaSecondaryDimension - _corner.size.height) / 2);
     } else {
       double cornerX = 0;
-      if (tabsAreaTheme.equalHeights == EqualHeights.all) {
+      if (tabsAreaTheme.crossAxisFit == TabsAreaCrossAxisFit.all) {
         cornerX = (tabsAreaSecondaryDimension - _corner.size.width) / 2;
       }
       cornerParentData.offset =
@@ -291,7 +291,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       size = constraints
           .constrain(Size(tabsAreaSecondaryDimension, constraints.maxHeight));
     }
-    if (tabsAreaTheme.equalHeights == EqualHeights.none) {
+    if (tabsAreaTheme.crossAxisFit == TabsAreaCrossAxisFit.none) {
       for (RenderBox tab in tabs) {
         final TabsAreaLayoutParentData parentData =
             tab.tabsAreaLayoutParentData();

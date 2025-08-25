@@ -13,7 +13,7 @@ export 'src/theme/tab_status_theme_data.dart';
 export 'src/theme/tab_theme_data.dart';
 export 'src/theme/vertical_alignment.dart';
 export 'src/theme/tabbed_view_theme_constants.dart';
-export 'src/theme/equal_heights.dart';
+export 'src/theme/tabs_area_cross_axis_fit.dart';
 export 'src/theme/tabs_area_theme_data.dart';
 export 'src/tabbed_view_menu_item.dart';
 export 'src/tabbed_view_menu_builder.dart';

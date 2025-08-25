@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
-import 'package:tabbed_view/src/theme/equal_heights.dart';
+import 'package:tabbed_view/src/theme/tabs_area_cross_axis_fit.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 
 ///Theme for tabs and buttons area.
@@ -16,7 +16,7 @@ class TabsAreaThemeData {
       double minimalFinalGap = 0,
       this.gapBottomBorder = BorderSide.none,
       this.gapSideBorder = BorderSide.none,
-      this.equalHeights = EqualHeights.none,
+      this.crossAxisFit = TabsAreaCrossAxisFit.none,
       this.buttonsAreaDecoration,
       this.buttonsAreaPadding,
       this.buttonPadding,
@@ -65,7 +65,7 @@ class TabsAreaThemeData {
   double middleGap;
   BorderSide gapBottomBorder;
   BorderSide gapSideBorder;
-  EqualHeights equalHeights;
+  TabsAreaCrossAxisFit crossAxisFit;
 
   /// Icon for the hidden tabs menu when it is open.
   final IconProvider menuIconOpen;
@@ -129,7 +129,7 @@ class TabsAreaThemeData {
           middleGap == other.middleGap &&
           gapBottomBorder == other.gapBottomBorder &&
           gapSideBorder == other.gapSideBorder &&
-          equalHeights == other.equalHeights &&
+          crossAxisFit == other.crossAxisFit &&
           dropColor == other.dropColor &&
           _minimalFinalGap == other._minimalFinalGap &&
           buttonsAreaDecoration == other.buttonsAreaDecoration &&
@@ -159,7 +159,7 @@ class TabsAreaThemeData {
       middleGap.hashCode ^
       gapBottomBorder.hashCode ^
       gapSideBorder.hashCode ^
-      equalHeights.hashCode ^
+      crossAxisFit.hashCode ^
       dropColor.hashCode ^
       _minimalFinalGap.hashCode ^
       buttonsAreaDecoration.hashCode ^

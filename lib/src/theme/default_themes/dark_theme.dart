@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
-import 'package:tabbed_view/src/theme/equal_heights.dart';
+import 'package:tabbed_view/src/theme/tabs_area_cross_axis_fit.dart';
 import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
@@ -63,7 +63,7 @@ class DarkTheme {
       required Color hoverButtonColor,
       required Color disabledButtonColor}) {
     return TabsAreaThemeData(
-        equalHeights: EqualHeights.all,
+        crossAxisFit: TabsAreaCrossAxisFit.all,
         middleGap: 4,
         buttonsAreaPadding: EdgeInsets.all(2),
         buttonsAreaDecoration: BoxDecoration(color: buttonsAreaColor),

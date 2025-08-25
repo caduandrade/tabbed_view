@@ -29,7 +29,7 @@ class MobileTheme extends TabbedViewThemeData {
     theme.divider = BorderSide(width: 5, color: borderColor);
 
     final TabsAreaThemeData tabsArea = theme.tabsArea;
-    tabsArea.equalHeights = EqualHeights.all;
+    tabsArea.crossAxisFit = TabsAreaCrossAxisFit.all;
     tabsArea.initialGap = 10;
     tabsArea.middleGap = 10;
     tabsArea.normalButtonColor = normalButtonColor;

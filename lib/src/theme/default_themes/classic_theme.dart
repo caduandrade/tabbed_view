@@ -32,7 +32,7 @@ class ClassicTheme extends TabbedViewThemeData {
         border: Border.all(color: borderColor, width: 1));
     tabsArea.buttonsAreaPadding = EdgeInsets.all(2);
     tabsArea.middleGap = -1;
-    tabsArea.equalHeights = EqualHeights.none;
+    tabsArea.crossAxisFit = TabsAreaCrossAxisFit.none;
     tabsArea.gapBottomBorder = BorderSide(color: borderColor, width: 1);
     tabsArea.gapSideBorder = BorderSide(color: borderColor, width: 1);
 
