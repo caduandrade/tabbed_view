@@ -50,7 +50,7 @@ class ContentArea extends StatelessWidget {
       Widget listener = NotificationListener<SizeChangedLayoutNotification>(
           child: SizeChangedLayoutNotifier(child: Stack(children: children)));
 
-      final Border border = _buildBorder(theme: contentAreaTheme);
+      final Border border = _buildBorder(theme: theme);
       final BorderRadius borderRadius =
           _buildBorderRadius(theme: contentAreaTheme);
 
@@ -87,9 +87,11 @@ class ContentArea extends StatelessWidget {
     );
   }
 
-  Border _buildBorder({required ContentAreaThemeData theme}) {
-    final BorderSide divider = theme.divider ?? BorderSide.none;
-    final BorderSide borderSide = theme.border ?? BorderSide.none;
+  Border _buildBorder({required TabbedViewThemeData theme}) {
+    final BorderSide divider = theme.isDividerWithinTabArea
+        ? BorderSide.none
+        : theme.divider ?? BorderSide.none;
+    final BorderSide borderSide = theme.contentArea.border ?? BorderSide.none;
     final TabBarPosition position = provider.tabBarPosition;
 
     bool top = position != TabBarPosition.top;

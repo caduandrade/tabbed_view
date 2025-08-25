@@ -26,6 +26,8 @@ class MobileTheme extends TabbedViewThemeData {
         highlightedColor: highlightedColor,
         selectedColor: accentColor);
 
+    theme.divider = BorderSide(width: 5, color: borderColor);
+
     final TabsAreaThemeData tabsArea = theme.tabsArea;
     tabsArea.equalHeights = EqualHeights.all;
     tabsArea.initialGap = 10;
@@ -68,7 +70,6 @@ class MobileTheme extends TabbedViewThemeData {
     // border works for any TabBarPosition.
     contentArea.color = backgroundColor;
     contentArea.border = BorderSide(width: 1, color: borderColor);
-    contentArea.divider = BorderSide(width: 1, color: borderColor);
 
     final HiddenTabsMenuThemeData menu = theme.menu;
     menu.color = backgroundColor;

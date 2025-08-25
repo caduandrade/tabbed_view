@@ -13,7 +13,6 @@ class TabsAreaThemeData {
       this.borderRadius = 0,
       this.initialGap = 0,
       this.middleGap = 0,
-      this.contentBorderThickness = 10,
       double minimalFinalGap = 0,
       this.gapBottomBorder = BorderSide.none,
       this.gapSideBorder = BorderSide.none,
@@ -24,7 +23,6 @@ class TabsAreaThemeData {
       double buttonsGap = 0,
       double buttonsOffset = 0,
       double buttonIconSize = TabbedViewThemeConstants.defaultIconSize,
-      this.contentBorderColor = Colors.yellow,
       this.normalButtonColor = Colors.black,
       this.hoverButtonColor = Colors.black,
       this.disabledButtonColor = Colors.black12,
@@ -62,14 +60,6 @@ class TabsAreaThemeData {
   /// The border around the outer edges of the entire area,
   /// excluding the side adjacent to the tab content.
   BorderSide? border;
-
-  /// The thickness of the border along the edge where the tab area meets
-  /// the main content, independent of the tab position.
-  final double contentBorderThickness;
-
-  /// The color of the border along the edge where the tab area meets
-  /// the main content, independent of the tab position.
-  final Color? contentBorderColor;
 
   double initialGap;
   double middleGap;
@@ -137,8 +127,6 @@ class TabsAreaThemeData {
           borderRadius == other.borderRadius &&
           initialGap == other.initialGap &&
           middleGap == other.middleGap &&
-          contentBorderThickness == other.contentBorderThickness &&
-          contentBorderColor == other.contentBorderColor &&
           gapBottomBorder == other.gapBottomBorder &&
           gapSideBorder == other.gapSideBorder &&
           equalHeights == other.equalHeights &&
@@ -169,8 +157,6 @@ class TabsAreaThemeData {
       borderRadius.hashCode ^
       initialGap.hashCode ^
       middleGap.hashCode ^
-      contentBorderThickness.hashCode ^
-      contentBorderColor.hashCode ^
       gapBottomBorder.hashCode ^
       gapSideBorder.hashCode ^
       equalHeights.hashCode ^

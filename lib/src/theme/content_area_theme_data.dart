@@ -15,12 +15,7 @@ class ContentAreaThemeData {
 
   /// The border around the outer side of the tab content area,
   /// excluding the side adjacent to the tabs.
-  /// If the tabs area is hidden, this border also covers the side where
-  /// the tabs would normally be.
   BorderSide? border;
-
-  /// The divider between the content and tab area.
-  BorderSide? divider;
 
   /// Empty space to inscribe inside the [decoration]. The content child, if any, is
   /// placed inside this padding.

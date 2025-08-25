@@ -26,6 +26,19 @@ class TabbedViewThemeData {
   ContentAreaThemeData contentArea;
   HiddenTabsMenuThemeData menu;
 
+  /// The border that separates the content area from the tab bar.
+  ///
+  /// If [isDividerWithinTabArea] is set to `true`, this border is drawn **inside**
+  /// the tab area, touching the sides of the tabs but not extending underneath them.
+  ///
+  /// If `false`, the border is drawn **outside** the tab area and acts like a
+  /// standard border, extending fully across the width of the pane.
+  BorderSide? divider;
+
+  /// If `true`, the [divider] will be drawn within the bounds of the tab area.
+  /// If `false`, the divider will act as a standard border, drawn outside the tab area.
+  bool isDividerWithinTabArea = false;
+
   /// Builds the predefined dark theme.
   factory TabbedViewThemeData.dark(
       {MaterialColor colorSet = Colors.grey, double fontSize = 13}) {
