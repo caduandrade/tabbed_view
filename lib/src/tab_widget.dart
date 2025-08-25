@@ -31,16 +31,12 @@ class TabWidget extends StatelessWidget {
     final TabData tab = provider.controller.tabs[index];
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabThemeData tabTheme = theme.tab;
-    final bool isHorizontal = provider.tabBarPosition == TabBarPosition.top ||
-        provider.tabBarPosition == TabBarPosition.bottom;
-    final bool isVertical = !isHorizontal;
-    final bool isStacked = isVertical &&
+    final bool isStacked = provider.tabBarPosition.isVertical &&
         tabTheme.verticalLayoutStyle == VerticalTabLayoutStyle.stacked;
 
     Widget widget = _TabContentWidget(
         provider: provider,
         index: index,
-        isHorizontal: isHorizontal,
         isStacked: isStacked,
         onClose: onClose,
         status: status,
@@ -71,7 +67,7 @@ class TabWidget extends StatelessWidget {
     final maxWidth = tabTheme.maxWidth;
     if (maxWidth != null) {
       BoxConstraints constraints;
-      if (isHorizontal) {
+      if (provider.tabBarPosition.isHorizontal) {
         constraints = BoxConstraints(maxWidth: maxWidth);
       } else {
         // left or right
@@ -187,8 +183,7 @@ class _TabContentWidget extends StatelessWidget {
       required this.provider,
       required this.onClose,
       required this.tabTheme,
-      required this.isStacked,
-      required this.isHorizontal});
+      required this.isStacked});
 
   final int index;
   final TabStatus status;
@@ -196,14 +191,13 @@ class _TabContentWidget extends StatelessWidget {
   final Function onClose;
   final TabThemeData tabTheme;
   final bool isStacked;
-  final bool isHorizontal;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> textAndButtons = _textAndButtons(context, tabTheme, isStacked);
 
     FlowDirection flowDirection;
-    if (isHorizontal) {
+    if (provider.tabBarPosition.isHorizontal) {
       flowDirection = FlowDirection.horizontal;
     } else {
       // For vertical tabs, the layout is counter-intuitive due to RotatedBox.

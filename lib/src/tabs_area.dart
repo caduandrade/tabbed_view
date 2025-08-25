@@ -54,9 +54,8 @@ class _TabsAreaState extends State<TabsArea> {
     children.add(
         TabsAreaCorner(provider: widget.provider, hiddenTabs: _hiddenTabs));
 
-    bool isHorizontal = widget.provider.tabBarPosition.isHorizontal;
-    if (isHorizontal != _lastIsHorizontal) {
-      _lastIsHorizontal = isHorizontal;
+    if (widget.provider.tabBarPosition.isHorizontal != _lastIsHorizontal) {
+      _lastIsHorizontal = widget.provider.tabBarPosition.isHorizontal;
       // Changing the key to force the layout to be rebuilt.
       _tabsAreaLayoutKey = UniqueKey();
     }

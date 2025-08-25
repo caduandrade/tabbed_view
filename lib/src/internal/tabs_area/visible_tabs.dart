@@ -13,10 +13,6 @@ class VisibleTabs {
   final TabsAreaThemeData tabsAreaTheme;
   final TabBarPosition tabBarPosition;
 
-  bool get _isHorizontal =>
-      tabBarPosition == TabBarPosition.top ||
-      tabBarPosition == TabBarPosition.bottom;
-
   List<RenderBox> _tabs = [];
 
   void add(RenderBox tab) {
@@ -30,8 +26,7 @@ class VisibleTabs {
   }
 
   /// Layouts the single selected tab.
-  void layoutSingleTab(
-      double maxPrimarySize, double maxSecondarySize, bool isHorizontal) {
+  void layoutSingleTab(double maxPrimarySize, double maxSecondarySize) {
     if (_tabs.length == 1) {
       double availablePrimarySize = maxPrimarySize -
           tabsAreaTheme.initialGap -
@@ -39,9 +34,9 @@ class VisibleTabs {
 
       if (availablePrimarySize > 0) {
         RenderBox tab = _tabs.first;
-        if ((_isHorizontal ? tab.size.width : tab.size.height) >
+        if ((tabBarPosition.isHorizontal ? tab.size.width : tab.size.height) >
             availablePrimarySize) {
-          final BoxConstraints childConstraints = isHorizontal
+          final BoxConstraints childConstraints = tabBarPosition.isHorizontal
               ? BoxConstraints.loose(
                   Size(availablePrimarySize, maxSecondarySize))
               : BoxConstraints.loose(
@@ -61,7 +56,7 @@ class VisibleTabs {
       final TabsAreaLayoutParentData tabParentData =
           tab.tabsAreaLayoutParentData();
 
-      if (_isHorizontal) {
+      if (tabBarPosition.isHorizontal) {
         // For horizontal, primary axis is X, secondary is Y.
         tabParentData.offset = Offset(offset, tabParentData.offset.dy);
       } else {
@@ -69,7 +64,8 @@ class VisibleTabs {
         tabParentData.offset = Offset(tabParentData.offset.dx, offset);
       }
 
-      double tabPrimarySize = _isHorizontal ? tab.size.width : tab.size.height;
+      double tabPrimarySize =
+          tabBarPosition.isHorizontal ? tab.size.width : tab.size.height;
 
       if (i < _tabs.length - 1) {
         // Not the last tab
@@ -83,7 +79,8 @@ class VisibleTabs {
   /// Calculates the required size for the tab in the primary axis. Includes the gap values.
   double requiredTabPrimarySize(int index) {
     RenderBox tab = _tabs[index];
-    double tabSize = _isHorizontal ? tab.size.width : tab.size.height;
+    double tabSize =
+        tabBarPosition.isHorizontal ? tab.size.width : tab.size.height;
     if (index < _tabs.length - 1) {
       // Not the last tab
       return tabSize + tabsAreaTheme.middleGap;

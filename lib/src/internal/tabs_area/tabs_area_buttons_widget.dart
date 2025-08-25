@@ -114,10 +114,6 @@ class _TabsAreaButtonsWidgetState extends State<TabsAreaButtonsWidget> {
     }
   }
 
-  bool isHorizontal() =>
-      widget.provider.tabBarPosition == TabBarPosition.top ||
-      widget.provider.tabBarPosition == TabBarPosition.bottom;
-
   @override
   Widget build(BuildContext context) {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
