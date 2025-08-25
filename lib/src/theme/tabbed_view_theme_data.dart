@@ -21,10 +21,10 @@ class TabbedViewThemeData {
         contentArea = contentArea ?? ContentAreaThemeData(),
         menu = menu ?? HiddenTabsMenuThemeData();
 
-  final TabsAreaThemeData tabsArea;
-  final TabThemeData tab;
-  final ContentAreaThemeData contentArea;
-  final HiddenTabsMenuThemeData menu;
+  TabsAreaThemeData tabsArea;
+  TabThemeData tab;
+  ContentAreaThemeData contentArea;
+  HiddenTabsMenuThemeData menu;
 
   /// Builds the predefined dark theme.
   factory TabbedViewThemeData.dark(
@@ -46,7 +46,7 @@ class TabbedViewThemeData {
       {MaterialColor colorSet = Colors.grey,
       Color accentColor = Colors.blue,
       double fontSize = 13}) {
-    return MobileTheme.build(
+    return MobileTheme(
         colorSet: colorSet, accentColor: accentColor, fontSize: fontSize);
   }
 
@@ -69,18 +69,4 @@ class TabbedViewThemeData {
   @override
   int get hashCode =>
       tabsArea.hashCode ^ tab.hashCode ^ contentArea.hashCode ^ menu.hashCode;
-
-  TabbedViewThemeData copyWith({
-    TabsAreaThemeData? tabsArea,
-    TabThemeData? tab,
-    ContentAreaThemeData? contentArea,
-    HiddenTabsMenuThemeData? menu,
-  }) {
-    return TabbedViewThemeData(
-      tabsArea: tabsArea ?? this.tabsArea,
-      tab: tab ?? this.tab,
-      contentArea: contentArea ?? this.contentArea,
-      menu: menu ?? this.menu,
-    );
-  }
 }

@@ -27,16 +27,16 @@ class HiddenTabsMenuThemeData {
       this.highlightColorDark});
 
   /// The color of the menu.
-  final Color? color;
+  Color? color;
 
   /// The color of the menu for dark theme.
   final Color? colorDark;
 
   /// A list of shadows cast by this box behind the menu.
-  final List<BoxShadow>? boxShadow;
+  List<BoxShadow>? boxShadow;
 
   /// The border radius of the menu.
-  final BorderRadius? borderRadius;
+  BorderRadius? borderRadius;
 
   /// The border of the menu.
   final Border? border;
@@ -48,7 +48,7 @@ class HiddenTabsMenuThemeData {
   final EdgeInsetsGeometry? padding;
 
   /// The padding of the menu item.
-  final EdgeInsetsGeometry menuItemPadding;
+  EdgeInsetsGeometry menuItemPadding;
 
   /// The maximum width of the menu.
   final double maxWidth;
@@ -57,7 +57,7 @@ class HiddenTabsMenuThemeData {
   final double maxHeight;
 
   /// The [TextStyle] of the menu item.
-  final TextStyle? textStyle;
+  TextStyle? textStyle;
 
   /// The [TextStyle] of the menu item for dark theme.
   final TextStyle? textStyleDark;
@@ -88,53 +88,6 @@ class HiddenTabsMenuThemeData {
 
   /// The highlight color of the menu item when pressed for dark theme.
   final Color? highlightColorDark;
-
-  /// Creates a copy of this theme but with the given fields replaced with the new values.
-  HiddenTabsMenuThemeData copyWith(
-      {Color? color,
-      List<BoxShadow>? boxShadow,
-      BorderRadius? borderRadius,
-      Border? border,
-      EdgeInsetsGeometry? margin,
-      EdgeInsetsGeometry? padding,
-      EdgeInsetsGeometry? menuItemPadding,
-      double? maxWidth,
-      double? maxHeight,
-      TextStyle? textStyle,
-      bool? ellipsisOverflowText,
-      bool? blur,
-      double? dividerThickness,
-      Color? dividerColor,
-      Color? hoverColor,
-      Color? highlightColor,
-      Color? colorDark,
-      TextStyle? textStyleDark,
-      Color? dividerColorDark,
-      Color? hoverColorDark,
-      Color? highlightColorDark}) {
-    return HiddenTabsMenuThemeData(
-        color: color ?? this.color,
-        boxShadow: boxShadow ?? this.boxShadow,
-        borderRadius: borderRadius ?? this.borderRadius,
-        border: border ?? this.border,
-        margin: margin ?? this.margin,
-        padding: padding ?? this.padding,
-        menuItemPadding: menuItemPadding ?? this.menuItemPadding,
-        maxWidth: maxWidth ?? this.maxWidth,
-        maxHeight: maxHeight ?? this.maxHeight,
-        textStyle: textStyle ?? this.textStyle,
-        ellipsisOverflowText: ellipsisOverflowText ?? this.ellipsisOverflowText,
-        blur: blur ?? this.blur,
-        dividerThickness: dividerThickness ?? this.dividerThickness,
-        dividerColor: dividerColor ?? this.dividerColor,
-        hoverColor: hoverColor ?? this.hoverColor,
-        highlightColor: highlightColor ?? this.highlightColor,
-        colorDark: colorDark ?? this.colorDark,
-        textStyleDark: textStyleDark ?? this.textStyleDark,
-        dividerColorDark: dividerColorDark ?? this.dividerColorDark,
-        hoverColorDark: hoverColorDark ?? this.hoverColorDark,
-        highlightColorDark: highlightColorDark ?? this.highlightColorDark);
-  }
 
   @override
   bool operator ==(Object other) =>

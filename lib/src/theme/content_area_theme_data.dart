@@ -6,7 +6,7 @@ class ContentAreaThemeData {
       {this.color, this.padding, this.borderRadius = 0, this.border});
 
   /// The background color.
-  final Color? color;
+   Color? color;
 
   /// The radius used to round the corners of a border.
   /// A value of zero represents a completely rectangular border,
@@ -18,6 +18,9 @@ class ContentAreaThemeData {
   /// If the tabs area is hidden, this border also covers the side where
   /// the tabs would normally be.
   BorderSide? border;
+
+  /// The divider between the content and tab area.
+  BorderSide? divider;
 
   /// Empty space to inscribe inside the [decoration]. The content child, if any, is
   /// placed inside this padding.

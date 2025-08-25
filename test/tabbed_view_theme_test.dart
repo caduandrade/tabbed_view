@@ -260,8 +260,8 @@ void main() {
       testWidgets(
           'is present and rotated when TabBarPosition is left and theme enables it',
           (WidgetTester tester) async {
-        final theme = TabbedViewThemeData.classic()
-            .copyWith(tab: TabThemeData(rotateCaptionsInVerticalTabs: true));
+        final theme = TabbedViewThemeData.classic();
+        theme.tab.rotateCaptionsInVerticalTabs = true;
 
         await tester.pumpWidget(MaterialApp(
           home: Scaffold(

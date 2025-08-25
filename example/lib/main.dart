@@ -172,26 +172,24 @@ class TabbedViewExamplePageState extends State<TabbedViewExamplePage> {
 
     TabbedViewThemeData themeData = _getTheme();
     // Customizing the theme.
-    // The `copyWith` method allows you to customize the theme from a predefined one.
-    themeData = themeData.copyWith(
-        tab: themeData.tab.copyWith(
-            verticalLayoutStyle: _useStackedLayout
-                ? VerticalTabLayoutStyle.stacked
-                : VerticalTabLayoutStyle.inline,
-            rotateCaptionsInVerticalTabs: _useStackedLayout,
-            showCloseIconWhenNotFocused: true,
-            maxWidth: 200,
-            maxTextWidth: 100,
-            // Making the close button visible on unfocused tabs by using the
-            // same colors as the selected tab's buttons.
-            // The button color is derived from the selected tab's font color,
-            // which acts as an accent. Use a default color if fontColor is null.
-            normalButtonColor:
-                themeData.tab.selectedStatus.fontColor ?? Colors.black,
-            // Use a slightly modified color for the hover state for visual feedback.
-            hoverButtonColor:
-                (themeData.tab.selectedStatus.fontColor ?? Colors.black)
-                    .withAlpha(200)));
+    themeData.tab
+      ..verticalLayoutStyle = _useStackedLayout
+          ? VerticalTabLayoutStyle.stacked
+          : VerticalTabLayoutStyle.inline
+      ..rotateCaptionsInVerticalTabs = _useStackedLayout
+      ..showCloseIconWhenNotFocused = true
+      ..maxWidth = 200
+      ..maxTextWidth = 100
+      // Making the close button visible on unfocused tabs by using the
+      // same colors as the selected tab's buttons.
+      // The button color is derived from the selected tab's font color,
+      // which acts as an accent. Use a default color if fontColor is null.
+      ..normalButtonColor =
+          themeData.tab.selectedStatus.fontColor ?? Colors.black
+      // Use a slightly modified color for the hover state for visual feedback.
+      ..hoverButtonColor =
+          (themeData.tab.selectedStatus.fontColor ?? Colors.black)
+              .withAlpha(200);
 
     Widget example = Column(children: [
       _buildButtons(),

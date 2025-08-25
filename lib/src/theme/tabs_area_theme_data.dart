@@ -52,7 +52,7 @@ class TabsAreaThemeData {
   bool visible;
 
   /// The background color.
-  final Color? color;
+  Color? color;
 
   /// The radius used to round the corners of a border.
   /// A value of zero represents a completely rectangular border,
@@ -61,7 +61,7 @@ class TabsAreaThemeData {
 
   /// The border around the outer edges of the entire area,
   /// excluding the side adjacent to the tab content.
-  final BorderSide? border;
+  BorderSide? border;
 
   /// The thickness of the border along the edge where the tab area meets
   /// the main content, independent of the tab position.
@@ -115,73 +115,6 @@ class TabsAreaThemeData {
 
   /// Icon for the hidden tabs menu.
   IconProvider menuIcon;
-
-  TabsAreaThemeData copyWith(
-      {bool? visible,
-      Color? color,
-      BorderSide? border,
-      double? borderRadius,
-      double? initialGap,
-      double? middleGap,
-      double? contentBorderThickness,
-      Color? contentBorderColor,
-      double? minimalFinalGap,
-      BorderSide? gapBottomBorder,
-      BorderSide? gapSideBorder,
-      EqualHeights? equalHeights,
-      BoxDecoration? buttonsAreaDecoration,
-      EdgeInsetsGeometry? buttonsAreaPadding,
-      EdgeInsetsGeometry? buttonPadding,
-      double? buttonsGap,
-      double? buttonsOffset,
-      double? buttonIconSize,
-      Color? normalButtonColor,
-      Color? hoverButtonColor,
-      Color? disabledButtonColor,
-      BoxDecoration? normalButtonBackground,
-      BoxDecoration? hoverButtonBackground,
-      BoxDecoration? disabledButtonBackground,
-      IconProvider? menuIcon,
-      IconProvider? menuIconOpen,
-      IconProvider? menuIconLeft,
-      IconProvider? menuIconRight,
-      Color? dropColor}) {
-    return TabsAreaThemeData(
-        visible: visible ?? this.visible,
-        color: color ?? this.color,
-        border: border ?? this.border,
-        borderRadius: borderRadius ?? this.borderRadius,
-        initialGap: initialGap ?? this.initialGap,
-        middleGap: middleGap ?? this.middleGap,
-        contentBorderThickness:
-            contentBorderThickness ?? this.contentBorderThickness,
-        contentBorderColor: contentBorderColor ?? this.contentBorderColor,
-        minimalFinalGap: minimalFinalGap ?? this.minimalFinalGap,
-        gapBottomBorder: gapBottomBorder ?? this.gapBottomBorder,
-        gapSideBorder: gapSideBorder ?? this.gapSideBorder,
-        equalHeights: equalHeights ?? this.equalHeights,
-        buttonsAreaDecoration:
-            buttonsAreaDecoration ?? this.buttonsAreaDecoration,
-        buttonsAreaPadding: buttonsAreaPadding ?? this.buttonsAreaPadding,
-        buttonPadding: buttonPadding ?? this.buttonPadding,
-        buttonsGap: buttonsGap ?? this.buttonsGap,
-        buttonsOffset: buttonsOffset ?? this.buttonsOffset,
-        buttonIconSize: buttonIconSize ?? this.buttonIconSize,
-        normalButtonColor: normalButtonColor ?? this.normalButtonColor,
-        hoverButtonColor: hoverButtonColor ?? this.hoverButtonColor,
-        disabledButtonColor: disabledButtonColor ?? this.disabledButtonColor,
-        normalButtonBackground:
-            normalButtonBackground ?? this.normalButtonBackground,
-        hoverButtonBackground:
-            hoverButtonBackground ?? this.hoverButtonBackground,
-        disabledButtonBackground:
-            disabledButtonBackground ?? this.disabledButtonBackground,
-        menuIcon: menuIcon ?? this.menuIcon,
-        menuIconOpen: menuIconOpen ?? this.menuIconOpen,
-        menuIconLeft: menuIconLeft ?? this.menuIconLeft,
-        menuIconRight: menuIconRight ?? this.menuIconRight,
-        dropColor: dropColor ?? this.dropColor);
-  }
 
   double _buttonsGap;
 

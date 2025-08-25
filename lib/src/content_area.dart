@@ -88,6 +88,7 @@ class ContentArea extends StatelessWidget {
   }
 
   Border _buildBorder({required ContentAreaThemeData theme}) {
+    final BorderSide divider = theme.divider ?? BorderSide.none;
     final BorderSide borderSide = theme.border ?? BorderSide.none;
     final TabBarPosition position = provider.tabBarPosition;
 
@@ -97,10 +98,10 @@ class ContentArea extends StatelessWidget {
     bool right = position != TabBarPosition.right;
 
     return Border(
-      top: top ? borderSide : BorderSide.none,
-      bottom: bottom ? borderSide : BorderSide.none,
-      left: left ? borderSide : BorderSide.none,
-      right: right ? borderSide : BorderSide.none,
+      top: top ? borderSide : divider,
+      bottom: bottom ? borderSide : divider,
+      left: left ? borderSide : divider,
+      right: right ? borderSide : divider,
     );
   }
 }

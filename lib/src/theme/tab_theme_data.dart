@@ -7,9 +7,15 @@ import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 import 'package:tabbed_view/src/theme/vertical_alignment.dart';
 import 'package:tabbed_view/src/theme/vertical_tab_layout_style.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 /// Theme for tab.
 class TabThemeData {
+  static TabBorder defaultBorderBuilder(
+      {required TabBarPosition tabBarPosition, required TabStatus status}) {
+    return TabBorder();
+  }
+
   TabThemeData(
       {IconProvider? closeIcon,
       this.normalButtonColor = Colors.black,
@@ -24,6 +30,7 @@ class TabThemeData {
       this.buttonPadding,
       double buttonsGap = 0,
       this.decoration,
+      this.borderBuilder = TabThemeData.defaultBorderBuilder,
       this.draggingDecoration,
       this.draggingOpacity = 0.3,
       this.borders = const TabBordersThemeData(
@@ -61,87 +68,16 @@ class TabThemeData {
         this.highlightedStatus =
             highlightedStatus ?? const TabStatusThemeData(),
         this.disabledStatus = disabledStatus ?? const TabStatusThemeData();
-  TabThemeData copyWith({
-    IconProvider? closeIcon,
-    Color? normalButtonColor,
-    Color? hoverButtonColor,
-    Color? disabledButtonColor,
-    BoxDecoration? normalButtonBackground,
-    BoxDecoration? hoverButtonBackground,
-    BoxDecoration? disabledButtonBackground,
-    double? buttonIconSize,
-    VerticalAlignment? verticalAlignment,
-    double? buttonsOffset,
-    EdgeInsetsGeometry? buttonPadding,
-    double? buttonsGap,
-    Color? contentBorderColor,
-    BoxDecoration? decoration,
-    BoxDecoration? draggingDecoration,
-    double? draggingOpacity,
-    BorderSide? innerBottomBorder,
-    BorderSide? innerTopBorder,
-    BorderSide? innerLeftBorder,
-    BorderSide? innerRightBorder,
-    TextStyle? textStyle,
-    double? maxTextWidth,
-    double? maxWidth,
-    EdgeInsetsGeometry? padding,
-    EdgeInsetsGeometry? paddingWithoutButton,
-    EdgeInsetsGeometry? margin,
-    TabStatusThemeData? selectedStatus,
-    VerticalTabLayoutStyle? verticalLayoutStyle,
-    bool? rotateCaptionsInVerticalTabs,
-    bool? showCloseIconWhenNotFocused,
-    TabStatusThemeData? highlightedStatus,
-    TabStatusThemeData? disabledStatus,
-  }) {
-    return TabThemeData(
-      closeIcon: closeIcon ?? this.closeIcon,
-      normalButtonColor: normalButtonColor ?? this.normalButtonColor,
-      hoverButtonColor: hoverButtonColor ?? this.hoverButtonColor,
-      disabledButtonColor: disabledButtonColor ?? this.disabledButtonColor,
-      normalButtonBackground:
-          normalButtonBackground ?? this.normalButtonBackground,
-      hoverButtonBackground:
-          hoverButtonBackground ?? this.hoverButtonBackground,
-      disabledButtonBackground:
-          disabledButtonBackground ?? this.disabledButtonBackground,
-      buttonIconSize: buttonIconSize ?? this.buttonIconSize,
-      verticalAlignment: verticalAlignment ?? this.verticalAlignment,
-      buttonsOffset: buttonsOffset ?? this.buttonsOffset,
-      buttonPadding: buttonPadding ?? this.buttonPadding,
-      buttonsGap: buttonsGap ?? this.buttonsGap,
-      decoration: decoration ?? this.decoration,
-      draggingDecoration: draggingDecoration ?? this.draggingDecoration,
-      draggingOpacity: draggingOpacity ?? this.draggingOpacity,
-      innerBottomBorder: innerBottomBorder ?? this.innerBottomBorder,
-      innerTopBorder: innerTopBorder ?? this.innerTopBorder,
-      innerLeftBorder: innerLeftBorder ?? this.innerLeftBorder,
-      innerRightBorder: innerRightBorder ?? this.innerRightBorder,
-      textStyle: textStyle ?? this.textStyle,
-      maxTextWidth: maxTextWidth ?? this.maxTextWidth,
-      maxWidth: maxWidth ?? this.maxWidth,
-      padding: padding ?? this.padding,
-      paddingWithoutButton: paddingWithoutButton ?? this.paddingWithoutButton,
-      margin: margin ?? this.margin,
-      selectedStatus: selectedStatus ?? this.selectedStatus,
-      verticalLayoutStyle: verticalLayoutStyle ?? this.verticalLayoutStyle,
-      rotateCaptionsInVerticalTabs:
-          rotateCaptionsInVerticalTabs ?? this.rotateCaptionsInVerticalTabs,
-      showCloseIconWhenNotFocused:
-          showCloseIconWhenNotFocused ?? this.showCloseIconWhenNotFocused,
-      highlightedStatus: highlightedStatus ?? this.highlightedStatus,
-      disabledStatus: disabledStatus ?? this.disabledStatus,
-    );
-  }
+
+  TabBorderBuilder borderBuilder;
 
   /// The maximum width for the tab text. If the text exceeds this width, it
   /// will be truncated with an ellipsis.
-  final double? maxTextWidth;
+   double? maxTextWidth;
 
   /// The maximum width for the tab. For vertical tabs, this will be the maximum
   /// height.
-  final double? maxWidth;
+   double? maxWidth;
 
   /// If `true`, characters within vertical tab text will also be rotated
   /// along with the tab. If `false` (default), characters will remain upright
@@ -149,9 +85,9 @@ class TabThemeData {
   ///
   /// This property is only effective when [verticalLayoutStyle] is
   /// [VerticalTabLayoutStyle.inline].
-  final bool rotateCaptionsInVerticalTabs;
+   bool rotateCaptionsInVerticalTabs;
 
-  final bool showCloseIconWhenNotFocused;
+   bool showCloseIconWhenNotFocused;
 
   /// Defines the layout style for a tab in a vertical [TabBar].
   ///
@@ -160,9 +96,9 @@ class TabThemeData {
   ///
   /// [VerticalTabLayoutStyle.stacked] will arrange the tab's internal components
   /// in a column.
-  final VerticalTabLayoutStyle verticalLayoutStyle;
-  final TabStatusThemeData selectedStatus;
-  final TabStatusThemeData highlightedStatus;
+   VerticalTabLayoutStyle verticalLayoutStyle;
+  TabStatusThemeData selectedStatus;
+  TabStatusThemeData highlightedStatus;
   final TabStatusThemeData disabledStatus;
 
   /// Empty space to inscribe inside the [decoration]. The tab child, if any, is
@@ -170,43 +106,43 @@ class TabThemeData {
   ///
   /// This padding is in addition to any padding inherent in the [decoration];
   /// see [Decoration.padding].
-  final EdgeInsetsGeometry? padding;
+  EdgeInsetsGeometry? padding;
 
-  final EdgeInsetsGeometry? paddingWithoutButton;
+  EdgeInsetsGeometry? paddingWithoutButton;
 
-  final EdgeInsetsGeometry? margin;
+  EdgeInsetsGeometry? margin;
 
-  final VerticalAlignment verticalAlignment;
+  VerticalAlignment verticalAlignment;
 
-  final double buttonsOffset;
+  double buttonsOffset;
 
-  final BoxDecoration? decoration;
-  final BoxDecoration? draggingDecoration;
-  final double draggingOpacity;
+  BoxDecoration? decoration;
+  BoxDecoration? draggingDecoration;
+  double draggingOpacity;
 
-  final TabBordersThemeData borders;
+  TabBordersThemeData borders;
 
-  final BorderSide? innerBottomBorder;
-  final BorderSide? innerTopBorder;
-  final BorderSide? innerLeftBorder;
-  final BorderSide? innerRightBorder;
+  BorderSide? innerBottomBorder;
+  BorderSide? innerTopBorder;
+  BorderSide? innerLeftBorder;
+  BorderSide? innerRightBorder;
 
-  final TextStyle? textStyle;
+  TextStyle? textStyle;
 
-  final double buttonIconSize;
-  final Color normalButtonColor;
-  final Color hoverButtonColor;
-  final Color disabledButtonColor;
-  final BoxDecoration? normalButtonBackground;
-  final BoxDecoration? hoverButtonBackground;
-  final BoxDecoration? disabledButtonBackground;
+  double buttonIconSize;
+  Color normalButtonColor;
+  Color hoverButtonColor;
+  Color disabledButtonColor;
+  BoxDecoration? normalButtonBackground;
+  BoxDecoration? hoverButtonBackground;
+  BoxDecoration? disabledButtonBackground;
 
   /// Icon for the close button.
-  final IconProvider closeIcon;
+  IconProvider closeIcon;
 
-  final EdgeInsetsGeometry? buttonPadding;
+  EdgeInsetsGeometry? buttonPadding;
 
-  final double buttonsGap;
+  double buttonsGap;
 
   /// Gets the theme of a tab according to its status.
   TabStatusThemeData getTabThemeFor(TabStatus status) {
@@ -230,6 +166,7 @@ class TabThemeData {
           margin == other.margin &&
           verticalAlignment == other.verticalAlignment &&
           decoration == other.decoration &&
+          borderBuilder == other.borderBuilder &&
           draggingDecoration == other.draggingDecoration &&
           draggingOpacity == other.draggingOpacity &&
           borders == other.borders &&
@@ -265,6 +202,7 @@ class TabThemeData {
       margin.hashCode ^
       verticalAlignment.hashCode ^
       decoration.hashCode ^
+      borderBuilder.hashCode ^
       draggingDecoration.hashCode ^
       draggingOpacity.hashCode ^
       borders.hashCode ^
