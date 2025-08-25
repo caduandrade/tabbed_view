@@ -1,12 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tabbed_view/src/icon_provider.dart';
-import 'package:tabbed_view/src/tab_status.dart';
-import 'package:tabbed_view/src/tabbed_view_icons.dart';
-import 'package:tabbed_view/src/theme/tab_borders_theme_data.dart';
-import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
-import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
-import 'package:tabbed_view/src/theme/vertical_alignment.dart';
-import 'package:tabbed_view/src/theme/vertical_tab_layout_style.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
 /// Theme for tab.
@@ -33,16 +25,6 @@ class TabThemeData {
       this.borderBuilder = TabThemeData.defaultBorderBuilder,
       this.draggingDecoration,
       this.draggingOpacity = 0.3,
-      this.borders = const TabBordersThemeData(
-          borderColor: Colors.pink,
-          borderWidth: 5,
-          borderRadius: 0,
-          nearContent: NearContentBorders(
-              label: BorderSide(color: Colors.indigo, width: 5),
-              middle: BorderSide(color: Colors.orange, width: 5)),
-          farContent: FarContentBorders(
-              label: BorderSide(color: Colors.blue, width: 5),
-              outer: BorderSide(color: Colors.brown, width: 5))),
       this.innerBottomBorder,
       this.innerTopBorder,
       this.innerLeftBorder,
@@ -73,11 +55,11 @@ class TabThemeData {
 
   /// The maximum width for the tab text. If the text exceeds this width, it
   /// will be truncated with an ellipsis.
-   double? maxTextWidth;
+  double? maxTextWidth;
 
   /// The maximum width for the tab. For vertical tabs, this will be the maximum
   /// height.
-   double? maxWidth;
+  double? maxWidth;
 
   /// If `true`, characters within vertical tab text will also be rotated
   /// along with the tab. If `false` (default), characters will remain upright
@@ -85,9 +67,9 @@ class TabThemeData {
   ///
   /// This property is only effective when [verticalLayoutStyle] is
   /// [VerticalTabLayoutStyle.inline].
-   bool rotateCaptionsInVerticalTabs;
+  bool rotateCaptionsInVerticalTabs;
 
-   bool showCloseIconWhenNotFocused;
+  bool showCloseIconWhenNotFocused;
 
   /// Defines the layout style for a tab in a vertical [TabBar].
   ///
@@ -96,7 +78,7 @@ class TabThemeData {
   ///
   /// [VerticalTabLayoutStyle.stacked] will arrange the tab's internal components
   /// in a column.
-   VerticalTabLayoutStyle verticalLayoutStyle;
+  VerticalTabLayoutStyle verticalLayoutStyle;
   TabStatusThemeData selectedStatus;
   TabStatusThemeData highlightedStatus;
   final TabStatusThemeData disabledStatus;
@@ -119,8 +101,6 @@ class TabThemeData {
   BoxDecoration? decoration;
   BoxDecoration? draggingDecoration;
   double draggingOpacity;
-
-  TabBordersThemeData borders;
 
   BorderSide? innerBottomBorder;
   BorderSide? innerTopBorder;
@@ -169,7 +149,6 @@ class TabThemeData {
           borderBuilder == other.borderBuilder &&
           draggingDecoration == other.draggingDecoration &&
           draggingOpacity == other.draggingOpacity &&
-          borders == other.borders &&
           innerBottomBorder == other.innerBottomBorder &&
           innerTopBorder == other.innerTopBorder &&
           innerLeftBorder == other.innerLeftBorder &&
@@ -205,7 +184,6 @@ class TabThemeData {
       borderBuilder.hashCode ^
       draggingDecoration.hashCode ^
       draggingOpacity.hashCode ^
-      borders.hashCode ^
       innerBottomBorder.hashCode ^
       innerTopBorder.hashCode ^
       innerLeftBorder.hashCode ^

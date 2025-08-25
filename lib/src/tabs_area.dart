@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/internal/tabs_area/hidden_tabs.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tabs_area_corner.dart';
-import 'package:tabbed_view/src/tab_widget_experimental2.dart';
+import 'package:tabbed_view/src/tab_widget.dart';
 import 'package:tabbed_view/src/tabs_area_layout.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 

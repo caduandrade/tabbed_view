@@ -4,7 +4,7 @@ export 'src/tabbed_view.dart' hide OnTabClose, TabCloseInterceptor;
 export 'src/tabbed_view_icons.dart';
 export 'src/tab_data.dart';
 export 'src/tabbed_view_controller.dart';
-export 'src/theme/tab_border_builder_experimental.dart';
+export 'src/theme/tab_border_builder.dart';
 export 'src/theme/tabbed_view_theme_data.dart';
 export 'src/theme/theme_widget.dart';
 export 'src/theme/hidden_tabs_menu_theme_data.dart';
