@@ -1,4 +1,4 @@
-# Tabbed view (1.17.0)
+# Tabbed view (2.0.0)
 
 Flutter widget inspired by the classic Desktop-style tab component. Supports customizable themes.
 
@@ -10,6 +10,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
 
 ![](main_minimalist_v2.png)
 
+* [Migrating to 2.0.0](#migrating-to-200)
 * [Get started](#get-started)
   * [Content builder](#content-builder)
   * [Close button tooltip](#close-button-tooltip)
@@ -23,11 +24,13 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
   * [Close interceptor](#close-interceptor)
   * [Close listener](#close-listener)
   * [Selection listener](#selection-listener)
+  * [Secondary tap (right-click)](#secondary-tap-right-click-on-tab)
   * [Leading](#tab-leading-widget)
   * [Draggable](#draggable-tab-builder)
   * [Keep alive](#keep-alive)
 * [Tabs area](#tabs-area)
   * [Tabs area buttons](#tabs-area-buttons)
+  * [Trailing widget](#trailing-widget)
 * [Themes](#themes)
   * [Tab](#themes---tab)
     * [Text style](#text-style)
@@ -40,6 +43,7 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
   * [Menu](#themes---menu)
     * [Max width](#max-width)
     * [Ellipsis on text overflow](#ellipsis-on-text-overflow)
+  * [Hidden tabs menu item builder](#hidden-tabs-menu-item-builder)
   * [Default themes](#default-themes)
     *  [Classic theme](#classic-theme)
        *  [Color set](#classic-theme---color-set)
@@ -52,6 +56,45 @@ Flutter widget inspired by the classic Desktop-style tab component. Supports cus
        *  [Color set](#minimalist-theme---color-set)
   * [Theme from scratch](#theme-from-scratch)
 * [Support this project](#support-this-project)
+
+## Migrating to 2.0.0
+
+Version 2.0.0 introduces significant improvements, including support for left, right, and bottom tab bar positions. This required some breaking changes to the theming system and callbacks.
+
+### 1. Updating Custom Themes
+
+The biggest change is how borders are defined in themes. Previously, themes used hardcoded `Border` objects that didn't adapt to different tab bar positions. Now, themes define a single `BorderSide` that the widgets use to draw the correct border dynamically.
+
+**Action required:** You must update your custom themes.
+
+**Example: Migrating a `TabThemeData`**
+
+*Before (v1.x):*
+```dart
+// This created a border that only worked for top-positioned tabs.
+themeData.tab.selectedStatus.decoration = BoxDecoration(
+  border: Border(
+    top: BorderSide(color: Colors.blue),
+    left: BorderSide(color: Colors.blue),
+    right: BorderSide(color: Colors.blue)
+  )
+);
+```
+
+*After (v2.0.0):*
+```dart
+// The widget now builds the correct 3-sided border automatically.
+themeData.tab.selectedStatus.border = BorderSide(color: Colors.blue);
+```
+
+Refer to the `classic_theme.dart` or `minimalist_theme.dart` for a complete example of a theme that merges with the content area. Refer to `dark_theme.dart` or `mobile_theme.dart` for an "indicator" style border.
+
+### 2. Updating `onTabSelection` Callback
+
+The `onTabSelection` callback now provides the full `TabData` object, which is more useful than just the index.
+
+*Before (v1.x):* `onTabSelection: (int? tabIndex) { ... }`
+*After (v2.0.0):* `onTabSelection: (TabData? tabData) { ... }`
 
 ## Get started
 
@@ -236,19 +279,37 @@ It allows creating the contents of the tab dynamically during the selection even
 ### Selection listener
 
 ```dart
-    _onTabSelection(int? newTabIndex) {
-      print('The new selected tab is $newTabIndex.');
+    _onTabSelection(TabData? newTab) {
+      if (newTab != null) {
+        // The controller's selectedIndex is updated before this callback is invoked.
+        print('The new selected tab is ${newTab.text} at index ${_controller.selectedIndex}.');
+        // You can use newTab.value for routing
+      } else {
+        print('No tab selected.');
+      }
     }
 
     List<TabData> tabs = [
-      TabData(text: 'Tab 1'),
-      TabData(text: 'Tab 2'),
-      TabData(text: 'Tab 3')
+      TabData(text: 'Tab 1', value: 'tab1'),
+      TabData(text: 'Tab 2', value: 'tab2'),
+      TabData(text: 'Tab 3', value: 'tab3')
     ];
     TabbedView tabbedView = TabbedView(
         controller: TabbedViewController(tabs),
         onTabSelection: _onTabSelection);
 ```
+
+### Secondary tap (right-click) on tab: Use onTabSecondaryTap to listen for right-click events on a tab. 
+```dart 
+  TabbedView(
+    controller: controller,
+    onTabSecondaryTap: (index, tabData, details) {
+      // Show a context menu, for example.
+      print('Right-clicked on ${tabData.text}');
+    },
+  ); 
+```
+
 
 ### Tab leading widget
 
@@ -345,6 +406,20 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
 ```
 
 ![](tabs_area_buttons.png)
+
+### Trailing widget
+
+You can add a custom widget at the end of the tabs area using the `trailing` property. This widget will be positioned and rotated correctly for all tab bar positions.
+
+```dart
+TabbedView(
+  controller: controller,
+  trailing: Padding(
+    padding: const EdgeInsets.all(4),
+    child: Icon(Icons.more_vert),
+  ),
+);
+```
 
 ## Themes
 
@@ -474,6 +549,36 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
 
 ![](menu_ellipsis.png)
 
+### Hidden tabs menu item builder
+
+It allows you to customize the menu item for hidden tabs.
+
+```dart
+    TabbedView tabbedView = TabbedView(
+        controller: controller,
+        hiddenTabsMenuItemBuilder: (context, tabIndex, tabData) {
+          final theme = TabbedViewTheme.of(context);
+          final isDark = Theme.of(context).brightness == Brightness.dark;
+          final textStyle = isDark ? theme.menu.textStyleDark : theme.menu.textStyle;
+          return Padding(
+            padding: theme.menu.menuItemPadding,
+            child: Row(
+              children: [
+                Icon(Icons.tab, size: 16, color: textStyle?.color),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '${tabData.text} (index $tabIndex)',
+                    style: textStyle,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+```
+
 ### Default themes
 
 ####  Classic theme
@@ -550,7 +655,7 @@ The `keepAlive` parameter indicates whether to keep the tab content widget in me
 ```dart
     TabbedView tabbedView = TabbedView(controller: controller);
 
-TabbedViewTheme theme = TabbedViewTheme(
+    TabbedViewTheme theme = TabbedViewTheme(
         child: tabbedView,
         data: TabbedViewThemeData.mobile(accentColor: Colors.green[700]!));
 ```

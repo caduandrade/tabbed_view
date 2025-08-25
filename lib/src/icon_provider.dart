@@ -48,6 +48,8 @@ class _IconPathPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
+    return oldDelegate is! _IconPathPainter ||
+        oldDelegate.color != color ||
+        oldDelegate.iconPath != iconPath;
   }
 }

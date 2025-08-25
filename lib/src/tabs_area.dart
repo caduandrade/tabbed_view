@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
 import 'package:tabbed_view/src/internal/tabs_area/hidden_tabs.dart';
 import 'package:tabbed_view/src/internal/tabs_area/tabs_area_corner.dart';
-import 'package:tabbed_view/src/tab_status.dart';
 import 'package:tabbed_view/src/tab_widget.dart';
-import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabs_area_layout.dart';
-import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
-import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
-import 'package:tabbed_view/src/theme/theme_widget.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 /// Widget for the tabs and buttons.
 class TabsArea extends StatefulWidget {
@@ -23,8 +19,17 @@ class TabsArea extends StatefulWidget {
 /// The [TabsArea] state.
 class _TabsAreaState extends State<TabsArea> {
   int? _highlightedIndex;
+  Key? _tabsAreaLayoutKey;
+  late bool _lastIsHorizontal;
 
   final HiddenTabs _hiddenTabs = HiddenTabs();
+
+  @override
+  void initState() {
+    super.initState();
+    _lastIsHorizontal = widget.provider.tabBarPosition.isHorizontal;
+    _tabsAreaLayoutKey = UniqueKey();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,31 +39,79 @@ class _TabsAreaState extends State<TabsArea> {
     List<Widget> children = [];
     for (int index = 0; index < controller.tabs.length; index++) {
       TabStatus status = _getStatusFor(index);
-      children.add(TabWidget(
-          key: controller.tabs[index].uniqueKey,
-          index: index,
-          status: status,
-          provider: widget.provider,
-          updateHighlightedIndex: _updateHighlightedIndex,
-          onClose: _onTabClose));
+      TabStatusThemeData tabStatusTheme = theme.tab.getTabThemeFor(status);
+      //TODO use tabStatusTheme
+      children.add(TabsAreaLayoutChild(
+          child: TabWidget(
+              key: controller.tabs[index].uniqueKey,
+              index: index,
+              status: status,
+              provider: widget.provider,
+              updateHighlightedIndex: _updateHighlightedIndex,
+              onClose: _onTabClose)));
     }
 
     children.add(
         TabsAreaCorner(provider: widget.provider, hiddenTabs: _hiddenTabs));
 
+    if (widget.provider.tabBarPosition.isHorizontal != _lastIsHorizontal) {
+      _lastIsHorizontal = widget.provider.tabBarPosition.isHorizontal;
+      // Changing the key to force the layout to be rebuilt.
+      _tabsAreaLayoutKey = UniqueKey();
+    }
+
     Widget tabsAreaLayout = TabsAreaLayout(
+        key: _tabsAreaLayoutKey,
         children: children,
         theme: theme,
         hiddenTabs: _hiddenTabs,
-        selectedTabIndex: controller.selectedIndex);
+        selectedTabIndex: controller.selectedIndex,
+        tabBarPosition: widget.provider.tabBarPosition);
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
 
-    Decoration? decoration;
-    if (tabsAreaTheme.color != null || tabsAreaTheme.border != null) {
-      decoration = BoxDecoration(
-          color: tabsAreaTheme.color, border: tabsAreaTheme.border);
-    }
-    return Container(child: tabsAreaLayout, decoration: decoration);
+    Widget content = tabsAreaLayout;
+
+    // Apply the theme's color and border directly.
+    return Container(
+        child: content,
+        decoration: BoxDecoration(
+            color: tabsAreaTheme.color,
+            borderRadius: _buildBorderRadius(theme: tabsAreaTheme),
+            border: _buildBorder(theme: tabsAreaTheme)));
+  }
+
+  BorderRadius _buildBorderRadius({required TabsAreaThemeData theme}) {
+    final Radius radius = Radius.circular(theme.borderRadius);
+    final TabBarPosition position = widget.provider.tabBarPosition;
+
+    bool top = position != TabBarPosition.bottom;
+    bool bottom = position != TabBarPosition.top;
+    bool left = position != TabBarPosition.right;
+    bool right = position != TabBarPosition.left;
+
+    return BorderRadius.only(
+      topLeft: (left && top) ? radius : Radius.zero,
+      topRight: (right && top) ? radius : Radius.zero,
+      bottomLeft: (left && bottom) ? radius : Radius.zero,
+      bottomRight: (right && bottom) ? radius : Radius.zero,
+    );
+  }
+
+  Border _buildBorder({required TabsAreaThemeData theme}) {
+    final BorderSide borderSide = theme.border ?? BorderSide.none;
+    final TabBarPosition position = widget.provider.tabBarPosition;
+
+    bool top = position != TabBarPosition.bottom;
+    bool bottom = position != TabBarPosition.top;
+    bool left = position != TabBarPosition.right;
+    bool right = position != TabBarPosition.left;
+
+    return Border(
+      top: top ? borderSide : BorderSide.none,
+      bottom: bottom ? borderSide : BorderSide.none,
+      left: left ? borderSide : BorderSide.none,
+      right: right ? borderSide : BorderSide.none,
+    );
   }
 
   /// Gets the status of the tab for a given index.

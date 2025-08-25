@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/icon_provider.dart';
 import 'package:tabbed_view/src/tabbed_view_icons.dart';
-import 'package:tabbed_view/src/theme/equal_heights.dart';
+import 'package:tabbed_view/src/theme/tabs_area_cross_axis_fit.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_constants.dart';
 
 ///Theme for tabs and buttons area.
@@ -10,11 +10,13 @@ class TabsAreaThemeData {
       {this.visible = true,
       this.color,
       this.border,
+      this.borderRadius = 0,
       this.initialGap = 0,
       this.middleGap = 0,
       double minimalFinalGap = 0,
       this.gapBottomBorder = BorderSide.none,
-      this.equalHeights = EqualHeights.none,
+      this.gapSideBorder = BorderSide.none,
+      this.crossAxisFit = TabsAreaCrossAxisFit.none,
       this.buttonsAreaDecoration,
       this.buttonsAreaPadding,
       this.buttonPadding,
@@ -28,24 +30,51 @@ class TabsAreaThemeData {
       this.hoverButtonBackground,
       this.disabledButtonBackground,
       IconProvider? menuIcon,
+      IconProvider? menuIconOpen,
+      IconProvider? menuIconLeft,
+      IconProvider? menuIconRight,
       this.dropColor = const Color.fromARGB(150, 0, 0, 0)})
       : this._minimalFinalGap = minimalFinalGap >= 0 ? minimalFinalGap : 0,
         this._buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
         this._buttonsGap = buttonsGap >= 0 ? buttonsGap : 0,
         this.buttonIconSize =
             TabbedViewThemeConstants.normalize(buttonIconSize),
-        this.menuIcon = menuIcon == null
-            ? IconProvider.path(TabbedViewIcons.menu)
-            : menuIcon;
+        this.menuIcon = menuIcon ?? IconProvider.path(TabbedViewIcons.menu),
+        this.menuIconOpen =
+            menuIconOpen ?? IconProvider.path(TabbedViewIcons.menuUp),
+        this.menuIconLeft =
+            menuIconLeft ?? IconProvider.path(TabbedViewIcons.menuLeft),
+        this.menuIconRight =
+            menuIconRight ?? IconProvider.path(TabbedViewIcons.menuRight);
 
   bool visible;
 
+  /// The background color.
   Color? color;
-  Border? border;
+
+  /// The radius used to round the corners of a border.
+  /// A value of zero represents a completely rectangular border,
+  /// while a larger value creates more rounded corners.
+  final double borderRadius;
+
+  /// The border around the outer edges of the entire area,
+  /// excluding the side adjacent to the tab content.
+  BorderSide? border;
+
   double initialGap;
   double middleGap;
   BorderSide gapBottomBorder;
-  EqualHeights equalHeights;
+  BorderSide gapSideBorder;
+  TabsAreaCrossAxisFit crossAxisFit;
+
+  /// Icon for the hidden tabs menu when it is open.
+  final IconProvider menuIconOpen;
+
+  /// Icon for the hidden tabs menu for a left tab bar.
+  final IconProvider menuIconLeft;
+
+  /// Icon for the hidden tabs menu for a right tab bar.
+  final IconProvider menuIconRight;
 
   Color dropColor;
 
@@ -95,10 +124,12 @@ class TabsAreaThemeData {
           visible == other.visible &&
           color == other.color &&
           border == other.border &&
+          borderRadius == other.borderRadius &&
           initialGap == other.initialGap &&
           middleGap == other.middleGap &&
           gapBottomBorder == other.gapBottomBorder &&
-          equalHeights == other.equalHeights &&
+          gapSideBorder == other.gapSideBorder &&
+          crossAxisFit == other.crossAxisFit &&
           dropColor == other.dropColor &&
           _minimalFinalGap == other._minimalFinalGap &&
           buttonsAreaDecoration == other.buttonsAreaDecoration &&
@@ -111,6 +142,9 @@ class TabsAreaThemeData {
           hoverButtonBackground == other.hoverButtonBackground &&
           disabledButtonBackground == other.disabledButtonBackground &&
           menuIcon == other.menuIcon &&
+          menuIconOpen == other.menuIconOpen &&
+          menuIconLeft == other.menuIconLeft &&
+          menuIconRight == other.menuIconRight &&
           _buttonsGap == other._buttonsGap &&
           _buttonsOffset == other._buttonsOffset &&
           buttonPadding == other.buttonPadding;
@@ -120,10 +154,12 @@ class TabsAreaThemeData {
       visible.hashCode ^
       color.hashCode ^
       border.hashCode ^
+      borderRadius.hashCode ^
       initialGap.hashCode ^
       middleGap.hashCode ^
       gapBottomBorder.hashCode ^
-      equalHeights.hashCode ^
+      gapSideBorder.hashCode ^
+      crossAxisFit.hashCode ^
       dropColor.hashCode ^
       _minimalFinalGap.hashCode ^
       buttonsAreaDecoration.hashCode ^
@@ -136,6 +172,9 @@ class TabsAreaThemeData {
       hoverButtonBackground.hashCode ^
       disabledButtonBackground.hashCode ^
       menuIcon.hashCode ^
+      menuIconOpen.hashCode ^
+      menuIconLeft.hashCode ^
+      menuIconRight.hashCode ^
       _buttonsGap.hashCode ^
       _buttonsOffset.hashCode ^
       buttonPadding.hashCode;

@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
-import 'package:tabbed_view/src/theme/equal_heights.dart';
-import 'package:tabbed_view/src/theme/menu_theme_data.dart';
-import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
-import 'package:tabbed_view/src/theme/tab_theme_data.dart';
-import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
-import 'package:tabbed_view/src/theme/tabs_area_theme_data.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 /// Predefined mobile theme builder.
-class MobileTheme {
-  static TabbedViewThemeData build(
+class MobileTheme extends TabbedViewThemeData {
+  MobileTheme._(
+      {required this.borderColor,
+      required this.highlightedColor,
+      required this.selectedColor});
+
+  factory MobileTheme(
       {required MaterialColor colorSet,
       required Color accentColor,
       required double fontSize}) {
@@ -17,126 +16,122 @@ class MobileTheme {
     Color foregroundColor = colorSet[900]!;
     Color backgroundColor = colorSet[50]!;
     Color menuColor = colorSet[100]!;
-    Color menuHoverColor = colorSet[300]!;
     Color normalButtonColor = colorSet[700]!;
     Color disabledButtonColor = colorSet[300]!;
     Color hoverButtonColor = colorSet[900]!;
     Color highlightedColor = colorSet[300]!;
-    return TabbedViewThemeData(
-        tabsArea: tabsAreaTheme(
-            normalButtonColor: normalButtonColor,
-            hoverButtonColor: hoverButtonColor,
-            disabledButtonColor: disabledButtonColor,
-            highlightedColor: highlightedColor,
-            foregroundColor: foregroundColor,
-            borderColor: borderColor,
-            fontSize: fontSize,
-            backgroundColor: backgroundColor),
-        tab: tabTheme(
-            normalButtonColor: normalButtonColor,
-            hoverButtonColor: hoverButtonColor,
-            disabledButtonColor: disabledButtonColor,
-            highlightedColor: highlightedColor,
-            borderColor: borderColor,
-            accentColor: accentColor,
-            fontSize: fontSize,
-            foregroundColor: foregroundColor),
-        contentArea: contentAreaTheme(
-            backgroundColor: backgroundColor, borderColor: borderColor),
-        menu: menuTheme(
-            hoverColor: menuHoverColor,
-            foregroundColor: foregroundColor,
-            borderColor: borderColor,
-            fontSize: fontSize,
-            backgroundColor: menuColor));
-  }
 
-  static TabsAreaThemeData tabsAreaTheme(
-      {required Color normalButtonColor,
-      required Color hoverButtonColor,
-      required Color disabledButtonColor,
-      required Color highlightedColor,
-      required double fontSize,
-      required Color borderColor,
-      required Color foregroundColor,
-      required Color backgroundColor}) {
-    return TabsAreaThemeData(
-        equalHeights: EqualHeights.all,
-        initialGap: -1,
-        middleGap: -1,
-        normalButtonColor: normalButtonColor,
-        hoverButtonColor: hoverButtonColor,
-        disabledButtonColor: disabledButtonColor,
-        buttonsAreaPadding: EdgeInsets.all(2),
-        hoverButtonBackground: BoxDecoration(color: highlightedColor),
-        buttonPadding: const EdgeInsets.all(2),
-        border: Border.all(color: borderColor, width: 1),
-        color: backgroundColor);
-  }
+    MobileTheme theme = MobileTheme._(
+        borderColor: borderColor,
+        highlightedColor: highlightedColor,
+        selectedColor: accentColor);
 
-  static TabThemeData tabTheme(
-      {required Color normalButtonColor,
-      required Color hoverButtonColor,
-      required Color disabledButtonColor,
-      required Color highlightedColor,
-      required double fontSize,
-      required Color borderColor,
-      required Color accentColor,
-      required Color foregroundColor}) {
-    BorderSide verticalBorderSide = BorderSide(color: borderColor, width: 1);
-    Border border = Border(left: verticalBorderSide, right: verticalBorderSide);
+    theme.divider = BorderSide(width: 5, color: borderColor);
+
+    final TabsAreaThemeData tabsArea = theme.tabsArea;
+    tabsArea.crossAxisFit = TabsAreaCrossAxisFit.all;
+    tabsArea.initialGap = 10;
+    tabsArea.middleGap = 10;
+    tabsArea.normalButtonColor = normalButtonColor;
+    tabsArea.hoverButtonColor = hoverButtonColor;
+    tabsArea.disabledButtonColor = disabledButtonColor;
+    tabsArea.buttonsAreaPadding = EdgeInsets.all(2);
+    tabsArea.hoverButtonBackground = BoxDecoration(color: highlightedColor);
+    tabsArea.buttonPadding = const EdgeInsets.all(2);
+    tabsArea.border = BorderSide(color: borderColor, width: 5);
+    tabsArea.color = backgroundColor;
+
+    final TabThemeData tab = theme.tab;
+    BorderSide verticalBorderSide = BorderSide(color: borderColor, width: 5);
     double borderHeight = 4;
-    return TabThemeData(
-        normalButtonColor: normalButtonColor,
-        hoverButtonColor: hoverButtonColor,
-        disabledButtonColor: disabledButtonColor,
-        textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
-        buttonsOffset: 4,
-        padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
-        paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
-        hoverButtonBackground: BoxDecoration(color: highlightedColor),
-        buttonPadding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(border: border),
-        draggingDecoration:
-            BoxDecoration(border: Border.all(color: borderColor, width: 1)),
-        innerBottomBorder:
-            BorderSide(color: Colors.transparent, width: borderHeight),
-        highlightedStatus: TabStatusThemeData(
-            innerBottomBorder:
-                BorderSide(color: borderColor, width: borderHeight)),
-        selectedStatus: TabStatusThemeData(
-            innerBottomBorder:
-                BorderSide(color: accentColor, width: borderHeight)));
+    tab.innerLeftBorder = verticalBorderSide;
+    tab.innerRightBorder = verticalBorderSide;
+    tab.innerTopBorder = verticalBorderSide;
+    tab.normalButtonColor = normalButtonColor;
+    tab.hoverButtonColor = hoverButtonColor;
+    tab.disabledButtonColor = disabledButtonColor;
+    tab.textStyle = TextStyle(fontSize: fontSize, color: foregroundColor);
+    tab.buttonsOffset = 4;
+    tab.padding = EdgeInsets.fromLTRB(6, 3, 3, 3);
+    tab.paddingWithoutButton = EdgeInsets.fromLTRB(6, 3, 6, 3);
+    tab.hoverButtonBackground = BoxDecoration(color: highlightedColor);
+    tab.buttonPadding = const EdgeInsets.all(2);
+    tab.draggingDecoration =
+        BoxDecoration(border: Border.all(color: borderColor, width: 1));
+    tab.highlightedStatus = TabStatusThemeData(
+        border: BorderSide(color: borderColor, width: borderHeight));
+    tab.selectedStatus = TabStatusThemeData(
+        border: BorderSide(color: accentColor, width: borderHeight));
+    tab.borderBuilder = theme._tabBorderBuilder;
+
+    final ContentAreaThemeData contentArea = theme.contentArea;
+    // For the mobile theme, the content area is a distinct, bordered box
+    // that does not try to connect its border with the tabs area. A full
+    // border works for any TabBarPosition.
+    contentArea.color = backgroundColor;
+    contentArea.border = BorderSide(width: 1, color: borderColor);
+
+    final HiddenTabsMenuThemeData menu = theme.menu;
+    menu.color = backgroundColor;
+    menu.textStyle = TextStyle(fontSize: fontSize, color: foregroundColor);
+    menu.menuItemPadding =
+        const EdgeInsets.symmetric(horizontal: 12, vertical: 8);
+    menu.boxShadow = [
+      BoxShadow(
+          color: borderColor.withAlpha(100),
+          blurRadius: 4,
+          offset: const Offset(0, 2))
+    ];
+    menu.borderRadius = BorderRadius.circular(4);
+
+    return theme;
   }
 
-  static ContentAreaThemeData contentAreaTheme(
-      {required Color borderColor, required Color backgroundColor}) {
-    BorderSide borderSide = BorderSide(width: 1, color: borderColor);
-    BoxDecoration decoration = BoxDecoration(
-        color: backgroundColor,
-        border:
-            Border(bottom: borderSide, left: borderSide, right: borderSide));
-    BoxDecoration decorationNoTabsArea = BoxDecoration(
-        color: backgroundColor,
-        border: Border.all(width: 1, color: borderColor));
-    return ContentAreaThemeData(
-        decoration: decoration, decorationNoTabsArea: decorationNoTabsArea);
+  Color borderColor;
+  Color highlightedColor;
+  Color selectedColor;
+
+  TabBorder _tabBorderBuilder(
+      {required TabBarPosition tabBarPosition, required TabStatus status}) {
+    Color? color;
+    switch (status) {
+      case TabStatus.selected:
+        color = selectedColor;
+        break;
+      case TabStatus.highlighted:
+        color = highlightedColor;
+        break;
+      case TabStatus.normal:
+        color = Colors.transparent;
+        break;
+    }
+    final BorderSide borderSide = BorderSide(color: color, width: 5);
+    switch (tabBarPosition) {
+      case TabBarPosition.top:
+        return TabBorder(
+            border: Border(bottom: borderSide),
+            wrapperBorderBuilder: _externalBorderBuilder);
+      case TabBarPosition.bottom:
+        return TabBorder(
+            border: Border(top: borderSide),
+            wrapperBorderBuilder: _externalBorderBuilder);
+      case TabBarPosition.left:
+        return TabBorder(
+            border: Border(right: borderSide),
+            wrapperBorderBuilder: _externalBorderBuilder);
+      case TabBarPosition.right:
+        return TabBorder(
+            border: Border(left: borderSide),
+            wrapperBorderBuilder: _externalBorderBuilder);
+    }
   }
 
-  static TabbedViewMenuThemeData menuTheme(
-      {required Color backgroundColor,
-      required double fontSize,
-      required Color borderColor,
-      required Color foregroundColor,
-      required Color hoverColor}) {
-    return TabbedViewMenuThemeData(
-        textStyle: TextStyle(fontSize: fontSize, color: foregroundColor),
-        border: Border.all(width: 1, color: borderColor),
-        margin: EdgeInsets.all(8),
-        menuItemPadding: EdgeInsets.all(8),
-        color: backgroundColor,
-        hoverColor: hoverColor,
-        dividerColor: borderColor,
-        dividerThickness: 1);
+  TabBorder _externalBorderBuilder(
+      {required TabBarPosition tabBarPosition, required TabStatus status}) {
+    final BorderSide borderSide = BorderSide(color: borderColor, width: 1);
+    if (tabBarPosition.isHorizontal) {
+      return TabBorder(border: Border(left: borderSide, right: borderSide));
+    }
+    return TabBorder(border: Border(top: borderSide, bottom: borderSide));
   }
 }

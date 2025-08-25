@@ -3,13 +3,19 @@ import 'package:flutter/widgets.dart';
 
 class ContentAreaThemeData {
   ContentAreaThemeData(
-      {this.decoration, this.padding, this.decorationNoTabsArea});
+      {this.color, this.padding, this.borderRadius = 0, this.border});
 
-  /// The decoration to paint behind the content.
-  BoxDecoration? decoration;
+  /// The background color.
+   Color? color;
 
-  /// The decoration to paint behind the content when there is no tab area.
-  BoxDecoration? decorationNoTabsArea;
+  /// The radius used to round the corners of a border.
+  /// A value of zero represents a completely rectangular border,
+  /// while a larger value creates more rounded corners.
+  final double borderRadius;
+
+  /// The border around the outer side of the tab content area,
+  /// excluding the side adjacent to the tabs.
+  BorderSide? border;
 
   /// Empty space to inscribe inside the [decoration]. The content child, if any, is
   /// placed inside this padding.
@@ -23,11 +29,15 @@ class ContentAreaThemeData {
       identical(this, other) ||
       other is ContentAreaThemeData &&
           runtimeType == other.runtimeType &&
-          decoration == other.decoration &&
-          decorationNoTabsArea == other.decorationNoTabsArea &&
+          color == other.color &&
+          borderRadius == other.borderRadius &&
+          border == other.border &&
           padding == other.padding;
 
   @override
   int get hashCode =>
-      decoration.hashCode ^ decorationNoTabsArea.hashCode ^ padding.hashCode;
+      color.hashCode ^
+      borderRadius.hashCode ^
+      border.hashCode ^
+      padding.hashCode;
 }

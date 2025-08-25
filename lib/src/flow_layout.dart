@@ -4,17 +4,21 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tabbed_view/src/theme/vertical_alignment.dart';
 
+enum FlowDirection { horizontal, vertical }
+
 /// Flow layout.
 class FlowLayout extends MultiChildRenderObjectWidget {
   FlowLayout(
       {Key? key,
       required List<Widget> children,
       required this.firstChildFlex,
-      this.verticalAlignment = VerticalAlignment.center})
+      this.verticalAlignment = VerticalAlignment.center,
+      this.direction = FlowDirection.horizontal})
       : super(key: key, children: children);
 
   final bool firstChildFlex;
   final VerticalAlignment verticalAlignment;
+  final FlowDirection direction;
 
   @override
   _FlowLayoutElement createElement() {
@@ -23,7 +27,7 @@ class FlowLayout extends MultiChildRenderObjectWidget {
 
   @override
   _FlowLayoutRenderBox createRenderObject(BuildContext context) {
-    return _FlowLayoutRenderBox(firstChildFlex, verticalAlignment);
+    return _FlowLayoutRenderBox(firstChildFlex, verticalAlignment, direction);
   }
 
   @override
@@ -31,6 +35,7 @@ class FlowLayout extends MultiChildRenderObjectWidget {
       BuildContext context, _FlowLayoutRenderBox renderObject) {
     renderObject..firstChildFlex = firstChildFlex;
     renderObject..verticalAlignment = verticalAlignment;
+    renderObject..direction = direction;
   }
 }
 
@@ -58,10 +63,12 @@ class _FlowLayoutRenderBox extends RenderBox
     with
         ContainerRenderObjectMixin<RenderBox, _FlowLayoutParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, _FlowLayoutParentData> {
-  _FlowLayoutRenderBox(this.firstChildFlex, this.verticalAlignment);
+  _FlowLayoutRenderBox(
+      this.firstChildFlex, this.verticalAlignment, this.direction);
 
   bool firstChildFlex;
   VerticalAlignment verticalAlignment;
+  FlowDirection direction;
 
   @override
   void setupParentData(RenderBox child) {
@@ -70,14 +77,26 @@ class _FlowLayoutRenderBox extends RenderBox
     }
   }
 
-  double _y(double childHeight) {
+  // Calculates the offset along the secondary axis for a child.
+  double _calculateSecondaryAxisOffset(
+      double childSecondarySize, double secondaryAxisConstraint) {
+    if (!secondaryAxisConstraint.isFinite || secondaryAxisConstraint < 0) {
+      // If the constraint is infinite or negative, treat it as zero to prevent infinite offsets.
+      secondaryAxisConstraint = 0;
+    }
+    // This is for secondary axis alignment (vertical for horizontal flow, horizontal for vertical flow)
+    // verticalAlignment is actually secondary axis alignment (e.g., top/center/bottom for horizontal flow, left/center/right for vertical flow)
     switch (verticalAlignment) {
+      // verticalAlignment is actually secondary axis alignment
       case VerticalAlignment.top:
+        // Align to the start of the secondary axis (top for horizontal, left for vertical)
         return 0;
       case VerticalAlignment.center:
-        return (constraints.maxHeight - childHeight) / 2;
+        // Center along the secondary axis
+        return (secondaryAxisConstraint - childSecondarySize) / 2;
       case VerticalAlignment.bottom:
-        return constraints.maxHeight - childHeight;
+        // Align to the end of the secondary axis (bottom for horizontal, right for vertical)
+        return secondaryAxisConstraint - childSecondarySize;
     }
   }
 
@@ -90,60 +109,116 @@ class _FlowLayoutRenderBox extends RenderBox
     });
 
     final BoxConstraints childConstraints =
-        BoxConstraints.loose(Size(double.infinity, constraints.maxHeight));
+        direction == FlowDirection.horizontal
+            ? BoxConstraints.loose(Size(double.infinity, constraints.maxHeight))
+            : BoxConstraints.loose(Size(constraints.maxWidth, double.infinity));
 
-    double firstWidth = 0;
-    double otherWidths = 0;
-    double biggestChildHeight = 0;
+    double firstPrimarySize = 0;
+    double otherPrimarySizes = 0;
+    double biggestSecondarySize = 0;
+
     for (int i = 0; i < children.length; i++) {
       children[i].layout(childConstraints, parentUsesSize: true);
+      double childPrimarySize = direction == FlowDirection.horizontal
+          ? children[i].size.width
+          : children[i].size.height;
+      double childSecondarySize = direction == FlowDirection.horizontal
+          ? children[i].size.height
+          : children[i].size.width;
+
       if (firstChildFlex && i == 0) {
-        firstWidth = children[i].size.width;
+        firstPrimarySize = childPrimarySize;
       } else {
-        otherWidths += children[i].size.width;
+        otherPrimarySizes += childPrimarySize;
       }
-      biggestChildHeight =
-          math.max(biggestChildHeight, children[i].size.height);
+      biggestSecondarySize = math.max(biggestSecondarySize, childSecondarySize);
     }
 
-    double width = 0;
-    if (otherWidths > constraints.maxWidth) {
-      width = constraints.maxWidth;
+    double totalPrimarySize = 0;
+    double primaryAxisConstraint = direction == FlowDirection.horizontal
+        ? constraints.maxWidth
+        : constraints.maxHeight;
+
+    if (otherPrimarySizes > primaryAxisConstraint) {
+      totalPrimarySize = primaryAxisConstraint;
       if (firstChildFlex) {
         children[0].flowLayoutParentData().visible = false;
       }
-      double availableWidth = constraints.maxWidth;
+      double availablePrimarySpace = primaryAxisConstraint;
       for (int i = children.length - 1; i >= 0; i--) {
         if (firstChildFlex && i > 0) {
-          if (availableWidth <= 0) {
+          double childPrimarySize = direction == FlowDirection.horizontal
+              ? children[i].size.width
+              : children[i].size.height;
+          double childSecondarySize = direction == FlowDirection.horizontal
+              ? children[i].size.height
+              : children[i].size.width;
+
+          if (availablePrimarySpace <= 0) {
             children[i].flowLayoutParentData().visible = false;
           } else {
-            children[i].flowLayoutParentData().offset = Offset(
-                availableWidth - children[i].size.width,
-                _y(children[i].size.height));
-            availableWidth -= children[i].size.width;
+            if (direction == FlowDirection.horizontal) {
+              children[i].flowLayoutParentData().offset = Offset(
+                  availablePrimarySpace - childPrimarySize,
+                  _calculateSecondaryAxisOffset(
+                      childSecondarySize, biggestSecondarySize));
+            } else {
+              children[i].flowLayoutParentData().offset = Offset(
+                  _calculateSecondaryAxisOffset(
+                      childSecondarySize, biggestSecondarySize),
+                  availablePrimarySpace - childPrimarySize);
+            }
+            availablePrimarySpace -= childPrimarySize;
           }
         }
       }
     } else {
-      if (firstChildFlex && firstWidth + otherWidths > constraints.maxWidth) {
+      if (firstChildFlex &&
+          firstPrimarySize + otherPrimarySizes > primaryAxisConstraint) {
         children[0].layout(
             BoxConstraints(
-                minWidth: 0,
-                maxWidth: constraints.maxWidth - otherWidths,
-                minHeight: biggestChildHeight,
-                maxHeight: biggestChildHeight),
+                minWidth: direction == FlowDirection.horizontal
+                    ? 0
+                    : biggestSecondarySize,
+                maxWidth: direction == FlowDirection.horizontal
+                    ? primaryAxisConstraint - otherPrimarySizes
+                    : biggestSecondarySize,
+                minHeight: direction == FlowDirection.horizontal
+                    ? biggestSecondarySize
+                    : 0,
+                maxHeight: direction == FlowDirection.horizontal
+                    ? biggestSecondarySize
+                    : primaryAxisConstraint - otherPrimarySizes),
             parentUsesSize: true);
       }
-      double x = 0;
-      children.forEach((child) {
-        child.flowLayoutParentData().offset = Offset(x, _y(child.size.height));
-        x += child.size.width;
-      });
-      width = x;
+      double currentPrimaryOffset = 0;
+      for (RenderBox child in children) {
+        double childPrimarySize = direction == FlowDirection.horizontal
+            ? child.size.width
+            : child.size.height;
+        double childSecondarySize = direction == FlowDirection.horizontal
+            ? child.size.height
+            : child.size.width;
+        if (direction == FlowDirection.horizontal) {
+          child.flowLayoutParentData().offset = Offset(
+              currentPrimaryOffset,
+              _calculateSecondaryAxisOffset(
+                  childSecondarySize, biggestSecondarySize));
+        } else {
+          child.flowLayoutParentData().offset = Offset(
+              _calculateSecondaryAxisOffset(
+                  childSecondarySize, biggestSecondarySize),
+              currentPrimaryOffset);
+        }
+
+        currentPrimaryOffset += childPrimarySize;
+      }
+      totalPrimarySize = currentPrimaryOffset;
     }
 
-    size = constraints.constrain(Size(width, biggestChildHeight));
+    size = constraints.constrain(direction == FlowDirection.horizontal
+        ? Size(totalPrimarySize, biggestSecondarySize)
+        : Size(biggestSecondarySize, totalPrimarySize));
   }
 
   void _visitVisibleChildren(RenderObjectVisitor visitor) {

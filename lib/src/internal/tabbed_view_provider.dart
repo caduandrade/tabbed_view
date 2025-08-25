@@ -1,11 +1,17 @@
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
-import 'package:tabbed_view/src/tabbed_view.dart';
+import 'package:tabbed_view/src/tabbed_view.dart'
+    show
+        OnTabSelection,
+        TabBarPosition,
+        TabSelectInterceptor,
+        TabsAreaButtonsBuilder;
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
 import 'package:tabbed_view/src/tabbed_view_menu_item.dart';
 import 'package:tabbed_view/src/typedefs/on_before_drop_accept.dart';
 import 'package:tabbed_view/src/typedefs/on_draggable_build.dart';
 import 'package:tabbed_view/src/typedefs/can_drop.dart';
+import 'package:tabbed_view/src/typedefs/on_tab_secondary_tap.dart';
 
 /// Propagates parameters to internal widgets.
 @internal
@@ -21,6 +27,7 @@ class TabbedViewProvider {
       required this.selectToEnableButtons,
       this.closeButtonTooltip,
       this.tabsAreaButtonsBuilder,
+      this.onTabSecondaryTap,
       required this.menuItems,
       required this.menuItemsUpdater,
       required this.onTabDrag,
@@ -28,7 +35,10 @@ class TabbedViewProvider {
       required this.onDraggableBuild,
       required this.canDrop,
       required this.onBeforeDropAccept,
-      required this.dragScope});
+      required this.dragScope,
+      required this.tabBarPosition,
+      this.hiddenTabsMenuItemBuilder,
+      this.trailing});
 
   final TabbedViewController controller;
   final bool contentClip;
@@ -37,6 +47,7 @@ class TabbedViewProvider {
   final TabCloseInterceptor? tabCloseInterceptor;
   final OnTabSelection? onTabSelection;
   final TabSelectInterceptor? tabSelectInterceptor;
+  final OnTabSecondaryTap? onTabSecondaryTap;
   final bool selectToEnableButtons;
   final String? closeButtonTooltip;
   final TabsAreaButtonsBuilder? tabsAreaButtonsBuilder;
@@ -48,6 +59,9 @@ class TabbedViewProvider {
   final CanDrop? canDrop;
   final OnBeforeDropAccept? onBeforeDropAccept;
   final String? dragScope;
+  final TabBarPosition tabBarPosition;
+  final HiddenTabsMenuItemBuilder? hiddenTabsMenuItemBuilder;
+  final Widget? trailing;
 }
 
 /// Updater for menu items

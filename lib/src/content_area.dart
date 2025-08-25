@@ -1,12 +1,8 @@
-import 'dart:async';
-import 'dart:math' as math;
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/internal/tabbed_view_provider.dart';
+import 'package:tabbed_view/src/tabbed_view.dart';
 import 'package:tabbed_view/src/tab_data.dart';
 import 'package:tabbed_view/src/tabbed_view_controller.dart';
-import 'package:tabbed_view/src/tabbed_view_menu_widget.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
 import 'package:tabbed_view/src/theme/theme_widget.dart';
@@ -45,63 +41,69 @@ class ContentArea extends StatelessWidget {
           if (tab.keepAlive) {
             child = Offstage(offstage: !selectedTab, child: child);
           }
-          children.add(Positioned.fill(
-              key: tab.key,
-              child:
-                  Container(child: child, padding: contentAreaTheme.padding)));
+          // Padding will be applied once on the parent container.
+          children.add(
+              Positioned.fill(key: tab.key, child: Container(child: child)));
         }
       }
 
-      NotificationListenerCallback<SizeChangedLayoutNotification>?
-          onSizeNotification;
-      if (provider.menuItems.isNotEmpty) {
-        children.add(Positioned.fill(child: _Glass(theme.menu.blur, provider)));
-        children.add(Positioned(
-            child: LimitedBox(
-                maxWidth: math.min(theme.menu.maxWidth, constraints.maxWidth),
-                child: TabbedViewMenuWidget(provider: provider)),
-            right: 0,
-            top: 0,
-            bottom: 0));
-        onSizeNotification = (n) {
-          scheduleMicrotask(() {
-            provider.menuItemsUpdater([]);
-          });
-          return true;
-        };
-      }
       Widget listener = NotificationListener<SizeChangedLayoutNotification>(
-          child: SizeChangedLayoutNotifier(child: Stack(children: children)),
-          onNotification: onSizeNotification);
+          child: SizeChangedLayoutNotifier(child: Stack(children: children)));
+
+      final Border border = _buildBorder(theme: theme);
+      final BorderRadius borderRadius =
+          _buildBorderRadius(theme: contentAreaTheme);
+
+      BoxDecoration decoration = BoxDecoration(
+          color: contentAreaTheme.color,
+          borderRadius: borderRadius,
+          border: border);
       return Container(
           child: listener,
-          decoration: tabsAreaVisible
-              ? contentAreaTheme.decoration
-              : contentAreaTheme.decorationNoTabsArea);
+          decoration: decoration,
+          padding: contentAreaTheme.padding);
     });
     if (provider.contentClip) {
       return ClipRect(child: layoutBuilder);
     }
+
     return layoutBuilder;
   }
-}
 
-class _Glass extends StatelessWidget {
-  _Glass(this.blur, this.provider);
+  BorderRadius _buildBorderRadius({required ContentAreaThemeData theme}) {
+    final Radius radius = Radius.circular(theme.borderRadius);
+    final TabBarPosition position = provider.tabBarPosition;
 
-  final bool blur;
-  final TabbedViewProvider provider;
+    bool top = position != TabBarPosition.top;
+    bool bottom = position != TabBarPosition.bottom;
+    bool left = position != TabBarPosition.left;
+    bool right = position != TabBarPosition.right;
 
-  @override
-  Widget build(BuildContext context) {
-    Widget? child;
-    if (blur) {
-      child = BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
-          child: Container(color: Colors.transparent));
-    }
-    return ClipRect(
-        child: GestureDetector(
-            child: child, onTap: () => provider.menuItemsUpdater([])));
+    return BorderRadius.only(
+      topLeft: (left && top) ? radius : Radius.zero,
+      topRight: (right && top) ? radius : Radius.zero,
+      bottomLeft: (left && bottom) ? radius : Radius.zero,
+      bottomRight: (right && bottom) ? radius : Radius.zero,
+    );
+  }
+
+  Border _buildBorder({required TabbedViewThemeData theme}) {
+    final BorderSide divider = theme.isDividerWithinTabArea
+        ? BorderSide.none
+        : theme.divider ?? BorderSide.none;
+    final BorderSide borderSide = theme.contentArea.border ?? BorderSide.none;
+    final TabBarPosition position = provider.tabBarPosition;
+
+    bool top = position != TabBarPosition.top;
+    bool bottom = position != TabBarPosition.bottom;
+    bool left = position != TabBarPosition.left;
+    bool right = position != TabBarPosition.right;
+
+    return Border(
+      top: top ? borderSide : divider,
+      bottom: bottom ? borderSide : divider,
+      left: left ? borderSide : divider,
+      right: right ? borderSide : divider,
+    );
   }
 }

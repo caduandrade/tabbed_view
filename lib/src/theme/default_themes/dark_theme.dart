@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/theme/content_area_theme_data.dart';
-import 'package:tabbed_view/src/theme/equal_heights.dart';
-import 'package:tabbed_view/src/theme/menu_theme_data.dart';
+import 'package:tabbed_view/src/theme/tabs_area_cross_axis_fit.dart';
+import 'package:tabbed_view/src/theme/hidden_tabs_menu_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_status_theme_data.dart';
 import 'package:tabbed_view/src/theme/tab_theme_data.dart';
 import 'package:tabbed_view/src/theme/tabbed_view_theme_data.dart';
@@ -17,8 +17,7 @@ class DarkTheme {
     Color normalButtonColor = colorSet[100]!;
     Color disabledButtonColor = colorSet[600]!;
     Color hoverButtonColor = colorSet[100]!;
-    Color menuColor = colorSet[700]!;
-    Color menuHoverColor = colorSet[600]!;
+    Color menuColor = colorSet[700]!; // This is the background for the menu
     Color menuDividerColor = colorSet[500]!;
     Color fontColor = colorSet[100]!;
     Color buttonsAreaColor = colorSet[800]!;
@@ -49,9 +48,8 @@ class DarkTheme {
         menu: menuTheme(
             fontColor: fontColor,
             fontSize: fontSize,
-            color: menuColor,
-            hoverColor: menuHoverColor,
-            dividerColor: menuDividerColor));
+            color: menuColor, // Use the defined menu color
+            borderColor: menuDividerColor));
   }
 
   static TabsAreaThemeData tabsAreaTheme(
@@ -65,7 +63,7 @@ class DarkTheme {
       required Color hoverButtonColor,
       required Color disabledButtonColor}) {
     return TabsAreaThemeData(
-        equalHeights: EqualHeights.all,
+        crossAxisFit: TabsAreaCrossAxisFit.all,
         middleGap: 4,
         buttonsAreaPadding: EdgeInsets.all(2),
         buttonsAreaDecoration: BoxDecoration(color: buttonsAreaColor),
@@ -89,23 +87,23 @@ class DarkTheme {
     double bottomWidth = 3;
     return TabThemeData(
         buttonsOffset: 4,
+        innerBottomBorder:
+            BorderSide(color: Colors.transparent, width: bottomWidth),
         textStyle: TextStyle(fontSize: fontSize, color: fontColor),
         decoration: BoxDecoration(color: tabColor),
         draggingDecoration: BoxDecoration(color: tabColor),
-        margin: EdgeInsets.only(bottom: bottomWidth),
         padding: EdgeInsets.fromLTRB(6, 3, 3, 3),
         paddingWithoutButton: EdgeInsets.fromLTRB(6, 3, 6, 3),
         hoverButtonBackground: BoxDecoration(color: highlightedColor),
         buttonPadding: const EdgeInsets.all(2),
         selectedStatus: TabStatusThemeData(
-            decoration: BoxDecoration(
-                color: selectedTabColor,
-                border: Border(
-                    bottom: BorderSide(
-                        width: bottomWidth, color: selectedTabColor))),
-            margin: EdgeInsets.zero),
+          decoration: BoxDecoration(color: selectedTabColor),
+          border: BorderSide(width: bottomWidth, color: selectedTabColor),
+        ),
         highlightedStatus: TabStatusThemeData(
-            decoration: BoxDecoration(color: highlightedColor)),
+          decoration: BoxDecoration(color: highlightedColor),
+          border: BorderSide(width: bottomWidth, color: highlightedColor),
+        ),
         normalButtonColor: normalButtonColor,
         hoverButtonColor: hoverButtonColor,
         disabledButtonColor: disabledButtonColor);
@@ -114,24 +112,25 @@ class DarkTheme {
   static ContentAreaThemeData contentAreaTheme(
       {required Color selectedTabColor}) {
     return ContentAreaThemeData(
-        decoration: BoxDecoration(color: selectedTabColor),
-        decorationNoTabsArea: BoxDecoration(color: selectedTabColor),
-        padding: EdgeInsets.all(8));
+        color: selectedTabColor, padding: EdgeInsets.all(8));
   }
 
-  static TabbedViewMenuThemeData menuTheme(
+  static HiddenTabsMenuThemeData menuTheme(
       {required Color fontColor,
       required double fontSize,
-      required Color color,
-      required hoverColor,
-      required dividerColor}) {
-    return TabbedViewMenuThemeData(
-        textStyle: TextStyle(fontSize: fontSize, color: fontColor),
-        margin: EdgeInsets.all(8),
-        menuItemPadding: EdgeInsets.all(8),
+      required Color color, // background color
+      required Color borderColor}) {
+    return HiddenTabsMenuThemeData(
         color: color,
-        hoverColor: hoverColor,
-        dividerColor: dividerColor,
-        dividerThickness: 1);
+        textStyle: TextStyle(fontSize: fontSize, color: fontColor),
+        menuItemPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        boxShadow: [
+          BoxShadow(
+              color: borderColor.withAlpha(100),
+              blurRadius: 4,
+              offset: const Offset(0, 2))
+        ],
+        borderRadius: BorderRadius.circular(4));
   }
 }

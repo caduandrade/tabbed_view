@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
@@ -5,6 +6,18 @@ import 'package:tabbed_view/src/tab_data.dart';
 
 /// Event that will be triggered when the tab is reorder.
 typedef OnReorder = void Function(int oldIndex, int newIndex);
+
+/// Interceptor for a tab closing event.
+/// The tab will be closed only if the function returns `true`.
+typedef TabCloseInterceptor = FutureOr<bool> Function(
+    int tabIndex, TabData tabData);
+
+/// Event that will be triggered when a tab is closed.
+typedef OnTabClose = void Function(int tabIndex, TabData tabData);
+
+/// Builder for hidden tabs menu item.
+typedef HiddenTabsMenuItemBuilder = Widget Function(
+    BuildContext context, int tabIndex, TabData tabData);
 
 /// The [TabbedView] controller.
 ///
@@ -34,6 +47,12 @@ class TabbedViewController extends ChangeNotifier {
   int? _selectedIndex;
 
   final OnReorder? onReorder;
+
+  /// The interceptor for a tab closing event.
+  TabCloseInterceptor? tabCloseInterceptor;
+
+  /// The callback for a tab closed event.
+  OnTabClose? onTabClose;
 
   bool _reorderEnable;
   bool get reorderEnable => _reorderEnable;
@@ -160,15 +179,29 @@ class TabbedViewController extends ChangeNotifier {
   /// Removes a tab.
   TabData removeTab(int tabIndex) {
     _validateIndex(tabIndex);
+    final int? originalSelectedIndex = _selectedIndex;
+    final TabData? originalSelectedTab = selectedTab;
+
     TabData tabData = _tabs.removeAt(tabIndex);
     tabData.removeListener(notifyListeners);
     tabData._setIndex(-1);
     _updateIndexes(false);
     if (_tabs.isEmpty) {
       _selectedIndex = null;
-    } else if (_selectedIndex != null &&
-        (_selectedIndex == tabIndex || _selectedIndex! >= _tabs.length)) {
-      _selectedIndex = 0;
+    } else {
+      if (originalSelectedTab != null) {
+        final int newIndex = _tabs.indexOf(originalSelectedTab);
+        if (newIndex != -1) {
+          // The selected tab was not removed, so we keep it selected.
+          _selectedIndex = newIndex;
+        } else if (originalSelectedIndex != null) {
+          // The selected tab was removed. Let's select the tab at the same index
+          // if possible, or the new last tab.
+          _selectedIndex = (originalSelectedIndex < _tabs.length)
+              ? originalSelectedIndex
+              : _tabs.length - 1;
+        }
+      }
     }
     notifyListeners();
     return tabData;
@@ -185,6 +218,125 @@ class TabbedViewController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Closes all tabs except the one at [tabIndex].
+  ///
+  /// This method respects the `closable` property of each tab and the
+  /// [tabCloseInterceptor]. It will only close tabs that are marked as
+  /// closable and not vetoed by the interceptor.
+  Future<void> closeOtherTabs(int tabIndex) async {
+    _validateIndex(tabIndex);
+    final tabsToRemove = await _getClosableTabs((i, tab) => i != tabIndex);
+    await _closeTabs(tabsToRemove);
+  }
+
+  /// Closes all tabs to the right of the tab at [tabIndex].
+  ///
+  /// This method respects the `closable` property of each tab and the
+  /// [tabCloseInterceptor]. It will only close tabs that are marked as
+  /// closable and not vetoed by the interceptor.
+  Future<void> closeTabsToTheRight(int tabIndex) async {
+    _validateIndex(tabIndex);
+    final tabsToRemove = await _getClosableTabs((i, tab) => i > tabIndex);
+    await _closeTabs(tabsToRemove);
+  }
+
+  /// Collects a list of closable tabs based on a predicate.
+  Future<List<MapEntry<int, TabData>>> _getClosableTabs(
+      bool Function(int index, TabData tab) predicate) async {
+    final List<MapEntry<int, TabData>> tabsToRemove = [];
+    for (int i = 0; i < _tabs.length; i++) {
+      final tab = _tabs[i];
+      if (predicate(i, tab) && tab.closable) {
+        bool canClose = await _canClose(i, tab);
+        if (canClose) {
+          tabsToRemove.add(MapEntry(i, tab));
+        }
+      }
+    }
+    return tabsToRemove;
+  }
+
+  /// Closes all tabs that are marked as closable.
+  ///
+  /// A tab is considered closable if its `TabData.closable` property is `true`.
+  /// This method provides a convenient way to close multiple tabs at once.
+  ///
+  /// After removing the tabs, it will update the selection. If the currently
+  /// selected tab is removed, the first available tab will be selected. If no
+  /// tabs remain, the selection will be cleared.
+  Future<void> closeAllClosableTabs() async {
+    final tabsToRemove = await _getClosableTabs((i, tab) => true);
+    await _closeTabs(tabsToRemove);
+  }
+
+  /// Backing method for closing multiple tabs.
+  Future<void> _closeTabs(List<MapEntry<int, TabData>> tabsToRemove) async {
+    final TabData? originalSelectedTab = selectedTab;
+    final int? originalSelectedIndex = _selectedIndex;
+
+    // Remove tabs from the list, from end to start to not mess up indices.
+    for (final entry in tabsToRemove.reversed) {
+      final tab = _tabs.removeAt(entry.key);
+      tab.removeListener(notifyListeners);
+      tab._setIndex(-1);
+    }
+
+    _updateIndexes(false);
+
+    if (_tabs.isEmpty) {
+      _selectedIndex = null;
+    } else {
+      final int newIndex = (originalSelectedTab != null)
+          ? _tabs.indexOf(originalSelectedTab)
+          : -1;
+
+      if (newIndex != -1) {
+        _selectedIndex = newIndex;
+      } else if (originalSelectedIndex != null) {
+        // Selected tab was closed.
+        final int removedBeforeCount = tabsToRemove
+            .where((entry) => entry.key < originalSelectedIndex)
+            .length;
+        int newSelectedIndex = originalSelectedIndex - removedBeforeCount;
+        if (newSelectedIndex >= _tabs.length) {
+          newSelectedIndex = _tabs.length - 1;
+        }
+        if (newSelectedIndex < 0) {
+          newSelectedIndex = 0;
+        }
+        _selectedIndex = newSelectedIndex;
+      }
+    }
+    notifyListeners();
+
+    for (final entry in tabsToRemove) {
+      onTabClose?.call(entry.key, entry.value);
+    }
+  }
+
+  /// Checks if a tab can be closed by running the [tabCloseInterceptor].
+  Future<bool> _canClose(int tabIndex, TabData tabData) async {
+    if (tabCloseInterceptor != null) {
+      return await tabCloseInterceptor!(tabIndex, tabData);
+    }
+    return true;
+  }
+
+  /// Selects a tab.
+  void selectTab(TabData tab) {
+    selectedIndex = tab.index;
+  }
+
+  /// Selects a tab by its value.
+  ///
+  /// Does nothing if the tab is not found.
+  void selectTabByValue(dynamic value) {
+    final index = _tabs.indexWhere((tab) => tab.value == value);
+    if (index != -1) {
+      selectedIndex = index;
+    }
+  }
+
   void _validateIndex(int tabIndex) {
     if (tabIndex < 0 || tabIndex >= _tabs.length) {
       throw IndexError.withLength(tabIndex, _tabs.length,
@@ -194,7 +346,20 @@ class TabbedViewController extends ChangeNotifier {
 
   /// Gets a tab given an index.
   TabData getTabByIndex(int index) {
+    _validateIndex(index);
     return _tabs[index];
+  }
+
+  /// Gets a tab given its value.
+  ///
+  /// The search is linear. Returns `null` if not found.
+  TabData? getTabByValue(dynamic value) {
+    for (final tab in _tabs) {
+      if (tab.value == value) {
+        return tab;
+      }
+    }
+    return null;
   }
 
   void _updateIndexes(bool clear) {
