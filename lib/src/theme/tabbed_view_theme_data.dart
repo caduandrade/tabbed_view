@@ -50,7 +50,7 @@ class TabbedViewThemeData {
       {MaterialColor colorSet = Colors.grey,
       double fontSize = 13,
       Color borderColor = Colors.black}) {
-    return ClassicTheme.build(
+    return ClassicTheme(
         colorSet: colorSet, fontSize: fontSize, borderColor: borderColor);
   }
 
