@@ -46,6 +46,7 @@ class TabData extends ChangeNotifier {
   TabData(
       {dynamic value,
       required String text,
+      String? tooltip,
       TabButtonsBuilder? buttonsBuilder,
       Widget? content,
       TabLeadingBuilder? leading,
@@ -58,6 +59,7 @@ class TabData extends ChangeNotifier {
       this.selectedStatusTheme})
       : _value = value,
         _text = text,
+        _tooltip = tooltip,
         _leading = leading,
         _closable = closable,
         _content = content,
@@ -122,6 +124,17 @@ class TabData extends ChangeNotifier {
   set closable(bool value) {
     if (_closable != value) {
       _closable = value;
+      notifyListeners();
+    }
+  }
+
+  String? _tooltip;
+
+  String? get tooltip => _tooltip;
+
+  set tooltip(String? value) {
+    if (_tooltip != value) {
+      _tooltip = value;
       notifyListeners();
     }
   }

@@ -1,3 +1,8 @@
+## 2.1.0
+
+* `TabData`
+  * Added the `tooltip` attribute
+
 ## 2.0.0
 
 * `TabbedView`
