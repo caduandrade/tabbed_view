@@ -72,6 +72,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
         keepAlive: true));
     tabs.add(TabData(
         text: 'This is a very long tab title that should be truncated',
+        leading: (context, status) => Icon(Icons.star, size: 16),
         content: Padding(
             padding: EdgeInsets.all(8),
             child: Text('Content for the long tab'))));
@@ -416,6 +417,7 @@ class ManilaFolderTheme extends TabbedViewThemeData {
         shape: ManilaFolderTabBorder(
           tabBarPosition: tabBarPosition,
           borderSide: BorderSide(color: borderColor, width: 1),
+          borderRadius: BorderRadius.circular(10),
         ),
       );
     };
