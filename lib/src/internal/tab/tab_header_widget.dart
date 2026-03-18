@@ -121,8 +121,10 @@ class TabHeaderWidget extends StatelessWidget {
     if (leading != null) {
       textAndButtons.add(leading);
     }
-    Widget tabText =
-        Text(tab.text, style: textStyle, overflow: TextOverflow.ellipsis);
+    Widget tabText = Text(tab.text,
+        maxLines: tabTheme.maxLines,
+        style: textStyle,
+        overflow: TextOverflow.ellipsis);
     if (tab.tooltip != null) {
       tabText = Tooltip(message: tab.tooltip, child: tabText);
     }

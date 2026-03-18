@@ -36,9 +36,10 @@ class ClassicTheme extends TabbedViewThemeData {
     tabsArea.disabledButtonColor = disabledButtonColor;
     tabsArea.buttonPadding = const EdgeInsets.all(2);
     tabsArea.hoveredButtonBackground = BoxDecoration(color: hoveredColor);
+    BorderSide borderSide = BorderSide(color: _borderColor, width: 1);
     tabsArea.buttonsAreaDecoration = BoxDecoration(
         color: _backgroundColor,
-        border: Border.all(color: _borderColor, width: 1));
+        border: Border(top: borderSide, left: borderSide, right: borderSide));
     tabsArea.buttonsAreaPadding = EdgeInsets.all(2);
     tabsArea.middleGap = -1;
     tabsArea.dropColor = isLight

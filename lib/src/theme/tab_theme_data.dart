@@ -34,6 +34,7 @@ class TabThemeData {
       this.draggingOpacity = 0.3,
       this.textStyle = const TextStyle(fontSize: 13),
       this.maxMainSize,
+      this.maxLines,
       this.padding,
       this.paddingWithoutButton,
       required this.selectedStatus,
@@ -52,6 +53,13 @@ class TabThemeData {
   /// This will be its width when the tab is displayed horizontally,
   /// and its height when displayed vertically.
   double? maxMainSize;
+
+  /// The maximum number of lines for the tab label.
+  ///
+  /// If [maxMainSize] is set, the text will wrap to a new line before
+  /// truncating with an ellipsis. If [maxMainSize] is null, this
+  /// parameter may have no visible effect as the tab expands to fit the text.
+  int? maxLines;
 
   TabStatusThemeData selectedStatus;
   TabStatusThemeData hoveredStatus;

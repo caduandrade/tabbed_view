@@ -21,6 +21,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
   SideTabsLayout _sideTabsLayout = SideTabsLayout.rotated;
   bool _modifyThemeColors = false;
   bool _maxMainSizeEnabled = false;
+  bool _maxLinesEnabled = false;
   bool _trailingWidgetEnabled = false;
   bool _addButtonEnabled = true;
   Brightness _brightness = Brightness.light;
@@ -120,6 +121,9 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
     theme.tabsArea.sideTabsLayout = _sideTabsLayout;
     if (_maxMainSizeEnabled) {
       theme.tab.maxMainSize = 200;
+    }
+    if (_maxLinesEnabled) {
+      theme.tab.maxLines = 2;
     }
     return theme;
   }
@@ -257,6 +261,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                       _buildTrailingWidgetSelector(),
                       _buildModifyThemeColorsSelector(),
                       _buildMaxMainSizeSelector(),
+                      _buildMaxLinesSelector(),
                       _buildAddButtonSelector(),
                       ElevatedButton(
                           onPressed: () => _controller.removeTabs(),
@@ -283,6 +288,13 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
         value: _maxMainSizeEnabled,
         text: 'Max tab main size',
         setter: (v) => _maxMainSizeEnabled = v);
+  }
+
+  Widget _buildMaxLinesSelector() {
+    return _buildSelector(
+        value: _maxLinesEnabled,
+        text: 'Max tab lines',
+        setter: (v) => _maxLinesEnabled = v);
   }
 
   Widget _buildAddButtonSelector() {
