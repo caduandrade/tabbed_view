@@ -1,7 +1,11 @@
+## 2.2.0
+
+* Added support for custom tab shape.
+
 ## 2.1.0
 
 * `TabData`
-  * Added the `tooltip` attribute
+  * Added the `tooltip` attribute.
 
 ## 2.0.0
 

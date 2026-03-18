@@ -59,20 +59,35 @@ class TabWidget extends StatelessWidget {
     while (decorationBuilder != null) {
       TabDecoration tabDecoration = decorationBuilder(
           status: status, tabBarPosition: theme.tabsArea.position);
-      if (tabDecoration.border != null || tabDecoration.color != null) {
-        final BorderRadius? borderRadius = tabDecoration.borderRadius;
-        if (borderRadius != null) {
-          widget = Container(
-              decoration: BoxDecoration(
-                  color: tabDecoration.color,
-                  border: tabDecoration.border,
-                  borderRadius: borderRadius),
-              child: ClipRRect(borderRadius: borderRadius, child: widget));
+      if (tabDecoration.border != null ||
+          tabDecoration.color != null ||
+          tabDecoration.shape != null) {
+        if (tabDecoration.shape != null) {
+          widget = DecoratedBox(
+            decoration: ShapeDecoration(
+              shape: tabDecoration.shape!,
+              color: tabDecoration.color,
+            ),
+            child: ClipPath(
+              clipper: ShapeBorderClipper(shape: tabDecoration.shape!),
+              child: widget,
+            ),
+          );
         } else {
-          widget = Container(
-              decoration: BoxDecoration(
-                  color: tabDecoration.color, border: tabDecoration.border),
-              child: widget);
+          final BorderRadius? borderRadius = tabDecoration.borderRadius;
+          if (borderRadius != null) {
+            widget = Container(
+                decoration: BoxDecoration(
+                    color: tabDecoration.color,
+                    border: tabDecoration.border,
+                    borderRadius: borderRadius),
+                child: ClipRRect(borderRadius: borderRadius, child: widget));
+          } else {
+            widget = Container(
+                decoration: BoxDecoration(
+                    color: tabDecoration.color, border: tabDecoration.border),
+                child: widget);
+          }
         }
       }
       decorationBuilder = tabDecoration.wrapperBorderBuilder;

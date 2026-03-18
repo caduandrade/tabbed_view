@@ -71,6 +71,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
         keepAlive: true));
     tabs.add(TabData(
         text: 'This is a very long tab title that should be truncated',
+        leading: (context, status) => Icon(Icons.star, size: 16),
         content: Padding(
             padding: EdgeInsets.all(8),
             child: Text('Content for the long tab'))));
@@ -107,6 +108,12 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                 colorSet: Colors.brown,
                 underlineColorSet: Colors.brown)
             : TabbedViewThemeData.underline(brightness: _brightness);
+        break;
+      case ThemeName.manilaFolder:
+        theme = _modifyThemeColors
+            ? TabbedViewThemeData.manilaFolder(
+                brightness: _brightness, colorSet: Colors.brown)
+            : TabbedViewThemeData.manilaFolder(brightness: _brightness);
         break;
     }
     theme.tabsArea.position = _position;
@@ -350,7 +357,7 @@ class SideTabsLayoutChooser extends StatelessWidget {
   }
 }
 
-enum ThemeName { classic, underline, minimalist }
+enum ThemeName { classic, underline, minimalist, manilaFolder }
 
 class ThemeChooser extends StatelessWidget {
   const ThemeChooser(

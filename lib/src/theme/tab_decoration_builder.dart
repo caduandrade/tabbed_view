@@ -11,7 +11,12 @@ typedef TabDecorationBuilder = TabDecoration Function(
 /// a border radius, and a wrapper builder for creating nested decorators.
 class TabDecoration {
   TabDecoration(
-      {this.borderRadius, this.color, this.border, this.wrapperBorderBuilder});
+      {this.borderRadius,
+      this.color,
+      this.border,
+      this.shape,
+      this.wrapperBorderBuilder})
+      : assert(border == null || shape == null);
 
   /// The radius to be applied to the corners.
   final BorderRadius? borderRadius;
@@ -21,6 +26,9 @@ class TabDecoration {
 
   /// The color of the tab.
   final Color? color;
+
+  /// The shape of the tab. It is an alternative to [border].
+  final ShapeBorder? shape;
 
   /// An optional builder that can be used to wrap this decoration with another
   /// [TabDecoration], allowing for the creation of composable decorators.

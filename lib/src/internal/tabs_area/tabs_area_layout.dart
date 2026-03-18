@@ -143,14 +143,14 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       return;
     }
 
-    final List<RenderBox> tabs = [];
+    final List<RenderBox> children = [];
     int index = 0;
     visitChildren((renderObject) {
       RenderBox child = renderObject as RenderBox;
       final TabsAreaLayoutParentData parentData =
           child.tabsAreaLayoutParentData();
       parentData.reset();
-      tabs.add(child);
+      children.add(child);
       if (child != lastChild) {
         // Corner will always be the last
         parentData.selected =
@@ -164,8 +164,8 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         ? (divider != null ? divider.width : 0)
         : 0;
     final double maxCrossAxisSize =
-        math.max(_layoutChildren(children: tabs), minimalCrossAxisSize);
-    final RenderBox corner = tabs.removeLast();
+        math.max(_layoutChildren(children: children), minimalCrossAxisSize);
+    final RenderBox corner = children.removeLast();
 
     final double reservedForCorner =
         tabBarPosition.isHorizontal ? corner.size.width : corner.size.height;
@@ -179,14 +179,14 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
     final List<int> hiddenIndexes = [];
 
-    while (tabs.isNotEmpty &&
-        _requiredTabsMainAxisSize(tabs: tabs) > availableSpaceForTabs) {
+    while (children.isNotEmpty &&
+        _requiredTabsMainAxisSize(tabs: children) > availableSpaceForTabs) {
       int? removedIndex;
-      if (tabs.length == 1) {
-        tabs.removeAt(0).tabsAreaLayoutParentData().visible = false;
+      if (children.length == 1) {
+        children.removeAt(0).tabsAreaLayoutParentData().visible = false;
         removedIndex = 0;
       } else {
-        removedIndex = _removeLastNonSelected(tabs: tabs);
+        removedIndex = _removeLastNonSelected(tabs: children);
       }
       if (removedIndex != null) {
         hiddenIndexes.add(removedIndex);
@@ -195,8 +195,9 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
     hiddenTabs.update(hiddenIndexes);
 
+    // The corner has already been removed from the children.
     _positionChildren(
-        tabs: tabs, corner: corner, maxCrossAxisSize: maxCrossAxisSize);
+        tabs: children, corner: corner, maxCrossAxisSize: maxCrossAxisSize);
 
     if (tabBarPosition.isHorizontal) {
       size =
@@ -256,14 +257,25 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       final Size? tabHeaderCrossAxisSize = needTabHeaderCrossAxisSize
           ? child.tabsAreaLayoutParentData().sizeHolder?.size
           : null;
+
+      double minimalCrossAxisSize = 0;
+      if (child == lastChild) {
+        final BorderSide? divider = theme.divider;
+        minimalCrossAxisSize = theme.isDividerWithinTabArea
+            ? (divider != null ? divider.width : 0)
+            : 0;
+      }
+
       if (tabBarPosition.isHorizontal) {
-        maxCrossAxisSize = math.max(maxCrossAxisSize, child.size.height);
+        maxCrossAxisSize = math.max(
+            maxCrossAxisSize, child.size.height + minimalCrossAxisSize);
         if (tabHeaderCrossAxisSize != null) {
           maxTabHeaderExtentSize =
               math.max(maxTabHeaderExtentSize, tabHeaderCrossAxisSize.height);
         }
       } else {
-        maxCrossAxisSize = math.max(maxCrossAxisSize, child.size.width);
+        maxCrossAxisSize =
+            math.max(maxCrossAxisSize, child.size.width + minimalCrossAxisSize);
         if (tabHeaderCrossAxisSize != null) {
           maxTabHeaderExtentSize =
               math.max(maxTabHeaderExtentSize, tabHeaderCrossAxisSize.width);
@@ -339,6 +351,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       RenderBox tab = tabs[i];
       _position(
           child: tab,
+          startCrossAxisSize: 0,
           maxCrossAxisSize: maxCrossAxisSize,
           mainAxisOffset: mainAxisOffset,
           alignment: tabsAreaTheme.crossAxisFit == TabsAreaCrossAxisFit.none
@@ -355,8 +368,13 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     }
 
     // Position the corner
+    final BorderSide? divider = theme.divider;
+    final double startCrossAxisSize = theme.isDividerWithinTabArea
+        ? (divider != null ? divider.width : 0)
+        : 0;
     _position(
         child: corner,
+        startCrossAxisSize: startCrossAxisSize,
         maxCrossAxisSize: maxCrossAxisSize,
         mainAxisOffset: tabBarPosition.isHorizontal
             ? constraints.maxWidth - corner.size.width
@@ -368,6 +386,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
   void _position(
       {required RenderBox child,
+      required double startCrossAxisSize,
       required double maxCrossAxisSize,
       required double mainAxisOffset,
       required TabsAreaCrossAxisAlignment alignment}) {
@@ -377,25 +396,26 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       case TabsAreaCrossAxisAlignment.outer:
         switch (tabBarPosition) {
           case TabBarPosition.top:
-            parentData.offset = Offset(mainAxisOffset, 0);
+            parentData.offset = Offset(mainAxisOffset, startCrossAxisSize);
             break;
           case TabBarPosition.bottom:
-            parentData.offset =
-                Offset(mainAxisOffset, maxCrossAxisSize - child.size.height);
+            parentData.offset = Offset(mainAxisOffset,
+                maxCrossAxisSize - child.size.height - startCrossAxisSize);
             break;
           case TabBarPosition.left:
-            parentData.offset = Offset(0, mainAxisOffset);
+            parentData.offset = Offset(startCrossAxisSize, mainAxisOffset);
             break;
           case TabBarPosition.right:
-            parentData.offset =
-                Offset(maxCrossAxisSize - child.size.width, mainAxisOffset);
+            parentData.offset = Offset(
+                maxCrossAxisSize - child.size.width - startCrossAxisSize,
+                mainAxisOffset);
             break;
         }
         break;
       case TabsAreaCrossAxisAlignment.center:
         if (tabBarPosition.isHorizontal) {
-          parentData.offset = Offset(
-              mainAxisOffset, (maxCrossAxisSize - child.size.height) / 2);
+          parentData.offset = Offset(mainAxisOffset,
+              (maxCrossAxisSize - child.size.height - startCrossAxisSize) / 2);
         } else {
           parentData.offset =
               Offset((maxCrossAxisSize - child.size.width) / 2, mainAxisOffset);
@@ -404,18 +424,19 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       case TabsAreaCrossAxisAlignment.inner:
         switch (tabBarPosition) {
           case TabBarPosition.top:
-            parentData.offset =
-                Offset(mainAxisOffset, maxCrossAxisSize - child.size.height);
+            parentData.offset = Offset(mainAxisOffset,
+                maxCrossAxisSize - child.size.height - startCrossAxisSize);
             break;
           case TabBarPosition.bottom:
-            parentData.offset = Offset(mainAxisOffset, 0);
+            parentData.offset = Offset(mainAxisOffset, startCrossAxisSize);
             break;
           case TabBarPosition.left:
-            parentData.offset =
-                Offset(maxCrossAxisSize - child.size.width, mainAxisOffset);
+            parentData.offset = Offset(
+                maxCrossAxisSize - child.size.width - startCrossAxisSize,
+                mainAxisOffset);
             break;
           case TabBarPosition.right:
-            parentData.offset = Offset(0, mainAxisOffset);
+            parentData.offset = Offset(startCrossAxisSize, mainAxisOffset);
             break;
         }
         break;

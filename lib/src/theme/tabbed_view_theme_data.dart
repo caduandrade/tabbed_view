@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'content_area_theme_data.dart';
 import 'default_themes/classic_theme.dart';
+import 'default_themes/manila_folder_theme.dart';
 import 'default_themes/minimalist_theme.dart';
 import 'default_themes/underline_theme.dart';
 import 'tab_status_theme_data.dart';
@@ -93,6 +94,21 @@ class TabbedViewThemeData {
         initialGap: initialGap ?? 16,
         gap: gap ?? 4,
         tabRadius: tabRadius ?? 10);
+  }
+
+  /// Builds the predefined minimalist theme.
+  factory TabbedViewThemeData.manilaFolder({
+    Brightness? brightness,
+    MaterialColor? colorSet,
+    double? fontSize,
+    double? initialGap,
+  }) {
+    return ManilaFolderTheme(
+      brightness: brightness ?? Brightness.light,
+      colorSet: colorSet ?? Colors.grey,
+      fontSize: fontSize ?? 13,
+      initialGap: initialGap ?? 16,
+    );
   }
 
   @override
