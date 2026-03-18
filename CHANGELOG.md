@@ -1,6 +1,9 @@
 ## 2.2.0
 
-* Added support for custom tab shape.
+* `TabDecoration`
+  * Added support for custom tab shape.
+* `TabThemeData`
+  * Added a `maxLines` parameter to allow text wrapping in tab labels, specifically designed to work in conjunction with `maxMainSize` constraints.
 
 ## 2.1.0
 
