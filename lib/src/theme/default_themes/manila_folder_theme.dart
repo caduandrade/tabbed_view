@@ -1,13 +1,100 @@
 import 'package:flutter/material.dart';
-import 'package:tabbed_view/tabbed_view.dart';
+
+import '../../tab_bar_position.dart';
+import '../../tab_status.dart';
+import '../tab_header_extent_behavior.dart';
+import '../tab_decoration_builder.dart';
+import '../tabbed_view_theme_data.dart';
+
+/// Predefined manila folder theme builder.
+class ManilaFolderTheme extends TabbedViewThemeData {
+  ManilaFolderTheme({
+    required Brightness brightness,
+    required MaterialColor colorSet,
+    required double fontSize,
+    required double initialGap,
+  }) {
+    final bool isLight = brightness == Brightness.light;
+
+    _color = isLight ? colorSet[300]! : colorSet[900]!;
+    _selectedColor = isLight ? colorSet[800]! : colorSet[400]!;
+    _hoveredColor = isLight ? colorSet[400]! : colorSet[800]!;
+    final Color buttonColor = isLight ? colorSet[800]! : colorSet[100]!;
+    final Color disabledButtonColor = buttonColor.withValues(alpha: .3);
+    final Color fontColor = isLight ? colorSet[900]! : colorSet[100]!;
+    final Color selectedFontColor = isLight ? colorSet[100]! : colorSet[900]!;
+
+    divider = BorderSide(color: _selectedColor, width: 4);
+
+    tabsArea.tabHeaderExtentBehavior = TabHeaderExtentBehavior.uniform;
+    tabsArea.initialGap = initialGap;
+    tabsArea.buttonsAreaPadding = EdgeInsets.all(4);
+    tabsArea.buttonPadding = const EdgeInsets.all(4);
+    tabsArea.hoveredButtonBackground =
+        BoxDecoration(color: isLight ? colorSet[300]! : colorSet[800]!);
+    tabsArea.buttonColor = buttonColor;
+    tabsArea.disabledButtonColor = disabledButtonColor;
+    tabsArea.dropColor = isLight
+        ? const Color.fromARGB(150, 0, 0, 0)
+        : const Color.fromARGB(150, 255, 255, 255);
+
+    tab.buttonsOffset = 4;
+    tab.textStyle = TextStyle(fontSize: fontSize, color: fontColor);
+    tab.draggingDecoration = BoxDecoration(color: _color);
+    tab.padding = const EdgeInsets.fromLTRB(16, 4, 12, 4);
+    tab.paddingWithoutButton = const EdgeInsets.fromLTRB(16, 6, 16, 4);
+    tab.hoveredButtonBackground =
+        BoxDecoration(color: isLight ? colorSet[500]! : colorSet[700]!);
+    tab.buttonPadding = const EdgeInsets.all(4);
+    tab.buttonColor = buttonColor;
+    tab.disabledButtonColor = disabledButtonColor;
+    tab.decorationBuilder = _tabDecorationBuilder;
+    tab.selectedStatus.fontColor = selectedFontColor;
+    tab.selectedStatus.buttonColor = selectedFontColor;
+    tab.selectedStatus.hoveredButtonBackground =
+        BoxDecoration(color: isLight ? colorSet[700]! : colorSet[500]!);
+    tab.hoveredStatus.disabledButtonColor =
+        isLight ? colorSet[500]! : colorSet[600]!;
+  }
+
+  late final Color _color;
+  late final Color _selectedColor;
+  late final Color _hoveredColor;
+
+  TabDecoration _tabDecorationBuilder(
+      {required TabBarPosition tabBarPosition, required TabStatus status}) {
+    Color? color;
+    switch (status) {
+      case TabStatus.selected:
+        color = _selectedColor;
+        break;
+      case TabStatus.hovered:
+        color = _hoveredColor;
+        break;
+      case TabStatus.normal:
+        color = _color;
+        break;
+    }
+
+    return TabDecoration(
+      color: color,
+      shape: _ManilaFolderTabBorder(
+        tabBarPosition: tabBarPosition,
+        borderSide: BorderSide(color: _selectedColor.withValues(alpha: 0.5)),
+        angle: 10,
+        borderRadius: BorderRadius.circular(10),
+      ),
+    );
+  }
+}
 
 /// A border that mimics the shape of a manila folder tab, with support for rounded corners.
-class ManilaFolderTabBorder extends ShapeBorder {
-  const ManilaFolderTabBorder({
+class _ManilaFolderTabBorder extends ShapeBorder {
+  const _ManilaFolderTabBorder({
     required this.tabBarPosition,
     required this.borderSide,
-    this.angle = 10.0,
-    this.borderRadius = BorderRadius.zero,
+    required this.angle,
+    required this.borderRadius,
   });
 
   final TabBarPosition tabBarPosition;

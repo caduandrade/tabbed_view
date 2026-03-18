@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
-import 'manila_folder_tab_border.dart';
 
 void main() {
   runApp(TabbedViewExample());
@@ -110,8 +109,11 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                 underlineColorSet: Colors.brown)
             : TabbedViewThemeData.underline(brightness: _brightness);
         break;
-      case ThemeName.manila:
-        theme = ManilaFolderTheme(brightness: _brightness);
+      case ThemeName.manilaFolder:
+        theme = _modifyThemeColors
+            ? TabbedViewThemeData.manilaFolder(
+                brightness: _brightness, colorSet: Colors.brown)
+            : TabbedViewThemeData.manilaFolder(brightness: _brightness);
         break;
     }
     theme.tabsArea.position = _position;
@@ -355,7 +357,7 @@ class SideTabsLayoutChooser extends StatelessWidget {
   }
 }
 
-enum ThemeName { classic, underline, minimalist, manila }
+enum ThemeName { classic, underline, minimalist, manilaFolder }
 
 class ThemeChooser extends StatelessWidget {
   const ThemeChooser(
@@ -374,53 +376,6 @@ class ThemeChooser extends StatelessWidget {
     }).toList();
 
     return Wrap(spacing: 8, runSpacing: 4, children: children);
-  }
-}
-
-/// Custom theme that uses [ManilaFolderTabBorder].
-class ManilaFolderTheme extends TabbedViewThemeData {
-  ManilaFolderTheme({required Brightness brightness}) {
-    final bool isLight = brightness == Brightness.light;
-    const MaterialColor colorSet = Colors.brown;
-
-    final Color backgroundColor = isLight ? colorSet[100]! : colorSet[800]!;
-    final Color foregroundColor = isLight ? colorSet[900]! : colorSet[50]!;
-    final Color borderColor = isLight ? colorSet[300]! : colorSet[600]!;
-    final Color hoveredColor = isLight ? colorSet[200]! : colorSet[700]!;
-
-    contentArea.color = backgroundColor;
-    contentArea.border = BorderSide(color: borderColor, width: 1);
-
-    tabsArea.middleGap = -1;
-
-    tab.textStyle = TextStyle(color: foregroundColor);
-    tab.padding = const EdgeInsets.symmetric(vertical: 8, horizontal: 16);
-
-    tab.decorationBuilder =
-        ({required TabStatus status, required TabBarPosition tabBarPosition}) {
-      Color? tabColor;
-      // This inner border "erases" the line between the selected tab and the content area.
-      if (status == TabStatus.selected) {
-        tabColor = backgroundColor;
-        if (tabBarPosition == TabBarPosition.bottom) {
-        } else if (tabBarPosition == TabBarPosition.top) {
-        } else if (tabBarPosition == TabBarPosition.left) {
-        } else {
-          // right
-        }
-      } else if (status == TabStatus.hovered) {
-        tabColor = hoveredColor;
-      }
-
-      return TabDecoration(
-        color: tabColor,
-        shape: ManilaFolderTabBorder(
-          tabBarPosition: tabBarPosition,
-          borderSide: BorderSide(color: borderColor, width: 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-      );
-    };
   }
 }
 
