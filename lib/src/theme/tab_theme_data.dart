@@ -116,6 +116,7 @@ class TabThemeData {
           runtimeType == other.runtimeType &&
           decorationBuilder == other.decorationBuilder &&
           maxMainSize == other.maxMainSize &&
+          maxLines == other.maxLines &&
           selectedStatus == other.selectedStatus &&
           hoveredStatus == other.hoveredStatus &&
           padding == other.padding &&
@@ -140,6 +141,7 @@ class TabThemeData {
   int get hashCode =>
       decorationBuilder.hashCode ^
       maxMainSize.hashCode ^
+      maxLines.hashCode ^
       selectedStatus.hashCode ^
       hoveredStatus.hashCode ^
       padding.hashCode ^
