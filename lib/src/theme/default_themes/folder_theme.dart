@@ -4,43 +4,49 @@ import '../../tab_bar_position.dart';
 import '../../tab_status.dart';
 import '../tab_header_extent_behavior.dart';
 import '../tab_decoration_builder.dart';
+import '../tab_style_context.dart';
+import '../tab_style_resolver.dart';
 import '../tabbed_view_theme_data.dart';
 
-/// Predefined manila folder theme builder.
-class ManilaFolderTheme extends TabbedViewThemeData {
-  ManilaFolderTheme({
+/// Predefined folder theme builder.
+class FolderTheme extends TabbedViewThemeData {
+  FolderTheme({
     required Brightness brightness,
     required MaterialColor colorSet,
     required double fontSize,
     required double initialGap,
+    required FolderTabStyleResolver? tabStyleResolver,
   }) {
     final bool isLight = brightness == Brightness.light;
 
-    _color = isLight ? colorSet[300]! : colorSet[900]!;
-    _selectedColor = isLight ? colorSet[800]! : colorSet[400]!;
-    _hoveredColor = isLight ? colorSet[400]! : colorSet[800]!;
+    _unselectedBackgroundColor = isLight ? colorSet[300]! : colorSet[900]!;
+    _selectedBackgroundColor = isLight ? colorSet[800]! : colorSet[400]!;
+    _hoveredBackgroundColor = isLight ? colorSet[400]! : colorSet[800]!;
     final Color buttonColor = isLight ? colorSet[800]! : colorSet[100]!;
     final Color disabledButtonColor = buttonColor.withValues(alpha: .3);
     final Color fontColor = isLight ? colorSet[900]! : colorSet[100]!;
     final Color selectedFontColor = isLight ? colorSet[100]! : colorSet[900]!;
 
-    divider = BorderSide(color: _selectedColor, width: 4);
+    divider = BorderSide(color: _selectedBackgroundColor, width: 4);
 
     tabsArea.tabHeaderExtentBehavior = TabHeaderExtentBehavior.uniform;
     tabsArea.initialGap = initialGap;
     tabsArea.buttonsAreaPadding = EdgeInsets.all(4);
     tabsArea.buttonPadding = const EdgeInsets.all(4);
-    tabsArea.hoveredButtonBackground =
-        BoxDecoration(color: isLight ? colorSet[300]! : colorSet[800]!);
+    tabsArea.hoveredButtonBackground = BoxDecoration(
+        color: isLight
+            ? colorSet[300]!.withValues(alpha: .5)
+            : colorSet[800]!.withValues(alpha: .5));
     tabsArea.buttonColor = buttonColor;
     tabsArea.disabledButtonColor = disabledButtonColor;
     tabsArea.dropColor = isLight
         ? const Color.fromARGB(150, 0, 0, 0)
         : const Color.fromARGB(150, 255, 255, 255);
 
+    tab.styleResolver = tabStyleResolver;
     tab.buttonsOffset = 4;
     tab.textStyle = TextStyle(fontSize: fontSize, color: fontColor);
-    tab.draggingDecoration = BoxDecoration(color: _color);
+    tab.draggingDecoration = BoxDecoration(color: _unselectedBackgroundColor);
     tab.padding = const EdgeInsets.fromLTRB(16, 4, 12, 4);
     tab.paddingWithoutButton = const EdgeInsets.fromLTRB(16, 6, 16, 4);
     tab.hoveredButtonBackground =
@@ -51,36 +57,52 @@ class ManilaFolderTheme extends TabbedViewThemeData {
     tab.decorationBuilder = _tabDecorationBuilder;
     tab.selectedStatus.fontColor = selectedFontColor;
     tab.selectedStatus.buttonColor = selectedFontColor;
-    tab.selectedStatus.hoveredButtonBackground =
-        BoxDecoration(color: isLight ? colorSet[700]! : colorSet[500]!);
+    tab.selectedStatus.hoveredButtonBackground = BoxDecoration(
+        color: isLight
+            ? colorSet[700]!.withValues(alpha: .5)
+            : colorSet[500]!.withValues(alpha: .5));
     tab.hoveredStatus.disabledButtonColor =
         isLight ? colorSet[500]! : colorSet[600]!;
   }
 
-  late final Color _color;
-  late final Color _selectedColor;
-  late final Color _hoveredColor;
+  late final Color _unselectedBackgroundColor;
+  late final Color _selectedBackgroundColor;
+  late final Color _hoveredBackgroundColor;
+
+  FolderTabStyleResolver? get _folderTabStyleResolver {
+    final TabStyleResolver? styleResolver = tab.styleResolver;
+    if (styleResolver is FolderTabStyleResolver) {
+      return styleResolver;
+    }
+    return null;
+  }
 
   TabDecoration _tabDecorationBuilder(
-      {required TabBarPosition tabBarPosition, required TabStatus status}) {
-    Color? color;
-    switch (status) {
+      {required TabBarPosition tabBarPosition,
+      required TabStyleContext styleContext}) {
+    Color? backgroundColor;
+    final FolderTabStyleResolver? resolver = _folderTabStyleResolver;
+    switch (styleContext.status) {
       case TabStatus.selected:
-        color = _selectedColor;
+        backgroundColor =
+            resolver?.backgroundColor(styleContext) ?? _selectedBackgroundColor;
         break;
       case TabStatus.hovered:
-        color = _hoveredColor;
+        backgroundColor =
+            resolver?.backgroundColor(styleContext) ?? _hoveredBackgroundColor;
         break;
       case TabStatus.normal:
-        color = _color;
+        backgroundColor = resolver?.backgroundColor(styleContext) ??
+            _unselectedBackgroundColor;
         break;
     }
 
     return TabDecoration(
-      color: color,
-      shape: _ManilaFolderTabBorder(
+      color: backgroundColor,
+      shape: _FolderTabBorder(
         tabBarPosition: tabBarPosition,
-        borderSide: BorderSide(color: _selectedColor.withValues(alpha: 0.5)),
+        borderSide:
+            BorderSide(color: _selectedBackgroundColor.withValues(alpha: 0.5)),
         angle: 10,
         borderRadius: BorderRadius.circular(10),
       ),
@@ -88,9 +110,9 @@ class ManilaFolderTheme extends TabbedViewThemeData {
   }
 }
 
-/// A border that mimics the shape of a manila folder tab, with support for rounded corners.
-class _ManilaFolderTabBorder extends ShapeBorder {
-  const _ManilaFolderTabBorder({
+/// A border that mimics the shape of a folder tab, with support for rounded corners.
+class _FolderTabBorder extends ShapeBorder {
+  const _FolderTabBorder({
     required this.tabBarPosition,
     required this.borderSide,
     required this.angle,

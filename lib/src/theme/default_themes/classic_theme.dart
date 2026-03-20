@@ -4,6 +4,8 @@ import '../../tab_bar_position.dart';
 import '../../tab_status.dart';
 import '../tab_header_extent_behavior.dart';
 import '../tab_decoration_builder.dart';
+import '../tab_style_context.dart';
+import '../tab_style_resolver.dart';
 import '../tabbed_view_theme_data.dart';
 import '../tabs_area_cross_axis_fit.dart';
 
@@ -14,11 +16,14 @@ class ClassicTheme extends TabbedViewThemeData {
       required MaterialColor colorSet,
       required double fontSize,
       required Color? borderColor,
+      required TabStyleResolver? tabStyleResolver,
       double? tabRadius}) {
     final bool isLight = brightness == Brightness.light;
 
     _backgroundColor = isLight ? colorSet[50]! : colorSet[900]!;
-    final Color hoveredColor = isLight ? colorSet[300]! : colorSet[600]!;
+    final Color hoveredColor = isLight
+        ? colorSet[300]!.withValues(alpha: .5)
+        : colorSet[600]!.withValues(alpha: .5);
     final Color fontColor = isLight ? colorSet[900]! : colorSet[200]!;
     final Color buttonColor = isLight ? colorSet[900]! : colorSet[200]!;
     final Color disabledButtonColor = buttonColor.withValues(alpha: .3);
@@ -46,6 +51,7 @@ class ClassicTheme extends TabbedViewThemeData {
         ? const Color.fromARGB(150, 0, 0, 0)
         : const Color.fromARGB(150, 255, 255, 255);
 
+    tab.styleResolver = tabStyleResolver;
     tab.textStyle = TextStyle(fontSize: fontSize, color: fontColor);
     tab.buttonColor = buttonColor;
     tab.hoveredButtonColor = hoveredButtonColor;
@@ -69,8 +75,9 @@ class ClassicTheme extends TabbedViewThemeData {
   late final Radius? _tabRadius;
 
   TabDecoration _tabDecorationBuilder(
-      {required TabBarPosition tabBarPosition, required TabStatus status}) {
-    final BorderSide borderSide = status == TabStatus.selected
+      {required TabBarPosition tabBarPosition,
+      required TabStyleContext styleContext}) {
+    final BorderSide borderSide = styleContext.status == TabStatus.selected
         ? BorderSide(color: _backgroundColor, width: 10)
         : divider ?? BorderSide.none;
     switch (tabBarPosition) {
@@ -98,7 +105,8 @@ class ClassicTheme extends TabbedViewThemeData {
   }
 
   TabDecoration _externalDecorationBuilder(
-      {required TabBarPosition tabBarPosition, required TabStatus status}) {
+      {required TabBarPosition tabBarPosition,
+      required TabStyleContext styleContext}) {
     final BorderSide borderSide = BorderSide(color: _borderColor, width: 1);
     final Radius? radius = this._tabRadius;
     switch (tabBarPosition) {

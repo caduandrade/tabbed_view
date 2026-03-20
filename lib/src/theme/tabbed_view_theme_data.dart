@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tabbed_view/src/theme/tab_style_resolver.dart';
 
 import 'content_area_theme_data.dart';
 import 'default_themes/classic_theme.dart';
-import 'default_themes/manila_folder_theme.dart';
+import 'default_themes/folder_theme.dart';
 import 'default_themes/minimalist_theme.dart';
 import 'default_themes/underline_theme.dart';
 import 'tab_status_theme_data.dart';
@@ -52,62 +53,76 @@ class TabbedViewThemeData {
   bool isDividerWithinTabArea = false;
 
   /// Builds the predefined classic theme.
-  factory TabbedViewThemeData.classic(
-      {Brightness? brightness,
-      MaterialColor? colorSet,
-      double? fontSize,
-      Color? borderColor,
-      double? tabRadius}) {
+  factory TabbedViewThemeData.classic({
+    Brightness? brightness,
+    MaterialColor? colorSet,
+    double? fontSize,
+    Color? borderColor,
+    double? tabRadius,
+    TabStyleResolver? tabStyleResolver,
+  }) {
     return ClassicTheme(
-        brightness: brightness ?? Brightness.light,
-        colorSet: colorSet ?? Colors.grey,
-        fontSize: fontSize ?? 13,
-        borderColor: borderColor,
-        tabRadius: tabRadius);
+      brightness: brightness ?? Brightness.light,
+      colorSet: colorSet ?? Colors.grey,
+      fontSize: fontSize ?? 13,
+      borderColor: borderColor,
+      tabRadius: tabRadius,
+      tabStyleResolver: tabStyleResolver,
+    );
   }
 
   /// Builds the predefined underline theme.
-  factory TabbedViewThemeData.underline(
-      {Brightness? brightness,
-      MaterialColor? colorSet,
-      MaterialColor? underlineColorSet,
-      double? fontSize}) {
+  factory TabbedViewThemeData.underline({
+    Brightness? brightness,
+    MaterialColor? colorSet,
+    MaterialColor? underlineColorSet,
+    double? fontSize,
+    UnderlineTabStyleResolver? tabStyleResolver,
+  }) {
     return UnderlineTheme(
-        brightness: brightness ?? Brightness.light,
-        colorSet: colorSet ?? Colors.grey,
-        underlineColorSet: underlineColorSet ?? Colors.blue,
-        fontSize: fontSize ?? 13);
+      brightness: brightness ?? Brightness.light,
+      colorSet: colorSet ?? Colors.grey,
+      underlineColorSet: underlineColorSet ?? Colors.blue,
+      fontSize: fontSize ?? 13,
+      tabStyleResolver: tabStyleResolver,
+    );
   }
 
   /// Builds the predefined minimalist theme.
-  factory TabbedViewThemeData.minimalist(
-      {Brightness? brightness,
-      MaterialColor? colorSet,
-      double? fontSize,
-      double? initialGap,
-      double? gap,
-      double? tabRadius}) {
-    return MinimalistTheme(
-        brightness: brightness ?? Brightness.light,
-        colorSet: colorSet ?? Colors.grey,
-        fontSize: fontSize ?? 13,
-        initialGap: initialGap ?? 16,
-        gap: gap ?? 4,
-        tabRadius: tabRadius ?? 10);
-  }
-
-  /// Builds the predefined minimalist theme.
-  factory TabbedViewThemeData.manilaFolder({
+  factory TabbedViewThemeData.minimalist({
     Brightness? brightness,
     MaterialColor? colorSet,
     double? fontSize,
     double? initialGap,
+    double? gap,
+    double? tabRadius,
+    MinimalistTabStyleResolver? tabStyleResolver,
   }) {
-    return ManilaFolderTheme(
+    return MinimalistTheme(
       brightness: brightness ?? Brightness.light,
       colorSet: colorSet ?? Colors.grey,
       fontSize: fontSize ?? 13,
       initialGap: initialGap ?? 16,
+      gap: gap ?? 4,
+      tabRadius: tabRadius ?? 10,
+      tabStyleResolver: tabStyleResolver,
+    );
+  }
+
+  /// Builds the predefined folder theme.
+  factory TabbedViewThemeData.folder({
+    Brightness? brightness,
+    MaterialColor? colorSet,
+    double? fontSize,
+    double? initialGap,
+    FolderTabStyleResolver? tabStyleResolver,
+  }) {
+    return FolderTheme(
+      brightness: brightness ?? Brightness.light,
+      colorSet: colorSet ?? Colors.grey,
+      fontSize: fontSize ?? 13,
+      initialGap: initialGap ?? 16,
+      tabStyleResolver: tabStyleResolver,
     );
   }
 

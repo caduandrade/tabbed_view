@@ -19,7 +19,7 @@ class TabButtonWidget extends StatefulWidget {
       required this.hoverColor,
       required this.disabledColor,
       this.themePadding,
-      this.normalBackground,
+      this.background,
       this.hoverBackground,
       this.disabledBackground});
 
@@ -30,9 +30,9 @@ class TabButtonWidget extends StatefulWidget {
   final Color disabledColor;
   final EdgeInsetsGeometry? themePadding;
   final bool enabled;
-  final BoxDecoration? normalBackground;
-  final BoxDecoration? hoverBackground;
-  final BoxDecoration? disabledBackground;
+  final Decoration? background;
+  final Decoration? hoverBackground;
+  final Decoration? disabledBackground;
 
   @override
   State<StatefulWidget> createState() => TabButtonWidgetState();
@@ -47,7 +47,7 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
 
     Color color;
-    BoxDecoration? background;
+    Decoration? background;
 
     final bool hasEvent =
         widget.button.onPressed != null || widget.button.menuBuilder != null;
@@ -72,7 +72,7 @@ class TabButtonWidgetState extends State<TabButtonWidget> {
           : widget.normalColor;
       background = widget.button.background != null
           ? widget.button.background
-          : widget.normalBackground;
+          : widget.background;
     }
 
     final TabbedViewMenuBuilder? menuBuilder = widget.button.menuBuilder;

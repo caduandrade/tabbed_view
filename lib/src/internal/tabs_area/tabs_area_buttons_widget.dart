@@ -67,7 +67,7 @@ class TabsAreaButtonsWidget extends StatelessWidget {
                   tabsAreaTheme.buttonColor,
               disabledColor:
                   tabButton.disabledColor ?? tabsAreaTheme.disabledButtonColor,
-              normalBackground:
+              background:
                   tabButton.background ?? tabsAreaTheme.buttonBackground,
               hoverBackground: tabButton.hoverBackground ??
                   tabsAreaTheme.hoveredButtonBackground,

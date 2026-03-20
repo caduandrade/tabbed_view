@@ -2,8 +2,79 @@
 
 * `TabDecoration`
   * Added support for custom tab shape.
+* `TabbedViewThemeData`
+  * Added a new predefined theme: `folder`. 
 * `TabThemeData`
   * Added a `maxLines` parameter to allow text wrapping in tab labels, specifically designed to work in conjunction with `maxMainSize` constraints.
+* `TabDecorationBuilder`
+  * The `TabStatus` parameter has been replaced by `TabStyleContext`.
+
+### Breaking Change
+
+Per-tab styling overrides have been moved from `TabData` to `TabThemeData`.
+
+The following properties were **removed** from `TabData`:
+
+* `normalStatusTheme`
+* `selectedStatusTheme`
+* `hoveredStatusTheme`
+
+These have been replaced by `TabStyleResolver`, which is now defined on `TabThemeData`.
+
+This change centralizes styling logic within the theme and enables dynamic, per-tab customization based on tab state, while keeping `TabData` focused on content and behavior.
+
+Before:
+
+```dart
+  TabData(
+    text: 'MyTab',
+    value: 'myTab',
+    normalStatusTheme: TabStatusThemeData(
+      fontColor: Colors.green.shade400,
+    ),
+    selectedStatusTheme: TabStatusThemeData(
+      fontColor: Colors.green.shade900,
+    ),
+    hoveredStatusTheme: TabStatusThemeData(
+      fontColor: Colors.green.shade500,
+    ),
+  );
+```
+
+After:
+
+```dart
+class MyTabStyleResolver extends TabStyleResolver {
+  @override
+  Color? fontColor(TabStyleContext context) {
+    if (context.tab.value == 'myTab') {
+      switch (context.status) {
+        case TabStatus.selected:
+          return Colors.green.shade900;
+        case TabStatus.hovered:
+          return Colors.green.shade500;
+        case TabStatus.normal:
+          return Colors.green.shade400;
+      }
+    }
+    // default theme color
+    return null;
+  }
+}
+```
+
+```dart
+  TabbedViewController controller =
+      TabbedViewController([TabData(text: 'MyTab', value: 'myTab')]);
+
+  TabbedViewTheme(
+    data: TabbedViewThemeData.classic(
+      tabStyleResolver: MyTabStyleResolver(),
+    ),
+    child: TabbedView(controller: controller),
+  );
+```
+
 
 ## 2.1.0
 

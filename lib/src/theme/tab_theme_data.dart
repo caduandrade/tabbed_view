@@ -6,14 +6,17 @@ import '../tab_status.dart';
 import '../tabbed_view_icons.dart';
 import 'tab_decoration_builder.dart';
 import 'tab_status_theme_data.dart';
+import 'tab_style_context.dart';
+import 'tab_style_resolver.dart';
 import 'tabbed_view_theme_constants.dart';
 import 'vertical_alignment.dart';
 
 /// Theme for tab.
 class TabThemeData {
   static TabDecoration defaultBorderBuilder(
-      {required TabBarPosition tabBarPosition, required TabStatus status}) {
-    return TabDecoration();
+      {required TabBarPosition tabBarPosition,
+      required TabStyleContext styleContext}) {
+    return const TabDecoration();
   }
 
   TabThemeData(
@@ -37,6 +40,7 @@ class TabThemeData {
       this.maxLines,
       this.padding,
       this.paddingWithoutButton,
+      this.styleResolver,
       required this.selectedStatus,
       required this.hoveredStatus})
       : this.buttonsOffset = buttonsOffset >= 0 ? buttonsOffset : 0,
@@ -93,6 +97,24 @@ class TabThemeData {
 
   double buttonsGap;
 
+  /// Optional resolver used to override the visual styling of individual tabs.
+  ///
+  /// By default, the theme applies a uniform style to all tabs. When a
+  /// [TabStyleResolver] is provided, it is consulted during style resolution
+  /// for each tab and [TabStatus], allowing per-tab customization without
+  /// affecting the global theme.
+  ///
+  /// The resolver operates on top of the theme defaults. For each property,
+  /// returning `null` indicates that the theme’s default value should be used.
+  ///
+  /// This mechanism is intended for **superficial styling overrides** (e.g.,
+  /// colors, padding, decorations). Structural or layout differences remain
+  /// the responsibility of the theme implementation itself.
+  ///
+  /// Concrete themes may provide specialized subclasses of [TabStyleResolver]
+  /// with additional capabilities specific to their rendering model.
+  TabStyleResolver? styleResolver;
+
   /// Gets an optional theme for a tab based on its [status].
   ///
   /// If a theme is returned (for [TabStatus.selected] or [TabStatus.hovered]),
@@ -135,7 +157,8 @@ class TabThemeData {
           disabledButtonBackground == other.disabledButtonBackground &&
           closeIcon == other.closeIcon &&
           buttonPadding == other.buttonPadding &&
-          buttonsGap == other.buttonsGap;
+          buttonsGap == other.buttonsGap &&
+          styleResolver == other.styleResolver;
 
   @override
   int get hashCode =>
@@ -160,5 +183,6 @@ class TabThemeData {
       disabledButtonBackground.hashCode ^
       closeIcon.hashCode ^
       buttonPadding.hashCode ^
-      buttonsGap.hashCode;
+      buttonsGap.hashCode ^
+      styleResolver.hashCode;
 }
