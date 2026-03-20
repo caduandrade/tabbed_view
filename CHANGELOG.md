@@ -6,18 +6,18 @@
   * Added a new predefined theme: `folder`. 
 * `TabThemeData`
   * Added a `maxLines` parameter to allow text wrapping in tab labels, specifically designed to work in conjunction with `maxMainSize` constraints.
+* `TabStyleResolver`
+  * Added to provides per-tab style overrides on top of a `TabThemeData`.
+
+### Breaking Changes
+
 * `TabDecorationBuilder`
-  * The `TabStatus` parameter has been replaced by `TabStyleContext`.
-
-### Breaking Change
-
-Per-tab styling overrides have been moved from `TabData` to `TabThemeData`.
-
-The following properties were **removed** from `TabData`:
-
-* `normalStatusTheme`
-* `selectedStatusTheme`
-* `hoveredStatusTheme`
+    * The `TabStatus` parameter has been replaced by `TabStyleContext`.
+* Per-tab styling overrides have been moved from `TabData` to `TabThemeData`.
+  * The following properties were **removed** from `TabData`:
+    * `normalStatusTheme`
+    * `selectedStatusTheme`
+    * `hoveredStatusTheme`
 
 These have been replaced by `TabStyleResolver`, which is now defined on `TabThemeData`.
 

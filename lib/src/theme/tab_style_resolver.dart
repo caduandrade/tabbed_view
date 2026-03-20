@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'tab_style_context.dart';
 
-/// Provides per-tab style overrides on top of a [TabbedViewThemeData].
+/// Provides per-tab style overrides on top of a [TabThemeData].
 ///
-/// By default, a [TabbedViewThemeData] (i.e., a tab theme/renderer) applies
+/// By default, a [TabThemeData] (i.e., a tab theme/renderer) applies
 /// a uniform appearance to all tabs. A [TabStyleResolver] allows selectively
 /// overriding visual properties for an individual tab without changing the
 /// global theme.
