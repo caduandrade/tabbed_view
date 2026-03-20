@@ -20,7 +20,7 @@ void main() {
           TabData(text: 'Tab 2'),
         ],
         onTabRemove: (tabData) => onTabCloseTabData = tabData,
-        onTabSelection: (index, tabData) => onSelectionTabData = tabData,
+        onTabSelection: (selection) => onSelectionTabData = selection?.tabData,
       );
       onSelectionTabData = null;
       onSecondaryTapTabData = null;

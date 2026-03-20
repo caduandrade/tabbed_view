@@ -81,7 +81,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
     _controller = TabbedViewController(
       tabs,
       onTabReorder: (int oldIndex, int newIndex) {},
-      onTabSelection: (index, tabData) {},
+      onTabSelection: (selection) {},
       onTabRemove: (tabData) {},
     );
   }

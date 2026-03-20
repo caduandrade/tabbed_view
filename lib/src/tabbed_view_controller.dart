@@ -18,7 +18,7 @@ class TabbedViewController extends ChangeNotifier {
   TabbedViewController(this._tabs,
       {this.data, this.onTabSelection, this.onTabRemove, this.onTabReorder}) {
     if (_tabs.isNotEmpty) {
-      _selection = _Selection(data: _tabs.first, index: 0);
+      _selection = TabSelection(tabData: _tabs.first, tabIndex: 0);
     }
     for (TabData tab in _tabs) {
       tab.addListener(notifyListeners);
@@ -39,17 +39,18 @@ class TabbedViewController extends ChangeNotifier {
 
   final dynamic data;
 
-  _Selection _selection = _Selection(index: null, data: null);
+  TabSelection? _selection;
 
   /// The selected tab index
-  int? get selectedIndex => _selection.index;
+  int? get selectedIndex => _selection?.tabIndex;
 
   void _updateSelection(int? tabIndex) {
-    final _Selection oldSelection = _selection;
-    _selection = _Selection(
-        data: tabIndex != null ? _tabs[tabIndex] : null, index: tabIndex);
+    final TabSelection? oldSelection = _selection;
+    _selection = tabIndex != null
+        ? TabSelection(tabIndex: tabIndex, tabData: _tabs[tabIndex])
+        : null;
     if (oldSelection != _selection) {
-      onTabSelection?.call(_selection.index, _selection.data);
+      onTabSelection?.call(_selection);
     }
   }
 
@@ -252,22 +253,4 @@ class TabbedViewController extends ChangeNotifier {
       TabDataHelper.setIndex(tab, clear ? -1 : i);
     }
   }
-}
-
-class _Selection {
-  _Selection({required this.data, required this.index});
-
-  final TabData? data;
-  final int? index;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is _Selection &&
-          runtimeType == other.runtimeType &&
-          data == other.data &&
-          index == other.index;
-
-  @override
-  int get hashCode => Object.hash(data, index);
 }

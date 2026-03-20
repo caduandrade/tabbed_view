@@ -75,6 +75,9 @@ class MyTabStyleResolver extends TabStyleResolver {
   );
 ```
 
+* `OnTabSelection`
+  * Callback signature updated from `(int? tabIndex, TabData? tabData)` to `(TabSelection? selection)`.
+
 
 ## 2.1.0
 
