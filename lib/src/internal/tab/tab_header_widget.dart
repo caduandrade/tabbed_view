@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:tabbed_view/src/theme/tab_style_context.dart';
+import 'package:tabbed_view/src/theme/tab_style_resolver.dart';
 
 import '../../tab_bar_position.dart';
 import '../../tab_button.dart';
@@ -17,24 +19,28 @@ import '../tabbed_view_provider.dart';
 
 @internal
 class TabHeaderWidget extends StatelessWidget {
-  const TabHeaderWidget(
-      {required this.index,
-      required this.status,
-      required this.provider,
-      required this.onClose,
-      required this.sideTabsLayout});
+  const TabHeaderWidget({
+    required this.index,
+    required this.status,
+    required this.provider,
+    required this.onClose,
+    required this.sideTabsLayout,
+    required this.styleContext,
+  });
 
   final int index;
   final TabStatus status;
   final TabbedViewProvider provider;
   final Function onClose;
   final SideTabsLayout sideTabsLayout;
+  final TabStyleContext styleContext;
 
   @override
   Widget build(BuildContext context) {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabThemeData tabTheme = theme.tab;
-    List<Widget> textAndButtons = _textAndButtons(context);
+
+    List<Widget> textAndButtons = _buildTextAndButtons(context);
 
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
     if (tabTheme.verticalAlignment == VerticalAlignment.top) {
@@ -50,14 +56,18 @@ class TabHeaderWidget extends StatelessWidget {
                 crossAxisAlignment: crossAxisAlignment)));
 
     final TabStatusThemeData? statusTheme = tabTheme.getTabThemeFor(status);
+    final TabStyleResolver? styleResolver = tabTheme.styleResolver;
 
     EdgeInsetsGeometry? padding;
     if (textAndButtons.length == 1) {
-      padding =
-          statusTheme?.paddingWithoutButton ?? tabTheme.paddingWithoutButton;
+      padding = styleResolver?.paddingWithoutButton(styleContext) ??
+          statusTheme?.paddingWithoutButton ??
+          tabTheme.paddingWithoutButton;
     }
     if (padding == null) {
-      padding = statusTheme?.padding ?? tabTheme.padding;
+      padding = styleResolver?.padding(styleContext) ??
+          statusTheme?.padding ??
+          tabTheme.padding;
     }
 
     Widget widget = Container(
@@ -78,46 +88,60 @@ class TabHeaderWidget extends StatelessWidget {
   }
 
   /// Builds a list with title text and buttons.
-  List<Widget> _textAndButtons(BuildContext context) {
-    final TabbedViewThemeData theme = TabbedViewTheme.of(context);
-    final TabThemeData tabTheme = theme.tab;
-    List<Widget> textAndButtons = [];
-
-    TabData tab = provider.controller.tabs[index];
-    TabStatusThemeData? statusTheme = tabTheme.getTabThemeFor(status);
-
-    Color color = statusTheme?.buttonColor ?? tabTheme.buttonColor;
-    Color hoverColor =
-        statusTheme?.hoveredButtonColor ?? tabTheme.hoveredButtonColor ?? color;
-    Color disabledColor =
-        statusTheme?.disabledButtonColor ?? tabTheme.disabledButtonColor;
-
-    BoxDecoration? normalBackground =
-        statusTheme?.buttonBackground ?? tabTheme.buttonBackground;
-    BoxDecoration? hoverBackground = statusTheme?.hoveredButtonBackground ??
-        tabTheme.hoveredButtonBackground;
-    BoxDecoration? disabledBackground = statusTheme?.disabledButtonBackground ??
-        tabTheme.disabledButtonBackground;
-
-    TextStyle? textStyle = tabTheme.textStyle;
-    if (statusTheme?.fontColor != null) {
-      if (textStyle != null) {
-        textStyle = textStyle.copyWith(color: statusTheme?.fontColor);
-      } else {
-        textStyle = TextStyle(color: statusTheme?.fontColor);
-      }
-    }
+  List<Widget> _buildTextAndButtons(BuildContext context) {
+    final List<Widget> textAndButtons = [];
+    final TabData tab = provider.controller.tabs[index];
 
     final List<TabButton>? buttons = tab.buttonsBuilder?.call(context);
+    final Widget? leading = tab.leading?.call(context, status);
+
+    final TabbedViewThemeData theme = TabbedViewTheme.of(context);
+    final TabThemeData tabTheme = theme.tab;
+    final TabStyleResolver? styleResolver = tabTheme.styleResolver;
+    final TabStatusThemeData? statusTheme = tabTheme.getTabThemeFor(status);
+
+    final Color color = styleResolver?.buttonColor(styleContext) ??
+        statusTheme?.buttonColor ??
+        tabTheme.buttonColor;
+    final Color hoverColor = styleResolver?.hoveredButtonColor(styleContext) ??
+        statusTheme?.hoveredButtonColor ??
+        tabTheme.hoveredButtonColor ??
+        color;
+    final Color disabledColor =
+        styleResolver?.disabledButtonColor(styleContext) ??
+            statusTheme?.disabledButtonColor ??
+            tabTheme.disabledButtonColor;
+
+    final Decoration? background =
+        styleResolver?.buttonBackground(styleContext) ??
+            statusTheme?.buttonBackground ??
+            tabTheme.buttonBackground;
+    final Decoration? hoverBackground =
+        styleResolver?.hoveredButtonBackground(styleContext) ??
+            statusTheme?.hoveredButtonBackground ??
+            tabTheme.hoveredButtonBackground;
+    final Decoration? disabledBackground =
+        styleResolver?.disabledButtonBackground(styleContext) ??
+            statusTheme?.disabledButtonBackground ??
+            tabTheme.disabledButtonBackground;
+
+    TextStyle? textStyle = tabTheme.textStyle;
+    final Color? fontColor =
+        styleResolver?.fontColor(styleContext) ?? statusTheme?.fontColor;
+    if (fontColor != null) {
+      if (textStyle != null) {
+        textStyle = textStyle.copyWith(color: fontColor);
+      } else {
+        textStyle = TextStyle(color: fontColor);
+      }
+    }
 
     EdgeInsets? padding;
     if (tab.closable ||
         buttons != null && buttons.isNotEmpty && tabTheme.buttonsOffset > 0) {
-      padding = EdgeInsets.only(
-          right: tabTheme.buttonsOffset); // Use final buttonsOffset
+      padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
     }
 
-    Widget? leading = tab.leading?.call(context, status);
     if (leading != null) {
       textAndButtons.add(leading);
     }
@@ -144,7 +168,6 @@ class TabHeaderWidget extends StatelessWidget {
       for (int i = 0; i < buttons.length; i++) {
         EdgeInsets? padding;
         if (i > 0 && i < buttons.length && tabTheme.buttonsGap > 0) {
-          // Use final buttonsGap
           padding = EdgeInsets.only(left: tabTheme.buttonsGap);
         }
         TabButton button = buttons[i];
@@ -155,7 +178,7 @@ class TabHeaderWidget extends StatelessWidget {
                 normalColor: color,
                 hoverColor: hoverColor,
                 disabledColor: disabledColor,
-                normalBackground: normalBackground,
+                background: background,
                 hoverBackground: hoverBackground,
                 disabledBackground: disabledBackground,
                 iconSize: button.iconSize != null
@@ -185,7 +208,7 @@ class TabHeaderWidget extends StatelessWidget {
               normalColor: color,
               hoverColor: hoverColor,
               disabledColor: disabledColor,
-              normalBackground: normalBackground,
+              background: background,
               hoverBackground: hoverBackground,
               disabledBackground: disabledBackground,
               iconSize: tabTheme.buttonIconSize,

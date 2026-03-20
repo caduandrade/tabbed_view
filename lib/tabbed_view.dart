@@ -18,6 +18,8 @@ export 'src/theme/side_tabs_layout.dart';
 export 'src/theme/tab_decoration_builder.dart';
 export 'src/theme/tab_header_extent_behavior.dart';
 export 'src/theme/tab_status_theme_data.dart';
+export 'src/theme/tab_style_context.dart';
+export 'src/theme/tab_style_resolver.dart';
 export 'src/theme/tab_theme_data.dart';
 export 'src/theme/tabbed_view_menu_theme_data.dart';
 export 'src/theme/tabbed_view_theme_constants.dart';

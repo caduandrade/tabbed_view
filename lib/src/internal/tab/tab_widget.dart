@@ -8,6 +8,7 @@ import '../../tab_data.dart';
 import '../../tab_status.dart';
 import '../../theme/side_tabs_layout.dart';
 import '../../theme/tab_decoration_builder.dart';
+import '../../theme/tab_style_context.dart';
 import '../../theme/tab_theme_data.dart';
 import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/theme_widget.dart';
@@ -47,18 +48,27 @@ class TabWidget extends StatelessWidget {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabThemeData tabTheme = theme.tab;
 
+    final TabStyleContext styleContext = TabStyleContext(
+      tab: tab,
+      status: status,
+      index: index,
+      tabsCount: provider.controller.length,
+    );
+
     Widget widget = TabHeaderWidget(
-        provider: provider,
-        index: index,
-        onClose: onClose,
-        status: status,
-        sideTabsLayout: theme.tabsArea.sideTabsLayout);
+      provider: provider,
+      index: index,
+      onClose: onClose,
+      status: status,
+      sideTabsLayout: theme.tabsArea.sideTabsLayout,
+      styleContext: styleContext,
+    );
     widget = _TabHeaderProxy(sizeHolder: sizeHolder, child: widget);
 
     TabDecorationBuilder? decorationBuilder = tabTheme.decorationBuilder;
     while (decorationBuilder != null) {
       TabDecoration tabDecoration = decorationBuilder(
-          status: status, tabBarPosition: theme.tabsArea.position);
+          tabBarPosition: theme.tabsArea.position, styleContext: styleContext);
       if (tabDecoration.border != null ||
           tabDecoration.color != null ||
           tabDecoration.shape != null) {

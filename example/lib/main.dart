@@ -33,6 +33,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
 
     tabs.add(TabData(
         text: 'Tab 1',
+        value: 'myTab',
         leading: (context, status) => Icon(Icons.star, size: 16),
         content: Padding(padding: EdgeInsets.all(8), child: Text('Hello')),
         buttonsBuilder: (context) => [
@@ -93,14 +94,15 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
             ? TabbedViewThemeData.classic(
                 brightness: _brightness,
                 colorSet: Colors.blueGrey,
-                borderColor: Colors.black)
+                borderColor: Colors.black,
+       )
             : TabbedViewThemeData.classic(brightness: _brightness);
         break;
       case ThemeName.minimalist:
         theme = _modifyThemeColors
             ? TabbedViewThemeData.minimalist(
                 brightness: _brightness, colorSet: Colors.blueGrey)
-            : TabbedViewThemeData.minimalist(brightness: _brightness);
+            : TabbedViewThemeData.minimalist(brightness: _brightness, tabStyleResolver: MyTabStyleResolver());
         break;
       case ThemeName.underline:
         theme = _modifyThemeColors
@@ -110,11 +112,11 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                 underlineColorSet: Colors.brown)
             : TabbedViewThemeData.underline(brightness: _brightness);
         break;
-      case ThemeName.manilaFolder:
+      case ThemeName.folder:
         theme = _modifyThemeColors
-            ? TabbedViewThemeData.manilaFolder(
+            ? TabbedViewThemeData.folder(
                 brightness: _brightness, colorSet: Colors.brown)
-            : TabbedViewThemeData.manilaFolder(brightness: _brightness);
+            : TabbedViewThemeData.folder(brightness: _brightness);
         break;
     }
     theme.tabsArea.position = _position;
@@ -369,7 +371,7 @@ class SideTabsLayoutChooser extends StatelessWidget {
   }
 }
 
-enum ThemeName { classic, underline, minimalist, manilaFolder }
+enum ThemeName { classic, underline, minimalist, folder }
 
 class ThemeChooser extends StatelessWidget {
   const ThemeChooser(
@@ -408,5 +410,49 @@ class BrightnessChooser extends StatelessWidget {
     }).toList();
 
     return Wrap(spacing: 8, runSpacing: 4, children: children);
+  }
+}
+
+void das() {
+  TabbedViewController controller =
+      TabbedViewController([TabData(text: 'MyTab', value: 'myTab')]);
+
+  TabbedViewTheme(
+    data: TabbedViewThemeData.classic(
+      tabStyleResolver: MyTabStyleResolver(),
+    ),
+    child: TabbedView(controller: controller),
+  );
+}
+
+class MyTabStyleResolver extends MinimalistTabStyleResolver {
+
+  @override
+  Color? backgroundColor(TabStyleContext context) {
+    if(context.index==1) {
+      if(context.status==TabStatus.selected) {
+        return Colors.green.shade900;
+      }
+      if(context.status==TabStatus.hovered) {
+        return Colors.green.shade200;
+      }
+    }
+    return null;
+  }
+
+  @override
+  Color? fontColor(TabStyleContext context) {
+    if (context.tab.value == 'myTab') {
+      switch (context.status) {
+        case TabStatus.selected:
+          return Colors.green.shade700;
+        case TabStatus.hovered:
+          return Colors.green.shade400;
+        case TabStatus.normal:
+          return Colors.green.shade200;
+      }
+    }
+    // default theme color
+    return null;
   }
 }

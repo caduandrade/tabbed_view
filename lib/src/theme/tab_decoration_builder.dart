@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:tabbed_view/src/theme/tab_style_context.dart';
 
 import '../tab_bar_position.dart';
-import '../tab_status.dart';
 
 /// A builder function that creates a [TabDecoration] based on the tab's position and status.
 typedef TabDecorationBuilder = TabDecoration Function(
-    {required TabBarPosition tabBarPosition, required TabStatus status});
+    {required TabBarPosition tabBarPosition,
+    required TabStyleContext styleContext});
 
 /// Defines the decoration of a tab, which can include a border, a color,
 /// a border radius, and a wrapper builder for creating nested decorators.
 class TabDecoration {
-  TabDecoration(
+  const TabDecoration(
       {this.borderRadius,
       this.color,
       this.border,

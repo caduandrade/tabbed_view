@@ -5,8 +5,6 @@ import 'package:meta/meta.dart';
 
 import 'typedefs/tab_buttons_builder.dart';
 import 'tab_leading_builder.dart';
-import 'tab_status.dart';
-import 'theme/tab_status_theme_data.dart';
 
 /// The tab data.
 ///
@@ -30,34 +28,22 @@ import 'theme/tab_status_theme_data.dart';
 /// parameter as long as the [TabbedViewController] is being kept in the
 /// state of its class.
 ///
-/// The [normalStatusTheme] overrides the default theme for the tab
-/// when it's in its regular state.
-///
-/// The [selectedStatusTheme] overrides the default theme to customize the
-/// appearance of the tab when it is currently selected.
-///
-/// The [hoveredStatusTheme] overrides the default theme to change
-/// the visual look of the tab when it's in a hovered state.
-///
 /// See also:
 ///
 /// * [TabbedView.contentBuilder]
 class TabData extends ChangeNotifier {
-  TabData(
-      {dynamic value,
-      required String text,
-      String? tooltip,
-      TabButtonsBuilder? buttonsBuilder,
-      Widget? content,
-      TabLeadingBuilder? leading,
-      bool closable = true,
-      double? textSize,
-      this.draggable = true,
-      this.keepAlive = false,
-      this.normalStatusTheme,
-      this.hoveredStatusTheme,
-      this.selectedStatusTheme})
-      : _value = value,
+  TabData({
+    dynamic value,
+    required String text,
+    String? tooltip,
+    TabButtonsBuilder? buttonsBuilder,
+    Widget? content,
+    TabLeadingBuilder? leading,
+    bool closable = true,
+    double? textSize,
+    this.draggable = true,
+    this.keepAlive = false,
+  })  : _value = value,
         _text = text,
         _tooltip = tooltip,
         _leading = leading,
@@ -76,9 +62,7 @@ class TabData extends ChangeNotifier {
   int _index = -1;
 
   dynamic _value;
-
   dynamic get value => _value;
-
   set value(dynamic value) {
     if (_value != value) {
       _value = value;
@@ -87,18 +71,14 @@ class TabData extends ChangeNotifier {
   }
 
   TabButtonsBuilder? _buttonsBuilder;
-
   TabButtonsBuilder? get buttonsBuilder => _buttonsBuilder;
-
   set buttonsBuilder(TabButtonsBuilder? value) {
     _buttonsBuilder = value;
     notifyListeners();
   }
 
   TabLeadingBuilder? _leading;
-
   TabLeadingBuilder? get leading => _leading;
-
   set leading(TabLeadingBuilder? leading) {
     if (_leading != leading) {
       _leading = leading;
@@ -107,9 +87,7 @@ class TabData extends ChangeNotifier {
   }
 
   Widget? _content;
-
   Widget? get content => _content;
-
   set content(Widget? content) {
     if (_content != content) {
       _content = content;
@@ -118,9 +96,7 @@ class TabData extends ChangeNotifier {
   }
 
   bool _closable;
-
   bool get closable => _closable;
-
   set closable(bool value) {
     if (_closable != value) {
       _closable = value;
@@ -129,9 +105,7 @@ class TabData extends ChangeNotifier {
   }
 
   String? _tooltip;
-
   String? get tooltip => _tooltip;
-
   set tooltip(String? value) {
     if (_tooltip != value) {
       _tooltip = value;
@@ -140,9 +114,7 @@ class TabData extends ChangeNotifier {
   }
 
   String _text;
-
   String get text => _text;
-
   set text(String value) {
     if (_text != value) {
       _text = value;
@@ -151,9 +123,7 @@ class TabData extends ChangeNotifier {
   }
 
   double? _textSize;
-
   double? get textSize => _textSize;
-
   set textSize(double? value) {
     if (value != null) {
       value = math.max(value, 0);
@@ -161,22 +131,6 @@ class TabData extends ChangeNotifier {
     if (_textSize != value) {
       _textSize = value;
       notifyListeners();
-    }
-  }
-
-  final TabStatusThemeData? normalStatusTheme;
-  final TabStatusThemeData? selectedStatusTheme;
-  final TabStatusThemeData? hoveredStatusTheme;
-
-  /// Gets the theme of a tab according to its status.
-  TabStatusThemeData? getTabThemeFor(TabStatus status) {
-    switch (status) {
-      case TabStatus.normal:
-        return normalStatusTheme;
-      case TabStatus.selected:
-        return selectedStatusTheme;
-      case TabStatus.hovered:
-        return hoveredStatusTheme;
     }
   }
 
