@@ -51,8 +51,8 @@ class MinimalistTheme extends TabbedViewThemeData {
     tab.buttonsOffset = 4;
     tab.textStyle = TextStyle(fontSize: fontSize, color: fontColor);
     tab.draggingDecoration = BoxDecoration(color: _unselectedBackgroundColor);
-    tab.padding = const EdgeInsets.fromLTRB(8, 4, 4, 4);
-    tab.paddingWithoutButton = const EdgeInsets.fromLTRB(8, 6, 8, 4);
+    tab.padding = const EdgeInsets.fromLTRB(10, 4, 6, 4);
+    tab.paddingWithoutButton = const EdgeInsets.fromLTRB(10, 6, 10, 4);
     tab.hoveredButtonBackground =
         BoxDecoration(color: isLight ? colorSet[500]! : colorSet[700]!);
     tab.buttonPadding = const EdgeInsets.all(4);
