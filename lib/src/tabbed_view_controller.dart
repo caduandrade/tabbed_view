@@ -1,11 +1,12 @@
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'tab_data.dart';
 import 'typedefs/on_tab_remove.dart';
 import 'typedefs/on_tab_reorder.dart';
-import 'typedefs/on_tab_selection.dart';
+import 'typedefs/on_tab_selected.dart';
 
 /// The [TabbedView] controller.
 ///
@@ -16,14 +17,18 @@ import 'typedefs/on_tab_selection.dart';
 /// Remember to dispose of the [TabbedView] when it is no longer needed. This will ensure we discard any resources used by the object.
 class TabbedViewController extends ChangeNotifier {
   TabbedViewController(this._tabs,
-      {this.data, this.onTabSelection, this.onTabRemove, this.onTabReorder}) {
+      {this.data, this.onTabSelected, this.onTabRemove, this.onTabReorder}) {
     if (_tabs.isNotEmpty) {
-      _selection = TabSelection(tabData: _tabs.first, tabIndex: 0);
+      _selection = TabSelection(tab: _tabs.first, index: 0);
     }
     for (TabData tab in _tabs) {
       tab.addListener(notifyListeners);
     }
     _updateIndexes(false);
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Callback triggered when a tab is removed.
@@ -31,7 +36,7 @@ class TabbedViewController extends ChangeNotifier {
 
   /// Callback triggered when a tab is reordered.
   OnTabReorder? onTabReorder;
-  OnTabSelection? onTabSelection;
+  OnTabSelected? onTabSelected;
 
   final List<TabData> _tabs;
 
@@ -42,15 +47,15 @@ class TabbedViewController extends ChangeNotifier {
   TabSelection? _selection;
 
   /// The selected tab index
-  int? get selectedIndex => _selection?.tabIndex;
+  int? get selectedIndex => _selection?.index;
 
   void _updateSelection(int? tabIndex) {
     final TabSelection? oldSelection = _selection;
     _selection = tabIndex != null
-        ? TabSelection(tabIndex: tabIndex, tabData: _tabs[tabIndex])
+        ? TabSelection(index: tabIndex, tab: _tabs[tabIndex])
         : null;
     if (oldSelection != _selection) {
-      onTabSelection?.call(_selection);
+      onTabSelected?.call(_selection);
     }
   }
 
@@ -120,6 +125,10 @@ class TabbedViewController extends ChangeNotifier {
     tab.addListener(notifyListeners);
     _updateIndexes(false);
     _afterIncTabs();
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Replaces all tabs.
@@ -131,6 +140,10 @@ class TabbedViewController extends ChangeNotifier {
     _tabs.clear();
     _updateSelection(null);
     addTabs(iterable);
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Adds multiple [TabData].
@@ -141,6 +154,10 @@ class TabbedViewController extends ChangeNotifier {
     }
     _updateIndexes(false);
     _afterIncTabs();
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Adds a [TabData].
@@ -149,6 +166,10 @@ class TabbedViewController extends ChangeNotifier {
     tab.addListener(notifyListeners);
     TabDataHelper.setIndex(tab, _tabs.length - 1);
     _afterIncTabs();
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Method that should be used after adding a tab.

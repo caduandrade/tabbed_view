@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:tabbed_view/src/tabbed_view.dart';
 
 import '../../tab_bar_position.dart';
+import '../../tab_data.dart';
 import '../../tab_status.dart';
 import '../../tabbed_view_controller.dart';
 import '../../theme/tabbed_view_theme_data.dart';
@@ -38,17 +40,18 @@ class _TabsAreaState extends State<TabsArea> {
   }
 
   Widget _builder(BuildContext context, Widget? child) {
-    TabbedViewController controller = widget.provider.controller;
+    final TabbedViewDelegate delegate = widget.provider.delegate;
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
     TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
     List<Widget> children = [];
-    for (int index = 0; index < controller.tabs.length; index++) {
+    for (int index = 0; index < delegate.tabCount; index++) {
       TabStatus status = _getStatusFor(index);
+      final TabData tab = delegate.getTab(index);
       SizeHolder sizeHolder = SizeHolder();
       children.add(TabsAreaLayoutChild(
           sizeHolder: sizeHolder,
           child: TabWidget(
-              key: controller.tabs[index].uniqueKey,
+              key: TabDataHelper.tabKey(tab),
               index: index,
               status: status,
               provider: widget.provider,
@@ -64,7 +67,7 @@ class _TabsAreaState extends State<TabsArea> {
         children: children,
         theme: theme,
         hiddenTabs: _hiddenTabs,
-        selectedTabIndex: controller.selectedIndex);
+        selectedTabIndex: delegate.selectedIndex);
     tabsAreaLayout = ClipRect(child: tabsAreaLayout);
 
     Widget content = tabsAreaLayout;
@@ -114,13 +117,12 @@ class _TabsAreaState extends State<TabsArea> {
 
   /// Gets the status of the tab for a given index.
   TabStatus _getStatusFor(int tabIndex) {
-    TabbedViewController controller = widget.provider.controller;
-    if (controller.tabs.isEmpty || tabIndex >= controller.tabs.length) {
+    final TabbedViewDelegate delegate = widget.provider.delegate;
+    if (delegate.tabCount == 0 || tabIndex >= delegate.tabCount) {
       throw Exception('Invalid tab index: $tabIndex');
     }
 
-    if (controller.selectedIndex != null &&
-        controller.selectedIndex == tabIndex) {
+    if (delegate.selectedIndex != null && delegate.selectedIndex == tabIndex) {
       return TabStatus.selected;
     } else if (_hoveredIndex != null && _hoveredIndex == tabIndex) {
       return TabStatus.hovered;

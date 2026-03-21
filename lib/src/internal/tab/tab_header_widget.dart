@@ -90,7 +90,7 @@ class TabHeaderWidget extends StatelessWidget {
   /// Builds a list with title text and buttons.
   List<Widget> _buildTextAndButtons(BuildContext context) {
     final List<Widget> textAndButtons = [];
-    final TabData tab = provider.controller.tabs[index];
+    final TabData tab = provider.delegate.getTab(index);
 
     final List<TabButton>? buttons = tab.buttonsBuilder?.call(context);
     final Widget? leading = tab.leading?.call(context, status);
@@ -220,15 +220,15 @@ class TabHeaderWidget extends StatelessWidget {
   }
 
   Future<void> _onClose(BuildContext context, int index) async {
-    TabData tabData = provider.controller.getTabByIndex(index);
+    TabData tabData = provider.delegate.getTab(index);
     if (provider.tabRemoveInterceptor == null ||
         (await provider.tabRemoveInterceptor!(context, index, tabData))) {
       onClose();
       // Check if the tab still exists and/or update with new index
       // if another tab has been removed
-      index = provider.controller.tabs.indexOf(tabData);
+      index = provider.delegate.indexOf(tabData);
       if (index != -1) {
-        provider.controller.removeTab(index);
+        provider.delegate.removeTab(index);
       }
     }
   }

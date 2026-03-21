@@ -5,10 +5,10 @@ void main() {
   group('TabbedViewController', () {
     late TabbedViewController controller;
     final tabs = [
-      TabData(text: 'Tab 1', value: 'value1'),
-      TabData(text: 'Tab 2', value: 'value2'),
-      TabData(text: 'Tab 3', value: 'value3', closable: false),
-      TabData(text: 'Tab 4', value: 'value4'),
+      TabData(id: 1, text: 'Tab 1', value: 'value1'),
+      TabData(id: 2, text: 'Tab 2', value: 'value2'),
+      TabData(id: 3, text: 'Tab 3', value: 'value3', closable: false),
+      TabData(id: 4, text: 'Tab 4', value: 'value4'),
     ];
 
     setUp(() {

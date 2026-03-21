@@ -9,6 +9,7 @@ import '../../theme/tabs_area_theme_data.dart';
 import '../../theme/theme_widget.dart';
 import '../tab/tab_button_widget.dart';
 import '../tabbed_view_provider.dart';
+import '../../tabbed_view.dart';
 import 'hidden_tabs.dart';
 
 /// Area for buttons like the hidden tabs menu button.
@@ -24,20 +25,20 @@ class TabsAreaButtonsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
+    final TabbedViewDelegate delegate = provider.delegate;
 
     List<TabButton> buttons = [];
     if (provider.tabsAreaButtonsBuilder != null) {
-      buttons = provider.tabsAreaButtonsBuilder!(
-          context, provider.controller.tabs.length);
+      buttons = provider.tabsAreaButtonsBuilder!(context, delegate.tabCount);
     }
     if (hiddenTabs.hasHiddenTabs) {
       final menuButton = TabButton.menu((context) {
         List<TabbedViewMenuItem> menus = [];
         for (int tabIndex in hiddenTabs.indexes) {
-          final String text = provider.controller.tabs[tabIndex].text;
+          final String text = delegate.getTab(tabIndex).text;
           menus.add(TabbedViewMenuItem(
               text: text,
-              onSelection: () => provider.controller.selectedIndex = tabIndex));
+              onSelection: () => delegate.selectedIndex = tabIndex));
         }
         return menus;
       });

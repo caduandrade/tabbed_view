@@ -10,8 +10,8 @@ void main() {
 
     setUp(() {
       controller = TabbedViewController([
-        TabData(text: 'Tab 1'),
-        TabData(text: 'Tab 2'),
+        TabData(id: 1, text: 'Tab 1'),
+        TabData(id: 2, text: 'Tab 2'),
       ]);
     });
 

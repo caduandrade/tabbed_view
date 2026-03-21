@@ -5,10 +5,10 @@ import 'package:tabbed_view/src/tabbed_view_controller.dart';
 class Helper {
   Helper() {
     controller = TabbedViewController([
-      TabData(text: 'a'),
-      TabData(text: 'b'),
-      TabData(text: 'c'),
-      TabData(text: 'd')
+      TabData(id: 'a', text: 'a'),
+      TabData(id: 'b', text: 'b'),
+      TabData(id: 'c', text: 'c'),
+      TabData(id: 'd', text: 'd')
     ]);
     test(p0: 'a', p1: 'b', p2: 'c', p3: 'd', selected: 'a', reordered: false);
   }

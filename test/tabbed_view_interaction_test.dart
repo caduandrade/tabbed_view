@@ -16,11 +16,11 @@ void main() {
     setUp(() {
       controller = TabbedViewController(
         [
-          TabData(text: 'Tab 1'),
-          TabData(text: 'Tab 2'),
+          TabData(id: 1, text: 'Tab 1'),
+          TabData(id: 2, text: 'Tab 2'),
         ],
         onTabRemove: (tabData) => onTabCloseTabData = tabData,
-        onTabSelection: (selection) => onSelectionTabData = selection?.tabData,
+        onTabSelected: (selection) => onSelectionTabData = selection?.tab,
       );
       onSelectionTabData = null;
       onSecondaryTapTabData = null;

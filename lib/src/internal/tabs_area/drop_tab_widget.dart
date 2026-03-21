@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
-import '../../draggable_data.dart';
+import '../../draggable_tab_data.dart';
 import '../../tab_bar_position.dart';
 import '../../tab_data.dart';
 import '../../theme/tabbed_view_theme_data.dart';
@@ -56,7 +56,7 @@ class DropTabWidgetState extends State<DropTabWidget> {
             });
           }
         },
-        child: DragTarget<DraggableData>(
+        child: DragTarget<DraggableTabData>(
           builder: (
             BuildContext context,
             List<dynamic> accepted,
@@ -123,21 +123,19 @@ class DropTabWidgetState extends State<DropTabWidget> {
             } else if (widget.provider.canDrop == null) {
               _canDrop = true;
             } else {
-              _canDrop = widget.provider.canDrop!(
-                  details.data, widget.provider.controller);
+              _canDrop = widget.provider.canDrop!(details.data);
             }
             return _canDrop;
           },
           onAcceptWithDetails: (details) {
-            final DraggableData data = details.data;
+            final DraggableTabData data = details.data;
             int finalNewIndex = widget.newIndex;
-            final int oldIndex = TabDataHelper.indexFrom(data.tabData);
+            final int oldIndex = TabDataHelper.indexFrom(data.tab);
             if (widget.halfWidthDrop && _dropPosition == _DropPosition.after) {
               finalNewIndex++;
             }
             if (widget.provider.onBeforeDropAccept != null) {
-              if (widget.provider.onBeforeDropAccept!(
-                      data, widget.provider.controller, finalNewIndex) ==
+              if (widget.provider.onBeforeDropAccept!(data, finalNewIndex) ==
                   false) {
                 setState(() {
                   _over = false;
@@ -146,14 +144,16 @@ class DropTabWidgetState extends State<DropTabWidget> {
                 return;
               }
             }
-            if (widget.provider.controller == data.controller) {
+            if (widget.provider.source ==
+                DraggableTabDataHelper.source(draggable: data)) {
               // When moving a tab from a lower index to a higher one, the
               // underlying list length is reduced by one, which requires
               // adjusting the target index.
-              widget.provider.controller.reorderTab(oldIndex, finalNewIndex);
+              widget.provider.delegate.reorderTab(oldIndex, finalNewIndex);
             } else {
-              data.controller.removeTab(TabDataHelper.indexFrom(data.tabData));
-              widget.provider.controller.insertTab(finalNewIndex, data.tabData);
+              DraggableTabDataHelper.delegate(draggable: data)
+                  .removeTab(TabDataHelper.indexFrom(data.tab));
+              widget.provider.delegate.insertTab(finalNewIndex, data.tab);
             }
           },
         ));

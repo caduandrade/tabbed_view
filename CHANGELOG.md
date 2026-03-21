@@ -1,18 +1,23 @@
-## 2.2.0
+## 3.0.0
 
 * `TabDecoration`
   * Added support for custom tab shape.
+
 * `TabbedViewThemeData`
   * Added a new predefined theme: `folder`. 
+
 * `TabThemeData`
   * Added a `maxLines` parameter to allow text wrapping in tab labels, specifically designed to work in conjunction with `maxMainSize` constraints.
+
 * `TabStyleResolver`
   * Added to provides per-tab style overrides on top of a `TabThemeData`.
+  * Added support for changing the tab background color in some predefined themes.
 
 ### Breaking Changes
 
 * `TabDecorationBuilder`
     * The `TabStatus` parameter has been replaced by `TabStyleContext`.
+
 * Per-tab styling overrides have been moved from `TabData` to `TabThemeData`.
   * The following properties were **removed** from `TabData`:
     * `normalStatusTheme`
@@ -27,8 +32,7 @@ Before:
 
 ```dart
   TabData(
-    text: 'MyTab',
-    value: 'myTab',
+    text: 'MyTab',    
     normalStatusTheme: TabStatusThemeData(
       fontColor: Colors.green.shade400,
     ),
@@ -47,7 +51,7 @@ After:
 class MyTabStyleResolver extends TabStyleResolver {
   @override
   Color? fontColor(TabStyleContext context) {
-    if (context.tab.value == 'myTab') {
+    if (context.tab.id == 'myTab') {
       switch (context.status) {
         case TabStatus.selected:
           return Colors.green.shade900;
@@ -65,7 +69,7 @@ class MyTabStyleResolver extends TabStyleResolver {
 
 ```dart
   TabbedViewController controller =
-      TabbedViewController([TabData(text: 'MyTab', value: 'myTab')]);
+      TabbedViewController([TabData(id: 'myTab', text: 'MyTab')]);
 
   TabbedViewTheme(
     data: TabbedViewThemeData.classic(
@@ -75,23 +79,47 @@ class MyTabStyleResolver extends TabStyleResolver {
   );
 ```
 
+
+* `OnDraggableBuild`
+    * Removed `controller` parameter.
+
+* `CanDrop`
+    * Removed `target` parameter.
+
+* `OnBeforeDropAccept`
+    * Removed `target` parameter.
+
 * `OnTabSelection`
-  * Callback signature updated from `(int? tabIndex, TabData? tabData)` to `(TabSelection? selection)`.
+    * Updated callback signature from `(int? tabIndex, TabData? tabData)` to `(TabSelection? selection)`.
+    * Renamed to `OnTabSelected`.
+
+* `TabbedViewController`
+    * Renamed `onTabSelection` property to `onTabSelected`.
+
+* `DraggableData`
+    * Renamed to `DraggableTabData`.
+    * Removed `controller` property.
+    * Renamed `tabData` property to `tab`.
+
+* `TabData`
+    * Added `id` property to uniquely identify tabs.
+    * Hid `key` and `uniqueKey` properties from the public API.
+    * Updated `value` property type from `dynamic` to `Object?`.
 
 
 ## 2.1.0
 
 * `TabData`
-  * Added the `tooltip` attribute.
+  * Added the `tooltip` property.
 
 ## 2.0.0
 
 * `TabbedView`
-  * Removed the `hiddenTabsMenuItemBuilder` attribute.
-  * Removed the `tabSelectInterceptor` attribute.
+  * Removed the `hiddenTabsMenuItemBuilder` property.
+  * Removed the `tabSelectInterceptor` property.
 * `TabbedViewController`
-  * Moved `reorderEnable` attribute to `TabbedView`.
-  * Moved `onReorder` attribute to `TabbedView`.
+  * Moved `reorderEnable` property to `TabbedView`.
+  * Moved `onReorder` property to `TabbedView`.
   * New methods:
     * `selectTab(TabData tab)`
     * `getTabByValue(dynamic value)`
@@ -99,13 +127,13 @@ class MyTabStyleResolver extends TabStyleResolver {
 * `TabStatus`
   * Renamed `highlighted` value to `hovered`.
 * `TabData`
-  * Renamed and refactored `buttons` attribute to `buttonsBuilder` to use the builder pattern.
+  * Renamed and refactored `buttons` property to `buttonsBuilder` to use the builder pattern.
 * `TabButton`
   * The constructor was replaced by two separate constructors: `TabButton.icon` and `TabButton.menu`.
 * `TabRemoveInterceptor`
-  * ̀Added the `BuildContext` attribute.
+  * ̀Added the `BuildContext` parameter.
 * `OnTabSelection`
-  * ̀Added the `tabData` attribute.
+  * ̀Added the `tabData` parameter.
 * Theme
   * Refactored theming system to fully support all tab bar positions (`top`, `bottom`, `left`, `right`).
     * Added `TabBarPosition` enum to represent the bar positions.
@@ -115,41 +143,41 @@ class MyTabStyleResolver extends TabStyleResolver {
   * Added brightness support.
   * The theme data classes are now mutable.
   * `TabbedViewThemeData`
-    * New attributes:
+    * New properties:
       * `divider`: The border that separates the content area from the tab bar.
   * `TabsAreaThemeData`
-    * Renamed `normalButtonColor` attribute to `buttonColor`.
-    * Renamed `hoverButtonColor` attribute to `hoveredButtonColor`.
-    * Renamed `hoverButtonBackground` attribute to `hoveredButtonBackground`.
+    * Renamed `normalButtonColor` property to `buttonColor`.
+    * Renamed `hoverButtonColor` property to `hoveredButtonColor`.
+    * Renamed `hoverButtonBackground` property to `hoveredButtonBackground`.
     * Allowed null `hoveredButtonColor` to inherit default color.
-    * New attributes:
+    * New properties:
       * `crossAxisFit`: Defines how the cross axis will fit within the tabs area.
       * `crossAxisAlignment`: Defines the alignment of tabs in relation to the main content.
       * `tabHeaderExtentSize`: Defines how tab headers are sized relative to each other along their extent.
-    * Removed attributes:
+    * Removed properties:
       * `gapBottomBorder`
       * `gapSideBorder`̀
   * `TabStatusThemeData`
-    * Renamed `normalButtonColor` attribute to `buttonColor`.
-    * Renamed `hoverButtonBackground` attribute to `hoveredButtonBackground`.
+    * Renamed `normalButtonColor` property to `buttonColor`.
+    * Renamed `hoverButtonBackground` property to `hoveredButtonBackground`.
   * `TabThemeData`
-    * Renamed `highlightedStatus` attribute to `hoveredStatus`.
-    * Renamed `normalButtonColor` attribute to `buttonColor`.
-    * Renamed `hoverButtonColor` attribute to `hoveredButtonColor`.
-    * Renamed `hoverButtonBackground` attribute to `hoveredButtonBackground`.
+    * Renamed `highlightedStatus` property to `hoveredStatus`.
+    * Renamed `normalButtonColor` property to `buttonColor`.
+    * Renamed `hoverButtonColor` property to `hoveredButtonColor`.
+    * Renamed `hoverButtonBackground` property to `hoveredButtonBackground`.
     * Allowed null `hoveredButtonColor` to inherit default color.
   * `TabThemeData` and `TabStatusThemeData`
-    * Removed attributes:
+    * Removed properties:
       * `innerBottomBorder`
       * `innerTopBorder`
       * `decoration`
       * `margin`
-    * New attributes:
+    * New properties:
       * `decorationBuilder`: A builder for creating complex and composable tab decorators.
       * `maxMainSize`: The maximum main size of the tab.
       * `sideTabsLayout`: Define how side-positioned tabs (left or right) are laid out.
   * `ContentAreaThemeData`
-    * New attributes:
+    * New properties:
       * `border`: The border around the outer side of the tab content area, excluding the side adjacent to the tabs.
       * `borderRadius`: The radius used to round the corners.  
   * Replaced `HiddenTabsMenuThemeData` with `TabbedViewMenuThemeData`.
@@ -204,7 +232,7 @@ class MyTabStyleResolver extends TabStyleResolver {
   * To: `(TabbedViewController controller, int tabIndex, TabData tabData)`
 * `Draggable` will always be `DraggableData` type: `Draggable<DraggableData>`
 * `TabsAreaThemeData`
-  * New attribute: `dropColor`.
+  * New property: `dropColor`.
 
 ## 1.17.0
 
@@ -214,21 +242,21 @@ class MyTabStyleResolver extends TabStyleResolver {
     * `setTabs`
     * `reorderTab`
     * `selectedTab`
-  * New attribute: `reorderEnable`
+  * New property: `reorderEnable`
 * New callback: `OnReorder` 
 * `TabThemeData`
-  * New attributes
+  * New properties
     * `draggingDecoration`
     * `draggingOpacity`
 * `TabData`
-  * New attribute: `draggable`
+  * New property: `draggable`
 * New class: `DraggableConfig`
 * New typedef: `OnDraggableBuild`
 * `TabbedView`
   * The `draggableTabBuilder` has been replaced by `onDraggableBuild`
     * Automatic creation of a `Draggable<TabData>`
 * `TabData`
-  * The `uniqueKey` attribute has been renamed to `key`.
+  * The `uniqueKey` property has been renamed to `key`.
 * Minimum sdk version required: 2.19.0
 
 ### Migrating custom drag feedback
@@ -302,7 +330,7 @@ To:
 ## 1.12.0
 
 * Adding `getTabByIndex` method in `TabbedViewController`.
-* Allowing update the following `TabData` attributes: `buttons`, `closable`, `content`, `text` and `value`.
+* Allowing update the following `TabData` properties: `buttons`, `closable`, `content`, `text` and `value`.
 
 ## 1.11.1
 
@@ -352,15 +380,15 @@ To:
 * `iconSize` setting in `TabButton`
 * API changes
   * `minimalIconSize` and `defaultIconSize` constants moved from `TabbedViewThemeData` to `TabbedViewThemeConstants`
-  * `ButtonsAreaThemeData` attributes moved to `TabsAreaThemeData`
+  * `ButtonsAreaThemeData` properties moved to `TabsAreaThemeData`
   * `TabButton`
     * `icon` parameter renamed to `iconData`
   * `TabsAreaThemeData`
     * `closeButtonIcon` renamed to `closeIconData`
     * `hiddenTabsMenuButtonIcon` renamed to `menuIconData`
-    * `tab` attribute moved to `TabbedViewThemeData`
-    * `closeIconData` attribute moved to `TabThemeData`
-    * `closeIconPath` attribute moved to `TabThemeData`
+    * `tab` property moved to `TabbedViewThemeData`
+    * `closeIconData` property moved to `TabThemeData`
+    * `closeIconPath` property moved to `TabThemeData`
 
 ## 1.7.0
 

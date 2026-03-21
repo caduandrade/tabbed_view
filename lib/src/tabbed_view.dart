@@ -1,13 +1,16 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 import 'internal/content_area.dart';
 import 'internal/tabbed_view_provider.dart';
+import 'internal/tabbed_view_source.dart';
 import 'internal/tabs_area/tabs_area.dart';
 import 'tab_bar_position.dart';
 import 'tabbed_view_controller.dart';
 import 'theme/tabbed_view_theme_data.dart';
+import 'tab_data.dart';
 import 'theme/theme_widget.dart';
 import 'typedefs/can_drop.dart';
 import 'typedefs/on_before_drop_accept.dart';
@@ -24,35 +27,73 @@ import 'unselected_tab_buttons_behavior.dart';
 /// Parameters:
 /// * [closeButtonTooltip]: optional tooltip for the close button.
 class TabbedView extends StatefulWidget {
-  TabbedView({
+  static const bool _defaultTabReorderEnabled = true;
+  static const UnselectedTabButtonsBehavior _defaultUnselectedBehavior =
+      UnselectedTabButtonsBehavior.allDisabled;
+  static const bool _defaultContentClip = true;
+
+  TabbedView._({
+    required this.delegate,
     required this.controller,
-    this.contentBuilder,
-    this.tabReorderEnabled = true,
-    this.onTabSecondaryTap,
-    this.unselectedTabButtonsBehavior =
-        UnselectedTabButtonsBehavior.allDisabled,
-    this.contentClip = true,
-    this.closeButtonTooltip,
-    this.tabsAreaButtonsBuilder,
-    this.tabsAreaVisible,
-    this.onDraggableBuild,
-    this.canDrop,
-    this.onBeforeDropAccept,
-    this.dragScope,
-    this.tabRemoveInterceptor,
-    this.trailing,
+    required this.contentBuilder,
+    required this.tabReorderEnabled,
+    required this.onTabSecondaryTap,
+    required this.unselectedTabButtonsBehavior,
+    required this.contentClip,
+    required this.closeButtonTooltip,
+    required this.tabsAreaButtonsBuilder,
+    required this.tabsAreaVisible,
+    required this.onDraggableBuild,
+    required this.canDrop,
+    required this.onBeforeDropAccept,
+    required this.dragScope,
+    required this.tabRemoveInterceptor,
+    required this.trailing,
   });
 
+  factory TabbedView({
+    required TabbedViewController controller,
+    IndexedWidgetBuilder? contentBuilder,
+    bool? tabReorderEnabled,
+    OnTabSecondaryTap? onTabSecondaryTap,
+    UnselectedTabButtonsBehavior? unselectedTabButtonsBehavior,
+    bool? contentClip,
+    String? closeButtonTooltip,
+    TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
+    bool? tabsAreaVisible,
+    OnDraggableBuild? onDraggableBuild,
+    CanDrop? canDrop,
+    OnBeforeDropAccept? onBeforeDropAccept,
+    String? dragScope,
+    TabRemoveInterceptor? tabRemoveInterceptor,
+    Widget? trailing,
+  }) {
+    return TabbedView._(
+      delegate: _ImperativeTabbedViewDelegate(controller: controller),
+      controller: controller,
+      contentBuilder: contentBuilder,
+      tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
+      onTabSecondaryTap: onTabSecondaryTap,
+      unselectedTabButtonsBehavior:
+          unselectedTabButtonsBehavior ?? _defaultUnselectedBehavior,
+      contentClip: contentClip ?? _defaultContentClip,
+      closeButtonTooltip: closeButtonTooltip,
+      tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
+      tabsAreaVisible: tabsAreaVisible,
+      onDraggableBuild: onDraggableBuild,
+      canDrop: canDrop,
+      onBeforeDropAccept: onBeforeDropAccept,
+      dragScope: dragScope,
+      tabRemoveInterceptor: tabRemoveInterceptor,
+      trailing: trailing,
+    );
+  }
+
+  final TabbedViewDelegate delegate;
   final TabbedViewController controller;
   final bool contentClip;
   final IndexedWidgetBuilder? contentBuilder;
-
-  /// Whether tab reordering via drag-and-drop is enabled in the UI.
-  ///
-  /// This flag controls **user interactions only**. It does **not** affect
-  /// programmatic reordering through [TabbedViewController.reorderTab].
   final bool tabReorderEnabled;
-
   final TabRemoveInterceptor? tabRemoveInterceptor;
   final OnTabSecondaryTap? onTabSecondaryTap;
   final UnselectedTabButtonsBehavior unselectedTabButtonsBehavior;
@@ -69,8 +110,73 @@ class TabbedView extends StatefulWidget {
   State<StatefulWidget> createState() => _TabbedViewState();
 }
 
+@internal
+abstract class TabbedViewDelegate {
+  //TODO tentar simplificar para:
+  //tabs
+  //selectedTab
+  //onTabSelected
+  //onTabClosed
+  //onTabMoved
+
+  /// Inserts [TabData] at position [index] in the [tabs].
+  ///
+  /// The [index] value must be non-negative and no greater than [tabs.length].
+  void insertTab(int index, TabData tab);
+
+  /// Removes a tab.
+  void removeTab(int index);
+
+  /// Reorders a tab.
+  bool reorderTab(int oldIndex, int newIndex);
+
+  TabData getTab(int index);
+
+  int indexOf(TabData tab);
+
+  int get tabCount;
+
+  int? get selectedIndex;
+
+  void set selectedIndex(int? value);
+}
+
+class _ImperativeTabbedViewDelegate extends TabbedViewDelegate {
+  _ImperativeTabbedViewDelegate({required this.controller});
+
+  final TabbedViewController controller;
+
+  @override
+  void insertTab(int index, TabData tab) => controller.insertTab(index, tab);
+
+  @override
+  void removeTab(int tabIndex) => controller.removeTab(tabIndex);
+
+  @override
+  bool reorderTab(int oldIndex, int newIndex) =>
+      controller.reorderTab(oldIndex, newIndex);
+
+  @override
+  TabData getTab(int index) => controller.tabs[index];
+
+  @override
+  int get tabCount => controller.tabs.length;
+
+  @override
+  int? get selectedIndex => controller.selectedIndex;
+
+  @override
+  set selectedIndex(int? value) => controller.selectedIndex = value;
+
+  @override
+  int indexOf(TabData tab) => controller.tabs.indexOf(tab);
+}
+
+abstract class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {}
+
 /// The [TabbedView] state.
 class _TabbedViewState extends State<TabbedView> {
+  final TabbedViewSource _source = TabbedViewSource();
   int? _draggingTabIndex;
 
   @override
@@ -93,7 +199,8 @@ class _TabbedViewState extends State<TabbedView> {
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
 
     TabbedViewProvider provider = TabbedViewProvider(
-        controller: widget.controller,
+        delegate: widget.delegate,
+        source: _source,
         contentBuilder: widget.contentBuilder,
         tabReorderEnabled: widget.tabReorderEnabled,
         tabRemoveInterceptor: widget.tabRemoveInterceptor,

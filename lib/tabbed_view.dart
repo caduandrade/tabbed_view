@@ -1,14 +1,14 @@
 library tabbed_view;
 
 export 'src/draggable_config.dart';
-export 'src/draggable_data.dart';
+export 'src/draggable_tab_data.dart' hide DraggableTabDataHelper;
 export 'src/icon_provider.dart';
 export 'src/tab_bar_position.dart';
 export 'src/tab_button.dart';
 export 'src/tab_data.dart' hide TabDataHelper;
 export 'src/tab_leading_builder.dart';
 export 'src/tab_status.dart';
-export 'src/tabbed_view.dart';
+export 'src/tabbed_view.dart' hide TabbedViewDelegate;
 export 'src/tabbed_view_controller.dart';
 export 'src/tabbed_view_icons.dart';
 export 'src/tabbed_view_menu_builder.dart';
@@ -34,7 +34,7 @@ export 'src/typedefs/on_draggable_build.dart';
 export 'src/typedefs/on_tab_remove.dart';
 export 'src/typedefs/on_tab_reorder.dart';
 export 'src/typedefs/on_tab_secondary_tap.dart';
-export 'src/typedefs/on_tab_selection.dart';
+export 'src/typedefs/on_tab_selected.dart';
 export 'src/typedefs/tab_buttons_builder.dart';
 export 'src/typedefs/tab_remove_interceptor.dart';
 export 'src/typedefs/tabs_area_buttons_builder.dart';
