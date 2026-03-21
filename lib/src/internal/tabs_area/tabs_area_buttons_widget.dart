@@ -3,13 +3,13 @@ import 'package:meta/meta.dart';
 
 import '../../tab_bar_position.dart';
 import '../../tab_button.dart';
+import '../../tabbed_view.dart';
 import '../../tabbed_view_menu_item.dart';
 import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/tabs_area_theme_data.dart';
 import '../../theme/theme_widget.dart';
 import '../tab/tab_button_widget.dart';
 import '../tabbed_view_provider.dart';
-import '../../tabbed_view.dart';
 import 'hidden_tabs.dart';
 
 /// Area for buttons like the hidden tabs menu button.

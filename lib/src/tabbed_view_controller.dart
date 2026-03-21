@@ -1,12 +1,11 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
 
 import 'tab_data.dart';
 import 'tab_selection.dart';
-import 'typedefs/on_tab_removed.dart';
 import 'typedefs/on_tab_moved.dart';
+import 'typedefs/on_tab_removed.dart';
 import 'typedefs/on_tab_selected.dart';
 
 /// The [TabbedView] controller.

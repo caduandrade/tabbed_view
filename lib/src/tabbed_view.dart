@@ -2,21 +2,23 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'typedefs/on_tab_close.dart';
+
 import 'internal/content_area.dart';
 import 'internal/tabbed_view_provider.dart';
 import 'internal/tabbed_view_source.dart';
 import 'internal/tabs_area/tabs_area.dart';
 import 'tab_bar_position.dart';
+import 'tab_data.dart';
 import 'tabbed_view_controller.dart';
 import 'theme/tabbed_view_theme_data.dart';
-import 'tab_data.dart';
 import 'theme/theme_widget.dart';
 import 'typedefs/can_drop.dart';
-import 'typedefs/on_tab_move.dart';
 import 'typedefs/on_before_drop_accept.dart';
 import 'typedefs/on_draggable_build.dart';
+import 'typedefs/on_tab_close.dart';
+import 'typedefs/on_tab_move.dart';
 import 'typedefs/on_tab_secondary_tap.dart';
+import 'typedefs/on_tab_select.dart';
 import 'typedefs/tab_remove_interceptor.dart';
 import 'typedefs/tabs_area_buttons_builder.dart';
 import 'unselected_tab_buttons_behavior.dart';
@@ -191,10 +193,11 @@ class _ImperativeTabbedViewDelegate extends TabbedViewDelegate {
 class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
   _DeclarativeTabbedViewDelegate(
       {required this.tabs,
-        required this.onTabClose, required this.onTabMove});
+        required this.onTabClose, required this.onTabMove, required this.onTabSelect});
 
   final OnTabClose? onTabClose;
   final OnTabMove? onTabMove;
+  final OnTabSelect? onTabSelect;
 
   @override
   final List<TabData> tabs;

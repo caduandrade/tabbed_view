@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../tab_bar_position.dart';
 import '../../tab_status.dart';
-import '../tab_header_extent_behavior.dart';
 import '../tab_decoration_builder.dart';
+import '../tab_header_extent_behavior.dart';
 import '../tab_style_context.dart';
 import '../tab_style_resolver.dart';
 import '../tabbed_view_theme_data.dart';

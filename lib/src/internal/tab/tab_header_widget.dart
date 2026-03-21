@@ -14,8 +14,8 @@ import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/theme_widget.dart';
 import '../../theme/vertical_alignment.dart';
 import '../../unselected_tab_buttons_behavior.dart';
-import 'tab_button_widget.dart';
 import '../tabbed_view_provider.dart';
+import 'tab_button_widget.dart';
 
 @internal
 class TabHeaderWidget extends StatelessWidget {

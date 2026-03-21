@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
-import 'typedefs/tab_buttons_builder.dart';
 import 'tab_leading_builder.dart';
+import 'typedefs/tab_buttons_builder.dart';
 
 /// The tab data.
 ///
