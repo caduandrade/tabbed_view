@@ -126,10 +126,6 @@ abstract class TabbedViewDelegate {
 
   void selectTab({required TabData tab});
 
-/////
-  /////
-  //////
-
   int? get selectedIndex;
 }
 
@@ -183,36 +179,39 @@ class _ImperativeTabbedViewDelegate extends TabbedViewDelegate {
     }
   }
 
-  //////
-  /////
-  /////
-
   @override
   int? get selectedIndex => controller.selectedIndex;
 }
 
+/// The [tabs] collection must be treated as immutable.
+///
+/// Any change to the tab list must trigger a rebuild of [TabbedView].
+/// Mutating the collection without rebuilding may lead to inconsistent state.
 class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
   _DeclarativeTabbedViewDelegate(
       {required this.tabs,
+      required Object? selectedTabId,
       required this.onTabClose,
       required this.onTabMove,
-      required this.onTabSelect});
-
-  final OnTabClose? onTabClose;
-  final OnTabMove? onTabMove;
-  final OnTabSelect? onTabSelect;
+      required this.onTabSelect}) {
+    selectedIndex = selectedTabId == null
+        ? null
+        : tabs.indexWhere((tab) => tab.id == selectedTabId);
+  }
 
   @override
   final List<TabData> tabs;
+  final OnTabClose? onTabClose;
+  final OnTabMove? onTabMove;
+  final OnTabSelect? onTabSelect;
 
   @override
   void selectTab({required TabData tab}) {
     onTabSelect?.call(tab.id);
   }
 
-  //TODO fazer
   @override
-  int? get selectedIndex => -1;
+  late final int? selectedIndex;
 
   @override
   void closeTab({required TabData tab}) {
