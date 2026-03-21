@@ -29,13 +29,13 @@ class TabsAreaButtonsWidget extends StatelessWidget {
 
     List<TabButton> buttons = [];
     if (provider.tabsAreaButtonsBuilder != null) {
-      buttons = provider.tabsAreaButtonsBuilder!(context, delegate.tabCount);
+      buttons = provider.tabsAreaButtonsBuilder!(context, delegate.tabs.length);
     }
     if (hiddenTabs.hasHiddenTabs) {
       final menuButton = TabButton.menu((context) {
         List<TabbedViewMenuItem> menus = [];
         for (int tabIndex in hiddenTabs.indexes) {
-          final String text = delegate.getTab(tabIndex).text;
+          final String text = delegate.tabs[tabIndex].text;
           menus.add(TabbedViewMenuItem(
               text: text,
               onSelection: () => delegate.selectedIndex = tabIndex));

@@ -43,7 +43,7 @@ class TabWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TabData tab = provider.delegate.getTab(index);
+    final TabData tab = provider.delegate.tabs[index];
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabThemeData tabTheme = theme.tab;
 
@@ -51,7 +51,7 @@ class TabWidget extends StatelessWidget {
       tab: tab,
       status: status,
       index: index,
-      tabsCount: provider.delegate.tabCount,
+      tabsCount: provider.delegate.tabs.length,
     );
 
     Widget widget = TabHeaderWidget(
@@ -139,7 +139,7 @@ class TabWidget extends StatelessWidget {
                 onTap: () => provider.delegate.selectedIndex = index,
                 onSecondaryTapDown: (details) {
                   if (provider.onTabSecondaryTap != null) {
-                    TabData tab = provider.delegate.getTab(index);
+                    TabData tab = provider.delegate.tabs[index];
                     provider.onTabSecondaryTap!(index, tab, details);
                   }
                 },

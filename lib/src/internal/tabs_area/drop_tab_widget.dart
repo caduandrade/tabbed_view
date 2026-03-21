@@ -131,19 +131,18 @@ class DropTabWidgetState extends State<DropTabWidget> {
           onAcceptWithDetails: (details) {
             final DraggableTabData data = details.data;
             TabData? targetTab;
-            if (widget.tabIndex < widget.provider.delegate.tabCount) {
-              targetTab = widget.provider.delegate.getTab(widget.tabIndex);
+            if (widget.tabIndex < widget.provider.delegate.tabs.length) {
+              targetTab = widget.provider.delegate.tabs[widget.tabIndex];
             }
             int finalNewIndex = widget.tabIndex;
             if (widget.halfWidthDrop && _dropPosition == _DropPosition.after) {
               finalNewIndex++;
-              if (widget.tabIndex == widget.provider.delegate.tabCount - 1) {
+              if (widget.tabIndex == widget.provider.delegate.tabs.length - 1) {
                 // Current drop is the last. Send to the end.
                 targetTab = null;
               } else if (widget.tabIndex + 1 <
-                  widget.provider.delegate.tabCount) {
-                targetTab =
-                    widget.provider.delegate.getTab(widget.tabIndex + 1);
+                  widget.provider.delegate.tabs.length) {
+                targetTab = widget.provider.delegate.tabs[widget.tabIndex + 1];
               }
             }
             if (widget.provider.onBeforeDropAccept != null) {

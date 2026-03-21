@@ -90,7 +90,7 @@ class TabHeaderWidget extends StatelessWidget {
   /// Builds a list with title text and buttons.
   List<Widget> _buildTextAndButtons(BuildContext context) {
     final List<Widget> textAndButtons = [];
-    final TabData tab = provider.delegate.getTab(index);
+    final TabData tab = provider.delegate.tabs[index];
 
     final List<TabButton>? buttons = tab.buttonsBuilder?.call(context);
     final Widget? leading = tab.leading?.call(context, status);
@@ -220,7 +220,7 @@ class TabHeaderWidget extends StatelessWidget {
   }
 
   Future<void> _onClose(BuildContext context, int index) async {
-    final TabData tab = provider.delegate.getTab(index);
+    final TabData tab = provider.delegate.tabs[index];
     if (provider.tabRemoveInterceptor == null ||
         (await provider.tabRemoveInterceptor!(context, index, tab))) {
       onClose();

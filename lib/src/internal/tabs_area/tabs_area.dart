@@ -5,7 +5,6 @@ import 'package:tabbed_view/src/tabbed_view.dart';
 import '../../tab_bar_position.dart';
 import '../../tab_data.dart';
 import '../../tab_status.dart';
-import '../../tabbed_view_controller.dart';
 import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/tabs_area_theme_data.dart';
 import '../../theme/theme_widget.dart';
@@ -44,9 +43,9 @@ class _TabsAreaState extends State<TabsArea> {
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
     TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
     List<Widget> children = [];
-    for (int index = 0; index < delegate.tabCount; index++) {
+    for (int index = 0; index < delegate.tabs.length; index++) {
       TabStatus status = _getStatusFor(index);
-      final TabData tab = delegate.getTab(index);
+      final TabData tab = delegate.tabs[index];
       SizeHolder sizeHolder = SizeHolder();
       children.add(TabsAreaLayoutChild(
           sizeHolder: sizeHolder,
@@ -118,7 +117,7 @@ class _TabsAreaState extends State<TabsArea> {
   /// Gets the status of the tab for a given index.
   TabStatus _getStatusFor(int tabIndex) {
     final TabbedViewDelegate delegate = widget.provider.delegate;
-    if (delegate.tabCount == 0 || tabIndex >= delegate.tabCount) {
+    if (delegate.tabs.length == 0 || tabIndex >= delegate.tabs.length) {
       throw Exception('Invalid tab index: $tabIndex');
     }
 

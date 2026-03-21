@@ -25,8 +25,8 @@ class ContentArea extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
       List<Widget> children = [];
 
-      for (int i = 0; i < delegate.tabCount; i++) {
-        TabData tab = delegate.getTab(i);
+      for (int i = 0; i < delegate.tabs.length; i++) {
+        TabData tab = delegate.tabs[i];
         bool selectedTab =
             delegate.selectedIndex != null && i == delegate.selectedIndex;
         if (tab.keepAlive || selectedTab) {
@@ -90,8 +90,8 @@ class ContentArea extends StatelessWidget {
 
   Border _buildBorder({required TabbedViewThemeData theme}) {
     final bool needDividerBorderSide = !theme.isDividerWithinTabArea &&
-        ((provider.delegate.tabCount == 0 && theme.alwaysShowDivider) ||
-            (provider.delegate.tabCount > 0));
+        ((provider.delegate.tabs.length == 0 && theme.alwaysShowDivider) ||
+            (provider.delegate.tabs.length > 0));
     final BorderSide divider = needDividerBorderSide
         ? theme.divider ?? BorderSide.none
         : BorderSide.none;

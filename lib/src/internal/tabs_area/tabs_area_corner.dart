@@ -68,7 +68,7 @@ class TabsAreaCorner extends StatelessWidget {
     if (provider.tabReorderEnabled) {
       return DropTabWidget(
           provider: provider,
-          tabIndex: provider.delegate.tabCount,
+          tabIndex: provider.delegate.tabs.length,
           child: corner,
           halfWidthDrop: false);
     }
