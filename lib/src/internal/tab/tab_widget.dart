@@ -136,7 +136,10 @@ class TabWidget extends StatelessWidget {
         onExit: (event) => updateHoveredIndex(null),
         child: provider.draggingTabIndex == null
             ? GestureDetector(
-                onTap: () => provider.delegate.selectedIndex = index,
+                onTap: () {
+                  final TabData tab = provider.delegate.tabs[index];
+                  provider.delegate.selectTab(tab: tab);
+                },
                 onSecondaryTapDown: (details) {
                   if (provider.onTabSecondaryTap != null) {
                     TabData tab = provider.delegate.tabs[index];

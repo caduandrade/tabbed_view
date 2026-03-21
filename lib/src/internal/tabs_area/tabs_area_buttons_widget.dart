@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 import '../../tab_bar_position.dart';
 import '../../tab_button.dart';
+import '../../tab_data.dart';
 import '../../tabbed_view.dart';
 import '../../tabbed_view_menu_item.dart';
 import '../../theme/tabbed_view_theme_data.dart';
@@ -35,10 +36,11 @@ class TabsAreaButtonsWidget extends StatelessWidget {
       final menuButton = TabButton.menu((context) {
         List<TabbedViewMenuItem> menus = [];
         for (int tabIndex in hiddenTabs.indexes) {
-          final String text = delegate.tabs[tabIndex].text;
+          final TabData tab = delegate.tabs[tabIndex];
+          final String text = tab.text;
           menus.add(TabbedViewMenuItem(
               text: text,
-              onSelection: () => delegate.selectedIndex = tabIndex));
+              onSelection: () => provider.delegate.selectTab(tab: tab)));
         }
         return menus;
       });

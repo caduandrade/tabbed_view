@@ -124,13 +124,13 @@ abstract class TabbedViewDelegate {
 
   List<TabData> get tabs;
 
+  void selectTab({required TabData tab});
+
 /////
   /////
   //////
 
   int? get selectedIndex;
-
-  void set selectedIndex(int? value);
 }
 
 class _ImperativeTabbedViewDelegate extends TabbedViewDelegate {
@@ -175,25 +175,28 @@ class _ImperativeTabbedViewDelegate extends TabbedViewDelegate {
     }
   }
 
+  @override
+  void selectTab({required TabData tab}) {
+    final int? index = _indexFromId(tab.id);
+    if (index != null) {
+      controller.selectedIndex = index;
+    }
+  }
+
   //////
   /////
   /////
 
-
-
   @override
   int? get selectedIndex => controller.selectedIndex;
-
-  @override
-  set selectedIndex(int? value) => controller.selectedIndex = value;
-
-
 }
 
 class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
   _DeclarativeTabbedViewDelegate(
       {required this.tabs,
-        required this.onTabClose, required this.onTabMove, required this.onTabSelect});
+      required this.onTabClose,
+      required this.onTabMove,
+      required this.onTabSelect});
 
   final OnTabClose? onTabClose;
   final OnTabMove? onTabMove;
@@ -202,20 +205,19 @@ class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
   @override
   final List<TabData> tabs;
 
+  @override
+  void selectTab({required TabData tab}) {
+    onTabSelect?.call(tab.id);
+  }
+
   //TODO fazer
   @override
   int? get selectedIndex => -1;
 
   @override
-  set selectedIndex(int? value) {
-    // TODO: implement selectedIndex
-  }
-
-  @override
   void closeTab({required TabData tab}) {
     onTabClose?.call(tab.id);
   }
-
 
   @override
   void moveTab(
@@ -224,7 +226,6 @@ class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
       required TabData? targetTab}) {
     onTabMove?.call(sourceTab.id, type, targetTab?.id);
   }
-
 }
 
 /// The [TabbedView] state.
