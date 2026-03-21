@@ -97,7 +97,7 @@ class MyTabStyleResolver extends TabStyleResolver {
   * Renamed to `OnTabRemoved`.
 
 * `OnTabReorder`
-    * Renamed to `OnTabReordered`.
+    * Renamed to `OnTabMoved`.
 
 * `TabbedViewController`
     * Renamed `onTabSelection` property to `onTabSelected`.

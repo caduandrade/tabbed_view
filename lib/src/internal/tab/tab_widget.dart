@@ -208,7 +208,7 @@ class TabWidget extends StatelessWidget {
         provider.draggingTabIndex != TabDataHelper.indexFrom(tab)) {
       return DropTabWidget(
           provider: provider,
-          newIndex: TabDataHelper.indexFrom(tab),
+          tabIndex: TabDataHelper.indexFrom(tab),
           child: widget,
           halfWidthDrop: true);
     }

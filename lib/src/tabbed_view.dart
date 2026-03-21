@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-
+import 'typedefs/on_tab_close.dart';
 import 'internal/content_area.dart';
 import 'internal/tabbed_view_provider.dart';
 import 'internal/tabbed_view_source.dart';
@@ -13,6 +13,7 @@ import 'theme/tabbed_view_theme_data.dart';
 import 'tab_data.dart';
 import 'theme/theme_widget.dart';
 import 'typedefs/can_drop.dart';
+import 'typedefs/on_tab_move.dart';
 import 'typedefs/on_before_drop_accept.dart';
 import 'typedefs/on_draggable_build.dart';
 import 'typedefs/on_tab_secondary_tap.dart';
@@ -112,27 +113,18 @@ class TabbedView extends StatefulWidget {
 
 @internal
 abstract class TabbedViewDelegate {
-  //TODO tentar simplificar para:
-  //tabs
-  //selectedTab
-  //onTabSelected
-  //onTabClosed
-  //onTabMoved
+  void closeTab({required TabData tab});
 
-  /// Inserts [TabData] at position [index] in the [tabs].
-  ///
-  /// The [index] value must be non-negative and no greater than [tabs.length].
-  void insertTab(int index, TabData tab);
+  void moveTab(
+      {required TabData sourceTab,
+      required TabMoveType type,
+      required TabData? targetTab});
 
-  /// Removes a tab.
-  void removeTab(int index);
-
-  /// Reorders a tab.
-  bool reorderTab(int oldIndex, int newIndex);
+/////
+  /////
+  //////
 
   TabData getTab(int index);
-
-  int indexOf(TabData tab);
 
   int get tabCount;
 
@@ -146,15 +138,43 @@ class _ImperativeTabbedViewDelegate extends TabbedViewDelegate {
 
   final TabbedViewController controller;
 
-  @override
-  void insertTab(int index, TabData tab) => controller.insertTab(index, tab);
+  int? _indexFromId(Object tabId) {
+    int index = controller.tabs.indexWhere((tab) => tab.id == tabId);
+    return index > -1 ? index : null;
+  }
 
   @override
-  void removeTab(int tabIndex) => controller.removeTab(tabIndex);
+  void closeTab({required TabData tab}) {
+    final int? index = _indexFromId(tab.id);
+    if (index != null) {
+      controller.removeTab(index);
+    }
+  }
 
   @override
-  bool reorderTab(int oldIndex, int newIndex) =>
-      controller.reorderTab(oldIndex, newIndex);
+  void moveTab(
+      {required TabData sourceTab,
+      required TabMoveType type,
+      required TabData? targetTab}) {
+    final int? sourceIndex = _indexFromId(sourceTab.id);
+    final int? targetIndex =
+        targetTab != null ? _indexFromId(targetTab.id) : null;
+    if (type == TabMoveType.reorder && sourceIndex != null) {
+      controller.reorderTab(sourceIndex, targetIndex ?? controller.length);
+    } else if (type == TabMoveType.attach) {
+      if (targetIndex == null) {
+        controller.insertTab(controller.length, sourceTab);
+      } else {
+        controller.insertTab(targetIndex, sourceTab);
+      }
+    } else if (type == TabMoveType.detach && sourceIndex != null) {
+      controller.removeTab(sourceIndex);
+    }
+  }
+
+  //////
+  /////
+  /////
 
   @override
   TabData getTab(int index) => controller.tabs[index];
@@ -167,12 +187,47 @@ class _ImperativeTabbedViewDelegate extends TabbedViewDelegate {
 
   @override
   set selectedIndex(int? value) => controller.selectedIndex = value;
-
-  @override
-  int indexOf(TabData tab) => controller.tabs.indexOf(tab);
 }
 
-abstract class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {}
+class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
+  _DeclarativeTabbedViewDelegate(
+      {required this.onTabClose, required this.onTabMove});
+
+  final OnTabClose? onTabClose;
+  final OnTabMove? onTabMove;
+
+  //TODO fazer
+  @override
+  int? get selectedIndex => -1;
+
+  @override
+  set selectedIndex(int? value) {
+    // TODO: implement selectedIndex
+  }
+
+  @override
+  void closeTab({required TabData tab}) {
+    onTabClose?.call(tab.id);
+  }
+
+  @override
+  TabData getTab(int index) {
+    // TODO: implement getTab
+    throw UnimplementedError();
+  }
+
+  @override
+  void moveTab(
+      {required TabData sourceTab,
+      required TabMoveType type,
+      required TabData? targetTab}) {
+    onTabMove?.call(sourceTab.id, type, targetTab?.id);
+  }
+
+  @override
+  // TODO: implement tabCount
+  int get tabCount => throw UnimplementedError();
+}
 
 /// The [TabbedView] state.
 class _TabbedViewState extends State<TabbedView> {

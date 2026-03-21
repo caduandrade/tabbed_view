@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:tabbed_view/src/typedefs/on_tab_move.dart';
 
 import '../../draggable_tab_data.dart';
 import '../../tab_bar_position.dart';
@@ -13,13 +14,13 @@ class DropTabWidget extends StatefulWidget {
   const DropTabWidget(
       {super.key,
       required this.provider,
-      required this.newIndex,
+      required this.tabIndex,
       required this.child,
       this.halfWidthDrop = true});
 
   final TabbedViewProvider provider;
   final Widget child;
-  final int newIndex;
+  final int tabIndex;
   final bool halfWidthDrop;
 
   static const double dropWidth = 8;
@@ -81,14 +82,14 @@ class DropTabWidgetState extends State<DropTabWidget> {
               // Dynamically adjust the drop zone based on drag direction.
               double ratio = 0.5;
 
-              int? fromIndex = widget.provider.draggingTabIndex;
+              final int? sourceIndex = widget.provider.draggingTabIndex;
               // Checking if the drag is happening inside the same tabbed_view.
-              if (fromIndex != null) {
-                int toIndex = widget.newIndex;
-                if (fromIndex > toIndex) {
+              if (sourceIndex != null) {
+                final int targetIndex = widget.tabIndex;
+                if (sourceIndex > targetIndex) {
                   // Dragging from right to left, make "before" zone larger.
                   ratio = 0.75;
-                } else if (fromIndex < toIndex) {
+                } else if (sourceIndex < targetIndex) {
                   // Dragging from left to right, make "after" zone larger.
                   ratio = 0.25;
                 }
@@ -129,10 +130,21 @@ class DropTabWidgetState extends State<DropTabWidget> {
           },
           onAcceptWithDetails: (details) {
             final DraggableTabData data = details.data;
-            int finalNewIndex = widget.newIndex;
-            final int oldIndex = TabDataHelper.indexFrom(data.tab);
+            TabData? targetTab;
+            if (widget.tabIndex < widget.provider.delegate.tabCount) {
+              targetTab = widget.provider.delegate.getTab(widget.tabIndex);
+            }
+            int finalNewIndex = widget.tabIndex;
             if (widget.halfWidthDrop && _dropPosition == _DropPosition.after) {
               finalNewIndex++;
+              if (widget.tabIndex == widget.provider.delegate.tabCount - 1) {
+                // Current drop is the last. Send to the end.
+                targetTab = null;
+              } else if (widget.tabIndex + 1 <
+                  widget.provider.delegate.tabCount) {
+                targetTab =
+                    widget.provider.delegate.getTab(widget.tabIndex + 1);
+              }
             }
             if (widget.provider.onBeforeDropAccept != null) {
               if (widget.provider.onBeforeDropAccept!(data, finalNewIndex) ==
@@ -146,14 +158,19 @@ class DropTabWidgetState extends State<DropTabWidget> {
             }
             if (widget.provider.source ==
                 DraggableTabDataHelper.source(draggable: data)) {
-              // When moving a tab from a lower index to a higher one, the
-              // underlying list length is reduced by one, which requires
-              // adjusting the target index.
-              widget.provider.delegate.reorderTab(oldIndex, finalNewIndex);
+              widget.provider.delegate.moveTab(
+                  sourceTab: data.tab,
+                  type: TabMoveType.reorder,
+                  targetTab: targetTab);
             } else {
-              DraggableTabDataHelper.delegate(draggable: data)
-                  .removeTab(TabDataHelper.indexFrom(data.tab));
-              widget.provider.delegate.insertTab(finalNewIndex, data.tab);
+              DraggableTabDataHelper.delegate(draggable: data).moveTab(
+                  sourceTab: data.tab,
+                  type: TabMoveType.detach,
+                  targetTab: null);
+              widget.provider.delegate.moveTab(
+                  sourceTab: data.tab,
+                  type: TabMoveType.attach,
+                  targetTab: targetTab);
             }
           },
         ));

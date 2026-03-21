@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'tab_data.dart';
 import 'tab_selection.dart';
 import 'typedefs/on_tab_removed.dart';
-import 'typedefs/on_tab_reordered.dart';
+import 'typedefs/on_tab_moved.dart';
 import 'typedefs/on_tab_selected.dart';
 
 /// The [TabbedView] controller.
@@ -36,7 +36,7 @@ class TabbedViewController extends ChangeNotifier {
   OnTabRemoved? onTabRemoved;
 
   /// Callback triggered when a tab is reordered.
-  OnTabReordered? onTabReordered;
+  OnTabMoved? onTabReordered;
   OnTabSelected? onTabSelected;
 
   final List<TabData> _tabs;

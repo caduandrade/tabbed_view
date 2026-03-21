@@ -220,16 +220,12 @@ class TabHeaderWidget extends StatelessWidget {
   }
 
   Future<void> _onClose(BuildContext context, int index) async {
-    TabData tabData = provider.delegate.getTab(index);
+    final TabData tab = provider.delegate.getTab(index);
     if (provider.tabRemoveInterceptor == null ||
-        (await provider.tabRemoveInterceptor!(context, index, tabData))) {
+        (await provider.tabRemoveInterceptor!(context, index, tab))) {
       onClose();
-      // Check if the tab still exists and/or update with new index
-      // if another tab has been removed
-      index = provider.delegate.indexOf(tabData);
-      if (index != -1) {
-        provider.delegate.removeTab(index);
-      }
+      // Because it's asynchronous, the tab might no longer exist at that point.
+      provider.delegate.closeTab(tab: tab);
     }
   }
 }

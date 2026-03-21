@@ -9,4 +9,4 @@
 ///
 /// The [oldIndex] is the previous position of the tab, and [newIndex]
 /// is its new position after the reorder.
-typedef OnTabReordered = void Function(int oldIndex, int newIndex);
+typedef OnTabMoved = void Function(int oldIndex, int newIndex);
