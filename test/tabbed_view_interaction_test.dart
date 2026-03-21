@@ -19,7 +19,7 @@ void main() {
           TabData(id: 1, text: 'Tab 1'),
           TabData(id: 2, text: 'Tab 2'),
         ],
-        onTabRemove: (tabData) => onTabCloseTabData = tabData,
+        onTabRemoved: (tabData) => onTabCloseTabData = tabData,
         onTabSelected: (selection) => onSelectionTabData = selection?.tab,
       );
       onSelectionTabData = null;

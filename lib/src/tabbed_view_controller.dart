@@ -4,8 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import 'tab_data.dart';
-import 'typedefs/on_tab_remove.dart';
-import 'typedefs/on_tab_reorder.dart';
+import 'tab_selection.dart';
+import 'typedefs/on_tab_removed.dart';
+import 'typedefs/on_tab_reordered.dart';
 import 'typedefs/on_tab_selected.dart';
 
 /// The [TabbedView] controller.
@@ -17,7 +18,7 @@ import 'typedefs/on_tab_selected.dart';
 /// Remember to dispose of the [TabbedView] when it is no longer needed. This will ensure we discard any resources used by the object.
 class TabbedViewController extends ChangeNotifier {
   TabbedViewController(this._tabs,
-      {this.data, this.onTabSelected, this.onTabRemove, this.onTabReorder}) {
+      {this.data, this.onTabSelected, this.onTabRemoved, this.onTabReordered}) {
     if (_tabs.isNotEmpty) {
       _selection = TabSelection(tab: _tabs.first, index: 0);
     }
@@ -32,10 +33,10 @@ class TabbedViewController extends ChangeNotifier {
   }
 
   /// Callback triggered when a tab is removed.
-  OnTabRemove? onTabRemove;
+  OnTabRemoved? onTabRemoved;
 
   /// Callback triggered when a tab is reordered.
-  OnTabReorder? onTabReorder;
+  OnTabReordered? onTabReordered;
   OnTabSelected? onTabSelected;
 
   final List<TabData> _tabs;
@@ -111,7 +112,7 @@ class TabbedViewController extends ChangeNotifier {
       _updateSelection(_tabs.indexOf(selectedTab));
     }
     notifyListeners();
-    onTabReorder?.call(oldIndex, newIndex);
+    onTabReordered?.call(oldIndex, newIndex);
     return true;
   }
 
@@ -209,7 +210,7 @@ class TabbedViewController extends ChangeNotifier {
       }
     }
     notifyListeners();
-    onTabRemove?.call(tabData);
+    onTabRemoved?.call(tabData);
     return tabData;
   }
 
@@ -224,7 +225,7 @@ class TabbedViewController extends ChangeNotifier {
     _updateSelection(null);
     notifyListeners();
     for (final tab in removedTabs) {
-      onTabRemove?.call(tab);
+      onTabRemoved?.call(tab);
     }
   }
 

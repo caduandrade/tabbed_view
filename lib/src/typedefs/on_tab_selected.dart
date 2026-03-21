@@ -1,22 +1,15 @@
-import '../tab_data.dart';
+import '../tab_selection.dart';
 
-/// Event that will be triggered when the tab selection is changed.
+/// Called when the effective tab selection has changed.
+///
+/// This callback is triggered after the selection state is updated, regardless
+/// of the cause. This includes:
+///
+/// - User-initiated selection
+/// - Tab removal
+/// - Tab reordering
+/// - Clearing all tabs
+/// - External state updates
+///
+/// The [selection] will be `null` if no tab is currently selected.
 typedef OnTabSelected = void Function(TabSelection? selection);
-
-class TabSelection {
-  const TabSelection({required this.index, required this.tab});
-
-  final int index;
-  final TabData tab;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is TabSelection &&
-          runtimeType == other.runtimeType &&
-          index == other.index &&
-          tab == other.tab;
-
-  @override
-  int get hashCode => Object.hash(index, tab);
-}

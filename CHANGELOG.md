@@ -93,8 +93,16 @@ class MyTabStyleResolver extends TabStyleResolver {
     * Updated callback signature from `(int? tabIndex, TabData? tabData)` to `(TabSelection? selection)`.
     * Renamed to `OnTabSelected`.
 
+* `OnTabRemove`
+  * Renamed to `OnTabRemoved`.
+
+* `OnTabReorder`
+    * Renamed to `OnTabReordered`.
+
 * `TabbedViewController`
     * Renamed `onTabSelection` property to `onTabSelected`.
+    * Renamed `onTabRemove` property to `onTabRemoved`.
+    * Renamed `onTabReorder` property to `onTabReordered`.
 
 * `DraggableData`
     * Renamed to `DraggableTabData`.
