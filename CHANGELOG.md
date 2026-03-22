@@ -1,4 +1,4 @@
-## 3.0.0
+## 3.0.0-rc.1
 
 * `TabDecoration`
   * Added support for custom tab shape.
