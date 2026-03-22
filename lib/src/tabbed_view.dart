@@ -26,9 +26,6 @@ import 'unselected_tab_buttons_behavior.dart';
 /// Widget inspired by the classic Desktop-style tab component.
 ///
 /// Supports customizable themes.
-///
-/// Parameters:
-/// * [closeButtonTooltip]: optional tooltip for the close button.
 class TabbedView extends StatefulWidget {
   static const bool _defaultTabReorderEnabled = true;
   static const UnselectedTabButtonsBehavior _defaultUnselectedBehavior =

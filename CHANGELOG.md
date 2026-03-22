@@ -18,6 +18,40 @@
 * `TabDecorationBuilder`
     * The `TabStatus` parameter has been replaced by `TabStyleContext`.
 
+* `OnDraggableBuild`
+    * Removed `controller` parameter.
+
+* `CanDrop`
+    * Removed `target` parameter.
+
+* `OnBeforeDropAccept`
+    * Removed `target` parameter.
+
+* `OnTabSelection`
+    * Renamed to `OnTabSelected`.
+    * Updated callback signature from `(int? tabIndex, TabData? tabData)` to `(TabSelection? selection)`.    
+
+* `OnTabRemove`
+    * Renamed to `OnTabRemoved`.
+
+* `OnTabReorder`
+    * Renamed to `OnTabMoved`.
+
+* `TabbedViewController`
+    * Renamed `onTabSelection` property to `onTabSelected`.
+    * Renamed `onTabRemove` property to `onTabRemoved`.
+    * Renamed `onTabReorder` property to `onTabReordered`.
+
+* `DraggableData`
+    * Renamed to `DraggableTabData`.
+    * Removed `controller` property.
+    * Renamed `tabData` property to `tab`.
+
+* `TabData`
+    * Added required `id` property to uniquely identify tabs.
+    * Hid `key` and `uniqueKey` properties from the public API.
+    * Updated `value` property type from `dynamic` to `Object?`.
+
 * Per-tab styling overrides have been moved from `TabData` to `TabThemeData`.
   * The following properties were **removed** from `TabData`:
     * `normalStatusTheme`
@@ -78,42 +112,6 @@ class MyTabStyleResolver extends TabStyleResolver {
     child: TabbedView(controller: controller),
   );
 ```
-
-
-* `OnDraggableBuild`
-    * Removed `controller` parameter.
-
-* `CanDrop`
-    * Removed `target` parameter.
-
-* `OnBeforeDropAccept`
-    * Removed `target` parameter.
-
-* `OnTabSelection`
-    * Updated callback signature from `(int? tabIndex, TabData? tabData)` to `(TabSelection? selection)`.
-    * Renamed to `OnTabSelected`.
-
-* `OnTabRemove`
-  * Renamed to `OnTabRemoved`.
-
-* `OnTabReorder`
-    * Renamed to `OnTabMoved`.
-
-* `TabbedViewController`
-    * Renamed `onTabSelection` property to `onTabSelected`.
-    * Renamed `onTabRemove` property to `onTabRemoved`.
-    * Renamed `onTabReorder` property to `onTabReordered`.
-
-* `DraggableData`
-    * Renamed to `DraggableTabData`.
-    * Removed `controller` property.
-    * Renamed `tabData` property to `tab`.
-
-* `TabData`
-    * Added `id` property to uniquely identify tabs.
-    * Hid `key` and `uniqueKey` properties from the public API.
-    * Updated `value` property type from `dynamic` to `Object?`.
-
 
 ## 2.1.0
 
