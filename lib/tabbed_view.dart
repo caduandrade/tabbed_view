@@ -9,7 +9,7 @@ export 'src/tab_data.dart' hide TabDataHelper;
 export 'src/tab_leading_builder.dart';
 export 'src/tab_selection.dart';
 export 'src/tab_status.dart';
-export 'src/tabbed_view.dart' hide TabbedViewDelegate;
+export 'src/tabbed_view.dart';
 export 'src/tabbed_view_controller.dart';
 export 'src/tabbed_view_icons.dart';
 export 'src/tabbed_view_menu_builder.dart';
