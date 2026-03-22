@@ -18,7 +18,7 @@ class TabDragFeedbackWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> children = [];
     if (tab.leading != null) {
-      Widget? leading = tab.leading!(context, TabStatus.normal);
+      Widget? leading = tab.leading!(context, TabStatus.unselected);
       if (leading != null) {
         children.add(leading);
       }

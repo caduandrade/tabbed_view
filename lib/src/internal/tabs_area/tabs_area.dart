@@ -126,7 +126,7 @@ class _TabsAreaState extends State<TabsArea> {
     } else if (_hoveredIndex != null && _hoveredIndex == tabIndex) {
       return TabStatus.hovered;
     }
-    return TabStatus.normal;
+    return TabStatus.unselected;
   }
 
   void _updateHoveredIndex(int? tabIndex) {

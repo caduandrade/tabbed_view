@@ -1,4 +1,4 @@
-## 3.0.0-rc.3
+## 3.0.0-rc.4
 
 * `TabDecoration`
   * Added support for custom tab shape.
@@ -33,6 +33,8 @@
             * `normalStatusTheme`
             * `selectedStatusTheme`
             * `hoveredStatusTheme`
+* `TabStatus`
+    * Renamed `normal` value to `unselected`.
 
 * `TabDecorationBuilder`
     * Replaced `TabStatus` parameter with `TabStyleContext`.

@@ -96,7 +96,7 @@ class MinimalistTheme extends TabbedViewThemeData {
         backgroundColor =
             resolver?.backgroundColor(styleContext) ?? _hoveredBackgroundColor;
         break;
-      case TabStatus.normal:
+      case TabStatus.unselected:
         backgroundColor = resolver?.backgroundColor(styleContext) ??
             _unselectedBackgroundColor;
         break;

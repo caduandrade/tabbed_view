@@ -12,8 +12,8 @@ class TabbedViewTheme extends StatelessWidget {
   /// The [data] and [child] arguments must not be null.
   const TabbedViewTheme({
     Key? key,
-    required this.child,
     required this.data,
+    required this.child,
   }) : super(key: key);
 
   /// Specifies the theme for descendant widgets.

@@ -97,7 +97,7 @@ class UnderlineTheme extends TabbedViewThemeData {
         underlineColor =
             resolver?.underlineColor(styleContext) ?? _hoveredUnderlineColor;
         break;
-      case TabStatus.normal:
+      case TabStatus.unselected:
         underlineColor =
             resolver?.underlineColor(styleContext) ?? Colors.transparent;
         break;
