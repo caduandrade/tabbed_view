@@ -37,7 +37,6 @@ class TabbedView extends StatefulWidget {
 
   TabbedView._({
     required this.delegate,
-    required this.controller,
     required this.contentBuilder,
     required this.tabReorderEnabled,
     required this.onTabSecondaryTap,
@@ -73,7 +72,6 @@ class TabbedView extends StatefulWidget {
   }) {
     return TabbedView._(
       delegate: ImperativeTabbedViewDelegate(controller: controller),
-      controller: controller,
       contentBuilder: contentBuilder,
       tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
       onTabSecondaryTap: onTabSecondaryTap,
@@ -157,7 +155,6 @@ class TabbedView extends StatefulWidget {
     String? dragScope,
     TabRemoveInterceptor? tabRemoveInterceptor,
     Widget? trailing,
-    required TabbedViewController controller,
   }) {
     return TabbedView._(
       delegate: DeclarativeTabbedViewDelegate(
@@ -181,13 +178,10 @@ class TabbedView extends StatefulWidget {
       dragScope: dragScope,
       tabRemoveInterceptor: tabRemoveInterceptor,
       trailing: trailing,
-      controller: controller,
     );
   }
 
   final TabbedViewDelegate delegate;
-  @Deprecated('move to delegate')
-  final TabbedViewController controller;
   final bool contentClip;
   final IndexedWidgetBuilder? contentBuilder;
   final bool tabReorderEnabled;
@@ -215,15 +209,30 @@ class _TabbedViewState extends State<TabbedView> {
   @override
   void initState() {
     super.initState();
-    widget.controller.addListener(_rebuildByTabOrSelection);
+    final TabbedViewDelegate delegate = widget.delegate;
+    if (delegate is ImperativeTabbedViewDelegate) {
+      delegate.controller.addListener(_rebuildByTabOrSelection);
+    }
   }
 
   @override
   void didUpdateWidget(covariant TabbedView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.controller != oldWidget.controller) {
-      oldWidget.controller.removeListener(_rebuildByTabOrSelection);
-      widget.controller.addListener(_rebuildByTabOrSelection);
+    TabbedViewController? oldController;
+    final TabbedViewDelegate oldDelegate = oldWidget.delegate;
+    if (oldDelegate is ImperativeTabbedViewDelegate) {
+      oldController = oldDelegate.controller;
+    }
+
+    TabbedViewController? newController;
+    final TabbedViewDelegate newDelegate = widget.delegate;
+    if (newDelegate is ImperativeTabbedViewDelegate) {
+      newController = newDelegate.controller;
+    }
+
+    if (newController != oldController) {
+      oldController?.removeListener(_rebuildByTabOrSelection);
+      newController?.addListener(_rebuildByTabOrSelection);
     }
   }
 
@@ -280,7 +289,10 @@ class _TabbedViewState extends State<TabbedView> {
 
   @override
   void dispose() {
-    widget.controller.removeListener(_rebuildByTabOrSelection);
+    final TabbedViewDelegate delegate = widget.delegate;
+    if (delegate is ImperativeTabbedViewDelegate) {
+      delegate.controller.removeListener(_rebuildByTabOrSelection);
+    }
     super.dispose();
   }
 }
