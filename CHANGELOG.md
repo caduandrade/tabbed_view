@@ -27,6 +27,7 @@
     * Added required `id` property to uniquely identify tabs.
     * Hid `key` and `uniqueKey` properties from the public API.
     * Updated `value` property type from `dynamic` to `Object?`.
+    * Renamed `content` property to `view`.
     * Per-tab styling overrides have been moved from `TabData` to `TabThemeData`.
         * The following properties were **removed** from `TabData`:
             * `normalStatusTheme`

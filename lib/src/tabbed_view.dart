@@ -3,11 +3,11 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/typedefs/tab_view_builder.dart';
 
-import 'internal/content_area.dart';
 import 'internal/tabbed_view_delegate.dart';
 import 'internal/tabbed_view_provider.dart';
 import 'internal/tabbed_view_source.dart';
 import 'internal/tabs_area/tabs_area.dart';
+import 'internal/view_area.dart';
 import 'tab_bar_position.dart';
 import 'tab_data.dart';
 import 'tabbed_view_controller.dart';
@@ -287,7 +287,7 @@ class _TabbedViewState extends State<TabbedView> {
       children.add(LayoutId(id: 1, child: tabArea));
     }
     Widget contentArea =
-        ContentArea(provider: provider, tabsAreaVisible: tabsAreaVisible);
+        ViewArea(provider: provider, tabsAreaVisible: tabsAreaVisible);
     children.add(LayoutId(id: 2, child: contentArea));
     return CustomMultiChildLayout(
         children: children,

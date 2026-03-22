@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tabbed_view/src/internal/content_area.dart';
+import 'package:tabbed_view/src/internal/view_area.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 import 'package:tabbed_view/src/internal/tab/tab_widget.dart';
 
@@ -40,7 +40,7 @@ void main() {
         await tester.pumpWidget(
             _buildTestApp(theme: theme, position: TabBarPosition.top));
 
-        final contentArea = find.byType(ContentArea);
+        final contentArea = find.byType(ViewArea);
         expect(contentArea, findsOneWidget);
 
         final container = find
@@ -62,7 +62,7 @@ void main() {
         await tester.pumpWidget(
             _buildTestApp(theme: theme, position: TabBarPosition.bottom));
 
-        final contentArea = find.byType(ContentArea);
+        final contentArea = find.byType(ViewArea);
         expect(contentArea, findsOneWidget);
 
         final container = find

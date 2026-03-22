@@ -36,7 +36,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
         text: 'Tab 1',
         value: 'myTab',
         leading: (context, status) => Icon(Icons.star, size: 16),
-        content: Padding(padding: EdgeInsets.all(8), child: Text('Hello')),
+        view: Padding(padding: EdgeInsets.all(8), child: Text('Hello')),
         buttonsBuilder: (context) => [
               TabButton.icon(IconProvider.data(Icons.info), onPressed: () {
                 _scaffoldMessengerKey.currentState?.showSnackBar(
@@ -62,13 +62,13 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                 ];
               })
             ],
-        content:
+        view:
             Padding(padding: EdgeInsets.all(8), child: Text('Hello again'))));
     tabs.add(TabData(
         id: 'text field',
         closable: false,
         text: 'TextField',
-        content: Padding(
+        view: Padding(
             padding: EdgeInsets.all(8),
             child: TextField(
                 decoration: InputDecoration(
@@ -78,7 +78,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
         id: 'long title',
         text: 'This is a very long tab title that should be truncated',
         leading: (context, status) => Icon(Icons.star, size: 16),
-        content: Padding(
+        view: Padding(
             padding: EdgeInsets.all(8),
             child: Text('Content for the long tab'))));
 
@@ -176,7 +176,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                     _controller.addTab(TabData(
                         id: Object(),
                         text: 'New Tab',
-                        content: Center(child: Text('Content of New Tab'))));
+                        view: Center(child: Text('Content of New Tab'))));
                   })
                 ];
               }

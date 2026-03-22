@@ -8,10 +8,10 @@ import '../theme/theme_widget.dart';
 import 'tabbed_view_delegate.dart';
 import 'tabbed_view_provider.dart';
 
-/// Container widget for the tab content and menu.
+/// Container widget for the tab view.
 @internal
-class ContentArea extends StatelessWidget {
-  ContentArea({required this.tabsAreaVisible, required this.provider});
+class ViewArea extends StatelessWidget {
+  ViewArea({required this.tabsAreaVisible, required this.provider});
 
   final bool tabsAreaVisible;
   final TabbedViewProvider provider;
@@ -34,7 +34,7 @@ class ContentArea extends StatelessWidget {
           if (provider.viewBuilder != null) {
             child = provider.viewBuilder!(context, tab);
           } else {
-            child = tab.content;
+            child = tab.view;
           }
           if (child != null) {
             child = ExcludeFocus(excluding: !selectedTab, child: child);

@@ -16,7 +16,14 @@ import 'typedefs/tab_buttons_builder.dart';
 ///
 /// The optional [value] parameter allows associate the tab to any value.
 ///
-/// The optional [content] parameter defines the content of the tab.
+/// The optional [view] is the content associated with this tab, displayed
+/// in the main area of a [TabbedView] when the tab is selected.
+///
+/// This is not the visual representation of the tab itself (such as its
+/// label or icon), but the primary content shown for this tab.
+///
+/// If a [viewBuilder] is provided to [TabbedView], it takes precedence
+/// over this property.
 ///
 /// The [closable] parameter defines whether the Close button is visible.
 ///
@@ -32,6 +39,10 @@ import 'typedefs/tab_buttons_builder.dart';
 /// parameter as long as the [TabbedViewController] is being kept in the
 /// state of its class.
 ///
+/// When used with [TabbedView.declarative], changes to this object
+/// do not automatically trigger UI updates. The caller must rebuild
+/// the [TabbedView] with updated data.
+///
 /// See also:
 ///
 /// * [TabbedView.viewBuilder]
@@ -42,7 +53,7 @@ class TabData extends ChangeNotifier {
     required String text,
     String? tooltip,
     TabButtonsBuilder? buttonsBuilder,
-    Widget? content,
+    Widget? view,
     TabLeadingBuilder? leading,
     bool closable = true,
     double? textSize,
@@ -53,7 +64,7 @@ class TabData extends ChangeNotifier {
         _tooltip = tooltip,
         _leading = leading,
         _closable = closable,
-        _content = content,
+        _view = view,
         _buttonsBuilder = buttonsBuilder,
         _textSize = textSize != null ? math.max(0, textSize) : null,
         _tabKey = ValueKey(id),
@@ -96,11 +107,11 @@ class TabData extends ChangeNotifier {
     }
   }
 
-  Widget? _content;
-  Widget? get content => _content;
-  set content(Widget? content) {
-    if (_content != content) {
-      _content = content;
+  Widget? _view;
+  Widget? get view => _view;
+  set view(Widget? view) {
+    if (_view != view) {
+      _view = view;
       notifyListeners();
     }
   }
