@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:tabbed_view/src/typedefs/on_tab_move.dart';
 
 import '../../draggable_tab_data.dart';
 import '../../tab_bar_position.dart';
@@ -157,19 +156,11 @@ class DropTabWidgetState extends State<DropTabWidget> {
             }
             if (widget.provider.source ==
                 DraggableTabDataHelper.source(draggable: data)) {
-              widget.provider.delegate.moveTab(
-                  sourceTab: data.tab,
-                  type: TabMoveType.reorder,
-                  targetTab: targetTab);
+              widget.provider.delegate.reorderTab(data.tab, targetTab);
             } else {
-              DraggableTabDataHelper.delegate(draggable: data).moveTab(
-                  sourceTab: data.tab,
-                  type: TabMoveType.detach,
-                  targetTab: null);
-              widget.provider.delegate.moveTab(
-                  sourceTab: data.tab,
-                  type: TabMoveType.attach,
-                  targetTab: targetTab);
+              DraggableTabDataHelper.delegate(draggable: data)
+                  .detachTab(data.tab);
+              widget.provider.delegate.attachTab(data.tab, targetTab);
             }
           },
         ));

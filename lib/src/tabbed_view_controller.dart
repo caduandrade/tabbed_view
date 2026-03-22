@@ -24,7 +24,6 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in _tabs) {
       tab.addListener(notifyListeners);
     }
-    _updateIndexes(false);
 
     if (!kReleaseMode) {
       assert(TabDataHelper.assertUniqueIds(tabs));
@@ -106,7 +105,6 @@ class TabbedViewController extends ChangeNotifier {
     } else {
       _tabs.insert(newIndex - 1, tabToReorder);
     }
-    _updateIndexes(false);
     if (selectedTab != null) {
       _updateSelection(_tabs.indexOf(selectedTab));
     }
@@ -123,7 +121,6 @@ class TabbedViewController extends ChangeNotifier {
   void insertTab(int index, TabData tab) {
     _tabs.insert(index, tab);
     tab.addListener(notifyListeners);
-    _updateIndexes(false);
     _afterIncTabs();
 
     if (!kReleaseMode) {
@@ -136,7 +133,6 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in _tabs) {
       tab.removeListener(notifyListeners);
     }
-    _updateIndexes(true);
     _tabs.clear();
     _updateSelection(null);
     addTabs(iterable);
@@ -152,7 +148,6 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in iterable) {
       tab.addListener(notifyListeners);
     }
-    _updateIndexes(false);
     _afterIncTabs();
 
     if (!kReleaseMode) {
@@ -164,7 +159,6 @@ class TabbedViewController extends ChangeNotifier {
   void addTab(TabData tab) {
     _tabs.add(tab);
     tab.addListener(notifyListeners);
-    TabDataHelper.setIndex(tab, _tabs.length - 1);
     _afterIncTabs();
 
     if (!kReleaseMode) {
@@ -189,8 +183,6 @@ class TabbedViewController extends ChangeNotifier {
 
     TabData tabData = _tabs.removeAt(tabIndex);
     tabData.removeListener(notifyListeners);
-    TabDataHelper.setIndex(tabData, -1);
-    _updateIndexes(false);
     if (_tabs.isEmpty) {
       _updateSelection(null);
     } else {
@@ -219,7 +211,6 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in _tabs) {
       tab.removeListener(notifyListeners);
     }
-    _updateIndexes(true);
     _tabs.clear();
     _updateSelection(null);
     notifyListeners();
@@ -230,7 +221,10 @@ class TabbedViewController extends ChangeNotifier {
 
   /// Selects a tab.
   void selectTab(TabData tab) {
-    selectedIndex = TabDataHelper.indexFrom(tab);
+    final index = _tabs.indexWhere((t) => t.id == tab.id);
+    if (index != -1) {
+      selectedIndex = index;
+    }
   }
 
   /// Selects a tab by its value.
@@ -266,12 +260,5 @@ class TabbedViewController extends ChangeNotifier {
       }
     }
     return null;
-  }
-
-  void _updateIndexes(bool clear) {
-    for (int i = 0; i < _tabs.length; i++) {
-      TabData tab = _tabs[i];
-      TabDataHelper.setIndex(tab, clear ? -1 : i);
-    }
   }
 }

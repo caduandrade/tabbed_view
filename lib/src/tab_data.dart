@@ -71,8 +71,6 @@ class TabData extends ChangeNotifier {
 
   final bool draggable;
 
-  int _index = -1;
-
   Object? _value;
   Object? get value => _value;
   set value(Object? value) {
@@ -149,10 +147,6 @@ class TabData extends ChangeNotifier {
 
 @internal
 class TabDataHelper {
-  static int indexFrom(TabData tab) => tab._index;
-
-  static void setIndex(TabData tab, int newIndex) => tab._index = newIndex;
-
   static Key contentKey(TabData tab) => tab._contentKey;
   static Key tabKey(TabData tab) => tab._tabKey;
 

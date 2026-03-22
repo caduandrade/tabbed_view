@@ -3,25 +3,34 @@ import 'package:meta/meta.dart';
 import '../tab_data.dart';
 import '../tabbed_view_controller.dart';
 import '../typedefs/on_tab_close.dart';
-import '../typedefs/on_tab_move.dart';
+import '../typedefs/on_tab_drag.dart';
 import '../typedefs/on_tab_select.dart';
 
 /// A facade for internal widgets to abstract whether
 /// the [TabbedView] is imperative or declarative.
 @internal
 abstract class TabbedViewDelegate {
-  void closeTab({required TabData tab});
-
-  void moveTab(
-      {required TabData sourceTab,
-      required TabMoveType type,
-      required TabData? targetTab});
-
   List<TabData> get tabs;
 
   void selectTab({required TabData tab});
 
   int? get selectedIndex;
+
+  void closeTab({required TabData tab});
+
+  void reorderTab(
+    TabData tab,
+    TabData? targetTab,
+  );
+
+  void detachTab(
+    TabData tab,
+  );
+
+  void attachTab(
+    TabData tab,
+    TabData? targetTab,
+  );
 }
 
 @internal
@@ -47,23 +56,31 @@ class ImperativeTabbedViewDelegate extends TabbedViewDelegate {
   }
 
   @override
-  void moveTab(
-      {required TabData sourceTab,
-      required TabMoveType type,
-      required TabData? targetTab}) {
-    final int? sourceIndex = _indexFromId(sourceTab.id);
+  void reorderTab(TabData tab, TabData? targetTab) {
+    final int? sourceIndex = _indexFromId(tab.id);
     final int? targetIndex =
         targetTab != null ? _indexFromId(targetTab.id) : null;
-    if (type == TabMoveType.reorder && sourceIndex != null) {
+    if (sourceIndex != null) {
       controller.reorderTab(sourceIndex, targetIndex ?? controller.length);
-    } else if (type == TabMoveType.attach) {
-      if (targetIndex == null) {
-        controller.insertTab(controller.length, sourceTab);
-      } else {
-        controller.insertTab(targetIndex, sourceTab);
-      }
-    } else if (type == TabMoveType.detach && sourceIndex != null) {
-      controller.removeTab(sourceIndex);
+    }
+  }
+
+  @override
+  void detachTab(TabData tab) {
+    final int? index = _indexFromId(tab.id);
+    if (index != null) {
+      controller.removeTab(index);
+    }
+  }
+
+  @override
+  void attachTab(TabData tab, TabData? targetTab) {
+    final int? targetIndex =
+        targetTab != null ? _indexFromId(targetTab.id) : null;
+    if (targetIndex == null) {
+      controller.insertTab(controller.length, tab);
+    } else {
+      controller.insertTab(targetIndex, tab);
     }
   }
 
@@ -81,12 +98,15 @@ class ImperativeTabbedViewDelegate extends TabbedViewDelegate {
 
 @internal
 class DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
-  DeclarativeTabbedViewDelegate(
-      {required this.tabs,
-      required Object? selectedTabId,
-      required this.onTabClose,
-      required this.onTabMove,
-      required this.onTabSelect}) {
+  DeclarativeTabbedViewDelegate({
+    required this.tabs,
+    required Object? selectedTabId,
+    required this.onTabClose,
+    required this.onTabReorder,
+    required this.onTabAttach,
+    required this.onTabDetach,
+    required this.onTabSelect,
+  }) {
     selectedIndex = selectedTabId == null
         ? null
         : tabs.indexWhere((tab) => tab.id == selectedTabId);
@@ -95,7 +115,9 @@ class DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
   @override
   final List<TabData> tabs;
   final OnTabClose? onTabClose;
-  final OnTabMove? onTabMove;
+  final OnTabReorder? onTabReorder;
+  final OnTabDetach? onTabDetach;
+  final OnTabAttach? onTabAttach;
   final OnTabSelect? onTabSelect;
 
   @override
@@ -112,10 +134,17 @@ class DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
   }
 
   @override
-  void moveTab(
-      {required TabData sourceTab,
-      required TabMoveType type,
-      required TabData? targetTab}) {
-    onTabMove?.call(sourceTab.id, type, targetTab?.id);
+  void reorderTab(TabData tab, TabData? targetTab) {
+    onTabReorder?.call(tab.id, targetTab?.id);
+  }
+
+  @override
+  void detachTab(TabData tab) {
+    onTabDetach?.call(tab.id);
+  }
+
+  @override
+  void attachTab(TabData tab, TabData? targetTab) {
+    onTabAttach?.call(tab.id, targetTab?.id);
   }
 }

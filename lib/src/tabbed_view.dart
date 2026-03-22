@@ -16,7 +16,7 @@ import 'typedefs/can_drop.dart';
 import 'typedefs/on_before_drop_accept.dart';
 import 'typedefs/on_draggable_build.dart';
 import 'typedefs/on_tab_close.dart';
-import 'typedefs/on_tab_move.dart';
+import 'typedefs/on_tab_drag.dart';
 import 'typedefs/on_tab_secondary_tap.dart';
 import 'typedefs/on_tab_select.dart';
 import 'typedefs/tab_remove_interceptor.dart';
@@ -121,10 +121,22 @@ class TabbedView extends StatefulWidget {
   /// a tab. The caller is responsible for removing the corresponding tab
   /// from [tabs] and rebuilding the widget.
   ///
-  /// The [onTabMove] callback is triggered when the user requests to move
-  /// a tab, either within the same [TabbedView] or across different instances.
-  /// The caller must update the tab list accordingly (reorder, insert, or remove)
-  /// and rebuild the widget.
+  /// The [onTabReorder] callback is triggered when the user requests to move
+  /// a tab within the same [TabbedView]. The caller is responsible for updating
+  /// the order of [tabs] and rebuilding the widget.
+  ///
+  /// The [onTabDetach] callback is triggered when the user requests to move
+  /// a tab out of this [TabbedView], typically by dragging it to another
+  /// [TabbedView]. The caller is responsible for removing the tab from [tabs]
+  /// and rebuilding the widget.
+  ///
+  /// The [onTabAttach] callback is triggered when the user requests to insert
+  /// a tab into this [TabbedView], typically by dropping a tab from another
+  /// [TabbedView]. The caller is responsible for inserting the tab into [tabs]
+  /// and rebuilding the widget.
+  ///
+  /// These callbacks represent user intent and do not guarantee that the
+  /// operation will be applied.
   ///
   /// All callbacks in this constructor represent user intent. The widget does
   /// not modify the tab state internally.
@@ -136,7 +148,9 @@ class TabbedView extends StatefulWidget {
     required List<TabData> tabs,
     Object? selectedTabId,
     OnTabClose? onTabClose,
-    OnTabMove? onTabMove,
+    OnTabReorder? onTabReorder,
+    OnTabDetach? onTabDetach,
+    OnTabAttach? onTabAttach,
     OnTabSelect? onTabSelect,
     IndexedWidgetBuilder? contentBuilder,
     bool? tabReorderEnabled,
@@ -155,11 +169,14 @@ class TabbedView extends StatefulWidget {
   }) {
     return TabbedView._(
       delegate: DeclarativeTabbedViewDelegate(
-          tabs: tabs,
-          selectedTabId: selectedTabId,
-          onTabClose: onTabClose,
-          onTabMove: onTabMove,
-          onTabSelect: onTabSelect),
+        tabs: tabs,
+        selectedTabId: selectedTabId,
+        onTabClose: onTabClose,
+        onTabReorder: onTabReorder,
+        onTabAttach: onTabAttach,
+        onTabDetach: onTabDetach,
+        onTabSelect: onTabSelect,
+      ),
       contentBuilder: contentBuilder,
       tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
       onTabSecondaryTap: onTabSecondaryTap,

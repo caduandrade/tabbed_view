@@ -207,11 +207,10 @@ class TabWidget extends StatelessWidget {
       }
     }
 
-    if (provider.tabReorderEnabled &&
-        provider.draggingTabIndex != TabDataHelper.indexFrom(tab)) {
+    if (provider.tabReorderEnabled && provider.draggingTabIndex != index) {
       return DropTabWidget(
           provider: provider,
-          tabIndex: TabDataHelper.indexFrom(tab),
+          tabIndex: index,
           child: widget,
           halfWidthDrop: true);
     }

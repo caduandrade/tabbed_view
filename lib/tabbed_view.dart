@@ -34,7 +34,7 @@ export 'src/typedefs/on_before_drop_accept.dart';
 export 'src/typedefs/on_draggable_build.dart';
 export 'src/typedefs/on_tab_close.dart';
 export 'src/typedefs/on_tab_removed.dart';
-export 'src/typedefs/on_tab_move.dart';
+export 'src/typedefs/on_tab_drag.dart';
 export 'src/typedefs/on_tab_moved.dart';
 export 'src/typedefs/on_tab_secondary_tap.dart';
 export 'src/typedefs/on_tab_select.dart';
