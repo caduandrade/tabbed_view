@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:tabbed_view/src/tabbed_view.dart';
 
 import '../tab_bar_position.dart';
 import '../tab_data.dart';
 import '../theme/tabbed_view_theme_data.dart';
 import '../theme/theme_widget.dart';
+import 'tabbed_view_delegate.dart';
 import 'tabbed_view_provider.dart';
 
 /// Container widget for the tab content and menu.

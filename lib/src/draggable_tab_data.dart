@@ -1,8 +1,8 @@
 import 'package:meta/meta.dart';
 
+import 'internal/tabbed_view_delegate.dart';
 import 'internal/tabbed_view_source.dart';
 import 'tab_data.dart';
-import 'tabbed_view.dart';
 
 class DraggableTabData {
   DraggableTabData._(

@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
-import '../tabbed_view.dart';
 import '../typedefs/can_drop.dart';
 import '../typedefs/on_before_drop_accept.dart';
 import '../typedefs/on_draggable_build.dart';
@@ -9,6 +8,7 @@ import '../typedefs/on_tab_secondary_tap.dart';
 import '../typedefs/tab_remove_interceptor.dart';
 import '../typedefs/tabs_area_buttons_builder.dart';
 import '../unselected_tab_buttons_behavior.dart';
+import 'tabbed_view_delegate.dart';
 import 'tabbed_view_source.dart';
 
 /// Propagates parameters to internal widgets.

@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 import 'internal/content_area.dart';
+import 'internal/tabbed_view_delegate.dart';
 import 'internal/tabbed_view_provider.dart';
 import 'internal/tabbed_view_source.dart';
 import 'internal/tabs_area/tabs_area.dart';
@@ -72,7 +72,7 @@ class TabbedView extends StatefulWidget {
     Widget? trailing,
   }) {
     return TabbedView._(
-      delegate: _ImperativeTabbedViewDelegate(controller: controller),
+      delegate: ImperativeTabbedViewDelegate(controller: controller),
       controller: controller,
       contentBuilder: contentBuilder,
       tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
@@ -92,7 +92,101 @@ class TabbedView extends StatefulWidget {
     );
   }
 
+  /// Creates a [TabbedView] using a declarative configuration.
+  ///
+  /// In this mode, the state of the tabs (including order, selection, insertion,
+  /// and removal) is fully controlled by the caller. The widget reflects the
+  /// provided data and emits intent callbacks when user interactions occur.
+  ///
+  /// The [tabs] collection defines the current tabs to be displayed.
+  ///
+  /// The [tabs] collection must be treated as immutable.
+  ///
+  /// Any change to the tab list must trigger a rebuild of [TabbedView].
+  /// Mutating the collection without rebuilding may lead to inconsistent state.
+  ///
+  /// Each [TabData] must have a unique and stable [TabData.id]. This identifier
+  /// is used to track tabs across rebuilds, including selection, reordering,
+  /// and state preservation.
+  ///
+  /// The [selectedTabId] defines which tab is currently selected.
+  ///
+  /// If `null`, no tab is selected. If the provided id does not match any tab
+  /// in [tabs], no tab will be selected.
+  ///
+  /// This value must be kept in sync with [tabs]. When the selected tab changes,
+  /// the caller is responsible for updating [selectedTabId] and rebuilding the
+  /// widget accordingly.
+  ///
+  /// The [onTabSelect] callback is triggered when the user requests to select
+  /// a tab. This represents an intent only — the selection will not change
+  /// unless the caller updates [selectedTabId].
+  ///
+  /// The [onTabClose] callback is triggered when the user requests to close
+  /// a tab. The caller is responsible for removing the corresponding tab
+  /// from [tabs] and rebuilding the widget.
+  ///
+  /// The [onTabMove] callback is triggered when the user requests to move
+  /// a tab, either within the same [TabbedView] or across different instances.
+  /// The caller must update the tab list accordingly (reorder, insert, or remove)
+  /// and rebuild the widget.
+  ///
+  /// All callbacks in this constructor represent user intent. The widget does
+  /// not modify the tab state internally.
+  ///
+  /// See also:
+  ///
+  /// * [TabbedView] for the controller-based (imperative) configuration.
+  factory TabbedView.declarative({
+    required List<TabData> tabs,
+    Object? selectedTabId,
+    OnTabClose? onTabClose,
+    OnTabMove? onTabMove,
+    OnTabSelect? onTabSelect,
+    IndexedWidgetBuilder? contentBuilder,
+    bool? tabReorderEnabled,
+    OnTabSecondaryTap? onTabSecondaryTap,
+    UnselectedTabButtonsBehavior? unselectedTabButtonsBehavior,
+    bool? contentClip,
+    String? closeButtonTooltip,
+    TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
+    bool? tabsAreaVisible,
+    OnDraggableBuild? onDraggableBuild,
+    CanDrop? canDrop,
+    OnBeforeDropAccept? onBeforeDropAccept,
+    String? dragScope,
+    TabRemoveInterceptor? tabRemoveInterceptor,
+    Widget? trailing,
+    required TabbedViewController controller,
+  }) {
+    return TabbedView._(
+      delegate: DeclarativeTabbedViewDelegate(
+          tabs: tabs,
+          selectedTabId: selectedTabId,
+          onTabClose: onTabClose,
+          onTabMove: onTabMove,
+          onTabSelect: onTabSelect),
+      contentBuilder: contentBuilder,
+      tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
+      onTabSecondaryTap: onTabSecondaryTap,
+      unselectedTabButtonsBehavior:
+          unselectedTabButtonsBehavior ?? _defaultUnselectedBehavior,
+      contentClip: contentClip ?? _defaultContentClip,
+      closeButtonTooltip: closeButtonTooltip,
+      tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
+      tabsAreaVisible: tabsAreaVisible,
+      onDraggableBuild: onDraggableBuild,
+      canDrop: canDrop,
+      onBeforeDropAccept: onBeforeDropAccept,
+      dragScope: dragScope,
+      tabRemoveInterceptor: tabRemoveInterceptor,
+      trailing: trailing,
+      controller: controller,
+    );
+  }
+
   final TabbedViewDelegate delegate;
+  @Deprecated('move to delegate')
   final TabbedViewController controller;
   final bool contentClip;
   final IndexedWidgetBuilder? contentBuilder;
@@ -111,120 +205,6 @@ class TabbedView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _TabbedViewState();
-}
-
-@internal
-abstract class TabbedViewDelegate {
-  void closeTab({required TabData tab});
-
-  void moveTab(
-      {required TabData sourceTab,
-      required TabMoveType type,
-      required TabData? targetTab});
-
-  List<TabData> get tabs;
-
-  void selectTab({required TabData tab});
-
-  int? get selectedIndex;
-}
-
-class _ImperativeTabbedViewDelegate extends TabbedViewDelegate {
-  _ImperativeTabbedViewDelegate({required this.controller});
-
-  final TabbedViewController controller;
-
-  @override
-  List<TabData> get tabs => controller.tabs;
-
-  int? _indexFromId(Object tabId) {
-    int index = tabs.indexWhere((tab) => tab.id == tabId);
-    return index > -1 ? index : null;
-  }
-
-  @override
-  void closeTab({required TabData tab}) {
-    final int? index = _indexFromId(tab.id);
-    if (index != null) {
-      controller.removeTab(index);
-    }
-  }
-
-  @override
-  void moveTab(
-      {required TabData sourceTab,
-      required TabMoveType type,
-      required TabData? targetTab}) {
-    final int? sourceIndex = _indexFromId(sourceTab.id);
-    final int? targetIndex =
-        targetTab != null ? _indexFromId(targetTab.id) : null;
-    if (type == TabMoveType.reorder && sourceIndex != null) {
-      controller.reorderTab(sourceIndex, targetIndex ?? controller.length);
-    } else if (type == TabMoveType.attach) {
-      if (targetIndex == null) {
-        controller.insertTab(controller.length, sourceTab);
-      } else {
-        controller.insertTab(targetIndex, sourceTab);
-      }
-    } else if (type == TabMoveType.detach && sourceIndex != null) {
-      controller.removeTab(sourceIndex);
-    }
-  }
-
-  @override
-  void selectTab({required TabData tab}) {
-    final int? index = _indexFromId(tab.id);
-    if (index != null) {
-      controller.selectedIndex = index;
-    }
-  }
-
-  @override
-  int? get selectedIndex => controller.selectedIndex;
-}
-
-/// The [tabs] collection must be treated as immutable.
-///
-/// Any change to the tab list must trigger a rebuild of [TabbedView].
-/// Mutating the collection without rebuilding may lead to inconsistent state.
-class _DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
-  _DeclarativeTabbedViewDelegate(
-      {required this.tabs,
-      required Object? selectedTabId,
-      required this.onTabClose,
-      required this.onTabMove,
-      required this.onTabSelect}) {
-    selectedIndex = selectedTabId == null
-        ? null
-        : tabs.indexWhere((tab) => tab.id == selectedTabId);
-  }
-
-  @override
-  final List<TabData> tabs;
-  final OnTabClose? onTabClose;
-  final OnTabMove? onTabMove;
-  final OnTabSelect? onTabSelect;
-
-  @override
-  void selectTab({required TabData tab}) {
-    onTabSelect?.call(tab.id);
-  }
-
-  @override
-  late final int? selectedIndex;
-
-  @override
-  void closeTab({required TabData tab}) {
-    onTabClose?.call(tab.id);
-  }
-
-  @override
-  void moveTab(
-      {required TabData sourceTab,
-      required TabMoveType type,
-      required TabData? targetTab}) {
-    onTabMove?.call(sourceTab.id, type, targetTab?.id);
-  }
 }
 
 /// The [TabbedView] state.
