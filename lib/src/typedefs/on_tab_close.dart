@@ -1,3 +1,5 @@
+import '../tab_data.dart';
+
 /// Called when the user requests to close a tab.
 ///
 /// This callback represents an intent triggered by user interaction,
@@ -7,4 +9,4 @@
 /// update the tab list accordingly.
 ///
 /// This callback does not guarantee that the tab will be removed.
-typedef OnTabClose = void Function(Object tabId);
+typedef OnTabClose = void Function(TabData tab);

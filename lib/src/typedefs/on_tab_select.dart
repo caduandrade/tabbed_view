@@ -1,3 +1,5 @@
+import '../tab_data.dart';
+
 /// Called when the user requests to select a tab.
 ///
 /// This callback represents a selection intent triggered by user interaction,
@@ -9,4 +11,4 @@
 /// the selection state accordingly (e.g., via `setState`).
 ///
 /// This callback does not guarantee that the selection has changed.
-typedef OnTabSelect = void Function(Object tabId);
+typedef OnTabSelect = void Function(TabData tab);

@@ -122,7 +122,7 @@ class DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
 
   @override
   void selectTab({required TabData tab}) {
-    onTabSelect?.call(tab.id);
+    onTabSelect?.call(tab);
   }
 
   @override
@@ -130,21 +130,21 @@ class DeclarativeTabbedViewDelegate extends TabbedViewDelegate {
 
   @override
   void closeTab({required TabData tab}) {
-    onTabClose?.call(tab.id);
+    onTabClose?.call(tab);
   }
 
   @override
   void reorderTab(TabData tab, TabData? targetTab) {
-    onTabReorder?.call(tab.id, targetTab?.id);
+    onTabReorder?.call(tab, targetTab);
   }
 
   @override
   void detachTab(TabData tab) {
-    onTabDetach?.call(tab.id);
+    onTabDetach?.call(tab);
   }
 
   @override
   void attachTab(TabData tab, TabData? targetTab) {
-    onTabAttach?.call(tab.id, targetTab?.id);
+    onTabAttach?.call(tab, targetTab);
   }
 }
