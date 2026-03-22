@@ -174,7 +174,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
               content:
               Text('Right-clicked on tab #$index: "${tabData.text}"')));
         },
-        contentBuilder: null,
+        viewBuilder: null,
         tabsAreaButtonsBuilder: _addButtonEnabled
             ? (context, tabsCount) {
           return [

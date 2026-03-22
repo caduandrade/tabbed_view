@@ -26,13 +26,13 @@ class ContentArea extends StatelessWidget {
       List<Widget> children = [];
 
       for (int i = 0; i < delegate.tabs.length; i++) {
-        TabData tab = delegate.tabs[i];
+        final TabData tab = delegate.tabs[i];
         bool selectedTab =
             delegate.selectedIndex != null && i == delegate.selectedIndex;
         if (tab.keepAlive || selectedTab) {
           Widget? child;
-          if (provider.contentBuilder != null) {
-            child = provider.contentBuilder!(context, i);
+          if (provider.viewBuilder != null) {
+            child = provider.viewBuilder!(context, tab);
           } else {
             child = tab.content;
           }

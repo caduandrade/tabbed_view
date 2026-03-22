@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:tabbed_view/src/typedefs/tab_view_builder.dart';
 
 import 'internal/content_area.dart';
 import 'internal/tabbed_view_delegate.dart';
@@ -26,6 +27,9 @@ import 'unselected_tab_buttons_behavior.dart';
 /// Widget inspired by the classic Desktop-style tab component.
 ///
 /// Supports customizable themes.
+///
+/// The [viewBuilder] callback is responsible for building the main content
+/// displayed for the currently selected tab.
 class TabbedView extends StatefulWidget {
   static const bool _defaultTabReorderEnabled = true;
   static const UnselectedTabButtonsBehavior _defaultUnselectedBehavior =
@@ -34,7 +38,7 @@ class TabbedView extends StatefulWidget {
 
   TabbedView._({
     required this.delegate,
-    required this.contentBuilder,
+    required this.viewBuilder,
     required this.tabReorderEnabled,
     required this.onTabSecondaryTap,
     required this.unselectedTabButtonsBehavior,
@@ -52,7 +56,7 @@ class TabbedView extends StatefulWidget {
 
   factory TabbedView({
     required TabbedViewController controller,
-    IndexedWidgetBuilder? contentBuilder,
+    TabViewBuilder? viewBuilder,
     bool? tabReorderEnabled,
     OnTabSecondaryTap? onTabSecondaryTap,
     UnselectedTabButtonsBehavior? unselectedTabButtonsBehavior,
@@ -69,7 +73,7 @@ class TabbedView extends StatefulWidget {
   }) {
     return TabbedView._(
       delegate: ImperativeTabbedViewDelegate(controller: controller),
-      contentBuilder: contentBuilder,
+      viewBuilder: viewBuilder,
       tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
       onTabSecondaryTap: onTabSecondaryTap,
       unselectedTabButtonsBehavior:
@@ -141,6 +145,9 @@ class TabbedView extends StatefulWidget {
   /// All callbacks in this constructor represent user intent. The widget does
   /// not modify the tab state internally.
   ///
+  /// The [viewBuilder] callback is responsible for building the main content
+  /// displayed for the currently selected tab.
+  ///
   /// See also:
   ///
   /// * [TabbedView] for the controller-based (imperative) configuration.
@@ -152,7 +159,7 @@ class TabbedView extends StatefulWidget {
     OnTabDetach? onTabDetach,
     OnTabAttach? onTabAttach,
     OnTabSelect? onTabSelect,
-    IndexedWidgetBuilder? contentBuilder,
+    TabViewBuilder? viewBuilder,
     bool? tabReorderEnabled,
     OnTabSecondaryTap? onTabSecondaryTap,
     UnselectedTabButtonsBehavior? unselectedTabButtonsBehavior,
@@ -177,7 +184,7 @@ class TabbedView extends StatefulWidget {
         onTabDetach: onTabDetach,
         onTabSelect: onTabSelect,
       ),
-      contentBuilder: contentBuilder,
+      viewBuilder: viewBuilder,
       tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
       onTabSecondaryTap: onTabSecondaryTap,
       unselectedTabButtonsBehavior:
@@ -197,7 +204,7 @@ class TabbedView extends StatefulWidget {
 
   final TabbedViewDelegate delegate;
   final bool contentClip;
-  final IndexedWidgetBuilder? contentBuilder;
+  final TabViewBuilder? viewBuilder;
   final bool tabReorderEnabled;
   final TabRemoveInterceptor? tabRemoveInterceptor;
   final OnTabSecondaryTap? onTabSecondaryTap;
@@ -257,7 +264,7 @@ class _TabbedViewState extends State<TabbedView> {
     TabbedViewProvider provider = TabbedViewProvider(
         delegate: widget.delegate,
         source: _source,
-        contentBuilder: widget.contentBuilder,
+        viewBuilder: widget.viewBuilder,
         tabReorderEnabled: widget.tabReorderEnabled,
         tabRemoveInterceptor: widget.tabRemoveInterceptor,
         contentClip: widget.contentClip,

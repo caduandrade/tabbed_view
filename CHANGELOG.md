@@ -13,10 +13,28 @@
   * Added to provides per-tab style overrides on top of a `TabThemeData`.
   * Added support for changing the tab background color in some predefined themes.
 
+* `TabbedView`
+    * Added `TabbedView.declarative` constructor for declarative (external state) usage.
+
 ### Breaking Changes
 
+* `TabbedView`
+    * Renamed `contentBuilder` property to `viewBuilder`.
+      * Updated property type from `IndexedWidgetBuilder` to `TabViewBuilder`.
+      * Now receives `TabData` instead of tab index.
+
+* `TabData`
+    * Added required `id` property to uniquely identify tabs.
+    * Hid `key` and `uniqueKey` properties from the public API.
+    * Updated `value` property type from `dynamic` to `Object?`.
+    * Per-tab styling overrides have been moved from `TabData` to `TabThemeData`.
+        * The following properties were **removed** from `TabData`:
+            * `normalStatusTheme`
+            * `selectedStatusTheme`
+            * `hoveredStatusTheme`
+
 * `TabDecorationBuilder`
-    * The `TabStatus` parameter has been replaced by `TabStyleContext`.
+    * Replaced `TabStatus` parameter with `TabStyleContext`.
 
 * `OnDraggableBuild`
     * Removed `controller` parameter.
@@ -46,72 +64,6 @@
     * Renamed to `DraggableTabData`.
     * Removed `controller` property.
     * Renamed `tabData` property to `tab`.
-
-* `TabData`
-    * Added required `id` property to uniquely identify tabs.
-    * Hid `key` and `uniqueKey` properties from the public API.
-    * Updated `value` property type from `dynamic` to `Object?`.
-
-* Per-tab styling overrides have been moved from `TabData` to `TabThemeData`.
-  * The following properties were **removed** from `TabData`:
-    * `normalStatusTheme`
-    * `selectedStatusTheme`
-    * `hoveredStatusTheme`
-
-These have been replaced by `TabStyleResolver`, which is now defined on `TabThemeData`.
-
-This change centralizes styling logic within the theme and enables dynamic, per-tab customization based on tab state, while keeping `TabData` focused on content and behavior.
-
-Before:
-
-```dart
-  TabData(
-    text: 'MyTab',    
-    normalStatusTheme: TabStatusThemeData(
-      fontColor: Colors.green.shade400,
-    ),
-    selectedStatusTheme: TabStatusThemeData(
-      fontColor: Colors.green.shade900,
-    ),
-    hoveredStatusTheme: TabStatusThemeData(
-      fontColor: Colors.green.shade500,
-    ),
-  );
-```
-
-After:
-
-```dart
-class MyTabStyleResolver extends TabStyleResolver {
-  @override
-  Color? fontColor(TabStyleContext context) {
-    if (context.tab.id == 'myTab') {
-      switch (context.status) {
-        case TabStatus.selected:
-          return Colors.green.shade900;
-        case TabStatus.hovered:
-          return Colors.green.shade500;
-        case TabStatus.normal:
-          return Colors.green.shade400;
-      }
-    }
-    // default theme color
-    return null;
-  }
-}
-```
-
-```dart
-  TabbedViewController controller =
-      TabbedViewController([TabData(id: 'myTab', text: 'MyTab')]);
-
-  TabbedViewTheme(
-    data: TabbedViewThemeData.classic(
-      tabStyleResolver: MyTabStyleResolver(),
-    ),
-    child: TabbedView(controller: controller),
-  );
-```
 
 ## 2.1.0
 

@@ -6,6 +6,7 @@ import '../typedefs/on_before_drop_accept.dart';
 import '../typedefs/on_draggable_build.dart';
 import '../typedefs/on_tab_secondary_tap.dart';
 import '../typedefs/tab_remove_interceptor.dart';
+import '../typedefs/tab_view_builder.dart';
 import '../typedefs/tabs_area_buttons_builder.dart';
 import '../unselected_tab_buttons_behavior.dart';
 import 'tabbed_view_delegate.dart';
@@ -17,7 +18,7 @@ class TabbedViewProvider {
   TabbedViewProvider(
       {required this.source,
       required this.delegate,
-      required this.contentBuilder,
+      required this.viewBuilder,
       required this.tabReorderEnabled,
       required this.contentClip,
       required this.unselectedTabButtonsBehavior,
@@ -36,7 +37,7 @@ class TabbedViewProvider {
   final TabbedViewSource source;
   final TabbedViewDelegate delegate;
   final bool contentClip;
-  final IndexedWidgetBuilder? contentBuilder;
+  final TabViewBuilder? viewBuilder;
   final bool tabReorderEnabled;
   final TabRemoveInterceptor? tabRemoveInterceptor;
   final OnTabSecondaryTap? onTabSecondaryTap;

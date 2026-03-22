@@ -34,7 +34,7 @@ import 'typedefs/tab_buttons_builder.dart';
 ///
 /// See also:
 ///
-/// * [TabbedView.contentBuilder]
+/// * [TabbedView.viewBuilder]
 class TabData extends ChangeNotifier {
   TabData({
     required this.id,
