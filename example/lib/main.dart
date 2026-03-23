@@ -62,8 +62,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                 ];
               })
             ],
-        view:
-            Padding(padding: EdgeInsets.all(8), child: Text('Hello again'))));
+        view: Padding(padding: EdgeInsets.all(8), child: Text('Hello again'))));
     tabs.add(TabData(
         id: 'text field',
         closable: false,
