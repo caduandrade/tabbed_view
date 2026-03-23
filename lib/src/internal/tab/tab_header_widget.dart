@@ -14,8 +14,8 @@ import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/theme_widget.dart';
 import '../../theme/vertical_alignment.dart';
 import '../../unselected_tab_buttons_behavior.dart';
-import 'tab_button_widget.dart';
 import '../tabbed_view_provider.dart';
+import 'tab_button_widget.dart';
 
 @internal
 class TabHeaderWidget extends StatelessWidget {
@@ -90,7 +90,7 @@ class TabHeaderWidget extends StatelessWidget {
   /// Builds a list with title text and buttons.
   List<Widget> _buildTextAndButtons(BuildContext context) {
     final List<Widget> textAndButtons = [];
-    final TabData tab = provider.controller.tabs[index];
+    final TabData tab = provider.delegate.tabs[index];
 
     final List<TabButton>? buttons = tab.buttonsBuilder?.call(context);
     final Widget? leading = tab.leading?.call(context, status);
@@ -220,16 +220,12 @@ class TabHeaderWidget extends StatelessWidget {
   }
 
   Future<void> _onClose(BuildContext context, int index) async {
-    TabData tabData = provider.controller.getTabByIndex(index);
+    final TabData tab = provider.delegate.tabs[index];
     if (provider.tabRemoveInterceptor == null ||
-        (await provider.tabRemoveInterceptor!(context, index, tabData))) {
+        (await provider.tabRemoveInterceptor!(context, index, tab))) {
       onClose();
-      // Check if the tab still exists and/or update with new index
-      // if another tab has been removed
-      index = provider.controller.tabs.indexOf(tabData);
-      if (index != -1) {
-        provider.controller.removeTab(index);
-      }
+      // Because it's asynchronous, the tab might no longer exist at that point.
+      provider.delegate.closeTab(tab: tab);
     }
   }
 }

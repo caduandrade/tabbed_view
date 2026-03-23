@@ -1,18 +1,25 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:tabbed_view/src/typedefs/tab_view_builder.dart';
 
-import 'internal/content_area.dart';
+import 'internal/tabbed_view_delegate.dart';
 import 'internal/tabbed_view_provider.dart';
+import 'internal/tabbed_view_source.dart';
 import 'internal/tabs_area/tabs_area.dart';
+import 'internal/view_area.dart';
 import 'tab_bar_position.dart';
+import 'tab_data.dart';
 import 'tabbed_view_controller.dart';
 import 'theme/tabbed_view_theme_data.dart';
 import 'theme/theme_widget.dart';
 import 'typedefs/can_drop.dart';
 import 'typedefs/on_before_drop_accept.dart';
 import 'typedefs/on_draggable_build.dart';
+import 'typedefs/on_tab_close.dart';
+import 'typedefs/on_tab_drag.dart';
 import 'typedefs/on_tab_secondary_tap.dart';
+import 'typedefs/on_tab_select.dart';
 import 'typedefs/tab_remove_interceptor.dart';
 import 'typedefs/tabs_area_buttons_builder.dart';
 import 'unselected_tab_buttons_behavior.dart';
@@ -21,38 +28,184 @@ import 'unselected_tab_buttons_behavior.dart';
 ///
 /// Supports customizable themes.
 ///
-/// Parameters:
-/// * [closeButtonTooltip]: optional tooltip for the close button.
+/// The [viewBuilder] callback is responsible for building the main content
+/// displayed for the currently selected tab.
 class TabbedView extends StatefulWidget {
-  TabbedView({
-    required this.controller,
-    this.contentBuilder,
-    this.tabReorderEnabled = true,
-    this.onTabSecondaryTap,
-    this.unselectedTabButtonsBehavior =
-        UnselectedTabButtonsBehavior.allDisabled,
-    this.contentClip = true,
-    this.closeButtonTooltip,
-    this.tabsAreaButtonsBuilder,
-    this.tabsAreaVisible,
-    this.onDraggableBuild,
-    this.canDrop,
-    this.onBeforeDropAccept,
-    this.dragScope,
-    this.tabRemoveInterceptor,
-    this.trailing,
+  static const bool _defaultTabReorderEnabled = true;
+  static const UnselectedTabButtonsBehavior _defaultUnselectedBehavior =
+      UnselectedTabButtonsBehavior.allDisabled;
+  static const bool _defaultContentClip = true;
+
+  TabbedView._({
+    required this.delegate,
+    required this.viewBuilder,
+    required this.tabReorderEnabled,
+    required this.onTabSecondaryTap,
+    required this.unselectedTabButtonsBehavior,
+    required this.contentClip,
+    required this.closeButtonTooltip,
+    required this.tabsAreaButtonsBuilder,
+    required this.tabsAreaVisible,
+    required this.onDraggableBuild,
+    required this.canDrop,
+    required this.onBeforeDropAccept,
+    required this.dragScope,
+    required this.tabRemoveInterceptor,
+    required this.trailing,
   });
 
-  final TabbedViewController controller;
-  final bool contentClip;
-  final IndexedWidgetBuilder? contentBuilder;
+  factory TabbedView({
+    required TabbedViewController controller,
+    TabViewBuilder? viewBuilder,
+    bool? tabReorderEnabled,
+    OnTabSecondaryTap? onTabSecondaryTap,
+    UnselectedTabButtonsBehavior? unselectedTabButtonsBehavior,
+    bool? contentClip,
+    String? closeButtonTooltip,
+    TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
+    bool? tabsAreaVisible,
+    OnDraggableBuild? onDraggableBuild,
+    CanDrop? canDrop,
+    OnBeforeDropAccept? onBeforeDropAccept,
+    String? dragScope,
+    TabRemoveInterceptor? tabRemoveInterceptor,
+    Widget? trailing,
+  }) {
+    return TabbedView._(
+      delegate: ImperativeTabbedViewDelegate(controller: controller),
+      viewBuilder: viewBuilder,
+      tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
+      onTabSecondaryTap: onTabSecondaryTap,
+      unselectedTabButtonsBehavior:
+          unselectedTabButtonsBehavior ?? _defaultUnselectedBehavior,
+      contentClip: contentClip ?? _defaultContentClip,
+      closeButtonTooltip: closeButtonTooltip,
+      tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
+      tabsAreaVisible: tabsAreaVisible,
+      onDraggableBuild: onDraggableBuild,
+      canDrop: canDrop,
+      onBeforeDropAccept: onBeforeDropAccept,
+      dragScope: dragScope,
+      tabRemoveInterceptor: tabRemoveInterceptor,
+      trailing: trailing,
+    );
+  }
 
-  /// Whether tab reordering via drag-and-drop is enabled in the UI.
+  /// Creates a [TabbedView] using a declarative configuration.
   ///
-  /// This flag controls **user interactions only**. It does **not** affect
-  /// programmatic reordering through [TabbedViewController.reorderTab].
-  final bool tabReorderEnabled;
+  /// In this mode, the state of the tabs (including order, selection, insertion,
+  /// and removal) is fully controlled by the caller. The widget reflects the
+  /// provided data and emits intent callbacks when user interactions occur.
+  ///
+  /// The [tabs] collection defines the current tabs to be displayed.
+  ///
+  /// The [tabs] collection must be treated as immutable.
+  ///
+  /// Any change to the tab list must trigger a rebuild of [TabbedView].
+  /// Mutating the collection without rebuilding may lead to inconsistent state.
+  ///
+  /// Each [TabData] must have a unique and stable [TabData.id]. This identifier
+  /// is used to track tabs across rebuilds, including selection, reordering,
+  /// and state preservation.
+  ///
+  /// The [selectedTabId] defines which tab is currently selected.
+  ///
+  /// If `null`, no tab is selected. If the provided id does not match any tab
+  /// in [tabs], no tab will be selected.
+  ///
+  /// This value must be kept in sync with [tabs]. When the selected tab changes,
+  /// the caller is responsible for updating [selectedTabId] and rebuilding the
+  /// widget accordingly.
+  ///
+  /// The [onTabSelect] callback is triggered when the user requests to select
+  /// a tab. This represents an intent only — the selection will not change
+  /// unless the caller updates [selectedTabId].
+  ///
+  /// The [onTabClose] callback is triggered when the user requests to close
+  /// a tab. The caller is responsible for removing the corresponding tab
+  /// from [tabs] and rebuilding the widget.
+  ///
+  /// The [onTabReorder] callback is triggered when the user requests to move
+  /// a tab within the same [TabbedView]. The caller is responsible for updating
+  /// the order of [tabs] and rebuilding the widget.
+  ///
+  /// The [onTabDetach] callback is triggered when the user requests to move
+  /// a tab out of this [TabbedView], typically by dragging it to another
+  /// [TabbedView]. The caller is responsible for removing the tab from [tabs]
+  /// and rebuilding the widget.
+  ///
+  /// The [onTabAttach] callback is triggered when the user requests to insert
+  /// a tab into this [TabbedView], typically by dropping a tab from another
+  /// [TabbedView]. The caller is responsible for inserting the tab into [tabs]
+  /// and rebuilding the widget.
+  ///
+  /// These callbacks represent user intent and do not guarantee that the
+  /// operation will be applied.
+  ///
+  /// All callbacks in this constructor represent user intent. The widget does
+  /// not modify the tab state internally.
+  ///
+  /// The [viewBuilder] callback is responsible for building the main content
+  /// displayed for the currently selected tab.
+  ///
+  /// See also:
+  ///
+  /// * [TabbedView] for the controller-based (imperative) configuration.
+  factory TabbedView.declarative({
+    required List<TabData> tabs,
+    Object? selectedTabId,
+    OnTabClose? onTabClose,
+    OnTabReorder? onTabReorder,
+    OnTabDetach? onTabDetach,
+    OnTabAttach? onTabAttach,
+    OnTabSelect? onTabSelect,
+    TabViewBuilder? viewBuilder,
+    bool? tabReorderEnabled,
+    OnTabSecondaryTap? onTabSecondaryTap,
+    UnselectedTabButtonsBehavior? unselectedTabButtonsBehavior,
+    bool? contentClip,
+    String? closeButtonTooltip,
+    TabsAreaButtonsBuilder? tabsAreaButtonsBuilder,
+    bool? tabsAreaVisible,
+    OnDraggableBuild? onDraggableBuild,
+    CanDrop? canDrop,
+    OnBeforeDropAccept? onBeforeDropAccept,
+    String? dragScope,
+    TabRemoveInterceptor? tabRemoveInterceptor,
+    Widget? trailing,
+  }) {
+    return TabbedView._(
+      delegate: DeclarativeTabbedViewDelegate(
+        tabs: tabs,
+        selectedTabId: selectedTabId,
+        onTabClose: onTabClose,
+        onTabReorder: onTabReorder,
+        onTabAttach: onTabAttach,
+        onTabDetach: onTabDetach,
+        onTabSelect: onTabSelect,
+      ),
+      viewBuilder: viewBuilder,
+      tabReorderEnabled: tabReorderEnabled ?? _defaultTabReorderEnabled,
+      onTabSecondaryTap: onTabSecondaryTap,
+      unselectedTabButtonsBehavior:
+          unselectedTabButtonsBehavior ?? _defaultUnselectedBehavior,
+      contentClip: contentClip ?? _defaultContentClip,
+      closeButtonTooltip: closeButtonTooltip,
+      tabsAreaButtonsBuilder: tabsAreaButtonsBuilder,
+      tabsAreaVisible: tabsAreaVisible,
+      onDraggableBuild: onDraggableBuild,
+      canDrop: canDrop,
+      onBeforeDropAccept: onBeforeDropAccept,
+      dragScope: dragScope,
+      tabRemoveInterceptor: tabRemoveInterceptor,
+      trailing: trailing,
+    );
+  }
 
+  final TabbedViewDelegate delegate;
+  final bool contentClip;
+  final TabViewBuilder? viewBuilder;
+  final bool tabReorderEnabled;
   final TabRemoveInterceptor? tabRemoveInterceptor;
   final OnTabSecondaryTap? onTabSecondaryTap;
   final UnselectedTabButtonsBehavior unselectedTabButtonsBehavior;
@@ -71,20 +224,36 @@ class TabbedView extends StatefulWidget {
 
 /// The [TabbedView] state.
 class _TabbedViewState extends State<TabbedView> {
+  final TabbedViewSource _source = TabbedViewSource();
   int? _draggingTabIndex;
 
   @override
   void initState() {
     super.initState();
-    widget.controller.addListener(_rebuildByTabOrSelection);
+    final TabbedViewDelegate delegate = widget.delegate;
+    if (delegate is ImperativeTabbedViewDelegate) {
+      delegate.controller.addListener(_rebuildByTabOrSelection);
+    }
   }
 
   @override
   void didUpdateWidget(covariant TabbedView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.controller != oldWidget.controller) {
-      oldWidget.controller.removeListener(_rebuildByTabOrSelection);
-      widget.controller.addListener(_rebuildByTabOrSelection);
+    TabbedViewController? oldController;
+    final TabbedViewDelegate oldDelegate = oldWidget.delegate;
+    if (oldDelegate is ImperativeTabbedViewDelegate) {
+      oldController = oldDelegate.controller;
+    }
+
+    TabbedViewController? newController;
+    final TabbedViewDelegate newDelegate = widget.delegate;
+    if (newDelegate is ImperativeTabbedViewDelegate) {
+      newController = newDelegate.controller;
+    }
+
+    if (newController != oldController) {
+      oldController?.removeListener(_rebuildByTabOrSelection);
+      newController?.addListener(_rebuildByTabOrSelection);
     }
   }
 
@@ -93,8 +262,9 @@ class _TabbedViewState extends State<TabbedView> {
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
 
     TabbedViewProvider provider = TabbedViewProvider(
-        controller: widget.controller,
-        contentBuilder: widget.contentBuilder,
+        delegate: widget.delegate,
+        source: _source,
+        viewBuilder: widget.viewBuilder,
         tabReorderEnabled: widget.tabReorderEnabled,
         tabRemoveInterceptor: widget.tabRemoveInterceptor,
         contentClip: widget.contentClip,
@@ -117,7 +287,7 @@ class _TabbedViewState extends State<TabbedView> {
       children.add(LayoutId(id: 1, child: tabArea));
     }
     Widget contentArea =
-        ContentArea(provider: provider, tabsAreaVisible: tabsAreaVisible);
+        ViewArea(provider: provider, tabsAreaVisible: tabsAreaVisible);
     children.add(LayoutId(id: 2, child: contentArea));
     return CustomMultiChildLayout(
         children: children,
@@ -140,7 +310,10 @@ class _TabbedViewState extends State<TabbedView> {
 
   @override
   void dispose() {
-    widget.controller.removeListener(_rebuildByTabOrSelection);
+    final TabbedViewDelegate delegate = widget.delegate;
+    if (delegate is ImperativeTabbedViewDelegate) {
+      delegate.controller.removeListener(_rebuildByTabOrSelection);
+    }
     super.dispose();
   }
 }

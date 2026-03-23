@@ -32,10 +32,11 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
     List<TabData> tabs = [];
 
     tabs.add(TabData(
+        id: 'tab1',
         text: 'Tab 1',
         value: 'myTab',
         leading: (context, status) => Icon(Icons.star, size: 16),
-        content: Padding(padding: EdgeInsets.all(8), child: Text('Hello')),
+        view: Padding(padding: EdgeInsets.all(8), child: Text('Hello')),
         buttonsBuilder: (context) => [
               TabButton.icon(IconProvider.data(Icons.info), onPressed: () {
                 _scaffoldMessengerKey.currentState?.showSnackBar(
@@ -43,6 +44,7 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
               })
             ]));
     tabs.add(TabData(
+        id: 'tab2',
         text: 'Tab 2',
         buttonsBuilder: (context) => [
               TabButton.menu((context) {
@@ -60,29 +62,30 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                 ];
               })
             ],
-        content:
-            Padding(padding: EdgeInsets.all(8), child: Text('Hello again'))));
+        view: Padding(padding: EdgeInsets.all(8), child: Text('Hello again'))));
     tabs.add(TabData(
+        id: 'text field',
         closable: false,
         text: 'TextField',
-        content: Padding(
+        view: Padding(
             padding: EdgeInsets.all(8),
             child: TextField(
                 decoration: InputDecoration(
                     isDense: true, border: OutlineInputBorder()))),
         keepAlive: true));
     tabs.add(TabData(
+        id: 'long title',
         text: 'This is a very long tab title that should be truncated',
         leading: (context, status) => Icon(Icons.star, size: 16),
-        content: Padding(
+        view: Padding(
             padding: EdgeInsets.all(8),
             child: Text('Content for the long tab'))));
 
     _controller = TabbedViewController(
       tabs,
-      onTabReorder: (int oldIndex, int newIndex) {},
-      onTabSelection: (index, tabData) {},
-      onTabRemove: (tabData) {},
+      onTabReordered: (int oldIndex, int newIndex) {},
+      onTabSelected: (selection) {},
+      onTabRemoved: (tabData) {},
     );
   }
 
@@ -95,14 +98,14 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
                 brightness: _brightness,
                 colorSet: Colors.blueGrey,
                 borderColor: Colors.black,
-       )
+              )
             : TabbedViewThemeData.classic(brightness: _brightness);
         break;
       case ThemeName.minimalist:
         theme = _modifyThemeColors
             ? TabbedViewThemeData.minimalist(
                 brightness: _brightness, colorSet: Colors.blueGrey)
-            : TabbedViewThemeData.minimalist(brightness: _brightness, tabStyleResolver: MyTabStyleResolver());
+            : TabbedViewThemeData.minimalist(brightness: _brightness);
         break;
       case ThemeName.underline:
         theme = _modifyThemeColors
@@ -164,19 +167,20 @@ class TabbedViewExampleState extends State<TabbedViewExample> {
               content:
                   Text('Right-clicked on tab #$index: "${tabData.text}"')));
         },
-        contentBuilder: null,
+        viewBuilder: null,
         tabsAreaButtonsBuilder: _addButtonEnabled
             ? (context, tabsCount) {
                 return [
                   TabButton.icon(IconProvider.data(Icons.add), onPressed: () {
                     _controller.addTab(TabData(
+                        id: Object(),
                         text: 'New Tab',
-                        content: Center(child: Text('Content of New Tab'))));
+                        view: Center(child: Text('Content of New Tab'))));
                   })
                 ];
               }
             : null,
-        onDraggableBuild: (controller, tabIndex, tab) {
+        onDraggableBuild: (tabIndex, tab) {
           return DraggableConfig(
             canDrag: true,
             feedback: null,
@@ -410,49 +414,5 @@ class BrightnessChooser extends StatelessWidget {
     }).toList();
 
     return Wrap(spacing: 8, runSpacing: 4, children: children);
-  }
-}
-
-void das() {
-  TabbedViewController controller =
-      TabbedViewController([TabData(text: 'MyTab', value: 'myTab')]);
-
-  TabbedViewTheme(
-    data: TabbedViewThemeData.classic(
-      tabStyleResolver: MyTabStyleResolver(),
-    ),
-    child: TabbedView(controller: controller),
-  );
-}
-
-class MyTabStyleResolver extends MinimalistTabStyleResolver {
-
-  @override
-  Color? backgroundColor(TabStyleContext context) {
-    if(context.index==1) {
-      if(context.status==TabStatus.selected) {
-        return Colors.green.shade900;
-      }
-      if(context.status==TabStatus.hovered) {
-        return Colors.green.shade200;
-      }
-    }
-    return null;
-  }
-
-  @override
-  Color? fontColor(TabStyleContext context) {
-    if (context.tab.value == 'myTab') {
-      switch (context.status) {
-        case TabStatus.selected:
-          return Colors.green.shade700;
-        case TabStatus.hovered:
-          return Colors.green.shade400;
-        case TabStatus.normal:
-          return Colors.green.shade200;
-      }
-    }
-    // default theme color
-    return null;
   }
 }

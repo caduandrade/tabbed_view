@@ -119,10 +119,10 @@ class TabThemeData {
   ///
   /// If a theme is returned (for [TabStatus.selected] or [TabStatus.hovered]),
   /// its non-null properties will override the corresponding properties of the main tab theme.
-  /// For [TabStatus.normal], it returns `null` as there is no specific theme to apply.
+  /// For [TabStatus.unselected], it returns `null` as there is no specific theme to apply.
   TabStatusThemeData? getTabThemeFor(TabStatus status) {
     switch (status) {
-      case TabStatus.normal:
+      case TabStatus.unselected:
         return null;
       case TabStatus.selected:
         return selectedStatus;

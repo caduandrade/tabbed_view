@@ -1,5 +1,3 @@
-import '../draggable_data.dart';
-import '../tabbed_view_controller.dart';
+import '../draggable_tab_data.dart';
 
-typedef CanDrop = bool Function(
-    DraggableData source, TabbedViewController target);
+typedef CanDrop = bool Function(DraggableTabData source);

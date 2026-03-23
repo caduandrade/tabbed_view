@@ -1,11 +1,12 @@
 import 'dart:collection';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/foundation.dart';
 
 import 'tab_data.dart';
-import 'typedefs/on_tab_remove.dart';
-import 'typedefs/on_tab_reorder.dart';
-import 'typedefs/on_tab_selection.dart';
+import 'tab_selection.dart';
+import 'typedefs/on_tab_moved.dart';
+import 'typedefs/on_tab_removed.dart';
+import 'typedefs/on_tab_selected.dart';
 
 /// The [TabbedView] controller.
 ///
@@ -16,22 +17,25 @@ import 'typedefs/on_tab_selection.dart';
 /// Remember to dispose of the [TabbedView] when it is no longer needed. This will ensure we discard any resources used by the object.
 class TabbedViewController extends ChangeNotifier {
   TabbedViewController(this._tabs,
-      {this.data, this.onTabSelection, this.onTabRemove, this.onTabReorder}) {
+      {this.data, this.onTabSelected, this.onTabRemoved, this.onTabReordered}) {
     if (_tabs.isNotEmpty) {
-      _selection = _Selection(data: _tabs.first, index: 0);
+      _selection = TabSelection(tab: _tabs.first, index: 0);
     }
     for (TabData tab in _tabs) {
       tab.addListener(notifyListeners);
     }
-    _updateIndexes(false);
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Callback triggered when a tab is removed.
-  OnTabRemove? onTabRemove;
+  OnTabRemoved? onTabRemoved;
 
   /// Callback triggered when a tab is reordered.
-  OnTabReorder? onTabReorder;
-  OnTabSelection? onTabSelection;
+  OnTabMoved? onTabReordered;
+  OnTabSelected? onTabSelected;
 
   final List<TabData> _tabs;
 
@@ -39,17 +43,18 @@ class TabbedViewController extends ChangeNotifier {
 
   final dynamic data;
 
-  _Selection _selection = _Selection(index: null, data: null);
+  TabSelection? _selection;
 
   /// The selected tab index
-  int? get selectedIndex => _selection.index;
+  int? get selectedIndex => _selection?.index;
 
   void _updateSelection(int? tabIndex) {
-    final _Selection oldSelection = _selection;
-    _selection = _Selection(
-        data: tabIndex != null ? _tabs[tabIndex] : null, index: tabIndex);
+    final TabSelection? oldSelection = _selection;
+    _selection = tabIndex != null
+        ? TabSelection(index: tabIndex, tab: _tabs[tabIndex])
+        : null;
     if (oldSelection != _selection) {
-      onTabSelection?.call(_selection.index, _selection.data);
+      onTabSelected?.call(_selection);
     }
   }
 
@@ -100,12 +105,11 @@ class TabbedViewController extends ChangeNotifier {
     } else {
       _tabs.insert(newIndex - 1, tabToReorder);
     }
-    _updateIndexes(false);
     if (selectedTab != null) {
       _updateSelection(_tabs.indexOf(selectedTab));
     }
     notifyListeners();
-    onTabReorder?.call(oldIndex, newIndex);
+    onTabReordered?.call(oldIndex, newIndex);
     return true;
   }
 
@@ -117,8 +121,11 @@ class TabbedViewController extends ChangeNotifier {
   void insertTab(int index, TabData tab) {
     _tabs.insert(index, tab);
     tab.addListener(notifyListeners);
-    _updateIndexes(false);
     _afterIncTabs();
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Replaces all tabs.
@@ -126,10 +133,13 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in _tabs) {
       tab.removeListener(notifyListeners);
     }
-    _updateIndexes(true);
     _tabs.clear();
     _updateSelection(null);
     addTabs(iterable);
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Adds multiple [TabData].
@@ -138,16 +148,22 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in iterable) {
       tab.addListener(notifyListeners);
     }
-    _updateIndexes(false);
     _afterIncTabs();
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Adds a [TabData].
   void addTab(TabData tab) {
     _tabs.add(tab);
     tab.addListener(notifyListeners);
-    TabDataHelper.setIndex(tab, _tabs.length - 1);
     _afterIncTabs();
+
+    if (!kReleaseMode) {
+      assert(TabDataHelper.assertUniqueIds(tabs));
+    }
   }
 
   /// Method that should be used after adding a tab.
@@ -167,8 +183,6 @@ class TabbedViewController extends ChangeNotifier {
 
     TabData tabData = _tabs.removeAt(tabIndex);
     tabData.removeListener(notifyListeners);
-    TabDataHelper.setIndex(tabData, -1);
-    _updateIndexes(false);
     if (_tabs.isEmpty) {
       _updateSelection(null);
     } else {
@@ -187,7 +201,7 @@ class TabbedViewController extends ChangeNotifier {
       }
     }
     notifyListeners();
-    onTabRemove?.call(tabData);
+    onTabRemoved?.call(tabData);
     return tabData;
   }
 
@@ -197,18 +211,20 @@ class TabbedViewController extends ChangeNotifier {
     for (TabData tab in _tabs) {
       tab.removeListener(notifyListeners);
     }
-    _updateIndexes(true);
     _tabs.clear();
     _updateSelection(null);
     notifyListeners();
     for (final tab in removedTabs) {
-      onTabRemove?.call(tab);
+      onTabRemoved?.call(tab);
     }
   }
 
   /// Selects a tab.
   void selectTab(TabData tab) {
-    selectedIndex = TabDataHelper.indexFrom(tab);
+    final index = _tabs.indexWhere((t) => t.id == tab.id);
+    if (index != -1) {
+      selectedIndex = index;
+    }
   }
 
   /// Selects a tab by its value.
@@ -245,29 +261,4 @@ class TabbedViewController extends ChangeNotifier {
     }
     return null;
   }
-
-  void _updateIndexes(bool clear) {
-    for (int i = 0; i < _tabs.length; i++) {
-      TabData tab = _tabs[i];
-      TabDataHelper.setIndex(tab, clear ? -1 : i);
-    }
-  }
-}
-
-class _Selection {
-  _Selection({required this.data, required this.index});
-
-  final TabData? data;
-  final int? index;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is _Selection &&
-          runtimeType == other.runtimeType &&
-          data == other.data &&
-          index == other.index;
-
-  @override
-  int get hashCode => Object.hash(data, index);
 }

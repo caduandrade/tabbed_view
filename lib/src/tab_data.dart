@@ -3,16 +3,27 @@ import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:meta/meta.dart';
 
-import 'typedefs/tab_buttons_builder.dart';
 import 'tab_leading_builder.dart';
+import 'typedefs/tab_buttons_builder.dart';
 
 /// The tab data.
 ///
 /// The text displayed on the tab is defined by [text] parameter.
 ///
+/// The [id] defines the identity of the tab and must be stable across
+///  rebuilds. It is used internally to manage selection, reordering, and
+///   state preservation.
+///
 /// The optional [value] parameter allows associate the tab to any value.
 ///
-/// The optional [content] parameter defines the content of the tab.
+/// The optional [view] is the content associated with this tab, displayed
+/// in the main area of a [TabbedView] when the tab is selected.
+///
+/// This is not the visual representation of the tab itself (such as its
+/// label or icon), but the primary content shown for this tab.
+///
+/// If a [viewBuilder] is provided to [TabbedView], it takes precedence
+/// over this property.
 ///
 /// The [closable] parameter defines whether the Close button is visible.
 ///
@@ -28,16 +39,21 @@ import 'tab_leading_builder.dart';
 /// parameter as long as the [TabbedViewController] is being kept in the
 /// state of its class.
 ///
+/// When used with [TabbedView.declarative], changes to this object
+/// do not automatically trigger UI updates. The caller must rebuild
+/// the [TabbedView] with updated data.
+///
 /// See also:
 ///
-/// * [TabbedView.contentBuilder]
+/// * [TabbedView.viewBuilder]
 class TabData extends ChangeNotifier {
   TabData({
-    dynamic value,
+    required this.id,
+    Object? value,
     required String text,
     String? tooltip,
     TabButtonsBuilder? buttonsBuilder,
-    Widget? content,
+    Widget? view,
     TabLeadingBuilder? leading,
     bool closable = true,
     double? textSize,
@@ -48,22 +64,27 @@ class TabData extends ChangeNotifier {
         _tooltip = tooltip,
         _leading = leading,
         _closable = closable,
-        _content = content,
+        _view = view,
         _buttonsBuilder = buttonsBuilder,
         _textSize = textSize != null ? math.max(0, textSize) : null,
-        key = keepAlive ? GlobalKey() : UniqueKey();
+        _tabKey = ValueKey(id),
+        _contentKey = keepAlive ? GlobalObjectKey(id) : ValueKey(id);
+
+  /// The unique identifier of this tab.
+  final Object id;
 
   /// Identifies the content of the tab in the tree
-  final Key key;
+  final Key _tabKey;
+
+  /// Identifies the content of the tab in the tree
+  final Key _contentKey;
   final bool keepAlive;
 
   final bool draggable;
 
-  int _index = -1;
-
-  dynamic _value;
-  dynamic get value => _value;
-  set value(dynamic value) {
+  Object? _value;
+  Object? get value => _value;
+  set value(Object? value) {
     if (_value != value) {
       _value = value;
       notifyListeners();
@@ -86,11 +107,11 @@ class TabData extends ChangeNotifier {
     }
   }
 
-  Widget? _content;
-  Widget? get content => _content;
-  set content(Widget? content) {
-    if (_content != content) {
-      _content = content;
+  Widget? _view;
+  Widget? get view => _view;
+  set view(Widget? view) {
+    if (_view != view) {
+      _view = view;
       notifyListeners();
     }
   }
@@ -133,13 +154,24 @@ class TabData extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  final UniqueKey uniqueKey = UniqueKey();
 }
 
 @internal
 class TabDataHelper {
-  static int indexFrom(TabData tab) => tab._index;
+  static Key contentKey(TabData tab) => tab._contentKey;
+  static Key tabKey(TabData tab) => tab._tabKey;
 
-  static void setIndex(TabData tab, int newIndex) => tab._index = newIndex;
+  static bool assertUniqueIds(List<TabData> tabs) {
+    final seen = <Object>{};
+
+    for (final tab in tabs) {
+      if (!seen.add(tab.id)) {
+        throw FlutterError(
+          'Duplicate TabData id detected: ${tab.id}. '
+          'Each tab must have a unique id.',
+        );
+      }
+    }
+    return true;
+  }
 }

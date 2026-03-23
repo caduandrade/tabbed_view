@@ -5,8 +5,16 @@ import 'package:tabbed_view/src/tabbed_view_controller.dart';
 void main() {
   group('controller', () {
     test('close - selectedIndex', () {
-      TabbedViewController controller =
-          TabbedViewController([TabData(text: 'a'), TabData(text: 'b')]);
+      TabbedViewController controller = TabbedViewController([
+        TabData(
+          id: 'a',
+          text: 'a',
+        ),
+        TabData(
+          id: 'b',
+          text: 'b',
+        )
+      ]);
 
       expect(controller.selectedIndex, 0);
 

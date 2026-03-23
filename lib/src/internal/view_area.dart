@@ -3,38 +3,38 @@ import 'package:meta/meta.dart';
 
 import '../tab_bar_position.dart';
 import '../tab_data.dart';
-import '../tabbed_view_controller.dart';
 import '../theme/tabbed_view_theme_data.dart';
 import '../theme/theme_widget.dart';
+import 'tabbed_view_delegate.dart';
 import 'tabbed_view_provider.dart';
 
-/// Container widget for the tab content and menu.
+/// Container widget for the tab view.
 @internal
-class ContentArea extends StatelessWidget {
-  ContentArea({required this.tabsAreaVisible, required this.provider});
+class ViewArea extends StatelessWidget {
+  ViewArea({required this.tabsAreaVisible, required this.provider});
 
   final bool tabsAreaVisible;
   final TabbedViewProvider provider;
 
   @override
   Widget build(BuildContext context) {
-    TabbedViewController controller = provider.controller;
+    final TabbedViewDelegate delegate = provider.delegate;
     TabbedViewThemeData theme = TabbedViewTheme.of(context);
 
     LayoutBuilder layoutBuilder = LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       List<Widget> children = [];
 
-      for (int i = 0; i < controller.tabs.length; i++) {
-        TabData tab = controller.tabs[i];
+      for (int i = 0; i < delegate.tabs.length; i++) {
+        final TabData tab = delegate.tabs[i];
         bool selectedTab =
-            controller.selectedIndex != null && i == controller.selectedIndex;
+            delegate.selectedIndex != null && i == delegate.selectedIndex;
         if (tab.keepAlive || selectedTab) {
           Widget? child;
-          if (provider.contentBuilder != null) {
-            child = provider.contentBuilder!(context, i);
+          if (provider.viewBuilder != null) {
+            child = provider.viewBuilder!(context, tab);
           } else {
-            child = tab.content;
+            child = tab.view;
           }
           if (child != null) {
             child = ExcludeFocus(excluding: !selectedTab, child: child);
@@ -43,8 +43,9 @@ class ContentArea extends StatelessWidget {
             child = Offstage(offstage: !selectedTab, child: child);
           }
           // Padding will be applied once on the parent container.
-          children.add(
-              Positioned.fill(key: tab.key, child: Container(child: child)));
+          children.add(Positioned.fill(
+              key: TabDataHelper.contentKey(tab),
+              child: Container(child: child)));
         }
       }
 
@@ -89,8 +90,8 @@ class ContentArea extends StatelessWidget {
 
   Border _buildBorder({required TabbedViewThemeData theme}) {
     final bool needDividerBorderSide = !theme.isDividerWithinTabArea &&
-        ((provider.controller.length == 0 && theme.alwaysShowDivider) ||
-            (provider.controller.length > 0));
+        ((provider.delegate.tabs.length == 0 && theme.alwaysShowDivider) ||
+            (provider.delegate.tabs.length > 0));
     final BorderSide divider = needDividerBorderSide
         ? theme.divider ?? BorderSide.none
         : BorderSide.none;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../tab_bar_position.dart';
 import '../../tab_status.dart';
-import '../tab_header_extent_behavior.dart';
 import '../tab_decoration_builder.dart';
+import '../tab_header_extent_behavior.dart';
 import '../tab_style_context.dart';
 import '../tab_style_resolver.dart';
 import '../tabbed_view_theme_data.dart';
@@ -51,8 +51,8 @@ class MinimalistTheme extends TabbedViewThemeData {
     tab.buttonsOffset = 4;
     tab.textStyle = TextStyle(fontSize: fontSize, color: fontColor);
     tab.draggingDecoration = BoxDecoration(color: _unselectedBackgroundColor);
-    tab.padding = const EdgeInsets.fromLTRB(8, 4, 4, 4);
-    tab.paddingWithoutButton = const EdgeInsets.fromLTRB(8, 6, 8, 4);
+    tab.padding = const EdgeInsets.fromLTRB(10, 4, 6, 4);
+    tab.paddingWithoutButton = const EdgeInsets.fromLTRB(10, 6, 10, 4);
     tab.hoveredButtonBackground =
         BoxDecoration(color: isLight ? colorSet[500]! : colorSet[700]!);
     tab.buttonPadding = const EdgeInsets.all(4);
@@ -96,7 +96,7 @@ class MinimalistTheme extends TabbedViewThemeData {
         backgroundColor =
             resolver?.backgroundColor(styleContext) ?? _hoveredBackgroundColor;
         break;
-      case TabStatus.normal:
+      case TabStatus.unselected:
         backgroundColor = resolver?.backgroundColor(styleContext) ??
             _unselectedBackgroundColor;
         break;

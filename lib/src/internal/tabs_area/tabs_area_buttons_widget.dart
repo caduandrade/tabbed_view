@@ -3,11 +3,13 @@ import 'package:meta/meta.dart';
 
 import '../../tab_bar_position.dart';
 import '../../tab_button.dart';
+import '../../tab_data.dart';
 import '../../tabbed_view_menu_item.dart';
 import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/tabs_area_theme_data.dart';
 import '../../theme/theme_widget.dart';
 import '../tab/tab_button_widget.dart';
+import '../tabbed_view_delegate.dart';
 import '../tabbed_view_provider.dart';
 import 'hidden_tabs.dart';
 
@@ -24,20 +26,21 @@ class TabsAreaButtonsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabsAreaThemeData tabsAreaTheme = theme.tabsArea;
+    final TabbedViewDelegate delegate = provider.delegate;
 
     List<TabButton> buttons = [];
     if (provider.tabsAreaButtonsBuilder != null) {
-      buttons = provider.tabsAreaButtonsBuilder!(
-          context, provider.controller.tabs.length);
+      buttons = provider.tabsAreaButtonsBuilder!(context, delegate.tabs.length);
     }
     if (hiddenTabs.hasHiddenTabs) {
       final menuButton = TabButton.menu((context) {
         List<TabbedViewMenuItem> menus = [];
         for (int tabIndex in hiddenTabs.indexes) {
-          final String text = provider.controller.tabs[tabIndex].text;
+          final TabData tab = delegate.tabs[tabIndex];
+          final String text = tab.text;
           menus.add(TabbedViewMenuItem(
               text: text,
-              onSelection: () => provider.controller.selectedIndex = tabIndex));
+              onSelection: () => provider.delegate.selectTab(tab: tab)));
         }
         return menus;
       });

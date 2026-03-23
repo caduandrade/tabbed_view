@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 
 import '../../draggable_config.dart';
-import '../../draggable_data.dart';
+import '../../draggable_tab_data.dart';
 import '../../tab_data.dart';
 import '../../tab_status.dart';
 import '../../theme/side_tabs_layout.dart';
@@ -26,14 +26,13 @@ typedef UpdateHoveredIndex = void Function(int? tabIndex);
 @internal
 class TabWidget extends StatelessWidget {
   const TabWidget(
-      {required UniqueKey key,
+      {required super.key,
       required this.index,
       required this.status,
       required this.provider,
       required this.updateHoveredIndex,
       required this.onClose,
-      required this.sizeHolder})
-      : super(key: key);
+      required this.sizeHolder});
 
   final int index;
   final TabStatus status;
@@ -44,7 +43,7 @@ class TabWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TabData tab = provider.controller.tabs[index];
+    final TabData tab = provider.delegate.tabs[index];
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabThemeData tabTheme = theme.tab;
 
@@ -52,7 +51,7 @@ class TabWidget extends StatelessWidget {
       tab: tab,
       status: status,
       index: index,
-      tabsCount: provider.controller.length,
+      tabsCount: provider.delegate.tabs.length,
     );
 
     Widget widget = TabHeaderWidget(
@@ -137,10 +136,13 @@ class TabWidget extends StatelessWidget {
         onExit: (event) => updateHoveredIndex(null),
         child: provider.draggingTabIndex == null
             ? GestureDetector(
-                onTap: () => provider.controller.selectedIndex = index,
+                onTap: () {
+                  final TabData tab = provider.delegate.tabs[index];
+                  provider.delegate.selectTab(tab: tab);
+                },
                 onSecondaryTapDown: (details) {
                   if (provider.onTabSecondaryTap != null) {
-                    TabData tab = provider.controller.tabs[index];
+                    TabData tab = provider.delegate.tabs[index];
                     provider.onTabSecondaryTap!(index, tab, details);
                   }
                 },
@@ -150,8 +152,7 @@ class TabWidget extends StatelessWidget {
     if (tab.draggable) {
       DraggableConfig draggableConfig = DraggableConfig.defaultConfig;
       if (provider.onDraggableBuild != null) {
-        draggableConfig =
-            provider.onDraggableBuild!(provider.controller, index, tab);
+        draggableConfig = provider.onDraggableBuild!(index, tab);
       }
 
       if (draggableConfig.canDrag) {
@@ -159,10 +160,14 @@ class TabWidget extends StatelessWidget {
             ? draggableConfig.feedback!
             : TabDragFeedbackWidget(tab: tab, tabTheme: tabTheme);
 
-        widget = Draggable<DraggableData>(
+        widget = Draggable<DraggableTabData>(
             child: widget,
             feedback: Material(child: feedback),
-            data: DraggableData(provider.controller, tab, provider.dragScope),
+            data: DraggableTabDataHelper.build(
+                source: provider.source,
+                delegate: provider.delegate,
+                tab: tab,
+                dragScope: provider.dragScope),
             feedbackOffset: draggableConfig.feedbackOffset,
             dragAnchorStrategy: draggableConfig.dragAnchorStrategy,
             onDragStarted: () {
@@ -202,11 +207,10 @@ class TabWidget extends StatelessWidget {
       }
     }
 
-    if (provider.tabReorderEnabled &&
-        provider.draggingTabIndex != TabDataHelper.indexFrom(tab)) {
+    if (provider.tabReorderEnabled && provider.draggingTabIndex != index) {
       return DropTabWidget(
           provider: provider,
-          newIndex: TabDataHelper.indexFrom(tab),
+          tabIndex: index,
           child: widget,
           halfWidthDrop: true);
     }
