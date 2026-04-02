@@ -37,7 +37,8 @@ class TabsAreaButtonsWidget extends StatelessWidget {
         List<TabbedViewMenuItem> menus = [];
         for (int tabIndex in hiddenTabs.indexes) {
           final TabData tab = delegate.tabs[tabIndex];
-          final String text = tab.text;
+          final TabTextProvider? textProvider = tab.textProvider;
+          final String text = textProvider?.call() ?? tab.text ?? '';
           menus.add(TabbedViewMenuItem(
               text: text,
               onSelection: () => provider.delegate.selectTab(tab: tab)));

@@ -37,6 +37,16 @@ class TabHeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TabData tab = provider.delegate.tabs[index];
+    final Listenable? listenable = tab.listenable;
+    if (listenable == null) {
+      return _build(context);
+    }
+    return ListenableBuilder(
+        listenable: listenable, builder: (context, child) => _build(context));
+  }
+
+  Widget _build(BuildContext context) {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabThemeData tabTheme = theme.tab;
 
@@ -83,7 +93,6 @@ class TabHeaderWidget extends StatelessWidget {
         widget = RotatedBox(quarterTurns: 1, child: widget);
       }
     }
-
     return widget;
   }
 
@@ -141,11 +150,12 @@ class TabHeaderWidget extends StatelessWidget {
         buttons != null && buttons.isNotEmpty && tabTheme.buttonsOffset > 0) {
       padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
     }
-
     if (leading != null) {
       textAndButtons.add(leading);
     }
-    Widget tabText = Text(tab.text,
+    final TabTextProvider? textProvider = tab.textProvider;
+    final String text = textProvider?.call() ?? tab.text ?? '';
+    Widget tabText = Text(text,
         maxLines: tabTheme.maxLines,
         style: textStyle,
         overflow: TextOverflow.ellipsis);

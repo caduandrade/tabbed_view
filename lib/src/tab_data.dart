@@ -39,6 +39,10 @@ import 'typedefs/tab_buttons_builder.dart';
 /// parameter as long as the [TabbedViewController] is being kept in the
 /// state of its class.
 ///
+/// The [textProvider] parameter if defined, overrides the static text property.
+/// While it is called during the initial build, it is highly recommended to use
+/// it in conjunction with the [listenable] to enable reactive updates to the tab label.
+///
 /// When used with [TabbedView.declarative], changes to this object
 /// do not automatically trigger UI updates. The caller must rebuild
 /// the [TabbedView] with updated data.
@@ -50,10 +54,12 @@ class TabData extends ChangeNotifier {
   TabData({
     required this.id,
     Object? value,
-    required String text,
+    String? text,
+    this.textProvider,
     String? tooltip,
     TabButtonsBuilder? buttonsBuilder,
     Widget? view,
+    this.listenable,
     TabLeadingBuilder? leading,
     bool closable = true,
     double? textSize,
@@ -75,6 +81,10 @@ class TabData extends ChangeNotifier {
 
   /// Identifies the content of the tab in the tree
   final Key _tabKey;
+
+  final Listenable? listenable;
+
+  final TabTextProvider? textProvider;
 
   /// Identifies the content of the tab in the tree
   final Key _contentKey;
@@ -134,9 +144,9 @@ class TabData extends ChangeNotifier {
     }
   }
 
-  String _text;
-  String get text => _text;
-  set text(String value) {
+  String? _text;
+  String? get text => _text;
+  set text(String? value) {
     if (_text != value) {
       _text = value;
       notifyListeners();
@@ -155,6 +165,8 @@ class TabData extends ChangeNotifier {
     }
   }
 }
+
+typedef TabTextProvider = String Function();
 
 @internal
 class TabDataHelper {

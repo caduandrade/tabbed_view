@@ -23,9 +23,11 @@ class TabDragFeedbackWidget extends StatelessWidget {
         children.add(leading);
       }
     }
+    final TabTextProvider? textProvider = tab.textProvider;
+    final String text = textProvider?.call() ?? tab.text ?? '';
     children.add(SizedBox(
         width: tab.textSize,
-        child: Text(tab.text,
+        child: Text(text,
             style: tabTheme.textStyle, overflow: TextOverflow.ellipsis)));
 
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;

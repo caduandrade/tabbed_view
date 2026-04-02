@@ -1,3 +1,8 @@
+## 3.1.0
+
+* `TabData`
+  * Added `listenable` and `textProvider` for reactive UI updates.
+
 ## 3.0.0
 
 * `TabDecoration`
