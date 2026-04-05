@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:tabbed_view/src/internal/tab/tab_header_layout.dart';
 import 'package:tabbed_view/src/theme/tab_style_context.dart';
 import 'package:tabbed_view/src/theme/tab_style_resolver.dart';
 
@@ -50,62 +51,11 @@ class TabHeaderWidget extends StatelessWidget {
     final TabbedViewThemeData theme = TabbedViewTheme.of(context);
     final TabThemeData tabTheme = theme.tab;
 
-    List<Widget> textAndButtons = _buildTextAndButtons(context);
-
-    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
-    if (tabTheme.verticalAlignment == VerticalAlignment.top) {
-      crossAxisAlignment = CrossAxisAlignment.start;
-    } else if (tabTheme.verticalAlignment == VerticalAlignment.bottom) {
-      crossAxisAlignment = CrossAxisAlignment.end;
-    }
-    Widget textAndButtonsContainer = ClipRect(
-        child: IntrinsicWidth(
-            child: Row(
-                children: textAndButtons,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: crossAxisAlignment)));
-
-    final TabStatusThemeData? statusTheme = tabTheme.getTabThemeFor(status);
-    final TabStyleResolver? styleResolver = tabTheme.styleResolver;
-
-    EdgeInsetsGeometry? padding;
-    if (textAndButtons.length == 1) {
-      padding = styleResolver?.paddingWithoutButton(styleContext) ??
-          statusTheme?.paddingWithoutButton ??
-          tabTheme.paddingWithoutButton;
-    }
-    if (padding == null) {
-      padding = styleResolver?.padding(styleContext) ??
-          statusTheme?.padding ??
-          tabTheme.padding;
-    }
-
-    Widget widget = Container(
-      child: Container(child: textAndButtonsContainer, padding: padding),
-    );
-
-    if (theme.tabsArea.position.isVertical &&
-        sideTabsLayout == SideTabsLayout.rotated) {
-      // Rotate the tab content
-      if (theme.tabsArea.position == TabBarPosition.left) {
-        widget = RotatedBox(quarterTurns: -1, child: widget);
-      } else if (theme.tabsArea.position == TabBarPosition.right) {
-        widget = RotatedBox(quarterTurns: 1, child: widget);
-      }
-    }
-    return widget;
-  }
-
-  /// Builds a list with title text and buttons.
-  List<Widget> _buildTextAndButtons(BuildContext context) {
-    final List<Widget> textAndButtons = [];
     final TabData tab = provider.delegate.tabs[index];
 
     final List<TabButton>? buttons = tab.buttonsBuilder?.call(context);
     final Widget? leading = tab.leading?.call(context, status);
 
-    final TabbedViewThemeData theme = TabbedViewTheme.of(context);
-    final TabThemeData tabTheme = theme.tab;
     final TabStyleResolver? styleResolver = tabTheme.styleResolver;
     final TabStatusThemeData? statusTheme = tabTheme.getTabThemeFor(status);
 
@@ -150,9 +100,7 @@ class TabHeaderWidget extends StatelessWidget {
         buttons != null && buttons.isNotEmpty && tabTheme.buttonsOffset > 0) {
       padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
     }
-    if (leading != null) {
-      textAndButtons.add(leading);
-    }
+
     final TabTextProvider? textProvider = tab.textProvider;
     final String text = textProvider?.call() ?? tab.text ?? '';
     Widget tabText = Text(text,
@@ -162,13 +110,16 @@ class TabHeaderWidget extends StatelessWidget {
     if (tab.tooltip != null) {
       tabText = Tooltip(message: tab.tooltip, child: tabText);
     }
-    textAndButtons.add(Expanded(
-        child: Container(
-      alignment: Alignment.centerLeft,
-      padding: padding,
-      child: SizedBox(width: tab.textSize, child: tabText),
-    )));
 
+    if (tab.textSize != null) {
+      tabText = Container(
+        alignment: Alignment.centerLeft,
+        padding: padding,
+        child: SizedBox(width: tab.textSize, child: tabText),
+      );
+    }
+
+    List<Widget>? trailing = [];
     if (buttons != null) {
       final bool enabled = provider.draggingTabIndex == null &&
           (status == TabStatus.selected ||
@@ -181,7 +132,7 @@ class TabHeaderWidget extends StatelessWidget {
           padding = EdgeInsets.only(left: tabTheme.buttonsGap);
         }
         TabButton button = buttons[i];
-        textAndButtons.add(Container(
+        trailing.add(Container(
             child: TabButtonWidget(
                 button: button,
                 enabled: enabled,
@@ -211,7 +162,7 @@ class TabHeaderWidget extends StatelessWidget {
       TabButton closeButton = TabButton.icon(tabTheme.closeIcon,
           onPressed: () async => await _onClose(context, index),
           toolTip: provider.closeButtonTooltip);
-      textAndButtons.add(Container(
+      trailing.add(Container(
           child: TabButtonWidget(
               button: closeButton,
               enabled: enabled,
@@ -226,7 +177,45 @@ class TabHeaderWidget extends StatelessWidget {
           padding: padding));
     }
 
-    return textAndButtons;
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
+    if (tabTheme.verticalAlignment == VerticalAlignment.top) {
+      crossAxisAlignment = CrossAxisAlignment.start;
+    } else if (tabTheme.verticalAlignment == VerticalAlignment.bottom) {
+      crossAxisAlignment = CrossAxisAlignment.end;
+    }
+
+    Widget textAndButtonsContainer = TabHeaderRow(
+        crossAxisAlignment: crossAxisAlignment,
+        text: tabText,
+        leading: leading,
+        trailing: trailing.isNotEmpty ? trailing : null);
+
+    EdgeInsetsGeometry? padding2;
+    if (trailing.isEmpty) {
+      padding2 = styleResolver?.paddingWithoutButton(styleContext) ??
+          statusTheme?.paddingWithoutButton ??
+          tabTheme.paddingWithoutButton;
+    }
+    if (padding2 == null) {
+      padding2 = styleResolver?.padding(styleContext) ??
+          statusTheme?.padding ??
+          tabTheme.padding;
+    }
+
+    Widget widget = Container(
+      child: Container(child: textAndButtonsContainer, padding: padding2),
+    );
+
+    if (theme.tabsArea.position.isVertical &&
+        sideTabsLayout == SideTabsLayout.rotated) {
+      // Rotate the tab content
+      if (theme.tabsArea.position == TabBarPosition.left) {
+        widget = RotatedBox(quarterTurns: -1, child: widget);
+      } else if (theme.tabsArea.position == TabBarPosition.right) {
+        widget = RotatedBox(quarterTurns: 1, child: widget);
+      }
+    }
+    return widget;
   }
 
   Future<void> _onClose(BuildContext context, int index) async {

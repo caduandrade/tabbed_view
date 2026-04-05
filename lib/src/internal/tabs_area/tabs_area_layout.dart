@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../tab_bar_position.dart';
 import '../../theme/tab_header_extent_behavior.dart';
@@ -163,7 +164,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
     final double minimalCrossAxisSize = theme.isDividerWithinTabArea
         ? (divider != null ? divider.width : 0)
         : 0;
-    final double maxCrossAxisSize =
+    double maxCrossAxisSize =
         math.max(_layoutChildren(children: children), minimalCrossAxisSize);
     final RenderBox corner = children.removeLast();
 
@@ -174,12 +175,72 @@ class _TabsAreaLayoutRenderBox extends RenderBox
         ? constraints.maxWidth
         : constraints.maxHeight;
 
-    final double availableSpaceForTabs = math.max(0,
-        availableMainAxisSpace - tabsAreaTheme.initialGap - reservedForCorner);
+    final double availableSpaceForTabs = math.max(
+        0,
+        availableMainAxisSpace -
+            tabsAreaTheme.initialGap -
+            reservedForCorner -
+            tabsAreaTheme.minimalFinalGap);
 
+    switch (theme.tabsArea.lastVisibleTabBehavior) {
+      case LastVisibleTabBehavior.hide:
+        _hideTabsUntilThereIsNoMoreSpace(
+            children: children, availableSpaceForTabs: availableSpaceForTabs);
+        break;
+      case LastVisibleTabBehavior.shrink:
+        maxCrossAxisSize = _shrinkLast(
+            children: children,
+            availableSpaceForTabs: availableSpaceForTabs,
+            maxCrossAxisSize: maxCrossAxisSize,
+            minimalCrossAxisSize: minimalCrossAxisSize,
+            corner: corner);
+        break;
+    }
+
+    // The corner has already been removed from the children.
+    _positionChildren(
+        tabs: children, corner: corner, maxCrossAxisSize: maxCrossAxisSize);
+
+    if (tabBarPosition.isHorizontal) {
+      size =
+          constraints.constrain(Size(constraints.maxWidth, maxCrossAxisSize));
+    } else {
+      size =
+          constraints.constrain(Size(maxCrossAxisSize, constraints.maxHeight));
+    }
+  }
+
+  void _hideTabsUntilThereIsNoMoreSpace({
+    required List<RenderBox> children,
+    required double availableSpaceForTabs,
+  }) {
+    final List<int> hiddenIndexes = [];
+    while (children.length >= 1 &&
+        _requiredTabsMainAxisSize(tabs: children) > availableSpaceForTabs) {
+      int? removedIndex;
+      if (children.length == 1) {
+        children.removeAt(0).tabsAreaLayoutParentData().visible = false;
+        removedIndex = 0;
+      } else {
+        removedIndex = _removeLastNonSelected(tabs: children);
+      }
+      if (removedIndex != null) {
+        hiddenIndexes.add(removedIndex);
+      }
+    }
+    hiddenTabs.update(hiddenIndexes);
+  }
+
+  double _shrinkLast({
+    required List<RenderBox> children,
+    required double availableSpaceForTabs,
+    required double maxCrossAxisSize,
+    required double minimalCrossAxisSize,
+    required RenderBox corner,
+  }) {
     final List<int> hiddenIndexes = [];
 
-    while (children.isNotEmpty &&
+    while (children.length > 1 &&
         _requiredTabsMainAxisSize(tabs: children) > availableSpaceForTabs) {
       int? removedIndex;
       if (children.length == 1) {
@@ -193,19 +254,35 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       }
     }
 
-    hiddenTabs.update(hiddenIndexes);
+    if (children.length == 1) {
+      RenderBox child = children.first;
 
-    // The corner has already been removed from the children.
-    _positionChildren(
-        tabs: children, corner: corner, maxCrossAxisSize: maxCrossAxisSize);
-
-    if (tabBarPosition.isHorizontal) {
-      size =
-          constraints.constrain(Size(constraints.maxWidth, maxCrossAxisSize));
-    } else {
-      size =
-          constraints.constrain(Size(maxCrossAxisSize, constraints.maxHeight));
+      if (tabBarPosition.isHorizontal) {
+        child.layout(
+            BoxConstraints(
+              minWidth: 0,
+              maxWidth: availableSpaceForTabs,
+              minHeight: 0,
+              maxHeight: double.infinity,
+            ),
+            parentUsesSize: true);
+        maxCrossAxisSize = math.max(child.size.height, corner.size.height);
+      } else {
+        child.layout(
+            BoxConstraints(
+              minWidth: 0,
+              maxWidth: double.infinity,
+              minHeight: 0,
+              maxHeight: availableSpaceForTabs,
+            ),
+            parentUsesSize: true);
+        maxCrossAxisSize = math.max(child.size.width, corner.size.width);
+      }
+      maxCrossAxisSize = math.max(maxCrossAxisSize, minimalCrossAxisSize);
     }
+
+    hiddenTabs.update(hiddenIndexes);
+    return maxCrossAxisSize;
   }
 
   /// Removes the last non-selected tab. Returns the removed tab index.
@@ -226,7 +303,7 @@ class _TabsAreaLayoutRenderBox extends RenderBox
 
   /// Calculates the required main axis size.
   double _requiredTabsMainAxisSize({required List<RenderBox> tabs}) {
-    double totalSize = tabsAreaTheme.initialGap;
+    double totalSize = 0;
     for (int i = 0; i < tabs.length; i++) {
       final RenderBox tab = tabs[i];
       totalSize +=
@@ -234,8 +311,6 @@ class _TabsAreaLayoutRenderBox extends RenderBox
       if (i < tabs.length - 1) {
         // Not the last tab
         totalSize += tabsAreaTheme.middleGap;
-      } else {
-        totalSize += tabsAreaTheme.minimalFinalGap;
       }
     }
     return totalSize;

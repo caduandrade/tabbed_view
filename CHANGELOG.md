@@ -2,6 +2,10 @@
 
 * `TabData`
   * Added `listenable` and `textProvider` for reactive UI updates.
+* `TabsAreaThemeData`
+  * Added `lastVisibleTabBehavior` to configure how the last remaining tab behaves when there is no space available.
+* `LastVisibleTabBehavior`
+  * New enum with two modes: hide (moves the tab to the overflow menu) and shrink (keeps the tab visible by reducing its width).
 * Bugfix
   * `TabsAreaCrossAxisAlignment`
     * Enum was not exported.

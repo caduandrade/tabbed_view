@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../tab_bar_position.dart';
+import 'last_visible_tab_behavior.dart';
 import 'side_tabs_layout.dart';
 import 'tab_header_extent_behavior.dart';
 import 'tabbed_view_theme_constants.dart';
@@ -17,6 +18,7 @@ class TabsAreaThemeData {
       this.initialGap = 0,
       this.middleGap = 0,
       double minimalFinalGap = 0,
+      this.lastVisibleTabBehavior = LastVisibleTabBehavior.hide,
       this.crossAxisFit = TabsAreaCrossAxisFit.none,
       this.crossAxisAlignment = TabsAreaCrossAxisAlignment.inner,
       this.tabHeaderExtentBehavior = TabHeaderExtentBehavior.individual,
@@ -83,6 +85,8 @@ class TabsAreaThemeData {
     _minimalFinalGap = value >= 0 ? value : 0;
   }
 
+  LastVisibleTabBehavior lastVisibleTabBehavior;
+
   /// The decoration to paint behind the buttons.
   BoxDecoration? buttonsAreaDecoration;
 
@@ -147,7 +151,8 @@ class TabsAreaThemeData {
           disabledButtonBackground == other.disabledButtonBackground &&
           _buttonsGap == other._buttonsGap &&
           _buttonsOffset == other._buttonsOffset &&
-          buttonPadding == other.buttonPadding;
+          buttonPadding == other.buttonPadding &&
+          lastVisibleTabBehavior == other.lastVisibleTabBehavior;
 
   @override
   int get hashCode => Object.hashAll([
@@ -175,6 +180,7 @@ class TabsAreaThemeData {
         disabledButtonBackground,
         _buttonsGap,
         _buttonsOffset,
-        buttonPadding
+        buttonPadding,
+        lastVisibleTabBehavior
       ]);
 }
