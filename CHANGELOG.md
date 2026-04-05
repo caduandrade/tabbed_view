@@ -2,6 +2,9 @@
 
 * `TabData`
   * Added `listenable` and `textProvider` for reactive UI updates.
+* Bugfix
+  * `TabsAreaCrossAxisAlignment`
+    * Enum was not exported.
 
 ## 3.0.0
 
