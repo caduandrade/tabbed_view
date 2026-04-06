@@ -27,13 +27,29 @@ class _Screen extends StatefulWidget {
 }
 
 class _ScreenState extends State<_Screen> {
-  final TabbedViewController _controller = TabbedViewController([
-    TabData(id: 1, text: 'Test'),
-  ]);
+  final TabbedViewController _controller = TabbedViewController([]);
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.setTabs([
+      TabData(id: 1, labelBuilder: _labelBuilder),
+      TabData(id: 2, labelBuilder: _labelBuilder),
+      TabData(id: 3, labelBuilder: _labelBuilder),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
     return TabbedView(controller: _controller);
+  }
+
+  Widget _labelBuilder(TabLabelBuilderContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
+      color: context.status==TabStatus.hovered? Colors.green:Colors.blue,
+      child: Text(context.tab.id.toString()),
+    );
   }
 }
 

@@ -13,9 +13,11 @@ import '../../theme/tab_theme_data.dart';
 import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/theme_widget.dart';
 import '../../theme/vertical_alignment.dart';
+import '../../typedefs/tab_label_builder.dart';
 import '../../unselected_tab_buttons_behavior.dart';
 import '../tabbed_view_provider.dart';
 import 'tab_button_widget.dart';
+import 'tab_header_layout.dart';
 
 @internal
 class TabHeaderWidget extends StatelessWidget {
@@ -94,31 +96,42 @@ class TabHeaderWidget extends StatelessWidget {
       }
     }
 
-    final TabTextProvider? textProvider = tab.textProvider;
-    final String text = textProvider?.call() ?? tab.text ?? '';
-    Widget tabText = Text(text,
-        maxLines: tabTheme.maxLines,
-        style: textStyle,
-        overflow: TextOverflow.ellipsis);
-    if (tab.tooltip != null) {
-      tabText = Tooltip(message: tab.tooltip, child: tabText);
-    }
-
-    EdgeInsets? padding;
+    EdgeInsets? buttonsOffsetPadding;
     if (tab.closable ||
         buttons != null && buttons.isNotEmpty && tabTheme.buttonsOffset > 0) {
-      padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
+      buttonsOffsetPadding = EdgeInsets.only(right: tabTheme.buttonsOffset);
     }
 
-    if (tab.textSize != null) {
-      //TODO padding only if textSize?!?
-      tabText = Container(
-        alignment: Alignment.centerLeft,
-        padding: padding,
-        child: SizedBox(width: tab.textSize, child: tabText),
-      );
+    Widget label;
+    TabLabelBuilder? labelBuilder = tab.labelBuilder;
+    if (labelBuilder != null) {
+      label = labelBuilder.call(TabLabelBuilderContext(
+          tab: tab,
+          status: status,
+          tabTheme: tabTheme,
+          hasButtons: buttons?.isNotEmpty ?? false,
+          textStyle: textStyle));
+    } else {
+      final TabTextProvider? textProvider = tab.textProvider;
+      final String text = textProvider?.call() ?? tab.text ?? '';
+      label = Text(text,
+          maxLines: tabTheme.maxLines,
+          style: textStyle,
+          overflow: TextOverflow.ellipsis);
+      if (tab.tooltip != null) {
+        label = Tooltip(message: tab.tooltip, child: label);
+      }
+      if (tab.textSize != null) {
+        label = Container(
+          alignment: Alignment.centerLeft,
+          child: SizedBox(width: tab.textSize, child: label),
+        );
+      }
     }
 
+    if (buttonsOffsetPadding != null) {
+      label = Padding(padding: buttonsOffsetPadding, child: label);
+    }
     List<Widget>? trailing = [];
     if (buttons != null) {
       final bool enabled = provider.draggingTabIndex == null &&
@@ -131,7 +144,7 @@ class TabHeaderWidget extends StatelessWidget {
         if (i > 0 && i < buttons.length && tabTheme.buttonsGap > 0) {
           padding = EdgeInsets.only(left: tabTheme.buttonsGap);
         }
-        //TODO avoid container if padding null
+        //TODO avoid container if padding null?
         TabButton button = buttons[i];
         trailing.add(Container(
             child: TabButtonWidget(
@@ -188,7 +201,7 @@ class TabHeaderWidget extends StatelessWidget {
     //TODO Use the tabText directly if there are no trailing or leading elements?
     Widget textAndButtonsContainer = TabHeaderRow(
         crossAxisAlignment: crossAxisAlignment,
-        text: tabText,
+        text: label,
         leading: leading,
         trailing: trailing.isNotEmpty ? trailing : null);
 
