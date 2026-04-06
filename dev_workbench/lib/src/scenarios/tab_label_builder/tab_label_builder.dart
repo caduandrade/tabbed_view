@@ -1,39 +1,39 @@
-import 'package:dev_workbench/src/scenarios/scenario_config.dart';
-import 'package:dev_workbench/src/scenarios/scenario_configurator.dart';
-import 'package:dev_workbench/src/scenarios/scenario_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:tabbed_view/src/internal/tab/tab_header_layout.dart';
+import 'package:tabbed_view/tabbed_view.dart';
 
-class TabHeaderRowScenario {
+import '../scenario_config.dart';
+import '../scenario_configurator.dart';
+import '../scenario_screen.dart';
+
+class TabLabelBuilder {
   static (ScenarioConfigurator?, ScenarioScreen) builder() {
     _Config config = _Config();
     return (
       _Configurator(config: config),
       ScenarioScreen(
         config: config,
-        builder: (context) => _Screen(config: config),
+        builder: (BuildContext context) => _Screen(config: config),
       ),
     );
   }
 }
 
-class _Screen extends StatelessWidget {
+class _Screen extends StatefulWidget {
   const _Screen({required this.config});
   final _Config config;
 
   @override
+  State<StatefulWidget> createState() => _ScreenState();
+}
+
+class _ScreenState extends State<_Screen> {
+  final TabbedViewController _controller = TabbedViewController([
+    TabData(id: 1, text: 'Test'),
+  ]);
+
+  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: TabHeaderRow(
-        text: Text(
-          'This is just a longer text. This is just a longer text. This is just a longer text.',
-          overflow: config.overflow ? TextOverflow.ellipsis : null,
-          maxLines: config.maxLines ? 2 : null,
-        ),
-        leading: Container(color: Colors.green, width: 200, height: 6),
-        trailing: [Container(color: Colors.blue, width: 200, height: 6)],
-      ),
-    );
+    return TabbedView(controller: _controller);
   }
 }
 

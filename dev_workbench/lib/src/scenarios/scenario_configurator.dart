@@ -12,13 +12,10 @@ abstract class ScenarioConfigurator<CONFIG extends ScenarioConfig>
     return ListenableBuilder(
       listenable: config,
       builder: (context, child) => SingleChildScrollView(
-        child: IntrinsicWidth(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(left: BorderSide(color: Colors.grey.shade600)),
-            ),
-            child: Column(children: buildConfigurations(context)),
-          ),
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: buildConfigurations(context),
         ),
       ),
     );

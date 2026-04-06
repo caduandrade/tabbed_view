@@ -1,19 +1,23 @@
 import 'package:dev_workbench/src/scenarios/scenario_config.dart';
 import 'package:flutter/material.dart';
 
-abstract class ScenarioScreen<CONFIG extends ScenarioConfig>
-    extends StatelessWidget {
-  const ScenarioScreen({super.key, required this.config});
+final class ScenarioScreen extends StatelessWidget {
+  const ScenarioScreen({
+    super.key,
+    required this.config,
+    required this.builder,
+  });
 
-  final CONFIG config;
+  final ScenarioConfig config;
+  final Builder builder;
 
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: config,
-      builder: (context, child) => buildScenario(context),
+      builder: (context, child) => builder.call(context),
     );
   }
-
-  Widget buildScenario(BuildContext context);
 }
+
+typedef Builder = Widget Function(BuildContext context);
