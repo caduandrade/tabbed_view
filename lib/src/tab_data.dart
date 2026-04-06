@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 
 import 'tab_leading_builder.dart';
 import 'typedefs/tab_buttons_builder.dart';
+import 'typedefs/tab_label_builder.dart';
 
 /// The tab data.
 ///
@@ -56,6 +57,7 @@ class TabData extends ChangeNotifier {
     Object? value,
     String? text,
     this.textProvider,
+    TabLabelBuilder? labelBuilder,
     String? tooltip,
     TabButtonsBuilder? buttonsBuilder,
     Widget? view,
@@ -71,6 +73,7 @@ class TabData extends ChangeNotifier {
         _leading = leading,
         _closable = closable,
         _view = view,
+        _labelBuilder = labelBuilder,
         _buttonsBuilder = buttonsBuilder,
         _textSize = textSize != null ? math.max(0, textSize) : null,
         _tabKey = ValueKey(id),
@@ -161,6 +164,15 @@ class TabData extends ChangeNotifier {
     }
     if (_textSize != value) {
       _textSize = value;
+      notifyListeners();
+    }
+  }
+
+  TabLabelBuilder? _labelBuilder;
+  TabLabelBuilder? get labelBuilder => _labelBuilder;
+  set labelBuilder(TabLabelBuilder? value) {
+    if (_labelBuilder != value) {
+      _labelBuilder = value;
       notifyListeners();
     }
   }

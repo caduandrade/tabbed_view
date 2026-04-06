@@ -42,6 +42,7 @@ export 'src/typedefs/on_tab_secondary_tap.dart';
 export 'src/typedefs/on_tab_select.dart';
 export 'src/typedefs/on_tab_selected.dart';
 export 'src/typedefs/tab_buttons_builder.dart';
+export 'src/typedefs/tab_label_builder.dart';
 export 'src/typedefs/tab_remove_interceptor.dart';
 export 'src/typedefs/tabs_area_buttons_builder.dart';
 export 'src/unselected_tab_buttons_behavior.dart';

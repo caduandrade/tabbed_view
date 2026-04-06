@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:tabbed_view/src/internal/tab/tab_header_layout.dart';
-import 'package:tabbed_view/src/theme/tab_style_context.dart';
-import 'package:tabbed_view/src/theme/tab_style_resolver.dart';
 
 import '../../tab_bar_position.dart';
 import '../../tab_button.dart';
@@ -10,6 +7,8 @@ import '../../tab_data.dart';
 import '../../tab_status.dart';
 import '../../theme/side_tabs_layout.dart';
 import '../../theme/tab_status_theme_data.dart';
+import '../../theme/tab_style_context.dart';
+import '../../theme/tab_style_resolver.dart';
 import '../../theme/tab_theme_data.dart';
 import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/theme_widget.dart';
@@ -95,12 +94,6 @@ class TabHeaderWidget extends StatelessWidget {
       }
     }
 
-    EdgeInsets? padding;
-    if (tab.closable ||
-        buttons != null && buttons.isNotEmpty && tabTheme.buttonsOffset > 0) {
-      padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
-    }
-
     final TabTextProvider? textProvider = tab.textProvider;
     final String text = textProvider?.call() ?? tab.text ?? '';
     Widget tabText = Text(text,
@@ -111,7 +104,14 @@ class TabHeaderWidget extends StatelessWidget {
       tabText = Tooltip(message: tab.tooltip, child: tabText);
     }
 
+    EdgeInsets? padding;
+    if (tab.closable ||
+        buttons != null && buttons.isNotEmpty && tabTheme.buttonsOffset > 0) {
+      padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
+    }
+
     if (tab.textSize != null) {
+      //TODO padding only if textSize?!?
       tabText = Container(
         alignment: Alignment.centerLeft,
         padding: padding,
@@ -131,6 +131,7 @@ class TabHeaderWidget extends StatelessWidget {
         if (i > 0 && i < buttons.length && tabTheme.buttonsGap > 0) {
           padding = EdgeInsets.only(left: tabTheme.buttonsGap);
         }
+        //TODO avoid container if padding null
         TabButton button = buttons[i];
         trailing.add(Container(
             child: TabButtonWidget(
@@ -184,6 +185,7 @@ class TabHeaderWidget extends StatelessWidget {
       crossAxisAlignment = CrossAxisAlignment.end;
     }
 
+    //TODO Use the tabText directly if there are no trailing or leading elements?
     Widget textAndButtonsContainer = TabHeaderRow(
         crossAxisAlignment: crossAxisAlignment,
         text: tabText,
