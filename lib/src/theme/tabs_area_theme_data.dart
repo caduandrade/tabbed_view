@@ -14,6 +14,7 @@ class TabsAreaThemeData {
       {this.visible = true,
       this.color,
       this.border,
+      this.padding,
       this.borderRadius = 0,
       this.initialGap = 0,
       this.middleGap = 0,
@@ -44,6 +45,8 @@ class TabsAreaThemeData {
             TabbedViewThemeConstants.normalize(buttonIconSize);
 
   bool visible;
+
+  EdgeInsetsGeometry? padding;
 
   /// The background color.
   Color? color;
@@ -152,6 +155,7 @@ class TabsAreaThemeData {
           _buttonsGap == other._buttonsGap &&
           _buttonsOffset == other._buttonsOffset &&
           buttonPadding == other.buttonPadding &&
+          padding == other.padding &&
           lastVisibleTabBehavior == other.lastVisibleTabBehavior;
 
   @override
@@ -181,6 +185,7 @@ class TabsAreaThemeData {
         _buttonsGap,
         _buttonsOffset,
         buttonPadding,
+        padding,
         lastVisibleTabBehavior
       ]);
 }

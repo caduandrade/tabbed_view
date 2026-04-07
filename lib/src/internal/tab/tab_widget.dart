@@ -124,7 +124,7 @@ class TabWidget extends StatelessWidget {
     }
 
     MouseCursor cursor = MouseCursor.defer;
-    if (provider.draggingTabIndex == null && status == TabStatus.selected) {
+    if (provider.draggingTabIndex == null) {
       cursor = SystemMouseCursors.click;
     }
 

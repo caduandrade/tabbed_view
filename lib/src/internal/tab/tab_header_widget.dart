@@ -106,11 +106,7 @@ class TabHeaderWidget extends StatelessWidget {
     TabLabelBuilder? labelBuilder = tab.labelBuilder;
     if (labelBuilder != null) {
       label = labelBuilder.call(TabLabelBuilderContext(
-          tab: tab,
-          status: status,
-          tabTheme: tabTheme,
-          hasButtons: buttons?.isNotEmpty ?? false,
-          textStyle: textStyle));
+          tab: tab, status: status, tabTheme: tabTheme, textStyle: textStyle));
     } else {
       final TabTextProvider? textProvider = tab.textProvider;
       final String text = textProvider?.call() ?? tab.text ?? '';
@@ -144,23 +140,25 @@ class TabHeaderWidget extends StatelessWidget {
         if (i > 0 && i < buttons.length && tabTheme.buttonsGap > 0) {
           padding = EdgeInsets.only(left: tabTheme.buttonsGap);
         }
-        //TODO avoid container if padding null?
-        TabButton button = buttons[i];
-        trailing.add(Container(
-            child: TabButtonWidget(
-                button: button,
-                enabled: enabled,
-                normalColor: color,
-                hoverColor: hoverColor,
-                disabledColor: disabledColor,
-                background: background,
-                hoverBackground: hoverBackground,
-                disabledBackground: disabledBackground,
-                iconSize: button.iconSize != null
-                    ? button.iconSize!
-                    : tabTheme.buttonIconSize,
-                themePadding: tabTheme.buttonPadding),
-            padding: padding));
+        final TabButton button = buttons[i];
+        final TabButtonWidget buttonWidget = TabButtonWidget(
+            button: button,
+            enabled: enabled,
+            normalColor: color,
+            hoverColor: hoverColor,
+            disabledColor: disabledColor,
+            background: background,
+            hoverBackground: hoverBackground,
+            disabledBackground: disabledBackground,
+            iconSize: button.iconSize != null
+                ? button.iconSize!
+                : tabTheme.buttonIconSize,
+            themePadding: tabTheme.buttonPadding);
+        if (padding != null) {
+          trailing.add(Container(child: buttonWidget, padding: padding));
+        } else {
+          trailing.add(buttonWidget);
+        }
       }
     }
     if (tab.closable) {
@@ -191,34 +189,39 @@ class TabHeaderWidget extends StatelessWidget {
           padding: padding));
     }
 
-    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
-    if (tabTheme.verticalAlignment == VerticalAlignment.top) {
-      crossAxisAlignment = CrossAxisAlignment.start;
-    } else if (tabTheme.verticalAlignment == VerticalAlignment.bottom) {
-      crossAxisAlignment = CrossAxisAlignment.end;
+    Widget textAndButtonsContainer;
+    if (leading == null && trailing.isEmpty) {
+      textAndButtonsContainer = label;
+    } else {
+      CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
+      if (tabTheme.verticalAlignment == VerticalAlignment.top) {
+        crossAxisAlignment = CrossAxisAlignment.start;
+      } else if (tabTheme.verticalAlignment == VerticalAlignment.bottom) {
+        crossAxisAlignment = CrossAxisAlignment.end;
+      }
+      textAndButtonsContainer = TabHeaderRow(
+          crossAxisAlignment: crossAxisAlignment,
+          text: label,
+          leading: leading,
+          trailing: trailing.isNotEmpty ? trailing : null);
     }
 
-    //TODO Use the tabText directly if there are no trailing or leading elements?
-    Widget textAndButtonsContainer = TabHeaderRow(
-        crossAxisAlignment: crossAxisAlignment,
-        text: label,
-        leading: leading,
-        trailing: trailing.isNotEmpty ? trailing : null);
-
-    EdgeInsetsGeometry? padding2;
+    EdgeInsetsGeometry? textAndButtonsPadding;
     if (trailing.isEmpty) {
-      padding2 = styleResolver?.paddingWithoutButton(styleContext) ??
-          statusTheme?.paddingWithoutButton ??
-          tabTheme.paddingWithoutButton;
+      textAndButtonsPadding =
+          styleResolver?.paddingWithoutButton(styleContext) ??
+              statusTheme?.paddingWithoutButton ??
+              tabTheme.paddingWithoutButton;
     }
-    if (padding2 == null) {
-      padding2 = styleResolver?.padding(styleContext) ??
+    if (textAndButtonsPadding == null) {
+      textAndButtonsPadding = styleResolver?.padding(styleContext) ??
           statusTheme?.padding ??
           tabTheme.padding;
     }
 
     Widget widget = Container(
-      child: Container(child: textAndButtonsContainer, padding: padding2),
+      child: Container(
+          child: textAndButtonsContainer, padding: textAndButtonsPadding),
     );
 
     if (theme.tabsArea.position.isVertical &&

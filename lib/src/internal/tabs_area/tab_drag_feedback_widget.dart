@@ -5,6 +5,7 @@ import '../../tab_data.dart';
 import '../../tab_status.dart';
 import '../../theme/tab_theme_data.dart';
 import '../../theme/vertical_alignment.dart';
+import '../../typedefs/tab_label_builder.dart';
 
 /// The tab drag feedback widget.
 @internal
@@ -23,12 +24,23 @@ class TabDragFeedbackWidget extends StatelessWidget {
         children.add(leading);
       }
     }
-    final TabTextProvider? textProvider = tab.textProvider;
-    final String text = textProvider?.call() ?? tab.text ?? '';
-    children.add(SizedBox(
-        width: tab.textSize,
-        child: Text(text,
-            style: tabTheme.textStyle, overflow: TextOverflow.ellipsis)));
+    Widget label;
+    final TabLabelBuilder? labelBuilder = tab.labelBuilder;
+    if (labelBuilder != null) {
+      label = labelBuilder.call(TabLabelBuilderContext(
+          tab: tab,
+          status: null,
+          tabTheme: tabTheme,
+          textStyle: tabTheme.textStyle));
+    } else {
+      final TabTextProvider? textProvider = tab.textProvider;
+      final String text = textProvider?.call() ?? tab.text ?? '';
+      label = SizedBox(
+          width: tab.textSize,
+          child: Text(text,
+              style: tabTheme.textStyle, overflow: TextOverflow.ellipsis));
+    }
+    children.add(label);
 
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
     if (tabTheme.verticalAlignment == VerticalAlignment.top) {

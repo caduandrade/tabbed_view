@@ -1,34 +1,67 @@
 import 'package:dev_workbench/src/scenario.dart';
-import 'package:dev_workbench/src/scenarios/scenario_configurator.dart';
-import 'package:dev_workbench/src/scenarios/scenario_screen.dart';
+import 'package:dev_workbench/src/scenario_configurator.dart';
+import 'package:dev_workbench/src/scenario_screen.dart';
 import 'package:flutter/material.dart';
 
 class DevWorkbenchApp extends StatelessWidget {
-  const DevWorkbenchApp({super.key});
+  DevWorkbenchApp({super.key});
+
+  final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: _scaffoldMessengerKey,
       debugShowCheckedModeBanner: false,
-      home: const _HomePage(),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
+      ),
+      home: _HomePage(scaffoldMessengerKey: _scaffoldMessengerKey),
     );
   }
 }
 
 class _HomePage extends StatefulWidget {
-  const _HomePage();
+  const _HomePage({required this.scaffoldMessengerKey});
+
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
 
   @override
   State<_HomePage> createState() => _HomePageState();
 }
 
+class _Key extends LocalKey {
+  const _Key({required this.scenario, required this.build});
+
+  final Scenario scenario;
+  final int build;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is _Key &&
+          runtimeType == other.runtimeType &&
+          scenario == other.scenario &&
+          build == other.build;
+
+  @override
+  int get hashCode => Object.hash(scenario, build);
+}
+
 class _HomePageState extends State<_HomePage> {
   Scenario _selectedScenario = Scenario.theme;
+  int _build = 1;
 
   @override
   Widget build(BuildContext context) {
     (ScenarioConfigurator? c, ScenarioScreen) scenario = _selectedScenario
         .builder
-        .call();
+        .call(scaffoldMessengerKey: widget.scaffoldMessengerKey);
 
     List<Widget> rows = [];
 
@@ -38,8 +71,15 @@ class _HomePageState extends State<_HomePage> {
       _SideBar(
         selectedScenario: _selectedScenario,
         onScenarioSelected: (scenario) {
+          if (_selectedScenario != scenario) {
+            setState(() {
+              _selectedScenario = scenario;
+            });
+          }
+        },
+        onReset: () {
           setState(() {
-            _selectedScenario = scenario;
+            _build++;
           });
         },
         configurator: configurator ?? Container(),
@@ -49,14 +89,13 @@ class _HomePageState extends State<_HomePage> {
     rows.add(
       Expanded(
         child: _ResizableLayout(
-          key: ValueKey(_selectedScenario),
+          key: _Key(scenario: _selectedScenario, build: _build),
           child: scenario.$2,
         ),
       ),
     );
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: rows),
     );
   }
@@ -78,7 +117,7 @@ class _ResizableLayoutState extends State<_ResizableLayout> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey.shade200,
+      color: Colors.blue.shade50,
       child: Column(
         children: [
           Row(
@@ -100,10 +139,7 @@ class _ResizableLayoutState extends State<_ResizableLayout> {
                     child: FractionallySizedBox(
                       widthFactor: _horizontalScale,
                       heightFactor: _verticalScale,
-                      child: Container(
-                        color: Colors.white,
-                        child: widget.child,
-                      ),
+                      child: Container(child: widget.child),
                     ),
                   ),
                 ),
@@ -130,17 +166,20 @@ class _SideBar extends StatelessWidget {
   const _SideBar({
     required this.selectedScenario,
     required this.onScenarioSelected,
+    required this.onReset,
     required this.configurator,
   });
 
   final Scenario selectedScenario;
   final ValueChanged<Scenario> onScenarioSelected;
+  final VoidCallback onReset;
   final Widget configurator;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border(right: BorderSide(color: Colors.grey.shade600)),
       ),
       child: IntrinsicWidth(
@@ -150,6 +189,13 @@ class _SideBar extends StatelessWidget {
             _ScenarioChooser(
               selectedScenario: selectedScenario,
               onScenarioSelected: onScenarioSelected,
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: TextButton(onPressed: onReset, child: Text('Reset')),
+              ),
             ),
             Divider(),
             configurator,

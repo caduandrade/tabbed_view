@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/tabbed_view.dart';
 
-import '../../widgets/theme_chooser.dart';
-import '../scenario_config.dart';
+import 'widgets/theme_chooser.dart';
 
-class ThemeConfig extends ScenarioConfig {
+class ScenarioConfig extends ChangeNotifier {
+  Brightness _brightness = Brightness.light;
+  Brightness get brightness => _brightness;
+  set brightness(Brightness value) {
+    if (_brightness != value) {
+      _brightness = value;
+      notifyListeners();
+    }
+  }
+}
+
+abstract class AbstractScenarioConfig extends ScenarioConfig {
   TabBarPosition _position = TabBarPosition.top;
   TabBarPosition get position => _position;
   set position(TabBarPosition value) {
@@ -77,12 +87,52 @@ class ThemeConfig extends ScenarioConfig {
     }
   }
 
-  Brightness _brightness = Brightness.light;
-  Brightness get brightness => _brightness;
-  set brightness(Brightness value) {
-    if (_brightness != value) {
-      _brightness = value;
-      notifyListeners();
+  TabbedViewThemeData buildTabbedViewThemeData() {
+    TabbedViewThemeData theme;
+    switch (themeName) {
+      case ThemeName.classic:
+        theme = modifyThemeColors
+            ? TabbedViewThemeData.classic(
+                brightness: brightness,
+                colorSet: Colors.blueGrey,
+                borderColor: Colors.black,
+              )
+            : TabbedViewThemeData.classic(brightness: brightness);
+        break;
+      case ThemeName.minimalist:
+        theme = modifyThemeColors
+            ? TabbedViewThemeData.minimalist(
+                brightness: brightness,
+                colorSet: Colors.blueGrey,
+              )
+            : TabbedViewThemeData.minimalist(brightness: brightness);
+        break;
+      case ThemeName.underline:
+        theme = modifyThemeColors
+            ? TabbedViewThemeData.underline(
+                brightness: brightness,
+                colorSet: Colors.brown,
+                underlineColorSet: Colors.brown,
+              )
+            : TabbedViewThemeData.underline(brightness: brightness);
+        break;
+      case ThemeName.folder:
+        theme = modifyThemeColors
+            ? TabbedViewThemeData.folder(
+                brightness: brightness,
+                colorSet: Colors.brown,
+              )
+            : TabbedViewThemeData.folder(brightness: brightness);
+        break;
     }
+    theme.tabsArea.position = position;
+    theme.tabsArea.sideTabsLayout = sideTabsLayout;
+    if (maxMainSizeEnabled) {
+      theme.tab.maxMainSize = 200;
+    }
+    if (maxLinesEnabled) {
+      theme.tab.maxLines = 2;
+    }
+    return theme;
   }
 }

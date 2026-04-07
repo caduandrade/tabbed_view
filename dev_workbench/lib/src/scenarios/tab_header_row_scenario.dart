@@ -1,54 +1,40 @@
+import 'package:dev_workbench/src/scenario_config.dart';
+import 'package:dev_workbench/src/scenario_configurator.dart';
+import 'package:dev_workbench/src/scenario_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:tabbed_view/tabbed_view.dart';
+import 'package:tabbed_view/src/internal/tab/tab_header_layout.dart';
 
-import '../scenario_config.dart';
-import '../scenario_configurator.dart';
-import '../scenario_screen.dart';
-
-class TabLabelBuilder {
-  static (ScenarioConfigurator?, ScenarioScreen) builder() {
+class TabHeaderRowScenario {
+  static (ScenarioConfigurator?, ScenarioScreen) builder({
+    required GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey,
+  }) {
     _Config config = _Config();
     return (
       _Configurator(config: config),
       ScenarioScreen(
         config: config,
-        builder: (BuildContext context) => _Screen(config: config),
+        builder: (context) => _Screen(config: config),
       ),
     );
   }
 }
 
-class _Screen extends StatefulWidget {
+class _Screen extends StatelessWidget {
   const _Screen({required this.config});
   final _Config config;
 
   @override
-  State<StatefulWidget> createState() => _ScreenState();
-}
-
-class _ScreenState extends State<_Screen> {
-  final TabbedViewController _controller = TabbedViewController([]);
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.setTabs([
-      TabData(id: 1, labelBuilder: _labelBuilder),
-      TabData(id: 2, labelBuilder: _labelBuilder),
-      TabData(id: 3, labelBuilder: _labelBuilder),
-    ]);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return TabbedView(controller: _controller);
-  }
-
-  Widget _labelBuilder(TabLabelBuilderContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
-      color: context.status==TabStatus.hovered? Colors.green:Colors.blue,
-      child: Text(context.tab.id.toString()),
+    return Center(
+      child: TabHeaderRow(
+        text: Text(
+          'This is just a longer text. This is just a longer text. This is just a longer text.',
+          overflow: config.overflow ? TextOverflow.ellipsis : null,
+          maxLines: config.maxLines ? 2 : null,
+        ),
+        leading: Container(color: Colors.green, width: 200, height: 6),
+        trailing: [Container(color: Colors.blue, width: 200, height: 6)],
+      ),
     );
   }
 }

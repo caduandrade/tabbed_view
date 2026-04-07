@@ -8,12 +8,10 @@ class TabLabelBuilderContext {
       {required this.tab,
       required this.status,
       required this.tabTheme,
-      required this.hasButtons,
       required this.textStyle});
 
   final TabData tab;
-  final TabStatus status;
+  final TabStatus? status;
   final TabThemeData tabTheme;
-  final bool hasButtons;
   final TextStyle? textStyle;
 }

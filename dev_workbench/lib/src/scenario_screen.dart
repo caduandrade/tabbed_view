@@ -1,4 +1,4 @@
-import 'package:dev_workbench/src/scenarios/scenario_config.dart';
+import 'package:dev_workbench/src/scenario_config.dart';
 import 'package:flutter/material.dart';
 
 final class ScenarioScreen extends StatelessWidget {
@@ -15,7 +15,12 @@ final class ScenarioScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListenableBuilder(
       listenable: config,
-      builder: (context, child) => builder.call(context),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData(brightness: config.brightness),
+          child: Material(child: builder.call(context)),
+        );
+      },
     );
   }
 }
