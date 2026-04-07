@@ -71,6 +71,10 @@ class _TabsAreaState extends State<TabsArea> {
 
     Widget content = tabsAreaLayout;
 
+    if (tabsAreaTheme.padding != null) {
+      content = Padding(padding: tabsAreaTheme.padding!, child: content);
+    }
+
     // Apply the theme's color and border directly.
     return Container(
         child: content,

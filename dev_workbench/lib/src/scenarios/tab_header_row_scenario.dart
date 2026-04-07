@@ -1,21 +1,30 @@
-import 'package:dev_workbench/src/scenarios/scenario_config.dart';
-import 'package:dev_workbench/src/scenarios/scenario_configurator.dart';
-import 'package:dev_workbench/src/scenarios/scenario_screen.dart';
+import 'package:dev_workbench/src/scenario_config.dart';
+import 'package:dev_workbench/src/scenario_configurator.dart';
+import 'package:dev_workbench/src/scenario_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:tabbed_view/src/internal/tab/tab_header_layout.dart';
 
 class TabHeaderRowScenario {
-  static (ScenarioConfigurator?, ScenarioScreen) build() {
+  static (ScenarioConfigurator?, ScenarioScreen) builder({
+    required GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey,
+  }) {
     _Config config = _Config();
-    return (_Configurator(config: config), _Screen(config: config));
+    return (
+      _Configurator(config: config),
+      ScenarioScreen(
+        config: config,
+        builder: (context) => _Screen(config: config),
+      ),
+    );
   }
 }
 
-class _Screen extends ScenarioScreen<_Config> {
-  const _Screen({required super.config});
+class _Screen extends StatelessWidget {
+  const _Screen({required this.config});
+  final _Config config;
 
   @override
-  Widget buildScenario(BuildContext context) {
+  Widget build(BuildContext context) {
     return Center(
       child: TabHeaderRow(
         text: Text(

@@ -2,7 +2,9 @@
 
 * `TabData`
   * Added `listenable` and `textProvider` for reactive UI updates.
+  * Added `labelBuilder` to allow custom label widget creation instead of using the internally generated widget from `text`.
 * `TabsAreaThemeData`
+  * Added `padding` property.
   * Added `lastVisibleTabBehavior` to configure how the last remaining tab behaves when there is no space available.
 * `LastVisibleTabBehavior`
   * New enum with two modes: hide (moves the tab to the overflow menu) and shrink (keeps the tab visible by reducing its width).

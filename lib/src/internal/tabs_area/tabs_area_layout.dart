@@ -3,9 +3,9 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
-import 'package:tabbed_view/tabbed_view.dart';
 
 import '../../tab_bar_position.dart';
+import '../../theme/last_visible_tab_behavior.dart';
 import '../../theme/tab_header_extent_behavior.dart';
 import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/tabs_area_cross_axis_alignment.dart';
@@ -267,6 +267,13 @@ class _TabsAreaLayoutRenderBox extends RenderBox
             ),
             parentUsesSize: true);
         maxCrossAxisSize = math.max(child.size.height, corner.size.height);
+        if (tabsAreaTheme.crossAxisFit == TabsAreaCrossAxisFit.all &&
+            child.size.height < maxCrossAxisSize) {
+          child.layout(
+              BoxConstraints.tightFor(
+                  width: child.size.width, height: maxCrossAxisSize),
+              parentUsesSize: true);
+        }
       } else {
         child.layout(
             BoxConstraints(
@@ -277,6 +284,13 @@ class _TabsAreaLayoutRenderBox extends RenderBox
             ),
             parentUsesSize: true);
         maxCrossAxisSize = math.max(child.size.width, corner.size.width);
+        if (tabsAreaTheme.crossAxisFit == TabsAreaCrossAxisFit.all &&
+            child.size.width < maxCrossAxisSize) {
+          child.layout(
+              BoxConstraints.tightFor(
+                  width: maxCrossAxisSize, height: child.size.height),
+              parentUsesSize: true);
+        }
       }
       maxCrossAxisSize = math.max(maxCrossAxisSize, minimalCrossAxisSize);
     }

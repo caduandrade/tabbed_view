@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
-import 'package:tabbed_view/src/internal/tab/tab_header_layout.dart';
-import 'package:tabbed_view/src/theme/tab_style_context.dart';
-import 'package:tabbed_view/src/theme/tab_style_resolver.dart';
 
 import '../../tab_bar_position.dart';
 import '../../tab_button.dart';
@@ -10,13 +7,17 @@ import '../../tab_data.dart';
 import '../../tab_status.dart';
 import '../../theme/side_tabs_layout.dart';
 import '../../theme/tab_status_theme_data.dart';
+import '../../theme/tab_style_context.dart';
+import '../../theme/tab_style_resolver.dart';
 import '../../theme/tab_theme_data.dart';
 import '../../theme/tabbed_view_theme_data.dart';
 import '../../theme/theme_widget.dart';
 import '../../theme/vertical_alignment.dart';
+import '../../typedefs/tab_label_builder.dart';
 import '../../unselected_tab_buttons_behavior.dart';
 import '../tabbed_view_provider.dart';
 import 'tab_button_widget.dart';
+import 'tab_header_layout.dart';
 
 @internal
 class TabHeaderWidget extends StatelessWidget {
@@ -95,30 +96,38 @@ class TabHeaderWidget extends StatelessWidget {
       }
     }
 
-    EdgeInsets? padding;
+    EdgeInsets? buttonsOffsetPadding;
     if (tab.closable ||
         buttons != null && buttons.isNotEmpty && tabTheme.buttonsOffset > 0) {
-      padding = EdgeInsets.only(right: tabTheme.buttonsOffset);
+      buttonsOffsetPadding = EdgeInsets.only(right: tabTheme.buttonsOffset);
     }
 
-    final TabTextProvider? textProvider = tab.textProvider;
-    final String text = textProvider?.call() ?? tab.text ?? '';
-    Widget tabText = Text(text,
-        maxLines: tabTheme.maxLines,
-        style: textStyle,
-        overflow: TextOverflow.ellipsis);
-    if (tab.tooltip != null) {
-      tabText = Tooltip(message: tab.tooltip, child: tabText);
+    Widget label;
+    TabLabelBuilder? labelBuilder = tab.labelBuilder;
+    if (labelBuilder != null) {
+      label = labelBuilder.call(TabLabelBuilderContext(
+          tab: tab, status: status, tabTheme: tabTheme, textStyle: textStyle));
+    } else {
+      final TabTextProvider? textProvider = tab.textProvider;
+      final String text = textProvider?.call() ?? tab.text ?? '';
+      label = Text(text,
+          maxLines: tabTheme.maxLines,
+          style: textStyle,
+          overflow: TextOverflow.ellipsis);
+      if (tab.tooltip != null) {
+        label = Tooltip(message: tab.tooltip, child: label);
+      }
+      if (tab.textSize != null) {
+        label = Container(
+          alignment: Alignment.centerLeft,
+          child: SizedBox(width: tab.textSize, child: label),
+        );
+      }
     }
 
-    if (tab.textSize != null) {
-      tabText = Container(
-        alignment: Alignment.centerLeft,
-        padding: padding,
-        child: SizedBox(width: tab.textSize, child: tabText),
-      );
+    if (buttonsOffsetPadding != null) {
+      label = Padding(padding: buttonsOffsetPadding, child: label);
     }
-
     List<Widget>? trailing = [];
     if (buttons != null) {
       final bool enabled = provider.draggingTabIndex == null &&
@@ -131,22 +140,25 @@ class TabHeaderWidget extends StatelessWidget {
         if (i > 0 && i < buttons.length && tabTheme.buttonsGap > 0) {
           padding = EdgeInsets.only(left: tabTheme.buttonsGap);
         }
-        TabButton button = buttons[i];
-        trailing.add(Container(
-            child: TabButtonWidget(
-                button: button,
-                enabled: enabled,
-                normalColor: color,
-                hoverColor: hoverColor,
-                disabledColor: disabledColor,
-                background: background,
-                hoverBackground: hoverBackground,
-                disabledBackground: disabledBackground,
-                iconSize: button.iconSize != null
-                    ? button.iconSize!
-                    : tabTheme.buttonIconSize,
-                themePadding: tabTheme.buttonPadding),
-            padding: padding));
+        final TabButton button = buttons[i];
+        final TabButtonWidget buttonWidget = TabButtonWidget(
+            button: button,
+            enabled: enabled,
+            normalColor: color,
+            hoverColor: hoverColor,
+            disabledColor: disabledColor,
+            background: background,
+            hoverBackground: hoverBackground,
+            disabledBackground: disabledBackground,
+            iconSize: button.iconSize != null
+                ? button.iconSize!
+                : tabTheme.buttonIconSize,
+            themePadding: tabTheme.buttonPadding);
+        if (padding != null) {
+          trailing.add(Container(child: buttonWidget, padding: padding));
+        } else {
+          trailing.add(buttonWidget);
+        }
       }
     }
     if (tab.closable) {
@@ -177,33 +189,39 @@ class TabHeaderWidget extends StatelessWidget {
           padding: padding));
     }
 
-    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
-    if (tabTheme.verticalAlignment == VerticalAlignment.top) {
-      crossAxisAlignment = CrossAxisAlignment.start;
-    } else if (tabTheme.verticalAlignment == VerticalAlignment.bottom) {
-      crossAxisAlignment = CrossAxisAlignment.end;
+    Widget textAndButtonsContainer;
+    if (leading == null && trailing.isEmpty) {
+      textAndButtonsContainer = label;
+    } else {
+      CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
+      if (tabTheme.verticalAlignment == VerticalAlignment.top) {
+        crossAxisAlignment = CrossAxisAlignment.start;
+      } else if (tabTheme.verticalAlignment == VerticalAlignment.bottom) {
+        crossAxisAlignment = CrossAxisAlignment.end;
+      }
+      textAndButtonsContainer = TabHeaderRow(
+          crossAxisAlignment: crossAxisAlignment,
+          text: label,
+          leading: leading,
+          trailing: trailing.isNotEmpty ? trailing : null);
     }
 
-    Widget textAndButtonsContainer = TabHeaderRow(
-        crossAxisAlignment: crossAxisAlignment,
-        text: tabText,
-        leading: leading,
-        trailing: trailing.isNotEmpty ? trailing : null);
-
-    EdgeInsetsGeometry? padding2;
+    EdgeInsetsGeometry? textAndButtonsPadding;
     if (trailing.isEmpty) {
-      padding2 = styleResolver?.paddingWithoutButton(styleContext) ??
-          statusTheme?.paddingWithoutButton ??
-          tabTheme.paddingWithoutButton;
+      textAndButtonsPadding =
+          styleResolver?.paddingWithoutButton(styleContext) ??
+              statusTheme?.paddingWithoutButton ??
+              tabTheme.paddingWithoutButton;
     }
-    if (padding2 == null) {
-      padding2 = styleResolver?.padding(styleContext) ??
+    if (textAndButtonsPadding == null) {
+      textAndButtonsPadding = styleResolver?.padding(styleContext) ??
           statusTheme?.padding ??
           tabTheme.padding;
     }
 
     Widget widget = Container(
-      child: Container(child: textAndButtonsContainer, padding: padding2),
+      child: Container(
+          child: textAndButtonsContainer, padding: textAndButtonsPadding),
     );
 
     if (theme.tabsArea.position.isVertical &&
