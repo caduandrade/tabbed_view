@@ -141,10 +141,8 @@ class _ScreenState extends State<_Screen> {
 
   @override
   Widget build(BuildContext context) {
-    TabbedViewThemeData d=widget.config.buildTabbedViewThemeData();
-    d.tabsArea.lastVisibleTabBehavior=LastVisibleTabBehavior.shrink;
     return TabbedViewTheme(
-      data: d,//widget.config.buildTabbedViewThemeData(),
+      data: widget.config.buildTabbedViewThemeData(),
       child: _buildTabbedView(),
     );
   }

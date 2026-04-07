@@ -2,6 +2,7 @@
 
 * `TabData`
   * Added `listenable` and `textProvider` for reactive UI updates.
+  * Added `labelBuilder` to allow custom label widget creation instead of using the internally generated widget from `text`.
 * `TabsAreaThemeData`
   * Added `padding` property.
   * Added `lastVisibleTabBehavior` to configure how the last remaining tab behaves when there is no space available.
